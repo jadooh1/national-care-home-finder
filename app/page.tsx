@@ -212,7 +212,20 @@ export default function Home() {
                   fontWeight: 600,
                 }}
               >
-                {state}
+                {state === "Washington" ? (
+  <a
+    href="/washington"
+    style={{
+      color: "inherit",
+      textDecoration: "none",
+      display: "block",
+    }}
+  >
+    {state}
+  </a>
+) : (
+  state
+)}
               </div>
             ))}
           </div>
