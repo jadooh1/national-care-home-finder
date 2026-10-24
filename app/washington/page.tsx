@@ -5,16 +5,10 @@ import Link from "next/link";
 import { supabase } from "../../lib/supabase";
 
 type Facility = {
-  id: string;
-  canonical_name: string;
-  address_line1: string | null;
-  city: string | null;
-  county: string | null;
-  state_code: string;
-  postal_code: string | null;
-  license_number: string | null;
-  licensed_capacity: number | null;
-  record_status: string;
+  id: string; canonical_name: string; address_line1: string | null;
+  city: string | null; county: string | null; state_code: string;
+  postal_code: string | null; license_number: string | null;
+  licensed_capacity: number | null; record_status: string;
 };
 
 const PAGE_SIZE = 20;
@@ -26,16 +20,10 @@ const fieldStyle: React.CSSProperties = {
   background: "#fff", color: C.navy,
 };
 
-// Keep punctuation from being interpreted as PostgREST filter operators.
 function cleanSearch(input: string) {
   return input.replace(/[^a-zA-Z0-9\s-]/g, "").trim().slice(0, 80);
 }
-
-function displayName(name: string) {
-  // Some source names start with an exclamation mark used for sorting.
-  // Strip that prefix for display only, preserving original database values.
-  return name.replace(/^\s*!+\s*/, "").trim() || name;
-}
+function displayName(name: string) { return name.replace(/^\s*!+\s*/, "").trim() || name; }
 
 export default function WashingtonPage() {
   const [facilities, setFacilities] = useState<Facility[]>([]);
@@ -50,39 +38,27 @@ export default function WashingtonPage() {
   useEffect(() => {
     let cancelled = false;
     const timer = setTimeout(async () => {
-      setLoading(true);
-      setError("");
+      setLoading(true); setError("");
       const term = cleanSearch(search);
       const cityTerm = cleanSearch(city);
       const countyTerm = cleanSearch(county);
-
-      let query = supabase
-        .from("wa_dshs_listed_facilities")
+      let query = supabase.from("wa_dshs_listed_facilities")
         .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status", { count: "exact" })
-        .order("canonical_name", { ascending: true })
-        .order("id", { ascending: true })
+        .order("canonical_name", { ascending: true }).order("id", { ascending: true })
         .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-
-      if (term) {
-        query = query.or([
-          `canonical_name.ilike.%${term}%`, `city.ilike.%${term}%`,
-          `county.ilike.%${term}%`, `postal_code.ilike.%${term}%`,
-          `license_number.ilike.%${term}%`,
-        ].join(","));
-      }
+      if (term) query = query.or([
+        `canonical_name.ilike.%${term}%`, `city.ilike.%${term}%`,
+        `county.ilike.%${term}%`, `postal_code.ilike.%${term}%`,
+        `license_number.ilike.%${term}%`,
+      ].join(","));
       if (cityTerm) query = query.ilike("city", `%${cityTerm}%`);
       if (countyTerm) query = query.ilike("county", `%${countyTerm}%`);
-
       const { data, count, error: queryError } = await query;
       if (cancelled) return;
       if (queryError) {
-        setFacilities([]);
-        setTotal(0);
+        setFacilities([]); setTotal(0);
         setError("Unable to load listings. Please try again later.");
-      } else {
-        setFacilities((data ?? []) as Facility[]);
-        setTotal(count ?? 0);
-      }
+      } else { setFacilities((data ?? []) as Facility[]); setTotal(count ?? 0); }
       setLoading(false);
     }, 350);
     return () => { cancelled = true; clearTimeout(timer); };
@@ -113,33 +89,25 @@ export default function WashingtonPage() {
         <section aria-label="Search and filter facilities" style={{ background: "white", padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 6px 20px rgba(18,60,89,.05)" }}>
           <h2 style={{ fontSize: 21, margin: "0 0 18px" }}>Find care homes</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 230px), 1fr))", gap: 15 }}>
-            <div>
-              <label htmlFor="name-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>Name, ZIP, or license</label>
-              <input id="name-filter" type="search" value={search} placeholder="e.g. 759392" style={fieldStyle} onChange={e => { setSearch(e.target.value); setPage(0); }} />
-            </div>
-            <div>
-              <label htmlFor="city-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>City</label>
-              <input id="city-filter" type="search" value={city} placeholder="e.g. Puyallup" style={fieldStyle} onChange={e => { setCity(e.target.value); setPage(0); }} />
-            </div>
-            <div>
-              <label htmlFor="county-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>County</label>
-              <input id="county-filter" type="search" value={county} placeholder="e.g. Pierce" style={fieldStyle} onChange={e => { setCounty(e.target.value); setPage(0); }} />
-            </div>
+            <div><label htmlFor="name-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>Name, ZIP, or license</label>
+              <input id="name-filter" type="search" value={search} placeholder="e.g. 759392" style={fieldStyle} onChange={e => { setSearch(e.target.value); setPage(0); }} /></div>
+            <div><label htmlFor="city-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>City</label>
+              <input id="city-filter" type="search" value={city} placeholder="e.g. Puyallup" style={fieldStyle} onChange={e => { setCity(e.target.value); setPage(0); }} /></div>
+            <div><label htmlFor="county-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>County</label>
+              <input id="county-filter" type="search" value={county} placeholder="e.g. Pierce" style={fieldStyle} onChange={e => { setCounty(e.target.value); setPage(0); }} /></div>
           </div>
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
             <button onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>Clear filters</button>
             <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Official Washington DSHS locator ↗</a>
           </div>
         </section>
-
         <div aria-live="polite" style={{ margin: "23px 0 15px", color: C.muted, fontWeight: 600 }}>
           {loading ? "Loading listings…" : error ? "Unable to display listings" : total === 0 ? "No matches found" : `Showing ${start.toLocaleString()}–${end.toLocaleString()} of ${total.toLocaleString()} listings`}
         </div>
         {error && <p role="alert" style={{ color: "#a62a2a" }}>{error}</p>}
         {!loading && !error && total === 0 && <p>Try another city, county, name, ZIP code, or license number.</p>}
-
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))", gap: 17 }}>
-          {!error && facilities.map((facility) => {
+          {!error && facilities.map(facility => {
             const address = [facility.address_line1, facility.city, facility.state_code, facility.postal_code].filter(Boolean).join(", ");
             const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
             return (
@@ -152,7 +120,8 @@ export default function WashingtonPage() {
                 <p style={{ borderTop: `1px solid ${C.border}`, paddingTop: 13, marginTop: 15, color: C.muted, fontSize: 14, lineHeight: 1.5 }}>
                   {facility.record_status === "verified" ? "Independently verified listing" : "DSHS license-number match — not independently verified"}
                 </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 13 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 13, alignItems: "center" }}>
+                  {facility.license_number && <Link href={`/washington/${encodeURIComponent(facility.license_number)}`} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>View details →</Link>}
                   {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>View map ↗</a>}
                   <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Check DSHS ↗</a>
                 </div>
@@ -160,7 +129,6 @@ export default function WashingtonPage() {
             );
           })}
         </div>
-
         {!loading && !error && total > PAGE_SIZE && (
           <nav aria-label="Listing pages" style={{ display: "flex", justifyContent: "center", gap: 18, alignItems: "center", flexWrap: "wrap", marginTop: 29 }}>
             <button disabled={page === 0} onClick={() => setPage(p => Math.max(0, p - 1))} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>← Previous</button>
