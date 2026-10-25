@@ -68,7 +68,10 @@ export default function WashingtonCitiesPage() {
   const cityKey = (r: CityMarket) => `${r.county_name}||${r.city_name}`;
   const selected1 = inCounty.find((r) => cityKey(r) === first);
   const selected2 = inCounty.find((r) => cityKey(r) === second);
-  const locationLabel = (r: CityMarket) => `${r.city_name} — ${r.county_name}`;
+  
+const locationLabel = (r: CityMarket) =>
+  county ? r.city_name : `${r.city_name} — ${r.county_name}`;
+
   const countyQuery = (r: CityMarket) => `/washington?${new URLSearchParams({ city: r.city_name, county: r.county_name })}`;
 
   return <main style={{minHeight:"100vh",background:"#f4f8fb",color:navy,fontFamily:"Arial, sans-serif"}}>
