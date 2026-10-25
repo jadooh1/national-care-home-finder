@@ -15,7 +15,12 @@ type Market = {
   age_80_84: number | null;
   age_85_plus: number | null;
   age_70_plus: number | null;
-  census_period: string | null;
+  census_period: string | null;median_household_income: number | null;
+median_income_margin_error: number | null;
+total_households: number | null;
+households_100k_plus: number | null;
+households_100k_plus_pct: number | null;
+income_census_period: string | null;
 };
 
 const navy = "#123c59";
@@ -42,8 +47,8 @@ export default function WashingtonDemographicsPage() {
     let active = true;
     async function load() {
       const { data, error: queryError } = await supabase
-        .from("wa_zip_market_intelligence")
-        .select("zip_code,total_afhs,homes_with_capacity,known_licensed_beds,population_total,age_60_69,age_70_79,age_80_84,age_85_plus,age_70_plus,census_period")
+        .from("wa_zip_market_income")
+        .select("zip_code,total_afhs,homes_with_capacity,known_licensed_beds,population_total,age_60_69,age_70_79,age_80_84,age_85_plus,age_70_plus,census_period,median_household_income,median_income_margin_error,total_households,households_100k_plus,households_100k_plus_pct,income_census_period")
         .order("zip_code", { ascending: true })
         .range(0, 499);
       if (!active) return;
@@ -104,6 +109,22 @@ export default function WashingtonDemographicsPage() {
             ["Residents aged 70+",fmt(current.age_70_plus)],
             ["Adult Family Homes",fmt(current.total_afhs)],
             ["Known licensed beds",fmt(current.known_licensed_beds)],
+    ["Median household income",
+  current.median_household_income == null
+    ? "Not available"
+    : current.median_household_income >= 250001
+      ? "$250,000+"
+      : "$" + current.median_household_income.toLocaleString()],
+
+["Households earning $100,000+",
+  current.households_100k_plus_pct == null
+    ? "Not available"
+    : Number(current.households_100k_plus_pct).toFixed(2) + "%"],
+
+["Median income margin of error",
+  current.median_income_margin_error == null
+    ? "Not available"
+    : "±$" + current.median_income_margin_error.toLocaleString()],
           ].map(([label,value]) => <div key={label} style={card}><div style={{ fontSize: 13, color: "#536b7c" }}>{label}</div><div style={{ fontSize: 27, fontWeight: 800, marginTop: 7 }}>{value}</div></div>)}
         </div>
         <section style={{ ...card, marginTop: 18 }}>
