@@ -86,6 +86,38 @@ export default function WashingtonPage() {
         </div>
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 60px" }}>
+        
+<section
+  aria-label="Market intelligence tools"
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
+    gap: 16,
+    marginBottom: 24,
+  }}
+>
+  <Link href="/washington/map" style={{
+    display: "block", background: "#123c59", color: "white",
+    padding: 24, borderRadius: 14, textDecoration: "none"
+  }}>
+    <h2 style={{ margin: "0 0 10px" }}>Explore AFH Market Map →</h2>
+    <p style={{ margin: 0, lineHeight: 1.6 }}>
+      View care home locations, recorded licensed beds,
+      and neighborhood concentration.
+    </p>
+  </Link>
+  <Link href="/washington/demographics" style={{
+    display: "block", background: "#176b53", color: "white",
+    padding: 24, borderRadius: 14, textDecoration: "none"
+  }}>
+    <h2 style={{ margin: "0 0 10px" }}>Aging Population Dashboard →</h2>
+    <p style={{ margin: 0, lineHeight: 1.6 }}>
+      Compare older-adult population estimates with AFH
+      counts and licensed capacity by ZIP code.
+    </p>
+  </Link>
+</section>
+
         <section aria-label="Search and filter facilities" style={{ background: "white", padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 6px 20px rgba(18,60,89,.05)" }}>
           <h2 style={{ fontSize: 21, margin: "0 0 18px" }}>Find care homes</h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 230px), 1fr))", gap: 15 }}>
