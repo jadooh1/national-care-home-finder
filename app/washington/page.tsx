@@ -158,6 +158,27 @@ export default function WashingtonPage() {
   </p>
 </Link>
 
+<Link
+  href="/washington/opportunity"
+  style={{
+    display: "block",
+    background: "#176b53",
+    color: "white",
+    padding: 24,
+    borderRadius: 14,
+    textDecoration: "none"
+  }}
+>
+  <h2 style={{ margin: "0 0 10px" }}>
+    Explore Market Opportunities →
+  </h2>
+  <p style={{ margin: 0, lineHeight: 1.6 }}>
+    Compare senior population, household income,
+    AFH supply, and recorded licensed beds
+    across Washington ZIP codes.
+  </p>
+</Link>
+
 </section>
 
         <section aria-label="Search and filter facilities" style={{ background: "white", padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 6px 20px rgba(18,60,89,.05)" }}>
