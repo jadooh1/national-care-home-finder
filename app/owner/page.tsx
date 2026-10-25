@@ -29,7 +29,9 @@ export default function OwnerPage() {
       if (mode === "register") {
         const { data, error: authError } = await supabase.auth.signUp({
           email: email.trim(), password,
-          options: { emailRedirectTo: "https://nationalcarehomefinder.com/auth/callback" },
+          options: { 
+emailRedirectTo: `${window.location.origin}/auth/callback`
+ },
         });
         if (authError) throw authError;
         if (data.session) router.replace("/owner/dashboard");
