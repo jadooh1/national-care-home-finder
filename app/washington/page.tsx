@@ -116,6 +116,28 @@ export default function WashingtonPage() {
       counts and licensed capacity by ZIP code.
     </p>
   </Link>
+
+<Link
+  href="/washington/counties"
+  style={{
+    display: "block",
+    background: "#176b53",
+    color: "white",
+    padding: 24,
+    borderRadius: 14,
+    textDecoration: "none"
+  }}
+>
+  <h2 style={{ margin: "0 0 10px" }}>
+    Compare Counties →
+  </h2>
+  <p style={{ margin: 0, lineHeight: 1.6 }}>
+    Compare Adult Family Home counts,
+    recorded licensed beds, and cities
+    across Washington counties.
+  </p>
+</Link>
+
 </section>
 
         <section aria-label="Search and filter facilities" style={{ background: "white", padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 6px 20px rgba(18,60,89,.05)" }}>
