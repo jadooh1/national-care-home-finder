@@ -80,7 +80,24 @@ export default function AdminClaimsPage() {
     <div style={{ maxWidth: 1050, margin: "auto" }}>
       <Link href="/owner/dashboard" style={{ color: "#176b53" }}>← Owner dashboard</Link>
       <h1 style={{ fontSize: 35, marginBottom: 8 }}>Administrator claim reviews</h1>
-      <p>Claims must be independently verified before approval. Approval records a decision only; it does not enable listing edits.</p>
+    
+<div style={{ margin: "18px 0" }}>
+  <Link
+    href="/admin/listing-edits"
+    style={{
+      display: "inline-block",
+      padding: "12px 18px",
+      background: "#176b53",
+      color: "#fff",
+      borderRadius: 9,
+      textDecoration: "none",
+      fontWeight: 600
+    }}
+  >
+    Review listing proposals
+  </Link>
+</div>
+  <p>Claims must be independently verified before approval. Approval records a decision only; it does not enable listing edits.</p>
       {loading && <p role="status">Checking administrator access…</p>}
       {error && <p role="alert" style={{ color: "#a32222" }}>{error}</p>}
       {notice && <p role="status" style={{ color: "#176b53", fontWeight: 700 }}>{notice}</p>}
