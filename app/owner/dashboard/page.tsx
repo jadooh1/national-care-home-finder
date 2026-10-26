@@ -105,6 +105,30 @@ export default function OwnerDashboard() {
       <h1 style={{ fontSize: 35, marginTop: 34 }}>Owner dashboard</h1>
       {loading ? <p role="status">Checking account…</p> : <>
         <p>Signed in as <strong>{user?.email}</strong></p>
+       
+<section style={card}>
+  <h2>Manage listing updates</h2>
+  <p>
+    Submit proposed descriptions, services, and amenities
+    for facilities with approved ownership claims.
+    All changes require administrator review.
+  </p>
+  <Link
+    href="/owner/listing-edits"
+    style={{
+      display: "inline-block",
+      padding: "12px 18px",
+      background: "#176b53",
+      color: "#fff",
+      textDecoration: "none",
+      borderRadius: 9,
+      fontWeight: 600
+    }}
+  >
+    Manage listing updates
+  </Link>
+</section>
+
         <section style={card}>
           <h2>My ownership claims</h2>
           <p>All claims require independent administrative review. Your account alone does not grant access to manage a care home.</p>
