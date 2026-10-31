@@ -20,6 +20,8 @@ type Facility = {
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
+const disclosureUrl = (license: string) =>
+  `https://fortress.wa.gov/dshs/adsaapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(license)}`;
 const card: React.CSSProperties = { background: "white", border: `1px solid ${C.border}`, borderRadius: 16, padding: 24, boxShadow: "0 5px 16px rgba(18,60,89,.045)" };
 const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 };
 
@@ -106,6 +108,18 @@ export default function WashingtonFacilityProfile() {
                 <h2 id="verify-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>Verify before choosing care</h2>
                 <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>This facility was matched by license number against a Washington DSHS locator download. That match does <strong>not</strong> independently establish its current license standing or quality of care.</p>
                 <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={linkStyle}>Check the official Washington DSHS locator ↗</a>
+                {facility.license_number && (
+  <p style={{ marginTop: 12 }}>
+    <a
+      href={disclosureUrl(facility.license_number)}
+      target="_blank"
+      rel="noopener noreferrer"
+      style={linkStyle}
+    >
+      View Official Disclosure of Services (DSHS)
+    </a>
+  </p>
+)}
               </section>
               <section style={card} aria-labelledby="questions-heading">
                 <h2 id="questions-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>Questions to ask the home</h2>
