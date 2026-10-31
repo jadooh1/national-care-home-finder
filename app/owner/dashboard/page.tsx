@@ -55,7 +55,7 @@ export default function OwnerDashboard() {
     const term = search.trim().replace(/[^a-zA-Z0-9\s-]/g, "").slice(0, 70);
     if (term.length < 3) { setSearchError("Enter at least 3 letters or numbers."); return; }
     setSearching(true);
-    const { data, error: queryError } = await supabase.from("wa_dshs_listed_facilities")
+    const { data, error: queryError } = await supabase.from("facilities")
       .select("id,canonical_name,address_line1,city,county,license_number")
       .or(`canonical_name.ilike.%${term}%,license_number.ilike.%${term}%,city.ilike.%${term}%`)
       .order("canonical_name", { ascending: true }).limit(15);
