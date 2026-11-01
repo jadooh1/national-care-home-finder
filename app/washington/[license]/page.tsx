@@ -16,12 +16,13 @@ type Facility = {
   license_number: string | null;
   licensed_capacity: number | null;
   record_status: string;
+  dshs_disclosure_url: string | null;
 };
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
-const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
+const DSHS_URL = "https://fortress.wa.gov/dshs/adsapps/lookup/AFHAdvLookup.aspx";
 const disclosureUrl = (license: string) =>
-  `https://fortress.wa.gov/dshs/adsaapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(license)}`;
+  `https://fortress.wa.gov/dshs/adsapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(license)}`;
 const card: React.CSSProperties = { background: "white", border: `1px solid ${C.border}`, borderRadius: 16, padding: 24, boxShadow: "0 5px 16px rgba(18,60,89,.045)" };
 const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 };
 
@@ -31,6 +32,7 @@ export default function WashingtonFacilityProfile() {
   const params = useParams();
   const license = typeof params.license === "string" ? params.license : "";
   const [facility, setFacility] = useState<Facility | null>(null);
+  const [verifiedDisclosureUrl, setVerifiedDisclosureUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notFound, setNotFound] = useState(false);
@@ -38,9 +40,10 @@ export default function WashingtonFacilityProfile() {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    setError("");
-    setFacility(null);
-    setNotFound(false);
+   setError("");
+setFacility(null);
+setVerifiedDisclosureUrl(null);
+setNotFound(false);
     if (!/^\d{1,20}$/.test(license)) {
       setNotFound(true);
       setLoading(false);
@@ -53,7 +56,18 @@ export default function WashingtonFacilityProfile() {
         .eq("license_number", license)
         .limit(1)
         .maybeSingle();
-      if (cancelled) return;
+      const { data: disclosureData } = await supabase
+  .from("wa_dshs_disclosure_links")
+  .select("dshs_disclosure_url")
+  .eq("license_number", license)
+  .limit(1)
+  .maybeSingle();
+
+if (cancelled) return;
+
+setVerifiedDisclosureUrl(
+  disclosureData?.dshs_disclosure_url ?? null
+);
       if (queryError) setError("Unable to load this facility right now. Please try again later.");
       else if (!data) setNotFound(true);
       else setFacility(data as Facility);
@@ -111,8 +125,11 @@ export default function WashingtonFacilityProfile() {
                 {facility.license_number && (
   <p style={{ marginTop: 12 }}>
     <a
-      href={disclosureUrl(facility.license_number)}
-      target="_blank"
+    href={
+  verifiedDisclosureUrl ||
+  disclosureUrl(facility.license_number)
+}
+target="_blank"
       rel="noopener noreferrer"
       style={linkStyle}
     >
