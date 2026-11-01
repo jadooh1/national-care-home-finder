@@ -20,9 +20,8 @@ type Facility = {
 };
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
-const DSHS_URL = "https://fortress.wa.gov/dshs/adsapps/lookup/AFHAdvLookup.aspx";
-const disclosureUrl = (license: string) =>
-  `https://fortress.wa.gov/dshs/adsapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(license)}`;
+const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
+const disclosureUrl = (license: string) => `https://fortress.wa.gov/dshs/adsaapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(license)}`;
 const card: React.CSSProperties = { background: "white", border: `1px solid ${C.border}`, borderRadius: 16, padding: 24, boxShadow: "0 5px 16px rgba(18,60,89,.045)" };
 const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 };
 
