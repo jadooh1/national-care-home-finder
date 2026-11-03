@@ -21,6 +21,12 @@
 --
 -- public.facilities and every other view are intentionally untouched.
 -- security_invoker views depend on underlying table privileges.
+--
+-- This script is one transaction. Permission changes and the index
+-- operation commit together. Any error before COMMIT rolls all of
+-- them back.
+
+begin;
 
 -- Restates the verified anon and authenticated table-level revocations.
 -- The PUBLIC revocation in this statement is proposed and has not been
@@ -452,3 +458,5 @@ begin
   end if;
 end
 $$;
+
+commit;

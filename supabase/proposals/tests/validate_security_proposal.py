@@ -147,7 +147,12 @@ WHERE relname LIKE 'owner_claims_predicate_probe%';
 
 
 def run_with_probe_check(database, on_error_stop):
-    sql = proposal_text() + "\n" + probe_count_sql()
+    sql = proposal_text()
+    if not on_error_stop:
+        # A failed proposal aborts its transaction. Roll it back before
+        # the cleanup query, or PostgreSQL rejects every later command.
+        sql += "\nROLLBACK;\n"
+    sql += "\n" + probe_count_sql()
     return psql(database, sql, on_error_stop=on_error_stop)
 
 
@@ -562,6 +567,48 @@ def scenario_privileges():
         )
 
 
+def scenario_permission_rollback():
+    scenario = "14. Late failure rolls back permission changes"
+    create_database(
+        "proposal_s14",
+        setup_sql(
+            CLAIMS,
+            extra="""
+            CREATE UNIQUE INDEX owner_claims_one_active_claim_per_user_facility
+              ON public.owner_claims USING btree (facility_id, claimant_user_id)
+              WHERE verification_status = 'pending';
+            """,
+        ),
+    )
+    code, output = run_proposal("proposal_s14")
+    if code == 0 or "does not canonically match" not in output.lower():
+        record(scenario, False, output)
+        return
+    code, output = psql(
+        "proposal_s14",
+        """
+        SELECT 'STILL_GRANTED=' || count(*)::text
+        FROM information_schema.role_table_grants
+        WHERE table_schema = 'public'
+          AND table_name IN (
+            'wa_dshs_listed_facilities',
+            'wa_afh_map_facilities'
+          )
+          AND grantee IN ('anon', 'authenticated', 'PUBLIC')
+          AND privilege_type = 'INSERT';
+        """,
+        on_error_stop=True,
+    )
+    if code != 0 or "STILL_GRANTED=6" not in output.replace(" ", ""):
+        record(scenario, False, output)
+        return
+    record(
+        scenario,
+        True,
+        "predicate failure rolled back the earlier privilege changes",
+    )
+
+
 def scenario_create_index():
     scenario = "13. Index absent is created correctly"
     create_database("proposal_s13", setup_sql(CLAIMS))
@@ -624,6 +671,7 @@ def main():
         scenario_missing_views,
         scenario_probe_cleanup,
         scenario_privileges,
+        scenario_permission_rollback,
         scenario_create_index,
     ]
     for scenario in scenarios:
