@@ -613,13 +613,94 @@ def scenario_permission_rollback():
     if code != 0 or "STILL_GRANTED=6" not in compact:
         record(scenario, False, output)
         return
-    if SERVER_VERSION_NUM >= 170000 and "STILL_MAINTAIN=6" not in compact:
-        record(scenario, False, output)
-        return
     detail = "predicate failure rolled back the earlier privilege changes"
     if SERVER_VERSION_NUM >= 170000:
+        try:
+            create_database(
+                "proposal_s14_maintain",
+                setup_sql(
+                    CLAIMS,
+                    extra="""
+                    CREATE UNIQUE INDEX owner_claims_one_active_claim_per_user_facility
+                      ON public.owner_claims USING btree (facility_id, claimant_user_id)
+                      WHERE verification_status = 'pending';
+                    """,
+                ),
+            )
+            grant_maintain("proposal_s14_maintain")
+        except RuntimeError as error:
+            record(scenario, False, str(error))
+            return
+        maintain_code, maintain_output = run_proposal("proposal_s14_maintain")
+        if maintain_code == 0 or "does not canonically match" not in maintain_output.lower():
+            record(scenario, False, maintain_output)
+            return
+        try:
+            remaining = maintain_grant_count("proposal_s14_maintain")
+        except RuntimeError as error:
+            record(scenario, False, str(error))
+            return
+        if remaining != 6:
+            record(scenario, False, f"expected 6 MAINTAIN grants after rollback, found {remaining}")
+            return
         detail += ", including MAINTAIN"
     record(scenario, True, detail)
+
+
+MAINTAIN_GRANT = """
+GRANT MAINTAIN ON TABLE
+  public.wa_dshs_listed_facilities,
+  public.wa_afh_map_facilities
+TO PUBLIC, anon, authenticated;
+"""
+
+
+def grant_maintain(database):
+    code, output = psql(database, MAINTAIN_GRANT, on_error_stop=True)
+    if code != 0:
+        raise RuntimeError(output)
+
+
+def maintain_grant_count(database):
+    code, output = psql(
+        database,
+        """
+        SELECT 'PRIVILEGE_COUNT=' || count(*)::text
+        FROM pg_class AS relation
+        JOIN pg_namespace AS schema
+          ON schema.oid = relation.relnamespace
+        CROSS JOIN LATERAL aclexplode(relation.relacl) AS acl
+        LEFT JOIN pg_roles AS grantee
+          ON grantee.oid = acl.grantee
+        WHERE schema.nspname = 'public'
+          AND relation.relname IN (
+            'wa_dshs_listed_facilities',
+            'wa_afh_map_facilities'
+          )
+          AND acl.privilege_type = 'MAINTAIN'
+          AND (
+            acl.grantee = 0
+            OR grantee.rolname IN ('anon', 'authenticated')
+          );
+        """,
+        on_error_stop=True,
+    )
+    if code != 0:
+        raise RuntimeError(output)
+    compact = output.replace(" ", "")
+    marker = "PRIVILEGE_COUNT="
+    start = compact.find(marker)
+    if start < 0:
+        raise RuntimeError(output)
+    digits = []
+    for character in compact[start + len(marker):]:
+        if character.isdigit():
+            digits.append(character)
+        else:
+            break
+    if not digits:
+        raise RuntimeError(output)
+    return int("".join(digits))
 
 
 def privilege_count(database, privilege):
@@ -668,7 +749,8 @@ def scenario_maintain_privilege():
     database = "proposal_s15"
     create_database(database, setup_sql(CLAIMS, extra=CORRECT_INDEX))
     try:
-        before = privilege_count(database, "MAINTAIN")
+        grant_maintain(database)
+        before = maintain_grant_count(database)
     except RuntimeError as error:
         record(scenario, False, str(error))
         return
@@ -680,7 +762,7 @@ def scenario_maintain_privilege():
         record(scenario, False, output)
         return
     try:
-        after = privilege_count(database, "MAINTAIN")
+        after = maintain_grant_count(database)
         select_count = privilege_count(database, "SELECT")
     except RuntimeError as error:
         record(scenario, False, str(error))
