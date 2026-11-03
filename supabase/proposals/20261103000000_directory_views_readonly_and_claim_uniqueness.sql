@@ -87,12 +87,8 @@ declare
   claims_relation oid;
   key_columns text[];
   predicate_text text;
-  status_type_oid oid;
-  status_category "char";
-  status_type text;
-  sample_values text;
-  verification_query text;
-  predicate_matches boolean;
+  expected_predicate text;
+  probe_index regclass;
 begin
   if not exists (
     select 1
@@ -180,18 +176,25 @@ begin
         'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility is not a valid, ready, live unique partial index on public.owner_claims.';
     end if;
 
+    -- indkey is an int2vector whose subscripts start at 0. Subscript 0
+    -- is the first key column. Every key position is retained so an
+    -- expression key cannot shift the remaining names into place.
     select coalesce(
-             array_agg(attribute.attname order by key_column.ordinality),
+             array_agg(
+               coalesce(attribute.attname, '<expression>')
+               order by key_subscript.subscript
+             ),
              '{}'::text[]
            )
       into key_columns
     from pg_index as index_row
-    cross join lateral generate_series(1, index_row.indnkeyatts) as key_column(ordinality)
-    join pg_attribute as attribute
+    cross join lateral generate_series(0, index_row.indnkeyatts - 1) as key_subscript(subscript)
+    left join pg_attribute as attribute
       on attribute.attrelid = index_row.indrelid
-     and attribute.attnum = index_row.indkey[key_column.ordinality]
-    where index_row.indexrelid = existing_index
-      and index_row.indkey[key_column.ordinality] > 0;
+     and attribute.attnum = index_row.indkey[key_subscript.subscript]
+     and attribute.attnum > 0
+     and not attribute.attisdropped
+    where index_row.indexrelid = existing_index;
 
     if key_columns is distinct from array['facility_id', 'claimant_user_id'] then
       raise exception
@@ -209,99 +212,64 @@ begin
         'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility has no partial predicate.';
     end if;
 
-    -- Compare the stored predicate by evaluation. This accepts any
-    -- equivalent spelling of pending and approved, and it rejects a
-    -- predicate that disagrees on any sample value.
-    select attribute.atttypid,
-           typ.typcategory,
-           format_type(attribute.atttypid, attribute.atttypmod)
-      into status_type_oid, status_category, status_type
-    from pg_attribute as attribute
-    join pg_type as typ
-      on typ.oid = attribute.atttypid
-    where attribute.attrelid = claims_relation
-      and attribute.attname = 'verification_status'
-      and attribute.attnum > 0
-      and not attribute.attisdropped;
-
-    if status_type is null then
+    if not exists (
+      select 1
+      from pg_attribute as attribute
+      where attribute.attrelid = claims_relation
+        and attribute.attname = 'verification_status'
+        and attribute.attnum > 0
+        and not attribute.attisdropped
+    ) then
       raise exception
         'Refusing to continue: public.owner_claims.verification_status does not exist, so the claim index predicate cannot be verified.';
     end if;
 
-    if status_category = 'E' then
-      select string_agg(
-               format('(%L::%s)', enum_label.enumlabel, status_type),
-               ', ' order by enum_label.enumsortorder
-             )
-        into sample_values
-      from pg_enum as enum_label
-      where enum_label.enumtypid = status_type_oid;
-    elsif status_category = 'S' then
-      select string_agg(
-               format('(%L::%s)', literal.value, status_type),
-               ', ' order by literal.ordinality
-             )
-        into sample_values
-      from (
-        values
-          (1, 'pending'),
-          (2, 'approved'),
-          (3, 'rejected'),
-          (4, 'denied'),
-          (5, 'revoked'),
-          (6, 'PENDING'),
-          (7, 'Approved'),
-          (8, 'pending '),
-          (9, '')
-      ) as literal(ordinality, value);
-    else
+    -- Identity is established by asking PostgreSQL to record the
+    -- intended predicate on a temporary copy of the column definitions
+    -- and comparing that canonical expression with the existing one.
+    -- A different spelling is rejected even if it might be semantically
+    -- similar. Sample values are not treated as proof. The temporary
+    -- objects are not created in public and are removed before success.
+    if to_regclass('pg_temp.owner_claims_predicate_probe') is not null
+      or to_regclass('pg_temp.owner_claims_predicate_probe_idx') is not null then
       raise exception
-        'Refusing to continue: public.owner_claims.verification_status has type %, which this proposal does not use for predicate verification.',
-        status_type;
+        'Refusing to continue: a predicate probe object already exists in this session.';
     end if;
-
-    if sample_values is null then
-      raise exception
-        'Refusing to continue: no verification_status sample values are available to verify the claim index predicate.';
-    end if;
-
-    sample_values := sample_values || format(', (NULL::%s)', status_type);
-    verification_query := replace(
-      $query$
-        select coalesce(bool_and(
-                 predicate_result is not distinct from
-                 (verification_status in ('pending', 'approved'))
-               ), false)
-        from (
-          select sample.verification_status,
-                 (__PREDICATE__) as predicate_result
-          from (values __SAMPLES__) as sample(verification_status)
-        ) as checks
-      $query$,
-      '__SAMPLES__',
-      sample_values
-    );
-    verification_query := replace(
-      verification_query,
-      '__PREDICATE__',
-      predicate_text
-    );
 
     begin
-      execute verification_query into predicate_matches;
+      execute 'create temp table owner_claims_predicate_probe (like public.owner_claims)';
+      execute $probe$
+        create index owner_claims_predicate_probe_idx
+          on pg_temp.owner_claims_predicate_probe (verification_status)
+          where verification_status in ('pending', 'approved')
+      $probe$;
+
+      probe_index := to_regclass('pg_temp.owner_claims_predicate_probe_idx');
+      if probe_index is null then
+        raise exception
+          'Refusing to continue: the canonical predicate probe index was not created.';
+      end if;
+
+      select pg_get_expr(index_row.indpred, index_row.indrelid)
+        into expected_predicate
+      from pg_index as index_row
+      where index_row.indexrelid = probe_index;
+
+      if expected_predicate is null
+        or predicate_text is distinct from expected_predicate then
+        raise exception
+          'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility predicate does not canonically match verification_status in (''pending'', ''approved''). Existing predicate: %. Canonical predicate: %',
+          predicate_text,
+          coalesce(expected_predicate, '<none>');
+      end if;
+
+      execute 'drop table pg_temp.owner_claims_predicate_probe';
     exception
       when others then
-        raise exception
-          'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility predicate could not be verified. Existing predicate: %',
-          predicate_text;
+        -- This handler creates a subtransaction, so a failed probe rolls
+        -- back its temporary table instead of leaving it behind.
+        raise;
     end;
-
-    if predicate_matches is not true then
-      raise exception
-        'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility predicate does not represent verification_status in (''pending'', ''approved''). Existing predicate: %',
-        predicate_text;
-    end if;
   else
     execute $index$
       create unique index owner_claims_one_active_claim_per_user_facility
