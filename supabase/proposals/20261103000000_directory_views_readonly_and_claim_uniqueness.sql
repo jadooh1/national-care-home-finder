@@ -89,6 +89,22 @@ declare
   predicate_text text;
   expected_predicate text;
   probe_index regclass;
+  index_access_method name;
+  nulls_not_distinct boolean;
+  key_subscript integer;
+  key_attnum smallint;
+  key_opclass oid;
+  key_collation oid;
+  key_name name;
+  key_type oid;
+  column_collation oid;
+  lookup_type oid;
+  base_type oid;
+  type_kind "char";
+  opclass_count integer;
+  opclass_depth integer;
+  default_opclass oid;
+  expected_name name;
 begin
   if not exists (
     select 1
@@ -202,6 +218,138 @@ begin
         key_columns;
     end if;
 
+    -- Unique enforcement must be the default B-tree equality semantics:
+    -- btree access method, the default operator class for each column
+    -- type, the column's own collation, and distinct nulls. A missing
+    -- or ambiguous catalog answer stops the proposal.
+    select access_method.amname
+      into index_access_method
+    from pg_class as index_relation
+    join pg_am as access_method
+      on access_method.oid = index_relation.relam
+    where index_relation.oid = existing_index;
+
+    if index_access_method is distinct from 'btree' then
+      raise exception
+        'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility uses access method %, not btree.',
+        coalesce(index_access_method, '<unknown>');
+    end if;
+
+    begin
+      execute
+        'select indnullsnotdistinct from pg_index where indexrelid = $1'
+        into nulls_not_distinct
+        using existing_index;
+    exception
+      when others then
+        raise exception
+          'Refusing to continue: null-distinct uniqueness behavior could not be verified for public.owner_claims_one_active_claim_per_user_facility.';
+    end;
+
+    if nulls_not_distinct is distinct from false then
+      raise exception
+        'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility does not use default null-distinct unique comparisons.';
+    end if;
+
+    -- indclass and indcollation are oidvectors. Like indkey, their
+    -- subscripts start at 0.
+    for key_subscript in 0..1 loop
+      select index_row.indkey[key_subscript],
+             index_row.indclass[key_subscript],
+             index_row.indcollation[key_subscript]
+        into key_attnum, key_opclass, key_collation
+      from pg_index as index_row
+      where index_row.indexrelid = existing_index;
+
+      expected_name := case key_subscript
+        when 0 then 'facility_id'
+        else 'claimant_user_id'
+      end;
+
+      if key_attnum is null or key_attnum <= 0 then
+        raise exception
+          'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility key % is an expression, not %.',
+          key_subscript,
+          expected_name;
+      end if;
+
+      select attribute.attname,
+             attribute.atttypid,
+             attribute.attcollation
+        into key_name, key_type, column_collation
+      from pg_attribute as attribute
+      where attribute.attrelid = claims_relation
+        and attribute.attnum = key_attnum
+        and attribute.attnum > 0
+        and not attribute.attisdropped;
+
+      if key_name is distinct from expected_name
+        or key_type is null
+        or key_collation is distinct from column_collation then
+        raise exception
+          'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility key % does not match % with its column collation.',
+          key_subscript,
+          expected_name;
+      end if;
+
+      default_opclass := null;
+      lookup_type := key_type;
+      opclass_depth := 0;
+      while lookup_type is not null and lookup_type <> 0 loop
+        opclass_depth := opclass_depth + 1;
+        if opclass_depth > 8 then
+          raise exception
+            'Refusing to continue: default btree operator class lookup did not finish for %.',
+            expected_name;
+        end if;
+        select count(*)
+          into opclass_count
+        from pg_opclass as operator_class
+        join pg_am as access_method
+          on access_method.oid = operator_class.opcmethod
+        where operator_class.opcintype = lookup_type
+          and access_method.amname = 'btree'
+          and operator_class.opcdefault;
+
+        if opclass_count > 1 then
+          raise exception
+            'Refusing to continue: more than one default btree operator class exists for %.',
+            lookup_type::regtype;
+        elsif opclass_count = 1 then
+          select operator_class.oid
+            into default_opclass
+          from pg_opclass as operator_class
+          join pg_am as access_method
+            on access_method.oid = operator_class.opcmethod
+          where operator_class.opcintype = lookup_type
+            and access_method.amname = 'btree'
+            and operator_class.opcdefault;
+          exit;
+        end if;
+
+        select typ.typtype, typ.typbasetype
+          into type_kind, base_type
+        from pg_type as typ
+        where typ.oid = lookup_type;
+
+        if type_kind = 'd'
+          and base_type is not null
+          and base_type <> 0 then
+          lookup_type := base_type;
+        else
+          lookup_type := null;
+        end if;
+      end loop;
+
+      if default_opclass is null
+        or key_opclass is distinct from default_opclass then
+        raise exception
+          'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility key % does not use the default btree operator class for %.',
+          expected_name,
+          coalesce(key_type::regtype::text, '<unknown>');
+      end if;
+    end loop;
+
     select pg_get_expr(index_row.indpred, index_row.indrelid)
       into predicate_text
     from pg_index as index_row
@@ -273,7 +421,7 @@ begin
   else
     execute $index$
       create unique index owner_claims_one_active_claim_per_user_facility
-        on public.owner_claims (facility_id, claimant_user_id)
+        on public.owner_claims using btree (facility_id, claimant_user_id)
         where verification_status in ('pending', 'approved')
     $index$;
   end if;
