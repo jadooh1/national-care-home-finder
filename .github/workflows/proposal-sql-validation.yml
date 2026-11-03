@@ -1,0 +1,56 @@
+# Runs the review-only security proposal against disposable PostgreSQL 16
+# and 17 service containers. This job does not connect to Supabase, does
+# not use production credentials, and does not deploy.
+name: Proposal SQL validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: proposal-sql-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Isolated PostgreSQL ${{ matrix.postgres_version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        postgres_version: ["16", "17"]
+    services:
+      postgres:
+        image: postgres:${{ matrix.postgres_version }}
+        env:
+          POSTGRES_USER: proposal_test
+          POSTGRES_PASSWORD: proposal-test-only
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U proposal_test -d postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      PGHOST: localhost
+      PGPORT: "5432"
+      PGUSER: proposal_test
+      PGPASSWORD: proposal-test-only
+      PGDATABASE: postgres
+    steps:
+      - name: Check out pull request
+        # actions/checkout v4.4.0
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Validate the security proposal
+        run: python3 supabase/proposals/tests/validate_security_proposal.py
