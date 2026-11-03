@@ -130,11 +130,30 @@ begin
       'Refusing to create the claim index: public.owner_claims.claimant_user_id must exist and be NOT NULL.';
   end if;
 
-  -- A malformed index must not be selected while counting claims.
-  -- The access-method check below is what rejects it.
-  perform set_config('enable_indexscan', 'off', true);
-  perform set_config('enable_indexonlyscan', 'off', true);
-  perform set_config('enable_bitmapscan', 'off', true);
+  -- Reject a non-btree index before any query plans a scan of owner_claims.
+  -- PostgreSQL validates the index access method while planning that scan.
+  select pg_class.oid, pg_class.relkind
+    into existing_index, existing_kind
+  from pg_class
+  join pg_namespace
+    on pg_namespace.oid = pg_class.relnamespace
+  where pg_namespace.nspname = 'public'
+    and pg_class.relname = 'owner_claims_one_active_claim_per_user_facility';
+
+  if existing_kind = 'i' then
+    select access_method.amname
+      into index_access_method
+    from pg_class as index_relation
+    join pg_am as access_method
+      on access_method.oid = index_relation.relam
+    where index_relation.oid = existing_index;
+
+    if index_access_method is distinct from 'btree' then
+      raise exception
+        'Refusing to continue: public.owner_claims_one_active_claim_per_user_facility uses access method %, not btree.',
+        coalesce(index_access_method, '<unknown>');
+    end if;
+  end if;
 
   select count(*)
     into duplicate_pairs
