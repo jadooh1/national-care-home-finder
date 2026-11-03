@@ -32,6 +32,7 @@ CREATE UNIQUE INDEX owner_claims_one_active_claim_per_user_facility
 """
 
 RESULTS = []
+SERVER_VERSION_NUM = 0
 
 
 def psql(database, sql=None, on_error_stop=True):
@@ -249,7 +250,9 @@ FROM information_schema.role_table_grants
 WHERE table_schema = 'public'
   AND table_name IN ('wa_dshs_listed_facilities', 'wa_afh_map_facilities')
   AND grantee IN ('anon', 'authenticated', 'PUBLIC')
-  AND privilege_type IN ('INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER')
+  AND privilege_type IN (
+    'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'MAINTAIN'
+  )
 UNION ALL
 SELECT 'MISSING select ' || roles.role_name || ' ' || views.view_name
 FROM (VALUES ('anon'), ('authenticated')) AS roles(role_name)
@@ -285,6 +288,7 @@ WHERE table_schema = 'public'
 
 
 def require_server():
+    global SERVER_VERSION_NUM
     output = admin("SELECT version(); SELECT current_setting('server_version_num');")
     print(output.strip(), flush=True)
     version_line = [
@@ -294,6 +298,7 @@ def require_server():
     ]
     if not version_line or int(version_line[-1]) < 160000:
         raise RuntimeError("PostgreSQL 16 or newer is required\n" + output)
+    SERVER_VERSION_NUM = int(version_line[-1])
     print(
         "command: psql -d <isolated-database> -v ON_ERROR_STOP=1 -f "
         + PROPOSAL.as_posix(),
@@ -587,7 +592,12 @@ def scenario_permission_rollback():
     code, output = psql(
         "proposal_s14",
         """
-        SELECT 'STILL_GRANTED=' || count(*)::text
+        SELECT 'STILL_GRANTED=' || count(*) FILTER (
+                 WHERE privilege_type = 'INSERT'
+               )::text
+               || ' STILL_MAINTAIN=' || count(*) FILTER (
+                 WHERE privilege_type = 'MAINTAIN'
+               )::text
         FROM information_schema.role_table_grants
         WHERE table_schema = 'public'
           AND table_name IN (
@@ -599,14 +609,90 @@ def scenario_permission_rollback():
         """,
         on_error_stop=True,
     )
-    if code != 0 or "STILL_GRANTED=6" not in output.replace(" ", ""):
+    compact = output.replace(" ", "")
+    if code != 0 or "STILL_GRANTED=6" not in compact:
         record(scenario, False, output)
         return
-    record(
-        scenario,
-        True,
-        "predicate failure rolled back the earlier privilege changes",
+    if SERVER_VERSION_NUM >= 170000 and "STILL_MAINTAIN=6" not in compact:
+        record(scenario, False, output)
+        return
+    detail = "predicate failure rolled back the earlier privilege changes"
+    if SERVER_VERSION_NUM >= 170000:
+        detail += ", including MAINTAIN"
+    record(scenario, True, detail)
+
+
+def privilege_count(database, privilege):
+    code, output = psql(
+        database,
+        f"""
+        SELECT 'PRIVILEGE_COUNT=' || count(*)::text
+        FROM information_schema.role_table_grants
+        WHERE table_schema = 'public'
+          AND table_name IN (
+            'wa_dshs_listed_facilities',
+            'wa_afh_map_facilities'
+          )
+          AND grantee IN ('anon', 'authenticated', 'PUBLIC')
+          AND privilege_type = '{privilege}';
+        """,
+        on_error_stop=True,
     )
+    if code != 0:
+        raise RuntimeError(output)
+    compact = output.replace(" ", "")
+    marker = "PRIVILEGE_COUNT="
+    start = compact.find(marker)
+    if start < 0:
+        raise RuntimeError(output)
+    digits = []
+    for character in compact[start + len(marker):]:
+        if character.isdigit():
+            digits.append(character)
+        else:
+            break
+    if not digits:
+        raise RuntimeError(output)
+    return int("".join(digits))
+
+
+def scenario_maintain_privilege():
+    scenario = "15. MAINTAIN removed when the server supports it"
+    if SERVER_VERSION_NUM < 170000:
+        record(
+            scenario,
+            True,
+            "PostgreSQL 16 has no MAINTAIN privilege; the revoke is skipped",
+        )
+        return
+    database = "proposal_s15"
+    create_database(database, setup_sql(CLAIMS, extra=CORRECT_INDEX))
+    try:
+        before = privilege_count(database, "MAINTAIN")
+    except RuntimeError as error:
+        record(scenario, False, str(error))
+        return
+    if before != 6:
+        record(scenario, False, f"expected 6 MAINTAIN grants before the proposal, found {before}")
+        return
+    code, output = run_proposal(database)
+    if code != 0:
+        record(scenario, False, output)
+        return
+    try:
+        after = privilege_count(database, "MAINTAIN")
+        select_count = privilege_count(database, "SELECT")
+    except RuntimeError as error:
+        record(scenario, False, str(error))
+        return
+    if after != 0 or select_count < 4:
+        record(
+            scenario,
+            False,
+            f"MAINTAIN count {after}; SELECT count {select_count}",
+        )
+        return
+    record(scenario, True, "MAINTAIN revoked from PUBLIC, anon, and authenticated; SELECT retained")
 
 
 def scenario_create_index():
@@ -672,6 +758,7 @@ def main():
         scenario_probe_cleanup,
         scenario_privileges,
         scenario_permission_rollback,
+        scenario_maintain_privilege,
         scenario_create_index,
     ]
     for scenario in scenarios:

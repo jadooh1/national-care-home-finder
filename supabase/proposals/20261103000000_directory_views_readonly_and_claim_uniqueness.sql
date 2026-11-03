@@ -18,6 +18,8 @@
 -- 1. Revoke those same table-level write privileges from PUBLIC.
 -- 2. Revoke column-level INSERT, UPDATE, and REFERENCES from PUBLIC,
 --    anon, and authenticated on every column of those two views.
+-- 3. Revoke MAINTAIN from PUBLIC, anon, and authenticated on those
+--    two views. PostgreSQL 17 has this privilege; PostgreSQL 16 does not.
 --
 -- public.facilities and every other view are intentionally untouched.
 -- security_invoker views depend on underlying table privileges.
@@ -41,6 +43,23 @@ grant select
   on table public.wa_dshs_listed_facilities,
            public.wa_afh_map_facilities
   to anon, authenticated;
+
+-- Proposed and not yet applied or verified.
+-- MAINTAIN is not a PostgreSQL 16 privilege. Running this statement
+-- only when the server is version 17 or newer keeps the script valid
+-- on both versions. SELECT granted above is not affected.
+do $$
+begin
+  if current_setting('server_version_num')::integer >= 170000 then
+    execute $maintain$
+      revoke maintain
+        on table public.wa_dshs_listed_facilities,
+                 public.wa_afh_map_facilities
+        from public, anon, authenticated
+    $maintain$;
+  end if;
+end
+$$;
 
 -- Proposed and not yet applied or verified.
 -- Column write privileges are INSERT, UPDATE, and REFERENCES.
