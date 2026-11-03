@@ -130,6 +130,12 @@ begin
       'Refusing to create the claim index: public.owner_claims.claimant_user_id must exist and be NOT NULL.';
   end if;
 
+  -- A malformed index must not be selected while counting claims.
+  -- The access-method check below is what rejects it.
+  perform set_config('enable_indexscan', 'off', true);
+  perform set_config('enable_indexonlyscan', 'off', true);
+  perform set_config('enable_bitmapscan', 'off', true);
+
   select count(*)
     into duplicate_pairs
   from (
