@@ -1,0 +1,32 @@
+---
+description: Stops production deploys, Supabase changes, secret changes, and merges
+alwaysApply: true
+---
+
+# Production protection
+
+Production is the deployed Vercel app, the production Supabase project, `main`, and live DNS. Do not change them unless a human gives an explicit approval for that exact action.
+
+Stop and ask before:
+
+- `vercel deploy`, `vercel --prod`, or changing Vercel env, domains, or project settings
+- any Supabase schema, policy, function, auth, or data change, including SQL run from the dashboard
+- editing GitHub Actions secrets, repository secrets, or environment protection rules
+- changing DNS or public environment variables
+- merging a pull request or pushing to `main`
+
+Allowed without a further production approval:
+
+- reading repository files
+- editing a non-`main` branch
+- opening or updating a draft pull request for that branch
+- running `npm run build` locally when dependencies are already available
+
+`.github/workflows/pr-validation.yml` may install dependencies and run `npm run build` on a pull request. It must not deploy, migrate, or receive secrets.
+
+```text
+# Not allowed from an agent task
+git push origin main
+gh pr merge
+vercel deploy --prod
+```

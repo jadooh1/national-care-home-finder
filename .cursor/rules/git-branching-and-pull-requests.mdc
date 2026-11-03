@@ -1,0 +1,22 @@
+---
+description: Branch, commit, and draft pull-request rules for this repository
+alwaysApply: true
+---
+
+# Git branching and pull requests
+
+Work leaves `main` only through a pull request. Agents open draft pull requests. Agents do not merge them.
+
+- Create a branch from current `main`. Use a prefix the change matches: `chore/`, `fix/`, or `feature/`.
+- Do not commit, push, or merge on `main`.
+- Do not force-push and do not skip hooks.
+- Do not mix an unrelated branch, such as `dev-facility-search-fix`, into the requested branch.
+- Do not commit `.env` files, key material, or generated `node_modules` and `.next` output.
+- Use `gh pr create --draft` with base `main`. Leave the pull request in draft.
+- Ask before pushing if the remote update could publish application changes outside the agreed branch.
+
+```text
+git checkout -b chore/example main
+# commit only the requested files
+gh pr create --draft --base main
+```

@@ -1,0 +1,26 @@
+---
+description: Architecture and coding standards for Next.js pages and the shared Supabase client
+globs: "{app,lib}/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Architecture and coding
+
+The app is the Next.js App Router in `app/`. Shared data access is `lib/supabase.ts`. Pages that use hooks or the browser Supabase client stay client components. Keep `app/layout.tsx` free of data fetching.
+
+- Add a route by adding `app/<route>/page.tsx`. Do not invent `app/api` routes unless the task asks for a server boundary.
+- Import the existing browser client. Do not construct a second Supabase client in a page.
+- Preserve the Washington search, map, owner, and admin flows when editing shared types or queries.
+- Query string links must be read by the destination page. City links use `/washington?city=&county=`. Map and demographics links use `?zip=`.
+- Keep user-facing copy accurate. Do not say a feature is unavailable when the page implements it.
+- Match the surrounding file's style. Do not add a styling framework or component library in a drive-by edit.
+
+```tsx
+// Good: one shared browser client
+import { supabase } from "../../lib/supabase";
+
+const { data, error } = await supabase
+  .from("wa_dshs_listed_facilities")
+  .select("id,canonical_name,license_number")
+  .limit(20);
+```

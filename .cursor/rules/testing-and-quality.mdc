@@ -1,0 +1,22 @@
+---
+description: Verification using the existing Next.js build script and the affected user flows
+globs: "{app,lib}/**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Testing and code quality
+
+The only verified package script for validation is `npm run build`. There is no lint script and no test runner. Do not add Jest, Playwright, ESLint, or another dependency in order to check a change.
+
+- Run `npm run build` before opening a pull request when Node.js and dependencies are available locally.
+- Do not treat `npm run dev` or `npm run start` as proof a change is correct.
+- For UI changes, exercise the touched flow: Washington search filters, map ZIP lookup, owner sign-in and claims, and admin review. A screenshot of the first paint is not enough.
+- TypeScript is strict in `tsconfig.json`. Do not silence a new error with `any` or a blanket `@ts-expect-error`.
+- Do not commit `.env`, `node_modules`, or `.next`.
+
+```text
+# Existing validation command
+npm run build
+```
+
+If Node.js or a lockfile is unavailable, say so in the pull request. Do not invent a passing check.

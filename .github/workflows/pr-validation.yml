@@ -1,0 +1,42 @@
+# Validates a pull request with the repository's existing build script.
+# Pull-request events only. contents: read. No secrets, deploy, or database access.
+name: Pull request validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-validation-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: npm run build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      # Non-routable placeholders so Next can inline public env names.
+      # These are not credentials and do not select a Supabase project.
+      NEXT_PUBLIC_SUPABASE_URL: https://ci.invalid
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-placeholder-not-a-credential
+    steps:
+      - name: Check out pull request
+        # actions/checkout v4.4.0 — commit tag verified against actions/checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Node.js
+        # actions/setup-node v4.4.0 — commit tag verified against actions/setup-node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+
+      - name: Install existing dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+
+      - name: Build
+        run: npm run build
