@@ -60,6 +60,51 @@ if ($rollbackText -notmatch "requires separate authorization") {
 $dropCount = [regex]::Matches($rollbackText, "(?i)drop\s+policy").Count
 if ($dropCount -ne 1) { throw "rollback drops $dropCount policies" }
 
+$committedManifest = Join-Path $proposal "20261105170000_wa_afh_directory_visibility.sha256"
+$packagedFiles = @(
+  @{ Name = "20261105170000_wa_afh_directory_visibility.sql"; Path = $sql },
+  @{ Name = "20261105170000_wa_afh_directory_visibility_ROLLBACK.sql"; Path = $rollback },
+  @{ Name = "20261105170000_wa_afh_directory_visibility_APP.md"; Path = $app },
+  @{ Name = "pg1711_directory_visibility_fixture.sql"; Path = $fixture },
+  @{ Name = "pg1711_directory_visibility_checks.sql"; Path = $checks },
+  @{ Name = "pg1711_directory_visibility_rollback_checks.sql"; Path = $rollbackChecks },
+  @{ Name = "pg1711_directory_visibility_runner.ps1"; Path = $PSCommandPath }
+)
+if (-not (Test-Path $committedManifest)) {
+  throw "SHA-256 preflight refused before PostgreSQL startup: committed manifest is missing"
+}
+$recordedHashes = @{}
+foreach ($line in @(Get-Content $committedManifest)) {
+  if ($line.Trim() -eq "") { continue }
+  $parts = $line -split "  ", 2
+  if ($parts.Count -ne 2) {
+    throw "SHA-256 preflight refused before PostgreSQL startup: manifest line is malformed"
+  }
+  $recordedHashes[$parts[1].Trim()] = $parts[0].Trim().ToLower()
+}
+if ($recordedHashes.Count -ne $packagedFiles.Count) {
+  throw "SHA-256 preflight refused before PostgreSQL startup: manifest does not record seven files"
+}
+foreach ($packagedFile in $packagedFiles) {
+  if (-not $recordedHashes.ContainsKey($packagedFile.Name)) {
+    throw "SHA-256 preflight refused before PostgreSQL startup: manifest omits $($packagedFile.Name)"
+  }
+  $actualHash = (Get-FileHash -Algorithm SHA256 $packagedFile.Path).Hash.ToLower()
+  if ($actualHash -ne $recordedHashes[$packagedFile.Name]) {
+    throw "SHA-256 preflight refused before PostgreSQL startup: $($packagedFile.Name)"
+  }
+}
+foreach ($recordedName in @($recordedHashes.Keys)) {
+  $known = $false
+  foreach ($packagedFile in $packagedFiles) {
+    if ($packagedFile.Name -eq $recordedName) { $known = $true }
+  }
+  if (-not $known) {
+    throw "SHA-256 preflight refused before PostgreSQL startup: manifest records $recordedName"
+  }
+}
+Write-Output "CASE manifest_preflight=pass"
+
 $runCreated = $false
 try {
   New-Item -ItemType Directory -Force -Path $run | Out-Null
