@@ -7,6 +7,7 @@ import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../../lib/supabase";
 
 type Claim = { id: string; facility_id: string; verification_status: string; reviewed_at: string | null };
+type ClaimEvent = { id: string; claim_id: string; event_type: string; to_status: string; created_at: string };
 type Facility = { id: string; canonical_name: string; address_line1: string | null; city: string | null; county: string | null; license_number: string | null };
 const field: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: 12, borderRadius: 8, border: "1px solid #cad9e2", fontSize: 16 };
 const card: React.CSSProperties = { background: "white", padding: 25, borderRadius: 14, border: "1px solid #dbe5eb", marginTop: 23 };
@@ -14,6 +15,7 @@ export default function OwnerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [claims, setClaims] = useState<Claim[]>([]);
+  const [events, setEvents] = useState<ClaimEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
@@ -30,7 +32,15 @@ export default function OwnerDashboard() {
       .select("id,facility_id,verification_status,reviewed_at")
       .eq("claimant_user_id", userId).order("id", { ascending: false });
     if (result.error) setError("Unable to load ownership claims. Please try again later.");
-    else { setClaims((result.data ?? []) as Claim[]); setError(""); }
+    else {
+      setClaims((result.data ?? []) as Claim[]);
+      const activity = await supabase.from("owner_claim_events")
+        .select("id,claim_id,event_type,to_status,created_at")
+        .order("created_at", { ascending: false }).limit(20);
+      if (activity.error) setEvents([]);
+      else setEvents((activity.data ?? []) as ClaimEvent[]);
+      setError("");
+    }
   }, []);
 
   useEffect(() => {
@@ -55,9 +65,10 @@ export default function OwnerDashboard() {
     const term = search.trim().replace(/[^a-zA-Z0-9\s-]/g, "").slice(0, 70);
     if (term.length < 3) { setSearchError("Enter at least 3 letters or numbers."); return; }
     setSearching(true);
+    const pattern = `"%${term}%"`;
     const { data, error: queryError } = await supabase.from("wa_dshs_listed_facilities")
       .select("id,canonical_name,address_line1,city,county,license_number")
-      .or(`canonical_name.ilike.%${term}%,license_number.ilike.%${term}%,city.ilike.%${term}%`)
+      .or(`canonical_name.ilike.${pattern},license_number.ilike.${pattern},city.ilike.${pattern}`)
       .order("canonical_name", { ascending: true }).limit(15);
     if (queryError) setSearchError("Unable to search facilities. Please retry.");
     else { setResults((data ?? []) as Facility[]); if (!data?.length) setSearchError("No matching listings. Try a facility name or license number."); }
@@ -78,12 +89,9 @@ export default function OwnerDashboard() {
     if (authError || !authData.user || authData.user.id !== user.id) {
       setError("Your session expired. Please sign in again."); setSubmitting(false); return;
     }
-    const result = await supabase.from("owner_claims").insert({
-      facility_id: selected.id,
-      claimant_user_id: authData.user.id,
-      verification_status: "pending",
-      evidence_notes: text.slice(0, 1500),
-      reviewed_at: null,
+    const result = await supabase.rpc("submit_owner_claim", {
+      p_facility_id: selected.id,
+      p_evidence_notes: text.slice(0, 1500),
     });
     if (result.error) setError("Claim could not be submitted. Please contact support if this continues.");
     else {
@@ -133,7 +141,7 @@ export default function OwnerDashboard() {
           <h2>My ownership claims</h2>
           <p>All claims require independent administrative review. Your account alone does not grant access to manage a care home.</p>
           {claims.length === 0 && <p>No ownership claims submitted yet.</p>}
-          {claims.map(c => <div key={c.id} style={{ padding: "14px 0", borderTop: "1px solid #dbe5eb" }}><div><strong>Facility ID:</strong> {c.facility_id}</div><div><strong>Status:</strong> {c.verification_status}</div></div>)}
+          {claims.map(c => <div key={c.id} style={{ padding: "14px 0", borderTop: "1px solid #dbe5eb" }}><div><strong>Facility ID:</strong> {c.facility_id}</div><div><strong>Status:</strong> {c.verification_status}</div>{events.filter(event => event.claim_id === c.id).map(event => <div key={event.id}>Activity: {event.event_type} → {event.to_status}</div>)}</div>)}
         </section>
         <section style={card}>
           <h2>Claim your facility</h2>

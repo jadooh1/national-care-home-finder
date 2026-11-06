@@ -23,9 +23,7 @@ export default function AdminClaimsPage() {
   const [statusFilter, setStatusFilter] = useState("pending");
 
   const refresh = useCallback(async () => {
-    const { data, error: e } = await supabase.from("owner_claims")
-      .select("id,facility_id,claimant_user_id,verification_status,evidence_notes,reviewed_at")
-      .order("id", { ascending: false }).limit(100);
+    const { data, error: e } = await supabase.rpc("admin_list_owner_claims");
     if (e) { setError("Unable to load claims. Check your administrator access and try again."); return; }
     const rows = (data ?? []) as Claim[];
     setClaims(rows);
@@ -97,7 +95,7 @@ export default function AdminClaimsPage() {
     Review listing proposals
   </Link>
 </div>
-  <p>Claims must be independently verified before approval. Approval records a decision only; it does not enable listing edits.</p>
+  <p>Claims must be independently verified before approval. Approval records a decision only; it does not publish listing text.</p>
       {loading && <p role="status">Checking administrator access…</p>}
       {error && <p role="alert" style={{ color: "#a32222" }}>{error}</p>}
       {notice && <p role="status" style={{ color: "#176b53", fontWeight: 700 }}>{notice}</p>}

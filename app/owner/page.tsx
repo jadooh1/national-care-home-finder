@@ -65,7 +65,7 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
           <button disabled={busy} type="submit" style={{ width: "100%", padding: 14, marginTop: 24, border: 0, borderRadius: 9, background: "#176b53", color: "white", fontSize: 16, fontWeight: 700, cursor: "pointer" }}>{busy ? "Please wait…" : mode === "register" ? "Create account" : "Sign in"}</button>
         </form>
       </section>
-      <p style={{ fontSize: 13, lineHeight: 1.6, color: "#536b7c" }}>This is an initial authentication test. Ownership claims and administrative approval are not yet enabled in the interface.</p>
+      <p style={{ fontSize: 13, lineHeight: 1.6, color: "#536b7c" }}>Registration does not verify facility ownership. A confirmed account can submit a claim, and an administrator must approve it before any listing proposal.</p>
     </div>
   </main>;
 }

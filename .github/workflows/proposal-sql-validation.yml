@@ -54,3 +54,6 @@ jobs:
 
       - name: Validate the security proposal
         run: python3 supabase/proposals/tests/validate_security_proposal.py
+
+      - name: Validate Phase 5C owner claims
+        run: python3 supabase/proposals/tests/validate_phase5c_owner_claims.py
