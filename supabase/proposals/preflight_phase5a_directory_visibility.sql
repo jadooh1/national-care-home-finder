@@ -10,6 +10,15 @@
 -- source_matched rows must not be visible yet. The 6265-row predicate,
 -- test-home visibility, inherited SELECT, and absent privilege snapshot
 -- are hard gates. This session must not carry rollback authorization.
+--
+-- Development execution, from the repository root. The command does not
+-- set a password. PGSSLROOTCERT must already name the development root
+-- certificate, and this command does not change it. Confirm the psql
+-- banner shows postgres.ajjsyloyihcqdomywhik at the development pooler.
+--
+-- if (-not $env:PGSSLROOTCERT -or -not (Test-Path -LiteralPath $env:PGSSLROOTCERT)) { throw "PGSSLROOTCERT must already name the development root certificate" }
+-- $env:PGSSLMODE = "verify-full"
+-- & "$env:TEMP\pg1711\pgsql\bin\psql.exe" -h aws-1-us-west-2.pooler.supabase.com -p 5432 -U postgres.ajjsyloyihcqdomywhik -d postgres -v ON_ERROR_STOP=1 -f "supabase\proposals\preflight_phase5a_directory_visibility.sql"
 
 BEGIN READ ONLY;
 
@@ -98,15 +107,75 @@ left join pg_attribute as attribute
  and not attribute.attisdropped
 order by required.attname;
 
-select 'RESULT|distribution|INFO|total=' || count(*)::text
-from public.facilities;
+do $preflight_distribution$
+declare
+  facilities_oid oid;
+  relation_kind "char";
+  missing_columns text;
+  total_rows bigint;
+  distribution_row record;
+begin
+  facilities_oid := to_regclass('public.facilities');
+  if facilities_oid is null then
+    raise notice 'RESULT|distribution|total|FAIL|rows=<unavailable>|missing=relation';
+    raise notice 'RESULT|distribution|grouped|FAIL|rows=<unavailable>|missing=relation';
+    return;
+  end if;
 
-select 'RESULT|distribution|INFO|source=' || coalesce(source_name, '<null>') ||
-       '|status=' || coalesce(record_status, '<null>') ||
-       '|rows=' || count(*)::text
-from public.facilities
-group by source_name, record_status
-order by source_name, record_status;
+  select relation.relkind
+    into relation_kind
+  from pg_class as relation
+  where relation.oid = facilities_oid;
+  if relation_kind is distinct from 'r'
+     and relation_kind is distinct from 'p'
+     and relation_kind is distinct from 'v'
+     and relation_kind is distinct from 'm'
+     and relation_kind is distinct from 'f' then
+    raise notice 'RESULT|distribution|total|FAIL|rows=<unavailable>|missing=structure';
+    raise notice 'RESULT|distribution|grouped|FAIL|rows=<unavailable>|missing=structure';
+    return;
+  end if;
+
+  select string_agg(required.attname, ',' order by required.attname)
+    into missing_columns
+  from (values ('record_status'), ('source_name')) as required(attname)
+  where not exists (
+    select 1
+    from pg_attribute as attribute
+    where attribute.attrelid = facilities_oid
+      and attribute.attname = required.attname
+      and attribute.attnum > 0
+      and not attribute.attisdropped
+  );
+  if missing_columns is not null then
+    raise notice 'RESULT|distribution|total|FAIL|rows=<unavailable>|missing=%', missing_columns;
+    raise notice 'RESULT|distribution|grouped|FAIL|rows=<unavailable>|missing=%', missing_columns;
+    return;
+  end if;
+
+  execute 'select count(*) from public.facilities' into total_rows;
+  raise notice 'RESULT|distribution|INFO|total=%', total_rows;
+  for distribution_row in
+    execute $distribution$
+      select coalesce(source_name, '<null>') as source_name,
+             coalesce(record_status, '<null>') as record_status,
+             count(*) as row_count
+      from public.facilities
+      group by source_name, record_status
+      order by source_name, record_status
+    $distribution$
+  loop
+    raise notice 'RESULT|distribution|INFO|source=%|status=%|rows=%',
+      distribution_row.source_name,
+      distribution_row.record_status,
+      distribution_row.row_count;
+  end loop;
+exception
+  when others then
+    raise notice 'RESULT|distribution|total|FAIL|rows=<unavailable>|sqlstate=%', sqlstate;
+    raise notice 'RESULT|distribution|grouped|FAIL|rows=<unavailable>|sqlstate=%', sqlstate;
+end
+$preflight_distribution$;
 
 do $preflight_predicate$
 declare
