@@ -1,0 +1,13 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets. Never commit real environment files.
+.env
+.env.*
+!.env.example
+
+npm-debug.log*
+*.log

@@ -1,0 +1,27 @@
+---
+description: How database changes are proposed without touching production Supabase
+globs: "supabase/**/*.sql"
+alwaysApply: false
+---
+
+# Database migrations
+
+This repository has no `supabase/` directory and no migration history. Production schema, policies, and data are outside the repo. Do not run SQL, `supabase db push`, or dashboard edits against production.
+
+- Stop and ask before adding or applying a migration.
+- If a task approves a migration, add a new forward-only file under `supabase/migrations/`. Do not edit a migration that is already applied.
+- Name files with a timestamp and a purpose, for example `supabase/migrations/20261102120000_owner_claims_pending_check.sql`.
+- Put Row Level Security and grants in the same change as the table or function they protect.
+- Claim status and listing-review functions must require an `app_admins` row and must reject self-review.
+- Do not include production data, copies of real rows, or credentials in SQL files.
+- A migration file in a pull request is a proposal. Applying it requires a separate approval and a non-production target.
+
+```sql
+-- Bad: unrestricted status change
+update public.owner_claims set verification_status = 'approved';
+
+-- Good: a proposed policy, not something an agent runs on production
+-- create policy "claimant inserts pending own claim"
+--   on public.owner_claims for insert
+--   with check (claimant_user_id = auth.uid() and verification_status = 'pending');
+```
