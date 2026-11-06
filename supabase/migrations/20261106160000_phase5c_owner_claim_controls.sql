@@ -1127,42 +1127,97 @@ begin
     id, edit_id, facility_id, actor_user_id, event_type, from_status, to_status, created_at
   ) on table public.listing_edit_events to authenticated;
 
-  select exists (
-    select 1
-    from (values ('anon'), ('authenticated'), ('public')) as browser(role_name)
-    cross join (
-      values
-        ('public.owner_claims'),
-        ('public.listing_edits'),
-        ('public.owner_claim_events'),
-        ('public.listing_edit_events'),
-        ('public.nchf_phase5c_privilege_snapshot')
-    ) as relation(name)
-    where has_table_privilege(browser.role_name, relation.name, 'INSERT')
-       or has_table_privilege(browser.role_name, relation.name, 'UPDATE')
-       or has_table_privilege(browser.role_name, relation.name, 'DELETE')
-       or has_table_privilege(browser.role_name, relation.name, 'TRUNCATE')
-       or (
-         relation.name = 'public.nchf_phase5c_privilege_snapshot'
-         and has_table_privilege(browser.role_name, relation.name, 'SELECT')
-       )
-       or (
-         browser.role_name <> 'authenticated'
-         and relation.name in (
-           'public.owner_claims',
-           'public.listing_edits',
-           'public.owner_claim_events',
-           'public.listing_edit_events'
+  -- PUBLIC is ACL grantee 0, not a role. Do not pass it to has_table_privilege.
+  select
+    exists (
+      select 1
+      from (values ('anon'), ('authenticated')) as browser(role_name)
+      cross join (
+        values
+          ('public.owner_claims'),
+          ('public.listing_edits'),
+          ('public.owner_claim_events'),
+          ('public.listing_edit_events'),
+          ('public.nchf_phase5c_privilege_snapshot')
+      ) as relation(name)
+      where has_table_privilege(browser.role_name, relation.name, 'INSERT')
+         or has_table_privilege(browser.role_name, relation.name, 'UPDATE')
+         or has_table_privilege(browser.role_name, relation.name, 'DELETE')
+         or has_table_privilege(browser.role_name, relation.name, 'TRUNCATE')
+         or (
+           relation.name = 'public.nchf_phase5c_privilege_snapshot'
+           and has_table_privilege(browser.role_name, relation.name, 'SELECT')
          )
-         and has_table_privilege(browser.role_name, relation.name, 'SELECT')
-       )
-  ) into browser_still_privileged;
+         or (
+           browser.role_name <> 'authenticated'
+           and relation.name in (
+             'public.owner_claims',
+             'public.listing_edits',
+             'public.owner_claim_events',
+             'public.listing_edit_events'
+           )
+           and has_table_privilege(browser.role_name, relation.name, 'SELECT')
+         )
+    )
+    or exists (
+      select 1
+      from pg_class as relation
+      cross join lateral pg_catalog.aclexplode(relation.relacl) as acl
+      where relation.oid = any (array[
+        'public.owner_claims'::regclass,
+        'public.listing_edits'::regclass,
+        'public.owner_claim_events'::regclass,
+        'public.listing_edit_events'::regclass,
+        'public.nchf_phase5c_privilege_snapshot'::regclass
+      ])
+        and acl.grantee = 0
+        and (
+          acl.privilege_type in ('INSERT', 'UPDATE', 'DELETE', 'TRUNCATE')
+          or (
+            relation.relname = 'nchf_phase5c_privilege_snapshot'
+            and acl.privilege_type = 'SELECT'
+          )
+          or (
+            relation.relname in (
+              'owner_claims',
+              'listing_edits',
+              'owner_claim_events',
+              'listing_edit_events'
+            )
+            and acl.privilege_type = 'SELECT'
+          )
+        )
+    )
+  into browser_still_privileged;
   if browser_still_privileged
      or has_table_privilege('authenticated', 'public.owner_claims', 'SELECT')
      or has_column_privilege('authenticated', 'public.owner_claims', 'evidence_notes', 'SELECT')
      or has_column_privilege('authenticated', 'public.listing_edits', 'proposed_value', 'SELECT')
      or has_column_privilege('anon', 'public.owner_claims', 'evidence_notes', 'INSERT')
-     or has_column_privilege('public', 'public.listing_edits', 'proposed_value', 'UPDATE')
+     or exists (
+       select 1
+       from pg_attribute as attribute
+       where attribute.attrelid = 'public.listing_edits'::regclass
+         and attribute.attname = 'proposed_value'
+         and attribute.attnum > 0
+         and not attribute.attisdropped
+         and (
+           exists (
+             select 1
+             from pg_catalog.aclexplode(attribute.attacl) as column_acl
+             where column_acl.grantee = 0
+               and column_acl.privilege_type = 'UPDATE'
+           )
+           or exists (
+             select 1
+             from pg_class as relation
+             cross join lateral pg_catalog.aclexplode(relation.relacl) as table_acl
+             where relation.oid = attribute.attrelid
+               and table_acl.grantee = 0
+               and table_acl.privilege_type = 'UPDATE'
+           )
+         )
+     )
      or not has_column_privilege('authenticated', 'public.owner_claims', 'verification_status', 'SELECT')
      or not has_column_privilege('authenticated', 'public.owner_claim_events', 'event_type', 'SELECT') then
     raise exception 'browser privileges were not reduced to the approved column list';

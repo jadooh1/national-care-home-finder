@@ -326,6 +326,122 @@ def scenario_checksum():
         record("rollback checksum refusal", False, output + check[1])
 
 
+def scenario_public_acl():
+    migration = MIGRATION.read_text(encoding="utf-8")
+    treats_public_as_role = (
+        "('public')" in migration
+        or "has_table_privilege('public'" in migration
+        or "has_column_privilege('public'" in migration
+    )
+    if treats_public_as_role or "acl.grantee = 0" not in migration:
+        record("public acl inspection", False, "verification still treats PUBLIC as a role")
+        return
+    create_database("phase5c_public_shape")
+    code, output = psql(
+        "phase5c_public_shape",
+        """
+        create table public.phase5c_public_probe (id integer, secret text);
+        revoke all on table public.phase5c_public_probe from public;
+        grant insert on table public.phase5c_public_probe to public;
+        grant update (secret) on table public.phase5c_public_probe to public;
+        select
+          exists (
+            select 1
+            from pg_class as relation
+            cross join lateral aclexplode(relation.relacl) as acl
+            where relation.oid = 'public.phase5c_public_probe'::regclass
+              and acl.grantee = 0
+              and acl.privilege_type = 'INSERT'
+          )
+          and not exists (
+            select 1
+            from pg_class as relation
+            cross join lateral aclexplode(relation.relacl) as acl
+            where relation.oid = 'public.phase5c_public_probe'::regclass
+              and acl.grantee = 0
+              and acl.privilege_type = 'UPDATE'
+          )
+          and exists (
+            select 1
+            from pg_attribute as attribute
+            cross join lateral aclexplode(attribute.attacl) as acl
+            where attribute.attrelid = 'public.phase5c_public_probe'::regclass
+              and attribute.attname = 'secret'
+              and acl.grantee = 0
+              and acl.privilege_type = 'UPDATE'
+          );
+        """,
+    )
+    if code == 0 and any(line.strip() == "t" for line in output.splitlines()):
+        record("public acl inspection", True, "table INSERT and column UPDATE are both visible at grantee 0")
+    else:
+        record("public acl inspection", False, output)
+        return
+
+    def refuse(database, grant_sql, label):
+        create_database(database)
+        setup = f"""
+        create function public.phase5c_plant_public_grant()
+        returns event_trigger
+        language plpgsql
+        as $fn$
+        begin
+          if pg_catalog.current_setting('nchf.phase5c_public_probe', true) = 'on' then
+            return;
+          end if;
+          perform pg_catalog.set_config('nchf.phase5c_public_probe', 'on', true);
+          if to_regclass('public.owner_claim_events') is null then
+            return;
+          end if;
+          execute {grant_sql!r};
+        end;
+        $fn$;
+        create event trigger phase5c_plant_public_grant
+          on ddl_command_end
+          when tag in ('GRANT')
+          execute function public.phase5c_plant_public_grant();
+        """
+        code, output = psql(database, setup)
+        if code != 0:
+            record(label, False, output)
+            return
+        code, output = run_files(database, [MIGRATION])
+        check = psql(
+            database,
+            """
+            select to_regclass('public.owner_claim_events') is null
+              and to_regclass('public.nchf_phase5c_privilege_snapshot') is null
+              and (select evidence_notes from public.owner_claims
+                   where id = '00000000-0000-4000-8000-0000000000c1')
+                  = 'preserved claim evidence'
+              and (select proposed_value from public.listing_edits
+                   where id = '00000000-0000-4000-8000-0000000000e1')
+                  = 'preserved proposal text'
+              and not (select relrowsecurity from pg_class
+                       where oid = 'public.nchf_phase5a_facilities_acl_snapshot'::regclass);
+            """,
+        )
+        if (
+            code != 0
+            and "browser privileges were not reduced to the approved column list" in output
+            and any(line.strip() == "t" for line in check[1].splitlines())
+        ):
+            record(label, True, "migration rolled back and the existing rows remain")
+        else:
+            record(label, False, output + check[1])
+
+    refuse(
+        "phase5c_public_table",
+        "grant insert on table public.owner_claims to public",
+        "public table privilege detection",
+    )
+    refuse(
+        "phase5c_public_column",
+        "grant update (proposed_value) on table public.listing_edits to public",
+        "public column privilege detection",
+    )
+
+
 def main():
     for path in (FIXTURE, MIGRATION, ROLLBACK, CHECKS):
         if not path.is_file():
@@ -348,6 +464,7 @@ def main():
         scenario_checksum,
         scenario_duplicate_rows,
         scenario_inherited,
+        scenario_public_acl,
     ):
         try:
             scenario()
