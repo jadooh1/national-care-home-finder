@@ -345,8 +345,54 @@ begin
   if not has_table_privilege('anon', 'public.phase5c_default_probe', 'INSERT')
      or has_table_privilege('anon', 'public.owner_claim_events', 'TRUNCATE')
      or has_table_privilege('authenticated', 'public.listing_edit_events', 'INSERT')
-     or has_column_privilege('public', 'public.owner_claim_events', 'event_type', 'UPDATE') then
+     or exists (
+       select 1
+       from pg_attribute as attribute
+       cross join lateral aclexplode(attribute.attacl) as column_acl
+       where attribute.attrelid = 'public.owner_claim_events'::regclass
+         and attribute.attname = 'event_type'
+         and column_acl.grantee = 0
+         and column_acl.privilege_type = 'UPDATE'
+     )
+     or exists (
+       select 1
+       from pg_class as relation
+       cross join lateral aclexplode(relation.relacl) as table_acl
+       where relation.oid = 'public.owner_claim_events'::regclass
+         and table_acl.grantee = 0
+         and table_acl.privilege_type in ('INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'SELECT')
+     ) then
     raise exception 'FAIL default privileges reappeared on the event tables';
+  end if;
+  if exists (
+    select 1
+    from pg_class as relation
+    cross join lateral aclexplode(relation.relacl) as table_acl
+    where relation.oid = any (array[
+      'public.owner_claims'::regclass,
+      'public.listing_edits'::regclass,
+      'public.owner_claim_events'::regclass,
+      'public.listing_edit_events'::regclass,
+      'public.nchf_phase5c_privilege_snapshot'::regclass
+    ])
+      and table_acl.grantee = 0
+      and table_acl.privilege_type in ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE')
+  ) or exists (
+    select 1
+    from pg_attribute as attribute
+    cross join lateral aclexplode(attribute.attacl) as column_acl
+    where attribute.attrelid = any (array[
+      'public.owner_claims'::regclass,
+      'public.listing_edits'::regclass,
+      'public.owner_claim_events'::regclass,
+      'public.listing_edit_events'::regclass,
+      'public.nchf_phase5c_privilege_snapshot'::regclass
+    ])
+      and attribute.attnum > 0
+      and not attribute.attisdropped
+      and column_acl.grantee = 0
+  ) then
+    raise exception 'FAIL public privileges remain on the protected tables';
   end if;
   drop table public.phase5c_default_probe;
 
