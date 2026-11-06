@@ -10,8 +10,9 @@ alwaysApply: false
 
 - Read `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` only. Never reference a service-role key in this repo.
 - Do not print environment values, tokens, or session secrets in logs, errors, or commits.
-- Inserts into `owner_claims` and `listing_edits` must stay compatible with restrictive policies. Do not send `verification_status: "approved"` or `review_status: "approved"` from the browser.
-- Admin decisions go through the existing RPCs: `admin_approve_owner_claim`, `admin_reject_owner_claim`, and `admin_review_listing_edit`. Do not update claim or review status with a direct table update.
+- Do not insert into `owner_claims` or `listing_edits` from the browser. Submit through `submit_owner_claim` and `submit_listing_edit`. Do not send `verification_status` or `review_status` from the browser.
+- Admin decisions go through `admin_approve_owner_claim`, `admin_reject_owner_claim`, and `admin_review_listing_edit`. Do not update claim or review status with a direct table update.
+- Read `evidence_notes` and `proposed_value` only through `admin_list_owner_claims` and `admin_list_listing_edits`. Do not select those columns from the browser tables.
 - Keep self-review blocked. Do not widen `app_admins` reads or writes.
 - Escape is React's default. Do not inject listing text with `dangerouslySetInnerHTML`. Leaflet popups must stay DOM text nodes, as in `app/washington/map/page.tsx`.
 - Quote or parameterize PostgREST filters. Do not interpolate raw search text into `.or()`.
@@ -20,6 +21,6 @@ alwaysApply: false
 // Bad: browser code decides that a claim is approved
 await supabase.from("owner_claims").insert({ verification_status: "approved" });
 
-// Good: submit a pending claim and let a reviewed admin RPC decide
-await supabase.from("owner_claims").insert({ verification_status: "pending" });
+// Good: the function records a pending claim and the admin RPC reviews it
+await supabase.rpc("submit_owner_claim", { p_facility_id: facilityId, p_evidence_notes: notes });
 ```

@@ -6,7 +6,7 @@ import { supabase } from "../../../lib/supabase";
 
 type Claim = { facility_id: string };
 type Facility = { id: string; canonical_name: string; license_number: string | null };
-type Edit = { id: string; facility_id: string; field_name: string; proposed_value: unknown; review_status: string; created_at: string };
+type Edit = { id: string; facility_id: string; field_name: string; review_status: string; created_at: string };
 const panel: React.CSSProperties = { background: "white", padding: 22, border: "1px solid #dbe5eb", borderRadius: 14, marginTop: 18 };
 const field: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: 12, borderRadius: 9, border: "1px solid #cad9e2", fontSize: 16 };
 export default function OwnerListingEdits() {
@@ -31,7 +31,7 @@ export default function OwnerListingEdits() {
       setFacilities((homes.data ?? []) as Facility[]);
       setFacilityId(old => ids.includes(old) ? old : ids[0]);
     } else { setFacilities([]); setFacilityId(""); }
-    const history = await supabase.from("listing_edits").select("id,facility_id,field_name,proposed_value,review_status,created_at").eq("submitted_by_user_id", userId).order("created_at", { ascending: false }).limit(100);
+    const history = await supabase.from("listing_edits").select("id,facility_id,field_name,review_status,created_at").eq("submitted_by_user_id", userId).order("created_at", { ascending: false }).limit(100);
     if (history.error) setError("Unable to load submitted proposals.");
     else { setEdits((history.data ?? []) as Edit[]); setError(""); }
   }
@@ -54,7 +54,7 @@ export default function OwnerListingEdits() {
     setBusy(true);
     const auth = await supabase.auth.getUser();
     if (auth.error || auth.data.user?.id !== uid) { setError("Session expired. Sign in again."); setBusy(false); return; }
-    const response = await supabase.from("listing_edits").insert({ facility_id: facilityId, submitted_by_user_id: uid, field_name: fieldName, proposed_value: proposed });
+    const response = await supabase.rpc("submit_listing_edit", { p_facility_id: facilityId, p_field_name: fieldName, p_proposed_value: proposed });
     if (response.error) setError("Could not submit proposal. Verify that your ownership claim was approved.");
     else { setValue(""); setNotice("Submitted for administrator review. No public listing has changed."); await refresh(uid); }
     setBusy(false);
@@ -71,7 +71,7 @@ export default function OwnerListingEdits() {
         <p style={{ fontSize: 13 }}>Do not include any resident personal information, health records, identity documents, or passwords.</p>
         <button disabled={busy} style={{ border: 0, borderRadius: 9, background: "#176b53", color: "white", padding: "12px 19px" }}>{busy ? "Submitting…" : "Submit proposal"}</button>
       </form>}</section>
-      <section style={panel}><h2>My proposals</h2>{edits.length === 0 && <p>No proposals yet.</p>}{edits.map(e => <article key={e.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities.find(f => f.id === e.facility_id)?.canonical_name ?? "Facility"}</strong> — {e.field_name}<p>Status: <strong>{e.review_status}</strong> · {new Date(e.created_at).toLocaleString()}</p><p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{typeof e.proposed_value === "string" ? e.proposed_value : JSON.stringify(e.proposed_value)}</p></article>)}</section>
+      <section style={panel}><h2>My proposals</h2><p>The proposed text is stored for administrator review and is not shown on this page.</p>{edits.length === 0 && <p>No proposals yet.</p>}{edits.map(e => <article key={e.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities.find(f => f.id === e.facility_id)?.canonical_name ?? "Facility"}</strong> — {e.field_name}<p>Status: <strong>{e.review_status}</strong> · {new Date(e.created_at).toLocaleString()}</p></article>)}</section>
     </>}
   </div></main>;
 }

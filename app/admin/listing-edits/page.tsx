@@ -20,7 +20,7 @@ export default function AdminListingEdits() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const refresh = useCallback(async () => {
-    const result = await supabase.from("listing_edits").select("id,facility_id,submitted_by_user_id,field_name,proposed_value,review_status,created_at,reviewed_at").order("created_at", { ascending: false }).limit(100);
+    const result = await supabase.rpc("admin_list_listing_edits");
     if (result.error) { setError("Unable to load proposals. Check administrator access."); return; }
     const rows = (result.data ?? []) as Edit[];
     setEdits(rows); setError("");
