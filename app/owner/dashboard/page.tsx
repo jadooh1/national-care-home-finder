@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "../../../lib/supabase";
+import { captureAndStripAuthCallback, recoveryPending, markRecoveryPending } from "../../../lib/password-recovery";
+
+captureAndStripAuthCallback();
 
 type Claim = { id: string; facility_id: string; verification_status: string; reviewed_at: string | null };
 type ClaimEvent = { id: string; claim_id: string; event_type: string; to_status: string; created_at: string };
@@ -48,13 +51,16 @@ export default function OwnerDashboard() {
     async function load() {
       const { data, error: authError } = await supabase.auth.getUser();
       if (!active) return;
+      if (recoveryPending()) { router.replace("/owner/reset-password"); return; }
       if (authError || !data.user) { router.replace("/owner"); return; }
       setUser(data.user);
       await loadClaims(data.user.id);
       if (active) setLoading(false);
     }
     void load();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY") markRecoveryPending();
+      if (event === "PASSWORD_RECOVERY" || recoveryPending()) { router.replace("/owner/reset-password"); return; }
       if (!session) { setUser(null); router.replace("/owner"); }
     });
     return () => { active = false; subscription.unsubscribe(); };

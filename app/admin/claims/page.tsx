@@ -4,6 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
+
+captureAndStripAuthCallback();
 
 type Claim = { id: string; facility_id: string; claimant_user_id: string; verification_status: string; evidence_notes: string | null; reviewed_at: string | null };
 type Facility = { id: string; canonical_name: string; license_number: string | null; city: string | null };
@@ -45,6 +48,7 @@ export default function AdminClaimsPage() {
     async function initialize() {
       const { data: auth, error: authError } = await supabase.auth.getUser();
       if (!active) return;
+      if (recoveryPending()) { router.replace("/owner/reset-password"); return; }
       if (authError || !auth.user) { router.replace("/owner"); return; }
       const { data: membership, error: membershipError } = await supabase.from("app_admins")
         .select("user_id").eq("user_id", auth.user.id).maybeSingle();
