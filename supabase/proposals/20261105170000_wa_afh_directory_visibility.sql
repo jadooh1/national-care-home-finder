@@ -17,6 +17,9 @@
 -- "Development test facility read": that authenticated policy is dropped
 -- so the unverified test home is not publicly readable. "Public read
 -- verified facilities" and every claim or edit policy stay unchanged.
+-- The post-change comparison reads only public.facilities,
+-- public.owner_claims, and public.listing_edits. Policies on other
+-- tables are outside that comparison and are left unchanged.
 -- The map view keeps its columns, grants, and security_invoker setting,
 -- and gains the published-source filter.
 --
@@ -474,8 +477,37 @@ begin
 
   if exists (
     select 1
-    from nchf_visibility_policy_before as before_policy
-    full join pg_policy as after_policy
+    from (
+      select before_policy.polrelid,
+             before_policy.polname,
+             before_policy.polcmd,
+             before_policy.polpermissive,
+             before_policy.polroles,
+             before_policy.qual,
+             before_policy.chk
+      from nchf_visibility_policy_before as before_policy
+      where before_policy.polrelid in (
+        'public.facilities'::regclass,
+        'public.owner_claims'::regclass,
+        'public.listing_edits'::regclass
+      )
+    ) as before_policy
+    full join (
+      select after_policy.oid,
+             after_policy.polrelid,
+             after_policy.polname,
+             after_policy.polcmd,
+             after_policy.polpermissive,
+             after_policy.polroles,
+             pg_get_expr(after_policy.polqual, after_policy.polrelid) as qual,
+             pg_get_expr(after_policy.polwithcheck, after_policy.polrelid) as chk
+      from pg_policy as after_policy
+      where after_policy.polrelid in (
+        'public.facilities'::regclass,
+        'public.owner_claims'::regclass,
+        'public.listing_edits'::regclass
+      )
+    ) as after_policy
       on after_policy.polrelid = before_policy.polrelid
      and after_policy.polname = before_policy.polname
     where coalesce(after_policy.polname, before_policy.polname)
@@ -491,10 +523,8 @@ begin
         or after_policy.polcmd is distinct from before_policy.polcmd
         or after_policy.polpermissive is distinct from before_policy.polpermissive
         or after_policy.polroles is distinct from before_policy.polroles
-        or pg_get_expr(after_policy.polqual, after_policy.polrelid)
-             is distinct from before_policy.qual
-        or pg_get_expr(after_policy.polwithcheck, after_policy.polrelid)
-             is distinct from before_policy.chk
+        or after_policy.qual is distinct from before_policy.qual
+        or after_policy.chk is distinct from before_policy.chk
       )
   ) then
     raise exception 'directory visibility gate refused: an existing facilities, claim, or edit policy changed';

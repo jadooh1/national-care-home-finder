@@ -144,6 +144,11 @@ try {
     throw "visibility checks failed: $($checked.Output)"
   }
   Write-Output "CASE restricted_column_denial=pass"
+  $unrelated = Invoke-LocalPsql -Database "visibility_pass" -User "postgres" -Command "select (select count(*) from pg_policy where polrelid = 'public.app_admins'::regclass and polname = 'app_admins_select_self' and polcmd = 'r')::text || '|' || (select string_agg(pg_get_userbyid(role_id), ',' order by pg_get_userbyid(role_id)) from pg_policy as policy cross join lateral unnest(policy.polroles) as role_id where policy.polrelid = 'public.app_admins'::regclass and policy.polname = 'app_admins_select_self') || '|' || (select count(*) from pg_policy where polrelid = 'public.ingest'::regclass and polname = 'ingest_definer_select' and polcmd = 'r')::text || '|' || (select string_agg(pg_get_userbyid(role_id), ',' order by pg_get_userbyid(role_id)) from pg_policy as policy cross join lateral unnest(policy.polroles) as role_id where policy.polrelid = 'public.ingest'::regclass and policy.polname = 'ingest_definer_select') || '|' || (select pg_get_expr(policy.polqual, policy.polrelid) from pg_policy as policy where policy.polrelid = 'public.ingest'::regclass and policy.polname = 'ingest_definer_select');"
+  if ($unrelated.Code -ne 0 -or $unrelated.Output -notmatch "1\|authenticated\|1\|ingest_definer\|true") {
+    throw "unrelated policies blocked or changed Phase 5A: $($unrelated.Output)"
+  }
+  Write-Output "CASE unrelated_policies_do_not_block=pass"
   $unauthorized = Invoke-LocalPsql -Database "visibility_pass" -User "postgres" -File $rollback
   if ($unauthorized.Code -eq 0 -or $unauthorized.Output -notmatch "requires separate authorization" -or $unauthorized.Output -match "(?m)^COMMIT\s*$") {
     throw "unauthorized rollback did not refuse: $($unauthorized.Output)"
@@ -249,6 +254,7 @@ try {
     "inherited_column_grant_refused=true",
     "inherited_table_grant_refused=true",
     "inherited_pg_read_all_data_refused=true",
+    "unrelated_policies_do_not_block=true",
     "repository_files_modified=false"
   ) -Encoding ascii
   Write-Output "DIRECTORY_VISIBILITY_REGRESSION_PASS"

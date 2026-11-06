@@ -77,6 +77,23 @@ begin
   if to_regclass('public.nchf_phase5a_facilities_acl_snapshot') is not null then
     raise exception 'rollback left the privilege snapshot';
   end if;
+  if (
+    select count(*)
+    from pg_policy as policy
+    where policy.polrelid = 'public.app_admins'::regclass
+      and policy.polname = 'app_admins_select_self'
+      and policy.polcmd = 'r'
+  ) is distinct from 1
+  or (
+    select count(*)
+    from pg_policy as policy
+    where policy.polrelid = 'public.ingest'::regclass
+      and policy.polname = 'ingest_definer_select'
+      and policy.polcmd = 'r'
+      and pg_get_expr(policy.polqual, policy.polrelid) = 'true'
+  ) is distinct from 1 then
+    raise exception 'rollback changed an unrelated app_admins or ingest policy';
+  end if;
   if not has_table_privilege('anon', 'public.facilities', 'select')
      or not has_table_privilege('authenticated', 'public.facilities', 'select')
      or not has_column_privilege('anon', 'public.facilities', 'public_phone', 'select')

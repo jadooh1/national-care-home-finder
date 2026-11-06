@@ -189,6 +189,52 @@ begin
     raise exception 'query column lists were not recorded';
   end if;
 
+  if (
+    select count(*)
+    from pg_policy as policy
+    where policy.polrelid = 'public.app_admins'::regclass
+  ) is distinct from 1
+  or (
+    select count(*)
+    from pg_policy as policy
+    where policy.polrelid = 'public.app_admins'::regclass
+      and policy.polname = 'app_admins_select_self'
+      and policy.polcmd = 'r'
+      and policy.polpermissive
+      and pg_get_expr(policy.polqual, policy.polrelid) ilike '%user_id%'
+      and pg_get_expr(policy.polqual, policy.polrelid) ilike '%request.jwt.claim.sub%'
+  ) is distinct from 1
+  or (
+    select string_agg(pg_get_userbyid(role_id), ',' order by pg_get_userbyid(role_id))
+    from pg_policy as policy
+    cross join lateral unnest(policy.polroles) as role_id
+    where policy.polrelid = 'public.app_admins'::regclass
+      and policy.polname = 'app_admins_select_self'
+  ) is distinct from 'authenticated'
+  or (
+    select count(*)
+    from pg_policy as policy
+    where policy.polrelid = 'public.ingest'::regclass
+  ) is distinct from 1
+  or (
+    select count(*)
+    from pg_policy as policy
+    where policy.polrelid = 'public.ingest'::regclass
+      and policy.polname = 'ingest_definer_select'
+      and policy.polcmd = 'r'
+      and policy.polpermissive
+      and pg_get_expr(policy.polqual, policy.polrelid) = 'true'
+  ) is distinct from 1
+  or (
+    select string_agg(pg_get_userbyid(role_id), ',' order by pg_get_userbyid(role_id))
+    from pg_policy as policy
+    cross join lateral unnest(policy.polroles) as role_id
+    where policy.polrelid = 'public.ingest'::regclass
+      and policy.polname = 'ingest_definer_select'
+  ) is distinct from 'ingest_definer' then
+    raise exception 'unrelated app_admins or ingest policies changed during Phase 5A';
+  end if;
+
   raise notice 'DIRECTORY_VISIBILITY_CHECKS_PASS';
 end
 $checks$;

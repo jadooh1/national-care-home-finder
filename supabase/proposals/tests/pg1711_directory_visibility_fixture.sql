@@ -116,6 +116,15 @@ create table public.listing_edits (
   review_status text not null
 );
 
+create table public.app_admins (
+  user_id uuid primary key
+);
+
+create table public.ingest (
+  id uuid primary key default gen_random_uuid(),
+  payload text
+);
+
 insert into public.owner_claims (facility_id, claimant_user_id, verification_status, evidence_notes)
 select id, '00000000-0000-4000-8000-0000000000a1', 'approved', 'private claim note for user a'
 from public.facilities
@@ -143,6 +152,8 @@ where license_number = '000002';
 alter table public.facilities enable row level security;
 alter table public.owner_claims enable row level security;
 alter table public.listing_edits enable row level security;
+alter table public.app_admins enable row level security;
+alter table public.ingest enable row level security;
 
 create policy "Development test facility read"
   on public.facilities
@@ -204,6 +215,18 @@ create policy listing_edits_insert_own
 
 create policy listing_edits_ingest_definer_select
   on public.listing_edits
+  for select
+  to ingest_definer
+  using (true);
+
+create policy app_admins_select_self
+  on public.app_admins
+  for select
+  to authenticated
+  using (user_id = current_setting('request.jwt.claim.sub', true)::uuid);
+
+create policy ingest_definer_select
+  on public.ingest
   for select
   to ingest_definer
   using (true);
