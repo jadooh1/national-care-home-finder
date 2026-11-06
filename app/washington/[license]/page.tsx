@@ -16,7 +16,6 @@ type Facility = {
   license_number: string | null;
   licensed_capacity: number | null;
   record_status: string;
-  dshs_disclosure_url: string | null;
 };
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
@@ -31,7 +30,6 @@ export default function WashingtonFacilityProfile() {
   const params = useParams();
   const license = typeof params.license === "string" ? params.license : "";
   const [facility, setFacility] = useState<Facility | null>(null);
-  const [verifiedDisclosureUrl, setVerifiedDisclosureUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notFound, setNotFound] = useState(false);
@@ -39,10 +37,9 @@ export default function WashingtonFacilityProfile() {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-   setError("");
-setFacility(null);
-setVerifiedDisclosureUrl(null);
-setNotFound(false);
+    setError("");
+    setFacility(null);
+    setNotFound(false);
     if (!/^\d{1,20}$/.test(license)) {
       setNotFound(true);
       setLoading(false);
@@ -55,18 +52,7 @@ setNotFound(false);
         .eq("license_number", license)
         .limit(1)
         .maybeSingle();
-      const { data: disclosureData } = await supabase
-  .from("wa_dshs_disclosure_links")
-  .select("dshs_disclosure_url")
-  .eq("license_number", license)
-  .limit(1)
-  .maybeSingle();
-
-if (cancelled) return;
-
-setVerifiedDisclosureUrl(
-  disclosureData?.dshs_disclosure_url ?? null
-);
+      if (cancelled) return;
       if (queryError) setError("Unable to load this facility right now. Please try again later.");
       else if (!data) setNotFound(true);
       else setFacility(data as Facility);
@@ -122,20 +108,12 @@ setVerifiedDisclosureUrl(
                 <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>This facility was matched by license number against a Washington DSHS locator download. That match does <strong>not</strong> independently establish its current license standing or quality of care.</p>
                 <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={linkStyle}>Check the official Washington DSHS locator ↗</a>
                 {facility.license_number && (
-  <p style={{ marginTop: 12 }}>
-    <a
-    href={
-  verifiedDisclosureUrl ||
-  disclosureUrl(facility.license_number)
-}
-target="_blank"
-      rel="noopener noreferrer"
-      style={linkStyle}
-    >
-      View Official Disclosure of Services (DSHS)
-    </a>
-  </p>
-)}
+                  <p style={{ marginTop: 12 }}>
+                    <a href={disclosureUrl(facility.license_number)} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                      View Official Disclosure of Services (DSHS)
+                    </a>
+                  </p>
+                )}
               </section>
               <section style={card} aria-labelledby="questions-heading">
                 <h2 id="questions-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>Questions to ask the home</h2>
