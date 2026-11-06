@@ -19,6 +19,16 @@
 -- verified facilities" and every claim or edit policy stay unchanged.
 -- The map view keeps its columns, grants, and security_invoker setting,
 -- and gains the published-source filter.
+--
+-- Direct SELECT grants for anon, authenticated, and PUBLIC are reduced to
+-- the directory and map columns. A column grant such as public_phone is
+-- removed in this same transaction, including a PUBLIC column grant and
+-- any grant option. An inherited role that can still read facilities
+-- stops the script before any change. That includes a direct table or
+-- column SELECT, ownership of public.facilities, superuser, and
+-- inherited membership in pg_read_all_data. The removed grants are saved
+-- in public.nchf_phase5a_facilities_acl_snapshot, with is_grantable, so
+-- rollback can restore the same direct grants and grant options.
 
 begin;
 
@@ -40,6 +50,9 @@ declare
   relation_name text;
   relation_acl text;
   before_acl text;
+  inherited_role text;
+  phone_exists boolean;
+  hash_column_exists boolean;
 begin
   if current_user is distinct from 'postgres'
      or session_user is distinct from 'postgres' then
@@ -194,6 +207,65 @@ begin
     raise exception 'directory visibility gate refused: map view is not the original unfiltered definition';
   end if;
 
+  select inherited.rolname
+    into inherited_role
+  from (
+    with recursive inherited_roles(roleid) as (
+      select membership.roleid
+      from pg_auth_members as membership
+      join pg_roles as member_role on member_role.oid = membership.member
+      where member_role.rolname in ('anon', 'authenticated')
+        and membership.inherit_option
+      union
+      select membership.roleid
+      from pg_auth_members as membership
+      join inherited_roles on inherited_roles.roleid = membership.member
+      where membership.inherit_option
+    )
+    select role_row.rolname
+    from inherited_roles
+    join pg_roles as role_row on role_row.oid = inherited_roles.roleid
+    where role_row.rolname not in ('anon', 'authenticated')
+      and (
+        role_row.rolsuper
+        or role_row.rolname = 'pg_read_all_data'
+        or role_row.oid = (
+          select facilities.relowner
+          from pg_class as facilities
+          where facilities.oid = 'public.facilities'::regclass
+        )
+        or exists (
+          select 1
+          from pg_class as facilities
+          cross join lateral aclexplode(facilities.relacl) as table_grant
+          where facilities.oid = 'public.facilities'::regclass
+            and table_grant.grantee = role_row.oid
+            and table_grant.privilege_type = 'SELECT'
+        )
+        or exists (
+          select 1
+          from pg_attribute as attribute
+          cross join lateral aclexplode(attribute.attacl) as column_grant
+          where attribute.attrelid = 'public.facilities'::regclass
+            and attribute.attnum > 0
+            and not attribute.attisdropped
+            and column_grant.grantee = role_row.oid
+            and column_grant.privilege_type = 'SELECT'
+        )
+      )
+    order by role_row.rolname
+    limit 1
+  ) as inherited;
+  if inherited_role is not null then
+    raise exception
+      'directory visibility gate refused: inherited role % grants select on public.facilities',
+      inherited_role;
+  end if;
+
+  if to_regclass('public.nchf_phase5a_facilities_acl_snapshot') is not null then
+    raise exception 'directory visibility gate refused: privilege snapshot already exists';
+  end if;
+
   create temporary table nchf_visibility_policy_before on commit drop as
   select policy.polrelid,
          policy.polname,
@@ -219,7 +291,62 @@ begin
     'public.wa_afh_map_facilities'::regclass
   );
 
-  revoke select on table public.facilities from anon, authenticated;
+  create table public.nchf_phase5a_facilities_acl_snapshot (
+    attname text not null default '',
+    grantee_oid oid not null,
+    privilege_type text not null,
+    is_grantable boolean not null,
+    primary key (attname, grantee_oid, privilege_type)
+  );
+  revoke all on table public.nchf_phase5a_facilities_acl_snapshot from public, anon, authenticated;
+
+  insert into public.nchf_phase5a_facilities_acl_snapshot (
+    attname, grantee_oid, privilege_type, is_grantable
+  )
+  select '', table_grant.grantee, table_grant.privilege_type, table_grant.is_grantable
+  from pg_class as facilities
+  cross join lateral aclexplode(facilities.relacl) as table_grant
+  where facilities.oid = 'public.facilities'::regclass
+    and table_grant.privilege_type = 'SELECT'
+    and (
+      table_grant.grantee = 0
+      or table_grant.grantee in (
+        select oid from pg_roles where rolname in ('anon', 'authenticated')
+      )
+    );
+
+  insert into public.nchf_phase5a_facilities_acl_snapshot (
+    attname, grantee_oid, privilege_type, is_grantable
+  )
+  select attribute.attname, column_grant.grantee, column_grant.privilege_type, column_grant.is_grantable
+  from pg_attribute as attribute
+  cross join lateral aclexplode(attribute.attacl) as column_grant
+  where attribute.attrelid = 'public.facilities'::regclass
+    and attribute.attnum > 0
+    and not attribute.attisdropped
+    and column_grant.privilege_type = 'SELECT'
+    and (
+      column_grant.grantee = 0
+      or column_grant.grantee in (
+        select oid from pg_roles where rolname in ('anon', 'authenticated')
+      )
+    );
+
+  revoke select on table public.facilities from anon, authenticated, public;
+  for relation_name in
+    select attribute.attname
+    from pg_attribute as attribute
+    where attribute.attrelid = 'public.facilities'::regclass
+      and attribute.attnum > 0
+      and not attribute.attisdropped
+    order by attribute.attnum
+  loop
+    execute format(
+      'revoke select (%I) on table public.facilities from anon, authenticated, public',
+      relation_name
+    );
+  end loop;
+
   grant select (
     id,
     canonical_name,
@@ -412,6 +539,55 @@ begin
     end if;
   end loop;
 
+  select exists (
+    select 1
+    from pg_attribute
+    where attrelid = 'public.facilities'::regclass
+      and attname = 'public_phone'
+      and attnum > 0
+      and not attisdropped
+  ) into phone_exists;
+  select exists (
+    select 1
+    from pg_attribute
+    where attrelid = 'public.facilities'::regclass
+      and attname = 'source_hash'
+      and attnum > 0
+      and not attisdropped
+  ) into hash_column_exists;
+
+  for relation_name in
+    select attribute.attname
+    from pg_attribute as attribute
+    where attribute.attrelid = 'public.facilities'::regclass
+      and attribute.attnum > 0
+      and not attribute.attisdropped
+  loop
+    if has_column_privilege('anon', 'public.facilities', relation_name, 'select')
+       is distinct from (
+         relation_name = any (array[
+           'id', 'canonical_name', 'address_line1', 'city', 'county', 'state_code',
+           'postal_code', 'license_number', 'licensed_capacity', 'record_status',
+           'latitude', 'longitude', 'source_name', 'license_category', 'facility_type',
+           'normalized_license_number'
+         ])
+       )
+       or has_column_privilege('authenticated', 'public.facilities', relation_name, 'select')
+          is distinct from (
+            relation_name = any (array[
+              'id', 'canonical_name', 'address_line1', 'city', 'county', 'state_code',
+              'postal_code', 'license_number', 'licensed_capacity', 'record_status',
+              'latitude', 'longitude', 'source_name', 'license_category', 'facility_type',
+              'normalized_license_number'
+            ])
+          )
+       or has_column_privilege('public', 'public.facilities', relation_name, 'select') then
+      raise exception
+        'directory visibility gate refused: public column privilege for % is not limited to the directory',
+        relation_name;
+    end if;
+  end loop;
+
   execute 'set local role anon';
   select count(*) into listed_count from public.wa_dshs_listed_facilities;
   select count(*) into map_count from public.wa_afh_map_facilities;
@@ -441,6 +617,18 @@ begin
   if hash_visible <> 0 then
     raise exception 'directory visibility gate refused: anon can read source_hash';
   end if;
+  if phone_exists then
+    begin
+      perform public_phone from public.facilities limit 1;
+      hash_visible := 1;
+    exception
+      when insufficient_privilege then
+        hash_visible := 0;
+    end;
+    if hash_visible <> 0 then
+      raise exception 'directory visibility gate refused: anon can read public_phone';
+    end if;
+  end if;
   execute 'set local role authenticated';
   select count(*) into listed_count from public.wa_dshs_listed_facilities;
   select count(*) into map_count from public.wa_afh_map_facilities;
@@ -457,6 +645,30 @@ begin
     raise exception
       'directory visibility gate refused: authenticated listed %, map %, directory test %, base test %',
       listed_count, map_count, test_visible, test_base;
+  end if;
+  if hash_column_exists then
+    begin
+      perform source_hash from public.facilities limit 1;
+      hash_visible := 1;
+    exception
+      when insufficient_privilege then
+        hash_visible := 0;
+    end;
+    if hash_visible <> 0 then
+      raise exception 'directory visibility gate refused: authenticated can read source_hash';
+    end if;
+  end if;
+  if phone_exists then
+    begin
+      perform public_phone from public.facilities limit 1;
+      hash_visible := 1;
+    exception
+      when insufficient_privilege then
+        hash_visible := 0;
+    end;
+    if hash_visible <> 0 then
+      raise exception 'directory visibility gate refused: authenticated can read public_phone';
+    end if;
   end if;
   execute 'reset role';
 

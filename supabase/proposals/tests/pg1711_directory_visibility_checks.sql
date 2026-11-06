@@ -15,6 +15,7 @@ declare
   claim_notes text;
   edit_count bigint;
   phone_visible integer;
+  hash_visible integer;
 begin
   select string_agg(attribute.attname, ',' order by attribute.attnum)
     into directory_columns
@@ -107,14 +108,21 @@ begin
     when insufficient_privilege then
       phone_visible := 0;
   end;
+  begin
+    perform source_hash from public.facilities limit 1;
+    hash_visible := 1;
+  exception
+    when insufficient_privilege then
+      hash_visible := 0;
+  end;
   execute 'reset role';
 
   if listed <> 6265 or other_source <> 0 or other_map <> 0
-     or verified_table <> 1 or phone_visible <> 0
+     or verified_table <> 1 or phone_visible <> 0 or hash_visible <> 0
      or test_directory <> 0 or test_base <> 0 then
     raise exception
-      'anon visibility failed listed % other % map % verified_table % phone % directory_test % base_test %',
-      listed, other_source, other_map, verified_table, phone_visible, test_directory, test_base;
+      'anon visibility failed listed % other % map % verified_table % phone % hash % directory_test % base_test %',
+      listed, other_source, other_map, verified_table, phone_visible, hash_visible, test_directory, test_base;
   end if;
 
   execute 'set local role authenticated';
@@ -127,11 +135,54 @@ begin
   select count(*) into other_map
   from public.wa_afh_map_facilities
   where canonical_name = 'VERIFIED OTHER SOURCE';
+  begin
+    perform public_phone from public.facilities limit 1;
+    phone_visible := 1;
+  exception
+    when insufficient_privilege then
+      phone_visible := 0;
+  end;
+  begin
+    perform source_hash from public.facilities limit 1;
+    hash_visible := 1;
+  exception
+    when insufficient_privilege then
+      hash_visible := 0;
+  end;
   execute 'reset role';
+  if phone_visible <> 0 or hash_visible <> 0 then
+    raise exception 'authenticated can read a restricted column phone % hash %', phone_visible, hash_visible;
+  end if;
   if test_directory <> 0 or test_base <> 0 or other_map <> 0 then
     raise exception
       'authenticated protection failed directory % base % map %',
       test_directory, test_base, other_map;
+  end if;
+  if has_column_privilege('anon', 'public.facilities', 'public_phone', 'select')
+     or has_column_privilege('authenticated', 'public.facilities', 'public_phone', 'select')
+     or has_column_privilege('public', 'public.facilities', 'public_phone', 'select')
+     or has_column_privilege('anon', 'public.facilities', 'source_hash', 'select')
+     or has_column_privilege('authenticated', 'public.facilities', 'source_hash', 'select')
+     or has_column_privilege('public', 'public.facilities', 'source_hash', 'select')
+     or not has_column_privilege('anon', 'public.facilities', 'canonical_name', 'select')
+     or not has_column_privilege('authenticated', 'public.facilities', 'canonical_name', 'select') then
+    raise exception 'public column privileges were not limited to the directory columns';
+  end if;
+  if exists (
+    select 1
+    from pg_attribute as attribute
+    cross join lateral aclexplode(attribute.attacl) as column_grant
+    where attribute.attrelid = 'public.facilities'::regclass
+      and attribute.attname in ('public_phone', 'source_hash')
+      and column_grant.privilege_type = 'SELECT'
+      and (
+        column_grant.grantee = 0
+        or column_grant.grantee in (
+          select oid from pg_roles where rolname in ('anon', 'authenticated')
+        )
+      )
+  ) then
+    raise exception 'a restricted column grant survived the migration';
   end if;
 
   if detail_columns is null or owner_columns is null then

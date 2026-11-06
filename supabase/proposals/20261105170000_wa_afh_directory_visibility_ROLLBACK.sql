@@ -2,10 +2,22 @@
 -- Do not execute it without a separate authorization and a verified
 -- development-database target. It must not be applied to production.
 --
+-- SECURITY DOWNGRADE. Restoring the saved table-level SELECT grants
+-- exposes every facilities column to the grantees who held that grant,
+-- including source_hash and public_phone. Restoring a saved column grant
+-- exposes that column directly. This file refuses to run unless the same
+-- session has already set:
+--   nchf.phase5a_rollback_authorization
+--     = authorize-directory-visibility-select-downgrade
+-- That setting is the separate authorization for this downgrade. A
+-- database target still has to be chosen outside this file.
+--
 -- Drops only facilities_public_read_wa_afh_source_matched, restores
 -- "Development test facility read" for authenticated, restores both view
--- definitions, and restores their saved grants. Claim and edit policies
--- are not changed.
+-- definitions, and restores their saved grants. Direct table and column
+-- SELECT for anon, authenticated, and PUBLIC, including grant options,
+-- are restored from public.nchf_phase5a_facilities_acl_snapshot, which is
+-- then removed. Claim and edit policies are not changed.
 
 begin;
 
@@ -20,10 +32,19 @@ declare
   map_acl text;
   restored_acl text;
   grant_row record;
+  relation_name text;
 begin
+  if current_setting('nchf.phase5a_rollback_authorization', true)
+     is distinct from 'authorize-directory-visibility-select-downgrade' then
+    raise exception
+      'directory visibility rollback refused: restoring table-level SELECT exposes source_hash and public_phone and requires separate authorization';
+  end if;
   if current_user is distinct from 'postgres'
      or session_user is distinct from 'postgres' then
     raise exception 'directory visibility rollback refused: current_user and session_user must be postgres';
+  end if;
+  if to_regclass('public.nchf_phase5a_facilities_acl_snapshot') is null then
+    raise exception 'directory visibility rollback refused: privilege snapshot is absent';
   end if;
 
   select string_agg(pg_get_userbyid(role_id), ',' order by pg_get_userbyid(role_id))
@@ -118,7 +139,52 @@ begin
     );
   end loop;
 
-  grant select on table public.facilities to anon, authenticated;
+  revoke select on table public.facilities from anon, authenticated, public;
+  for relation_name in
+    select attribute.attname
+    from pg_attribute as attribute
+    where attribute.attrelid = 'public.facilities'::regclass
+      and attribute.attnum > 0
+      and not attribute.attisdropped
+    order by attribute.attnum
+  loop
+    execute format(
+      'revoke select (%I) on table public.facilities from anon, authenticated, public',
+      relation_name
+    );
+  end loop;
+
+  for grant_row in
+    select snapshot.attname,
+           snapshot.grantee_oid,
+           snapshot.privilege_type,
+           snapshot.is_grantable
+    from public.nchf_phase5a_facilities_acl_snapshot as snapshot
+  loop
+    if grant_row.attname = '' then
+      execute format(
+        'grant %s on table public.facilities to %s%s',
+        grant_row.privilege_type,
+        case
+          when grant_row.grantee_oid = 0 then 'public'
+          else quote_ident(pg_get_userbyid(grant_row.grantee_oid))
+        end,
+        case when grant_row.is_grantable then ' with grant option' else '' end
+      );
+    else
+      execute format(
+        'grant %s (%I) on table public.facilities to %s%s',
+        grant_row.privilege_type,
+        grant_row.attname,
+        case
+          when grant_row.grantee_oid = 0 then 'public'
+          else quote_ident(pg_get_userbyid(grant_row.grantee_oid))
+        end,
+        case when grant_row.is_grantable then ' with grant option' else '' end
+      );
+    end if;
+  end loop;
+  drop table public.nchf_phase5a_facilities_acl_snapshot;
 
   create or replace view public.wa_afh_map_facilities
   with (security_invoker = true) as

@@ -233,7 +233,12 @@ where state_code = 'WA'
   and postal_code is not null
   and facility_type = 'AFH';
 
-grant select on table public.facilities to anon, authenticated;
+grant select on table public.facilities to anon;
+grant select on table public.facilities to authenticated with grant option;
+grant select (public_phone) on table public.facilities to anon;
+grant select (public_phone) on table public.facilities to authenticated with grant option;
+-- PUBLIC can hold this column grant. PostgreSQL rejects WITH GRANT OPTION for PUBLIC.
+grant select (public_phone) on table public.facilities to public;
 grant select on table public.wa_dshs_listed_facilities, public.wa_afh_map_facilities to anon, authenticated;
 grant select, insert on table public.owner_claims, public.listing_edits to authenticated;
 

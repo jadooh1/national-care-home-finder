@@ -12,6 +12,7 @@ declare
   test_roles text;
   claim_count bigint;
   claim_notes text;
+  acl_signature text;
 begin
   select string_agg(attribute.attname, ',' order by attribute.attnum)
     into columns
@@ -72,6 +73,69 @@ begin
   execute 'reset role';
   if test_visible <> 1 or test_base <> 1 then
     raise exception 'rollback authenticated test visibility directory % base %', test_visible, test_base;
+  end if;
+  if to_regclass('public.nchf_phase5a_facilities_acl_snapshot') is not null then
+    raise exception 'rollback left the privilege snapshot';
+  end if;
+  if not has_table_privilege('anon', 'public.facilities', 'select')
+     or not has_table_privilege('authenticated', 'public.facilities', 'select')
+     or not has_column_privilege('anon', 'public.facilities', 'public_phone', 'select')
+     or not has_column_privilege('authenticated', 'public.facilities', 'public_phone', 'select')
+     or not has_column_privilege('anon', 'public.facilities', 'source_hash', 'select')
+     or not has_column_privilege('authenticated', 'public.facilities', 'source_hash', 'select') then
+    raise exception 'rollback did not restore original facilities select';
+  end if;
+  if (
+    select count(*)
+    from pg_attribute as attribute
+    cross join lateral aclexplode(attribute.attacl) as column_grant
+    where attribute.attrelid = 'public.facilities'::regclass
+      and attribute.attname = 'public_phone'
+      and column_grant.privilege_type = 'SELECT'
+      and (
+        column_grant.grantee = 0
+        or column_grant.grantee in (
+          select oid from pg_roles where rolname in ('anon', 'authenticated')
+        )
+      )
+  ) <> 3 then
+    raise exception 'rollback did not restore the public_phone column grants';
+  end if;
+  select string_agg(item, ',' order by item)
+    into acl_signature
+  from (
+    select 'table|' || case when table_grant.grantee = 0 then 'public' else pg_get_userbyid(table_grant.grantee) end
+           || '|SELECT|' || table_grant.is_grantable::text as item
+    from pg_class as facilities
+    cross join lateral aclexplode(facilities.relacl) as table_grant
+    where facilities.oid = 'public.facilities'::regclass
+      and table_grant.privilege_type = 'SELECT'
+      and (
+        table_grant.grantee = 0
+        or table_grant.grantee in (
+          select oid from pg_roles where rolname in ('anon', 'authenticated')
+        )
+      )
+    union all
+    select 'column|' || attribute.attname || '|'
+           || case when column_grant.grantee = 0 then 'public' else pg_get_userbyid(column_grant.grantee) end
+           || '|SELECT|' || column_grant.is_grantable::text
+    from pg_attribute as attribute
+    cross join lateral aclexplode(attribute.attacl) as column_grant
+    where attribute.attrelid = 'public.facilities'::regclass
+      and attribute.attnum > 0
+      and not attribute.attisdropped
+      and column_grant.privilege_type = 'SELECT'
+      and (
+        column_grant.grantee = 0
+        or column_grant.grantee in (
+          select oid from pg_roles where rolname in ('anon', 'authenticated')
+        )
+      )
+  ) as saved_grants;
+  if acl_signature is distinct from
+     'column|public_phone|anon|SELECT|false,column|public_phone|authenticated|SELECT|true,column|public_phone|public|SELECT|false,table|anon|SELECT|false,table|authenticated|SELECT|true' then
+    raise exception 'rollback ACL signature is %', coalesce(acl_signature, '<none>');
   end if;
 
   perform set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', true);
