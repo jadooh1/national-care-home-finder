@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
@@ -24,9 +24,14 @@ export default function AdminClaimsPage() {
   const [reviewing, setReviewing] = useState<string | null>(null);
   const [confirm, setConfirm] = useState<{ id: string; action: "approve" | "reject" } | null>(null);
   const [statusFilter, setStatusFilter] = useState("pending");
+  const claimCursor = useRef<string | null>(null);
+  const pageSize = 20;
 
   const refresh = useCallback(async () => {
-    const { data, error: e } = await supabase.rpc("admin_list_owner_claims");
+    const { data, error: e } = await supabase.rpc("admin_list_owner_claims", {
+      p_limit: pageSize,
+      p_before_id: claimCursor.current,
+    });
     if (e) { setError("Unable to load claims. Check your administrator access and try again."); return; }
     const rows = (data ?? []) as Claim[];
     setClaims(rows);
@@ -40,7 +45,7 @@ export default function AdminClaimsPage() {
         for (const f of (facilityResult.data ?? []) as Facility[]) mapped[f.id] = f;
         setFacilities(mapped);
       }
-    }
+    } else setFacilities({});
   }, []);
 
   useEffect(() => {
@@ -110,7 +115,9 @@ export default function AdminClaimsPage() {
             <option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All</option>
           </select>
           <button style={button} type="button" onClick={() => void refresh()}>Refresh</button>
-          <span>{visibleClaims.length} matching claims (up to 100 latest records)</span>
+          <button style={{ ...button, background: "#536b7c" }} type="button" onClick={() => { claimCursor.current = null; void refresh(); }}>First page</button>
+          {claims.length === pageSize && <button style={{ ...button, background: "#536b7c" }} type="button" onClick={() => { claimCursor.current = claims[claims.length - 1].id; void refresh(); }}>Older records</button>}
+          <span>{visibleClaims.length} matching claims (20 per page)</span>
         </div>
         {visibleClaims.length === 0 && <section style={card}>No matching claims.</section>}
         {visibleClaims.map(c => <section key={c.id} style={card}>

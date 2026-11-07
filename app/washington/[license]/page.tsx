@@ -154,7 +154,7 @@ export default function WashingtonFacilityProfile() {
             </div>
           </div>
         )}
-        <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>Independent informational directory based on a DSHS locator download from October 23, 2026. Official name, address, license number, and capacity are not edited by facility owners. Owner-provided description, services, and amenities appear only after a separate administrator publication. Contact details, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations.</footer>
+        <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>Independent informational directory based on a DSHS locator download from October 23, 2026. Official name, address, license number, and capacity are not edited by facility owners. Owner-provided description, services, and amenities appear only after a separate administrator publication. Withdrawn owner text is removed from the public profile. Contact details, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations.</footer>
       </div>
     </main>
   );
