@@ -5,7 +5,7 @@ import Link from "next/link";
 import type * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../../../lib/supabase";
-import { DENSITY_BANDS, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary } from "../../../lib/family-journey";
+import { DENSITY_BANDS, densityColor, dshsDisclosureUrl, facilityProfilePath, invalidZipMessage, mapResultSummary, mappedCapacityNote } from "../../../lib/family-journey";
 
 type Home = {
   id: string;
@@ -216,7 +216,7 @@ export default function WashingtonMarketMapPage() {
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 13, marginBottom: 20 }}>
           <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>Mapped AFHs</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : homes.length.toLocaleString()}</div></div>
-          <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>Known licensed beds</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : knownCapacity.toLocaleString()}</div><small>{!loading && !error && missingCapacity > 0 ? `${missingCapacity} home(s) missing capacity` : "Not available beds"}</small></div>
+          <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>Known licensed beds</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : knownCapacity.toLocaleString()}</div>{mappedCapacityNote({ ready: !loading && !error, missing: missingCapacity }) && <small>{mappedCapacityNote({ ready: !loading && !error, missing: missingCapacity })}</small>}</div>
           <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>Homes in high-density clusters</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : highConcentration.toLocaleString()}</div><small>20+ AFHs within 1 mile</small></div>
         </div>
         <section aria-label="Interactive AFH facility map" style={{ border: `1px solid ${border}`, borderRadius: 14, overflow: "hidden", background: "white" }}>
@@ -240,7 +240,8 @@ export default function WashingtonMarketMapPage() {
             {homes.map(home => {
               const profile = facilityProfilePath(home.license_number);
               const label = prettyName(home.canonical_name);
-              return <li key={home.id}>{profile ? <Link href={profile} style={{ color: teal, fontWeight: 700 }}>{label}</Link> : label}{[home.city, home.license_number].filter(Boolean).length > 0 ? ` — ${[home.city, home.license_number ? `License ${home.license_number}` : ""].filter(Boolean).join(", ")}` : ""}</li>;
+              const disclosure = dshsDisclosureUrl(home.license_number);
+              return <li key={home.id}>{profile ? <Link href={profile} style={{ color: teal, fontWeight: 700 }}>{label}</Link> : label}{[home.city, home.license_number].filter(Boolean).length > 0 ? ` — ${[home.city, home.license_number ? `License ${home.license_number}` : ""].filter(Boolean).join(", ")}` : ""}{disclosure && <>{" · "}<a href={disclosure} target="_blank" rel="noopener noreferrer" style={{ color: teal, fontWeight: 700 }}>Official Disclosure of Services</a></>}</li>;
             })}
           </ul>
         </section>}

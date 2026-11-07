@@ -3,17 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
-import { facilityProfilePath } from "../../lib/family-journey";
+import { DIRECTORY_MATCH_LABEL, DSHS_LOCATOR_URL, dshsDisclosureUrl, facilityProfilePath } from "../../lib/family-journey";
 
 type Facility = {
   id: string; canonical_name: string; address_line1: string | null;
   city: string | null; county: string | null; state_code: string;
   postal_code: string | null; license_number: string | null;
-  licensed_capacity: number | null; record_status: string;
+  licensed_capacity: number | null;
 };
 
 const PAGE_SIZE = 20;
-const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const fieldStyle: React.CSSProperties = {
   boxSizing: "border-box", width: "100%", minWidth: 0, padding: "13px 14px",
@@ -44,7 +43,7 @@ export default function WashingtonPage() {
       const cityTerm = cleanSearch(city);
       const countyTerm = cleanSearch(county);
       let query = supabase.from("wa_dshs_listed_facilities")
-        .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status", { count: "exact" })
+        .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity", { count: "exact" })
         .order("canonical_name", { ascending: true }).order("id", { ascending: true })
         .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
       if (term) query = query.or([
@@ -194,7 +193,7 @@ export default function WashingtonPage() {
           </div>
           <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
             <button onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>Clear filters</button>
-            <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Official Washington DSHS locator ↗</a>
+            <a href={DSHS_LOCATOR_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Official Washington DSHS locator ↗</a>
           </div>
         </section>
         <div aria-live="polite" style={{ margin: "23px 0 15px", color: C.muted, fontWeight: 600 }}>
@@ -214,12 +213,12 @@ export default function WashingtonPage() {
                 <p style={{ margin: "8px 0" }}><strong>License:</strong> {facility.license_number ?? "Not available"}</p>
                 {facility.licensed_capacity !== null && <p style={{ margin: "8px 0" }}><strong>Recorded capacity:</strong> {facility.licensed_capacity}</p>}
                 <p style={{ borderTop: `1px solid ${C.border}`, paddingTop: 13, marginTop: 15, color: C.muted, fontSize: 14, lineHeight: 1.5 }}>
-                  {facility.record_status === "verified" ? "Independently verified listing" : "DSHS license-number match — not independently verified"}
+                  {DIRECTORY_MATCH_LABEL}
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 13, alignItems: "center" }}>
                   {facilityProfilePath(facility.license_number) && <Link href={facilityProfilePath(facility.license_number) as string} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>View details →</Link>}
                   {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>View location in Google Maps ↗</a>}
-                  <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Check DSHS ↗</a>
+                  {dshsDisclosureUrl(facility.license_number) && <a href={dshsDisclosureUrl(facility.license_number) as string} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Official Disclosure of Services ↗</a>}
                 </div>
               </article>
             );

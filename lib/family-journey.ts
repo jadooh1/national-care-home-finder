@@ -30,3 +30,23 @@ export function mapResultSummary(input: { zip: string; loading: boolean; error: 
 export function invalidZipMessage(currentZip: string): string {
   return `Enter a five-digit ZIP code. The map is still showing ZIP ${currentZip}.`;
 }
+
+export const DSHS_LOCATOR_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
+
+export const DIRECTORY_MATCH_LABEL = "DSHS license-number match — not independently verified";
+
+export function dshsDisclosureUrl(license: string | null | undefined): string | null {
+  const value = license?.trim() ?? "";
+  if (!/^\d{1,20}$/.test(value)) return null;
+  return `https://fortress.wa.gov/dshs/adsaapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(value)}`;
+}
+
+export function recordedCapacityText(capacity: number | null): string {
+  return capacity === null ? "Not available" : String(capacity);
+}
+
+export function mappedCapacityNote(input: { ready: boolean; missing: number }): string {
+  if (!input.ready) return "";
+  if (input.missing > 0) return `${input.missing} home(s) missing capacity`;
+  return "Recorded for every mapped home";
+}

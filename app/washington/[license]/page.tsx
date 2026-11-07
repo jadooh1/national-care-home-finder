@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { DSHS_LOCATOR_URL, dshsDisclosureUrl, recordedCapacityText } from "../../../lib/family-journey";
 
 type Facility = {
   id: string;
@@ -15,14 +16,11 @@ type Facility = {
   postal_code: string | null;
   license_number: string | null;
   licensed_capacity: number | null;
-  record_status: string;
 };
 type PublishedContent = { field_name: string; published_value: string; published_at: string };
 const publishedLabel: Record<string, string> = { description: "Description", services: "Services", amenities: "Amenities" };
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
-const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
-const disclosureUrl = (license: string) => `https://fortress.wa.gov/dshs/adsaapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(license)}`;
 const card: React.CSSProperties = { background: "white", border: `1px solid ${C.border}`, borderRadius: 16, padding: 24, boxShadow: "0 5px 16px rgba(18,60,89,.045)" };
 const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 };
 
@@ -52,7 +50,7 @@ export default function WashingtonFacilityProfile() {
     async function load() {
       const { data, error: queryError } = await supabase
         .from("wa_dshs_listed_facilities")
-        .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status")
+        .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity")
         .eq("license_number", license)
         .limit(1)
         .maybeSingle();
@@ -112,7 +110,7 @@ export default function WashingtonFacilityProfile() {
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>Address</dt><dd style={{ margin: "0 0 7px" }}>{address || "Not available"}</dd>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>County</dt><dd style={{ margin: "0 0 7px" }}>{facility.county ? `${facility.county} County` : "Not available"}</dd>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>License number</dt><dd style={{ margin: "0 0 7px" }}>{facility.license_number ?? "Not available"}</dd>
-                <dt style={{ fontWeight: 700, marginTop: 12 }}>Recorded licensed capacity</dt><dd style={{ margin: "0 0 7px" }}>{facility.licensed_capacity ?? "Not available"}{facility.licensed_capacity !== null ? " residents" : ""}</dd>
+                <dt style={{ fontWeight: 700, marginTop: 12 }}>Recorded licensed capacity</dt><dd style={{ margin: "0 0 7px" }}>{recordedCapacityText(facility.licensed_capacity)}</dd>
               </dl>
               {address && <p style={{ marginTop: 20 }}><a href={mapUrl} target="_blank" rel="noopener noreferrer" style={linkStyle}>View location in Google Maps ↗</a></p>}
               <p style={{ color: C.muted, lineHeight: 1.6 }}>Name, address, license number, and capacity come from the Washington DSHS locator download.</p>
@@ -133,10 +131,10 @@ export default function WashingtonFacilityProfile() {
               <section style={card} aria-labelledby="verify-heading">
                 <h2 id="verify-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>Verify before choosing care</h2>
                 <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>This facility was matched by license number against a Washington DSHS locator download. That match does <strong>not</strong> independently establish its current license standing or quality of care.</p>
-                <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={linkStyle}>Check the official Washington DSHS locator ↗</a>
-                {facility.license_number && (
+                <a href={DSHS_LOCATOR_URL} target="_blank" rel="noopener noreferrer" style={linkStyle}>Check the official Washington DSHS locator ↗</a>
+                {dshsDisclosureUrl(facility.license_number) && (
                   <p style={{ marginTop: 12 }}>
-                    <a href={disclosureUrl(facility.license_number)} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                    <a href={dshsDisclosureUrl(facility.license_number) as string} target="_blank" rel="noopener noreferrer" style={linkStyle}>
                       View Official Disclosure of Services (DSHS)
                     </a>
                   </p>
