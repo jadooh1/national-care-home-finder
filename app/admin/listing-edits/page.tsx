@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
-import { authorizationDecision, createListingRequestGate, currentListingInput, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, loadAdminListing, olderCursor, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
+import { authorizationDecision, createAdminActionGate, createListingRequestGate, currentListingInput, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, loadAdminListing, olderCursor, runAdminAction, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
 
 captureAndStripAuthCallback();
 
@@ -26,7 +26,7 @@ export default function AdminListingEdits() {
   const historyCursor = useRef<Cursor | null>(null);
   const reviewStatus = useRef("pending");
   const requests = useRef(createListingRequestGate());
-  const busyRef = useRef(false);
+  const actions = useRef(createAdminActionGate());
   const listingSource = useCallback((): AdminListingSource => ({
     async listEdits(request) {
       return supabase.rpc("admin_list_listing_edits", {
@@ -93,55 +93,52 @@ export default function AdminListingEdits() {
     })();
     return () => { active = false; };
   }, [listingInput, router, refresh]);
-  function finishAction(requestId: number, clear: () => void) {
-    if (requests.current.isLatest(requestId)) return false;
-    clear();
-    busyRef.current = false;
-    setBusy(false);
-    return true;
-  }
   async function review() {
-    if (!confirm || !adminId || busyRef.current) return;
+    if (!confirm || !adminId) return;
     const item = edits.find(e => e.id === confirm.id);
     if (!item || item.review_status !== "pending" || !item.submitted_by_user_id || item.submitted_by_user_id === adminId) { setError("Cannot review this proposal."); setConfirm(null); return; }
-    const request = requests.current.start(listingInput());
     const decision = confirm.decision;
-    busyRef.current = true; setBusy(true); setError(""); setNotice("");
-    const result = await supabase.rpc("admin_review_listing_edit", { p_edit_id: confirm.id, p_decision: decision });
-    if (finishAction(request.id, () => setConfirm(null))) return;
-    if (result.error || result.data !== true) setError(result.error?.message ?? "Review was not completed.");
-    else setNotice(`Proposal ${decision}. This records a decision but does NOT publish changes.`);
-    setConfirm(null);
-    if (result.data === true && !result.error) await refresh();
-    busyRef.current = false; setBusy(false);
+    const editId = confirm.id;
+    await runAdminAction(actions.current, async () => {
+      setBusy(true); setError(""); setNotice("");
+      return supabase.rpc("admin_review_listing_edit", { p_edit_id: editId, p_decision: decision });
+    }, async (result) => {
+      if (result.error || result.data !== true) setError(result.error?.message ?? "Review was not completed.");
+      else setNotice(`Proposal ${decision}. This records a decision but does NOT publish changes.`);
+      setConfirm(null);
+      if (result.data === true && !result.error) await refresh();
+    }, () => setBusy(false));
   }
   async function publish() {
-    if (!publishId || !adminId || busyRef.current) return;
+    if (!publishId || !adminId) return;
     const item = edits.find(e => e.id === publishId);
     if (!item || item.review_status !== "approved" || !item.submitted_by_user_id || item.submitted_by_user_id === adminId || item.current_publication) { setError("Cannot publish this proposal."); setPublishId(null); return; }
-    const request = requests.current.start(listingInput());
-    busyRef.current = true; setBusy(true); setError(""); setNotice("");
-    const result = await supabase.rpc("admin_publish_listing_edit", { p_edit_id: publishId });
-    if (finishAction(request.id, () => setPublishId(null))) return;
-    if (result.error || result.data !== true) setError(result.error?.message ?? "Publication was not completed.");
-    else setNotice("Owner text was published separately. Official DSHS name, address, license, and capacity were not changed.");
-    setPublishId(null);
-    if (result.data === true && !result.error) await refresh();
-    busyRef.current = false; setBusy(false);
+    const editId = publishId;
+    await runAdminAction(actions.current, async () => {
+      setBusy(true); setError(""); setNotice("");
+      return supabase.rpc("admin_publish_listing_edit", { p_edit_id: editId });
+    }, async (result) => {
+      if (result.error || result.data !== true) setError(result.error?.message ?? "Publication was not completed.");
+      else setNotice("Owner text was published separately. Official DSHS name, address, license, and capacity were not changed.");
+      setPublishId(null);
+      if (result.data === true && !result.error) await refresh();
+    }, () => setBusy(false));
   }
   async function withdraw() {
-    if (!withdrawId || !adminId || busyRef.current) return;
+    if (!withdrawId || !adminId) return;
     const item = edits.find(e => e.id === withdrawId);
     if (!item || !item.current_publication || item.submitted_by_user_id === adminId) { setError("Cannot withdraw this owner text."); setWithdrawId(null); return; }
-    const request = requests.current.start(listingInput());
-    busyRef.current = true; setBusy(true); setError(""); setNotice("");
-    const result = await supabase.rpc("admin_withdraw_published_owner_listing", { p_facility_id: item.facility_id, p_field_name: item.field_name });
-    if (finishAction(request.id, () => setWithdrawId(null))) return;
-    if (result.error || result.data !== true) setError(result.error?.message ?? "Withdrawal was not completed.");
-    else setNotice("Owner text was removed from the public profile. The audit history remains. Official DSHS name, address, license, and capacity were not changed.");
-    setWithdrawId(null);
-    if (result.data === true && !result.error) await refresh();
-    busyRef.current = false; setBusy(false);
+    const facilityId = item.facility_id;
+    const fieldName = item.field_name;
+    await runAdminAction(actions.current, async () => {
+      setBusy(true); setError(""); setNotice("");
+      return supabase.rpc("admin_withdraw_published_owner_listing", { p_facility_id: facilityId, p_field_name: fieldName });
+    }, async (result) => {
+      if (result.error || result.data !== true) setError(result.error?.message ?? "Withdrawal was not completed.");
+      else setNotice("Owner text was removed from the public profile. The audit history remains. Official DSHS name, address, license, and capacity were not changed.");
+      setWithdrawId(null);
+      if (result.data === true && !result.error) await refresh();
+    }, () => setBusy(false));
   }
   const matching = counts ? matchingProposals(counts, status) : null;
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", color: "#123c59", padding: "30px 5%", fontFamily: "Arial,sans-serif" }}><div style={{ maxWidth: 1050, margin: "auto" }}>
@@ -154,9 +151,9 @@ export default function AdminListingEdits() {
         const isCurrent = edit.current_publication;
         return <article key={edit.id} style={panel}><h2>{facilities[edit.facility_id]?.canonical_name ?? "Facility listing"}</h2><p>License: {facilities[edit.facility_id]?.license_number ?? "Not available"} · Field: <strong>{edit.field_name}</strong> · Status: <strong>{edit.review_status}</strong></p><p>Submitted: {new Date(edit.created_at).toLocaleString()}</p><p>Submitting user: <code style={{ overflowWrap: "anywhere" }}>{edit.submitted_by_user_id ?? "Unknown"}</code></p><div style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", background: "#f4f8fb", padding: 15, borderRadius: 8 }}>{typeof edit.proposed_value === "string" ? edit.proposed_value : JSON.stringify(edit.proposed_value)}</div>
         {isCurrent && <p>Currently published owner content as of {edit.current_published_at ? new Date(edit.current_published_at).toLocaleString() : "the latest publication"}. Official DSHS fields were not changed.</p>}
-        {edit.review_status === "pending" && (edit.submitted_by_user_id === adminId ? <p>Self-review is prohibited.</p> : <div style={{ display: "flex", gap: 12, marginTop: 18 }}><button type="button" style={btn} onClick={() => { setPublishId(null); setWithdrawId(null); setConfirm({ id: edit.id, decision: "approved" }); }}>Approve</button><button type="button" style={{ ...btn, background: "#9f2626" }} onClick={() => { setPublishId(null); setWithdrawId(null); setConfirm({ id: edit.id, decision: "rejected" }); }}>Reject</button></div>)}
-        {edit.review_status === "approved" && !isCurrent && (edit.submitted_by_user_id === adminId ? <p>Self-publication is prohibited.</p> : <div style={{ marginTop: 18 }}><button type="button" style={btn} onClick={() => { setConfirm(null); setWithdrawId(null); setPublishId(edit.id); }}>Publish owner text</button></div>)}
-        {isCurrent && (edit.submitted_by_user_id === adminId ? <p>This account submitted the published text and cannot withdraw it.</p> : <div style={{ marginTop: 18 }}><button type="button" style={{ ...btn, background: "#9f2626" }} onClick={() => { setConfirm(null); setPublishId(null); setWithdrawId(edit.id); }}>Withdraw owner text</button></div>)}
+        {edit.review_status === "pending" && (edit.submitted_by_user_id === adminId ? <p>Self-review is prohibited.</p> : <div style={{ display: "flex", gap: 12, marginTop: 18 }}><button type="button" disabled={busy} style={btn} onClick={() => { setPublishId(null); setWithdrawId(null); setConfirm({ id: edit.id, decision: "approved" }); }}>Approve</button><button type="button" disabled={busy} style={{ ...btn, background: "#9f2626" }} onClick={() => { setPublishId(null); setWithdrawId(null); setConfirm({ id: edit.id, decision: "rejected" }); }}>Reject</button></div>)}
+        {edit.review_status === "approved" && !isCurrent && (edit.submitted_by_user_id === adminId ? <p>Self-publication is prohibited.</p> : <div style={{ marginTop: 18 }}><button type="button" disabled={busy} style={btn} onClick={() => { setConfirm(null); setWithdrawId(null); setPublishId(edit.id); }}>Publish owner text</button></div>)}
+        {isCurrent && (edit.submitted_by_user_id === adminId ? <p>This account submitted the published text and cannot withdraw it.</p> : <div style={{ marginTop: 18 }}><button type="button" disabled={busy} style={{ ...btn, background: "#9f2626" }} onClick={() => { setConfirm(null); setPublishId(null); setWithdrawId(edit.id); }}>Withdraw owner text</button></div>)}
         {confirm?.id === edit.id && <div style={{ border: "2px solid #d4a152", borderRadius: 10, marginTop: 18, padding: 16, background: "#fffaf0" }}><strong>Confirm {confirm.decision}?</strong><p>Verify the claim and accuracy independently. Review decisions do not publish listing data.</p><button type="button" disabled={busy} style={btn} onClick={() => void review()}>{busy ? "Processing…" : "Confirm"}</button> <button type="button" disabled={busy} style={{ ...btn, background: "#536b7c" }} onClick={() => setConfirm(null)}>Cancel</button></div>}
         {publishId === edit.id && <div style={{ border: "2px solid #d4a152", borderRadius: 10, marginTop: 18, padding: 16, background: "#fffaf0" }}><strong>Publish this approved text?</strong><p>{edit.field_published ? "This replaces the current owner text. It does not change the official DSHS name, address, license number, or capacity." : <>This stores the owner-provided {edit.field_name} separately. It does not change the official DSHS name, address, license number, or capacity.</>}</p><button type="button" disabled={busy} style={btn} onClick={() => void publish()}>{busy ? "Publishing…" : "Confirm publication"}</button> <button type="button" disabled={busy} style={{ ...btn, background: "#536b7c" }} onClick={() => setPublishId(null)}>Cancel</button></div>}
         {withdrawId === edit.id && <div style={{ border: "2px solid #d4a152", borderRadius: 10, marginTop: 18, padding: 16, background: "#fffaf0" }}><strong>Withdraw this owner text?</strong><p>Withdrawal removes that text from the public profile, keeps the audit history, and does not change official DSHS name, address, license, or capacity.</p><button type="button" disabled={busy} style={{ ...btn, background: "#9f2626" }} onClick={() => void withdraw()}>{busy ? "Withdrawing…" : "Confirm withdrawal"}</button> <button type="button" disabled={busy} style={{ ...btn, background: "#536b7c" }} onClick={() => setWithdrawId(null)}>Cancel</button></div>}

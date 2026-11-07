@@ -41,5 +41,8 @@ jobs:
       - name: Check latest administrator request wins
         run: node --experimental-strip-types --test supabase/proposals/tests/phase5j_admin_listing_requests.ts
 
+      - name: Check administrator actions run once
+        run: node --experimental-strip-types --test supabase/proposals/tests/phase5k_admin_action_submissions.ts
+
       - name: Build
         run: npm run build
