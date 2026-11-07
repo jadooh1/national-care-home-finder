@@ -3,6 +3,9 @@ import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
+
+captureAndStripAuthCallback();
 
 type Edit = { id: string; facility_id: string; submitted_by_user_id: string | null; field_name: string; proposed_value: unknown; review_status: string; created_at: string; reviewed_at: string | null };
 type Facility = { id: string; canonical_name: string; license_number: string | null };
@@ -35,6 +38,7 @@ export default function AdminListingEdits() {
     void (async () => {
       const auth = await supabase.auth.getUser();
       if (!active) return;
+      if (recoveryPending()) { router.replace("/owner/reset-password"); return; }
       if (auth.error || !auth.data.user) { router.replace("/owner"); return; }
       const member = await supabase.from("app_admins").select("user_id").eq("user_id", auth.data.user.id).maybeSingle();
       if (!active) return;

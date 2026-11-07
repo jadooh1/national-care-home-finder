@@ -3,6 +3,9 @@ import { useEffect, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
+
+captureAndStripAuthCallback();
 
 type Claim = { facility_id: string };
 type Facility = { id: string; canonical_name: string; license_number: string | null };
@@ -40,6 +43,7 @@ export default function OwnerListingEdits() {
     void (async () => {
       const auth = await supabase.auth.getUser();
       if (!active) return;
+      if (recoveryPending()) { router.replace("/owner/reset-password"); return; }
       if (auth.error || !auth.data.user) { router.replace("/owner"); return; }
       setUid(auth.data.user.id);
       await refresh(auth.data.user.id);
