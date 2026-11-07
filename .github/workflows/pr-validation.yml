@@ -38,5 +38,8 @@ jobs:
       - name: Install existing dependencies
         run: npm install --ignore-scripts --no-audit --no-fund
 
+      - name: Check latest administrator request wins
+        run: node --experimental-strip-types --test supabase/proposals/tests/phase5j_admin_listing_requests.ts
+
       - name: Build
         run: npm run build
