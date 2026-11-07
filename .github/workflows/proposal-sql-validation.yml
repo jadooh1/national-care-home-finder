@@ -60,3 +60,6 @@ jobs:
 
       - name: Validate Phase 5E owner workflow
         run: python3 supabase/proposals/tests/validate_phase5e_owner_workflow.py
+
+      - name: Validate Phase 5G owner publication
+        run: python3 supabase/proposals/tests/validate_phase5g_owner_publication.py

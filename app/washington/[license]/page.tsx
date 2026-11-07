@@ -17,6 +17,8 @@ type Facility = {
   licensed_capacity: number | null;
   record_status: string;
 };
+type PublishedContent = { field_name: string; published_value: string; published_at: string };
+const publishedLabel: Record<string, string> = { description: "Description", services: "Services", amenities: "Amenities" };
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
@@ -30,6 +32,7 @@ export default function WashingtonFacilityProfile() {
   const params = useParams();
   const license = typeof params.license === "string" ? params.license : "";
   const [facility, setFacility] = useState<Facility | null>(null);
+  const [published, setPublished] = useState<PublishedContent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [notFound, setNotFound] = useState(false);
@@ -39,6 +42,7 @@ export default function WashingtonFacilityProfile() {
     setLoading(true);
     setError("");
     setFacility(null);
+    setPublished([]);
     setNotFound(false);
     if (!/^\d{1,20}$/.test(license)) {
       setNotFound(true);
@@ -55,7 +59,17 @@ export default function WashingtonFacilityProfile() {
       if (cancelled) return;
       if (queryError) setError("Unable to load this facility right now. Please try again later.");
       else if (!data) setNotFound(true);
-      else setFacility(data as Facility);
+      else {
+        const home = data as Facility;
+        setFacility(home);
+        const content = await supabase
+          .from("wa_afh_published_owner_content")
+          .select("field_name,published_value,published_at")
+          .eq("facility_id", home.id);
+        if (!cancelled && !content.error) {
+          setPublished(((content.data ?? []) as PublishedContent[]).filter(row => row.field_name in publishedLabel));
+        }
+      }
       setLoading(false);
     }
     void load();
@@ -101,7 +115,20 @@ export default function WashingtonFacilityProfile() {
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>Recorded licensed capacity</dt><dd style={{ margin: "0 0 7px" }}>{facility.licensed_capacity ?? "Not available"}{facility.licensed_capacity !== null ? " residents" : ""}</dd>
               </dl>
               {address && <p style={{ marginTop: 20 }}><a href={mapUrl} target="_blank" rel="noopener noreferrer" style={linkStyle}>View location in Google Maps ↗</a></p>}
+              <p style={{ color: C.muted, lineHeight: 1.6 }}>Name, address, license number, and capacity come from the Washington DSHS locator download.</p>
             </section>
+            {published.length > 0 && (
+              <section style={card} aria-labelledby="owner-content-heading">
+                <h2 id="owner-content-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>Information published by the facility</h2>
+                <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>An administrator published this owner-provided text separately. It does not change the official DSHS licensing record.</p>
+                {published.map(item => (
+                  <div key={item.field_name}>
+                    <h3 style={{ margin: "16px 0 6px", fontSize: 18 }}>{publishedLabel[item.field_name]}</h3>
+                    <p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", lineHeight: 1.7, margin: 0 }}>{item.published_value}</p>
+                  </div>
+                ))}
+              </section>
+            )}
             <div style={{ display: "grid", gap: 22 }}>
               <section style={card} aria-labelledby="verify-heading">
                 <h2 id="verify-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>Verify before choosing care</h2>
@@ -127,7 +154,7 @@ export default function WashingtonFacilityProfile() {
             </div>
           </div>
         )}
-        <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>Independent informational directory based on a DSHS locator download from October 23, 2026. Contact details, services, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations. Facility owners cannot edit this profile yet.</footer>
+        <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>Independent informational directory based on a DSHS locator download from October 23, 2026. Official name, address, license number, and capacity are not edited by facility owners. Owner-provided description, services, and amenities appear only after a separate administrator publication. Contact details, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations.</footer>
       </div>
     </main>
   );
