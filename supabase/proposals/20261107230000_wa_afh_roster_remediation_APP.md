@@ -1,6 +1,8 @@
 # Washington AFH roster remediation
 
-Review only. This proposal does not change development or production data.
+Execution was not started. On 2026-11-07 the development pooler for project `ajjsyloyihcqdomywhik` returned `fe_sendauth: no password supplied`. No password was read or entered. Live prechecks did not run. No directory, map, facility, view, or function change was applied. Production was not contacted.
+
+`20261107233000_wa_afh_roster_remediation_EXECUTE.sql` is the guarded transaction. It raises and aborts unless the session already names this development project and every precheck passes. It was not run.
 
 The companion file `20261107230000_wa_afh_roster_remediation_REVIEW.sql` raises before any read or write. It is not a migration.
 
