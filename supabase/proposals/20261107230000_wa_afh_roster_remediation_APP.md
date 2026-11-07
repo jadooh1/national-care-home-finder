@@ -1,6 +1,8 @@
 # Washington AFH roster remediation
 
-Execution was not started. On 2026-11-07 the development pooler for project `ajjsyloyihcqdomywhik` returned `fe_sendauth: no password supplied`. No password was read or entered. Live prechecks did not run. No directory, map, facility, view, or function change was applied. Production was not contacted.
+Execution was not started. The passwordless pooler was not retried. No Supabase MCP server is connected, the Supabase CLI is not installed, and no CLI login file is present. The Cursor browser is on the Supabase sign-in page. Chrome has the development SQL editor open at project `ajjsyloyihcqdomywhik` (`national-care-home-finder-dev`), but clicks do not stay in that editor. Live database prechecks therefore did not run. No directory, map, facility, view, or function change was applied. Production project `yiehgstweswxjakbcdzc` was not contacted.
+
+A fresh public ArcGIS read of licenses 759434–759450 returned 17 current rows. Names, addresses, and coordinates matched the November 7 roster and `wa_afh_addition_coordinates_20261107.json`. That source check does not replace the unread database prechecks.
 
 `20261107233000_wa_afh_roster_remediation_EXECUTE.sql` is the guarded transaction. It raises and aborts unless the session already names this development project and every precheck passes. It was not run.
 
