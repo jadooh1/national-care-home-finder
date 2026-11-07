@@ -5,6 +5,7 @@ import Link from "next/link";
 import type * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../../../lib/supabase";
+import { DENSITY_BANDS, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary } from "../../../lib/family-journey";
 
 type Home = {
   id: string;
@@ -39,13 +40,6 @@ function distanceInMiles(a: Home, b: Home): number {
   return 3958.8 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
-function densityColor(neighbors: number): string {
-  if (neighbors >= 20) return "#dc2626"; // 20+ homes within 1 mile
-  if (neighbors >= 10) return "#f97316"; // 10–19
-  if (neighbors >= 5) return "#eab308";  // 5–9
-  return "#16835b"; // 1–4
-}
-
 function prettyName(name: string): string {
   return name.replace(/^\s*!+\s*/, "").trim() || name;
 }
@@ -66,12 +60,15 @@ function makePopup(home: Home, count: number): HTMLElement {
   concentration.textContent = `AFHs within 1 mile: ${count} (including this home)`;
   wrap.appendChild(concentration);
   if (home.license_number) {
-    const link = document.createElement("a");
-    link.href = `/washington/${encodeURIComponent(home.license_number)}`;
-    link.textContent = "View home profile →";
-    link.style.color = teal;
-    link.style.fontWeight = "700";
-    wrap.appendChild(link);
+    const path = facilityProfilePath(home.license_number);
+    if (path) {
+      const link = document.createElement("a");
+      link.href = path;
+      link.textContent = "View home profile →";
+      link.style.color = teal;
+      link.style.fontWeight = "700";
+      wrap.appendChild(link);
+    }
   }
   return wrap;
 }
@@ -83,6 +80,7 @@ export default function WashingtonMarketMapPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [mode, setMode] = useState<DisplayMode>("density");
+  const [zipError, setZipError] = useState("");
   const [mapReady, setMapReady] = useState(false);
   const mapDivRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<Leaflet.Map | null>(null);
@@ -179,10 +177,11 @@ export default function WashingtonMarketMapPage() {
     event.preventDefault();
     const cleaned = zipInput.trim();
     if (!/^\d{5}$/.test(cleaned)) {
-      setError("Please enter a valid five-digit ZIP code.");
+      setZipError(invalidZipMessage(zip));
       return;
     }
-    if (cleaned === zip) { setError(""); return; }
+    setZipError("");
+    if (cleaned === zip) return;
     setZip(cleaned);
   }, [zipInput, zip]);
 
@@ -211,7 +210,8 @@ export default function WashingtonMarketMapPage() {
           <button type="submit" style={{ border: 0, color: "white", background: teal, borderRadius: 9, padding: "14px 22px", fontWeight: 700, cursor: "pointer", fontSize: 16 }}>Analyze ZIP</button>
         </form>
         <div aria-live="polite" style={{ margin: "18px 0" }}>
-          <strong>ZIP {zip}</strong> {loading ? "— Loading facilities…" : error ? "— Data unavailable" : `— ${homes.length.toLocaleString()} mapped AFHs`}
+          <strong>{mapResultSummary({ zip, loading, error, count: homes.length })}</strong>
+          {zipError && <p role="alert" style={{ color: "#a62a2a" }}>{zipError}</p>}
           {error && <p role="alert" style={{ color: "#a62a2a" }}>{error}</p>}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 13, marginBottom: 20 }}>
@@ -229,11 +229,21 @@ export default function WashingtonMarketMapPage() {
           </div>
           <div ref={mapDivRef} style={{ height: "min(65vh, 590px)", minHeight: 390, width: "100%", zIndex: 0 }} aria-label="Map of care homes; click a dot for the home profile" />
           <div style={{ padding: 16, fontSize: 13, color: "#425b6d", lineHeight: 1.8 }}>
-            {mode === "density" ? <span><strong>AFHs within 1 mile of each marker:</strong> <span style={{ color: "#dc2626" }}>●</span> 20+ &nbsp; <span style={{ color: "#f97316" }}>●</span> 10–19 &nbsp; <span style={{ color: "#c69a06" }}>●</span> 5–9 &nbsp; <span style={{ color: "#16835b" }}>●</span> 1–4</span> : <span>All dots show facility locations. Click a dot to view licensed capacity and the home profile.</span>}
+            {mode === "density" ? <span><strong>AFHs within 1 mile of each marker:</strong> {DENSITY_BANDS.map(band => <span key={band.label}> <span style={{ color: band.color }}>●</span> {band.label}</span>)}</span> : <span>All dots show facility locations. Click a dot to view licensed capacity and the home profile.</span>}
             <div>Counts include the selected facility and may include homes just outside the ZIP boundary. This is a preliminary one-mile clustering heuristic, not a population-adjusted density or investment score.</div>
           </div>
         </section>
         {!loading && !error && homes.length === 0 && <p style={{ marginTop: 18 }}>No mapped facilities were found for this ZIP code in the current directory.</p>}
+        {!loading && !error && homes.length > 0 && <section aria-label="Facilities in this ZIP" style={{ marginTop: 22 }}>
+          <h2 style={{ fontSize: 22 }}>Facilities in ZIP {zip}</h2>
+          <ul style={{ lineHeight: 1.7, paddingLeft: 20 }}>
+            {homes.map(home => {
+              const profile = facilityProfilePath(home.license_number);
+              const label = prettyName(home.canonical_name);
+              return <li key={home.id}>{profile ? <Link href={profile} style={{ color: teal, fontWeight: 700 }}>{label}</Link> : label}{[home.city, home.license_number].filter(Boolean).length > 0 ? ` — ${[home.city, home.license_number ? `License ${home.license_number}` : ""].filter(Boolean).join(", ")}` : ""}</li>;
+            })}
+          </ul>
+        </section>}
         <p style={{ color: "#536b7c", fontSize: 13, lineHeight: 1.8, marginTop: 23 }}>Facility information is from a Washington DSHS locator download matched to state GIS data. Recorded capacity is not vacancy availability. Map coordinates, licensing information and care suitability should be independently confirmed. This directory does not recommend or certify providers. Base map © OpenStreetMap contributors.</p>
       </div>
     </main>

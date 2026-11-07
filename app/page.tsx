@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
+import { HOMEPAGE_DIRECTORY_NOTE, stateFilterStatus } from "../lib/family-journey";
 
 const states = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California",
@@ -213,16 +215,17 @@ export default function Home() {
                 }}
               >
                 {state === "Washington" ? (
-  <a
+  <Link
     href="/washington"
     style={{
-      color: "inherit",
-      textDecoration: "none",
+      color: "#176b53",
+      textDecoration: "underline",
+      textUnderlineOffset: 3,
       display: "block",
     }}
   >
     {state}
-  </a>
+  </Link>
 ) : (
   state
 )}
@@ -230,9 +233,7 @@ export default function Home() {
             ))}
           </div>
 
-          {filteredStates.length === 0 && (
-            <p>No matching states found.</p>
-          )}
+          <p aria-live="polite">{stateFilterStatus(filteredStates.length)}</p>
 
           <p
             style={{
@@ -241,9 +242,7 @@ export default function Home() {
               lineHeight: 1.7,
             }}
           >
-            State-specific listings and official source links
-            are being prepared. Facility availability,
-            licensing status, and prices are not yet displayed.
+            {HOMEPAGE_DIRECTORY_NOTE}
           </p>
         </div>
       </section>
