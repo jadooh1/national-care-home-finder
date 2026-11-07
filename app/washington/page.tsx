@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { supabase } from "../../lib/supabase";
+import { facilityProfilePath } from "../../lib/family-journey";
 
 type Facility = {
   id: string; canonical_name: string; address_line1: string | null;
@@ -216,8 +217,8 @@ export default function WashingtonPage() {
                   {facility.record_status === "verified" ? "Independently verified listing" : "DSHS license-number match — not independently verified"}
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 13, alignItems: "center" }}>
-                  {facility.license_number && <Link href={`/washington/${encodeURIComponent(facility.license_number)}`} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>View details →</Link>}
-                  {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>View map ↗</a>}
+                  {facilityProfilePath(facility.license_number) && <Link href={facilityProfilePath(facility.license_number) as string} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>View details →</Link>}
+                  {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>View location in Google Maps ↗</a>}
                   <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Check DSHS ↗</a>
                 </div>
               </article>
