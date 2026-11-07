@@ -19,6 +19,7 @@ export default function OwnerDashboard() {
   const [user, setUser] = useState<User | null>(null);
   const [claims, setClaims] = useState<Claim[]>([]);
   const [events, setEvents] = useState<ClaimEvent[]>([]);
+  const [facilities, setFacilities] = useState<Record<string, Facility>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
@@ -36,7 +37,15 @@ export default function OwnerDashboard() {
       .eq("claimant_user_id", userId).order("id", { ascending: false });
     if (result.error) setError("Unable to load ownership claims. Please try again later.");
     else {
-      setClaims((result.data ?? []) as Claim[]);
+      const rows = (result.data ?? []) as Claim[];
+      setClaims(rows);
+      const ids = [...new Set(rows.map(claim => claim.facility_id))];
+      if (ids.length) {
+        const homes = await supabase.from("wa_dshs_listed_facilities")
+          .select("id,canonical_name,address_line1,city,county,license_number").in("id", ids);
+        if (homes.error) setFacilities({});
+        else setFacilities(Object.fromEntries(((homes.data ?? []) as Facility[]).map(home => [home.id, home])));
+      } else setFacilities({});
       const activity = await supabase.from("owner_claim_events")
         .select("id,claim_id,event_type,to_status,created_at")
         .order("created_at", { ascending: false }).limit(20);
@@ -147,7 +156,16 @@ export default function OwnerDashboard() {
           <h2>My ownership claims</h2>
           <p>All claims require independent administrative review. Your account alone does not grant access to manage a care home.</p>
           {claims.length === 0 && <p>No ownership claims submitted yet.</p>}
-          {claims.map(c => <div key={c.id} style={{ padding: "14px 0", borderTop: "1px solid #dbe5eb" }}><div><strong>Facility ID:</strong> {c.facility_id}</div><div><strong>Status:</strong> {c.verification_status}</div>{events.filter(event => event.claim_id === c.id).map(event => <div key={event.id}>Activity: {event.event_type} → {event.to_status}</div>)}</div>)}
+          {claims.map(c => {
+            const home = facilities[c.facility_id];
+            return <div key={c.id} style={{ padding: "14px 0", borderTop: "1px solid #dbe5eb" }}>
+              <div><strong>{home?.canonical_name ?? "Facility details are unavailable"}</strong></div>
+              <div>License: {home?.license_number ?? "Not listed"}{home?.city ? ` · ${home.city}` : ""}</div>
+              <div><strong>Status:</strong> {c.verification_status}</div>
+              {c.reviewed_at && <div>Reviewed: {new Date(c.reviewed_at).toLocaleString()}</div>}
+              {events.filter(event => event.claim_id === c.id).map(event => <div key={event.id}>Activity: {event.event_type} → {event.to_status}</div>)}
+            </div>;
+          })}
         </section>
         <section style={card}>
           <h2>Claim your facility</h2>
