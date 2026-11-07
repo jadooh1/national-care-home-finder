@@ -57,3 +57,6 @@ jobs:
 
       - name: Validate Phase 5C owner claims
         run: python3 supabase/proposals/tests/validate_phase5c_owner_claims.py
+
+      - name: Validate Phase 5E owner workflow
+        run: python3 supabase/proposals/tests/validate_phase5e_owner_workflow.py
