@@ -1,0 +1,94 @@
+{
+  "official_csv": "wa_afh_official_roster.csv",
+  "official_rows": 6278,
+  "official_retrieval_timestamp": "2026-11-07T22:49:17Z",
+  "development_source": "scripts/dshs/output/wa_afh_normalized_20261104T172407Z.csv",
+  "development_retrieval_timestamp": "2026-11-04T17:24:07Z",
+  "development_rows": 6265,
+  "live_database_read": false,
+  "exact_license_matches": 6261,
+  "one_to_one_license_matches": 6261,
+  "dshs_only_licenses": [
+    "759434",
+    "759435",
+    "759436",
+    "759437",
+    "759438",
+    "759439",
+    "759440",
+    "759441",
+    "759442",
+    "759443",
+    "759444",
+    "759445",
+    "759446",
+    "759447",
+    "759448",
+    "759449",
+    "759450"
+  ],
+  "development_only_licenses": [
+    "752686",
+    "755649",
+    "757132",
+    "758334"
+  ],
+  "duplicate_official_licenses": [],
+  "duplicate_development_licenses": [],
+  "blank_official_licenses": 0,
+  "blank_development_licenses": 0,
+  "field_discrepancy_counts": {
+    "name": 1,
+    "capacity": 3
+  },
+  "discrepancies": [
+    {
+      "license_number": "754130",
+      "fields": {
+        "name": {
+          "dshs": "Harmony Senior Home LLC",
+          "development": "#1 Samantha & Yoanna's Care Home LLC"
+        }
+      }
+    },
+    {
+      "license_number": "757641",
+      "fields": {
+        "capacity": {
+          "dshs": "8",
+          "development": "6"
+        }
+      }
+    },
+    {
+      "license_number": "759147",
+      "fields": {
+        "capacity": {
+          "dshs": "6",
+          "development": ""
+        }
+      }
+    },
+    {
+      "license_number": "759176",
+      "fields": {
+        "capacity": {
+          "dshs": "2",
+          "development": ""
+        }
+      }
+    }
+  ],
+  "development_missing_capacity": [
+    {
+      "license_number": "759147",
+      "facility_name": "Ridgefield Adult Family Home-2 LLC",
+      "city": "Vancouver"
+    },
+    {
+      "license_number": "759176",
+      "facility_name": "MARIA LOVING CARE LLC",
+      "city": "Vancouver"
+    }
+  ]
+}
