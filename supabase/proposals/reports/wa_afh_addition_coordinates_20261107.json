@@ -1,0 +1,25 @@
+{
+  "source": "https://services2.arcgis.com/WW3T8U6q5EkZ9U3n/arcgis/rest/services/Long_Term_Care_Residential_Care_view/FeatureServer/1/query",
+  "filter": "FacilityType = 'AF' AND GDLArchiveDate IS NULL",
+  "read_on": "2026-11-07",
+  "rule": "One current official row per license. The street address matched the roster CSV. No coordinate was estimated.",
+  "coordinates": [
+    { "license_number": "759434", "latitude": 47.761458, "longitude": -117.445549, "address": "11516 N Kathy Dr" },
+    { "license_number": "759435", "latitude": 47.095314, "longitude": -122.341103, "address": "6601 177th Street Ct E" },
+    { "license_number": "759436", "latitude": 47.826185, "longitude": -122.335297, "address": "19024 75th Ave W" },
+    { "license_number": "759437", "latitude": 47.004401, "longitude": -122.773485, "address": "7817 48th Loop SE" },
+    { "license_number": "759438", "latitude": 47.316747, "longitude": -122.348995, "address": "31813 10th Pl SW" },
+    { "license_number": "759439", "latitude": 47.722817, "longitude": -117.398316, "address": "7116 N Hamilton St" },
+    { "license_number": "759440", "latitude": 47.567983, "longitude": -117.667972, "address": "615 S Pineview Dr" },
+    { "license_number": "759441", "latitude": 47.43857, "longitude": -122.14117, "address": "18307 150th Ave SE" },
+    { "license_number": "759442", "latitude": 45.629536, "longitude": -122.582972, "address": "8713 NE Mountview St" },
+    { "license_number": "759443", "latitude": 47.169515, "longitude": -122.585469, "address": "710 Roe St" },
+    { "license_number": "759444", "latitude": 47.004071, "longitude": -122.9288, "address": "2216 48th Ave SW" },
+    { "license_number": "759445", "latitude": 47.490167, "longitude": -122.697915, "address": "6559 Gleneagle Ave SW" },
+    { "license_number": "759446", "latitude": 45.63441, "longitude": -122.539854, "address": "1619 NE 129th Ave" },
+    { "license_number": "759447", "latitude": 47.812461, "longitude": -122.279612, "address": "20512 Poplar Way" },
+    { "license_number": "759448", "latitude": 47.151242, "longitude": -122.574821, "address": "10317 117th Street Ct SW" },
+    { "license_number": "759449", "latitude": 45.693026, "longitude": -122.502965, "address": "16505 NE 98th St" },
+    { "license_number": "759450", "latitude": 47.884246, "longitude": -122.173071, "address": "12432 44TH DR SE" }
+  ]
+}

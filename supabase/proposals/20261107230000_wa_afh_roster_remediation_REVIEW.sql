@@ -19,6 +19,17 @@ rollback;
 --
 -- Do not delete licenses 752686, 755649, 757132, or 758334.
 -- Do not change license 752686 into license 759444.
+-- Set presence = 'absent' on only those four licenses.
+-- Keep record_status = 'source_matched'.
+-- Add "presence is distinct from 'absent'" to:
+--   public.wa_dshs_listed_facilities
+--   public.wa_afh_map_facilities
+--   public.nchf_phase5g_facility_is_listed
+-- Copy latitude and longitude for 759434-759450 only from a current
+-- official row that matches the license and address and lies inside
+-- latitude 45.580299..48.998467 and longitude -124.383814..-117.047107.
+-- The November 7 official read supplied all 17 points. Read them again
+-- before execution. Do not estimate a missing point.
 --
 -- Precheck, read only:
 --   select count(*) from public.wa_dshs_listed_facilities;
