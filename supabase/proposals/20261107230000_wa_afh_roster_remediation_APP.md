@@ -4,7 +4,9 @@ Execution was not started. The passwordless pooler was not retried. No Supabase 
 
 A fresh public ArcGIS read of licenses 759434–759450 returned 17 current rows. Names, addresses, and coordinates matched the November 7 roster and `wa_afh_addition_coordinates_20261107.json`. That source check does not replace the unread database prechecks.
 
-`20261107233000_wa_afh_roster_remediation_EXECUTE.sql` is the guarded transaction. It raises and aborts unless the session already names this development project and every precheck passes. It was not run.
+`20261107233000_wa_afh_roster_remediation_EXECUTE.sql` is the guarded transaction. It raises and aborts unless the session already names this development project and every precheck passes. It was not run against development.
+
+The script no longer requires `wa_zip_market_income`, `wa_county_market_summary`, or `wa_city_market_summary` to exist, and it does not create them. It stops when a live market relation reads `public.facilities` without excluding absent rows. The publication-helper check reads `pg_proc` instead of searching function text for `search_path = ''`. A disposable local PostgreSQL 17 run confirmed that the old text search misses `SET search_path TO ''`, the catalog check accepts that function, a missing market relation is allowed, and a market view that counts `public.facilities` without mentioning absent is rejected. The replacement views and helper were created on a stub table and rolled back. That local proof is not a development execution.
 
 The companion file `20261107230000_wa_afh_roster_remediation_REVIEW.sql` raises before any read or write. It is not a migration.
 
@@ -117,10 +119,10 @@ License 754130 still matches the roster on address, city, county, ZIP, and capac
 - The live development table may no longer match the November 4 snapshot. The precheck below stops the change when the listed count is not 6,265 or a stored value differs.
 - Setting `presence = 'absent'` without the view and helper filters would leave the four licenses in family search. Both changes have to land together.
 - If an existing row has null `presence`, the filter keeps it. The precheck must count null, active, and absent values before changing the views.
-- Market summary views are not defined in this repository. The authorized script must read their definitions and stop if they still count a `presence = 'absent'` facility.
+- The city, county, and ZIP pages query `wa_city_market_summary`, `wa_county_market_summary`, and `wa_zip_market_income`. Those three relations are not in the development database and are not defined in this repository. The execution script does not create them. It stops when a live market view, materialized view, table, or function reads `public.facilities` without excluding `presence = 'absent'`. A market query that reads only the family views becomes safe when those views gain the absence filter in the same transaction.
 - Adding a second license at the same address can look like a duplicate home. Both licenses are still distinct official numbers.
 - A direct update of `canonical_name` or `licensed_capacity` is not blocked by owner publication. An approved listing edit or field lock for that column would make `ingest.publish_run` keep the old value. The authorized script must stop if such a lock exists.
-- Replacing `nchf_phase5g_facility_is_listed` must keep its signature, definer rights, empty search path, and existing execute grants.
+- Replacing `nchf_phase5g_facility_is_listed` must keep its signature, `SECURITY DEFINER`, empty `search_path`, and existing execute grants. The script reads `pg_proc` (`prosecdef`, `proconfig`, `proargtypes`, `prorettype`, `proacl`, and `proowner`) instead of matching the function text. `pg_get_functiondef` prints `SET search_path TO ''`, so a search for `search_path = ''` does not describe the stored function.
 
 ## Rollback
 
@@ -147,7 +149,8 @@ Run these reads first and stop on any mismatch:
 7. The jurisdiction id comes from one existing `wa_dshs_afh` row or connector, and the unique source-license guard rejects a second copy of the same normalized license.
 8. A fresh official read still returns one current coordinate for each of the 17 licenses, the address still matches, and every point is inside the Washington rectangle.
 9. `facilities_presence_check` still allows only null, `active`, and `absent`.
-10. Every family, market, and published-owner view that counts facilities is identified. A view that does not exclude `presence = 'absent'` stops the run.
+10. The publication helper is a security-definer SQL function with one `uuid` argument, a `boolean` result, an empty `search_path` in `proconfig`, no `PUBLIC` execute grant, and the reserved-home safeguards. Its grants and owner are saved and compared after replacement. Published owner content must depend on that function.
+11. Live market relations are discovered from the catalog. The three application names may be absent. A market relation that reads `public.facilities` without excluding absent rows stops the run. No placeholder market view is created.
 
 After an authorized run, when the precheck found 6,265 listed rows and 6,265 mapped rows:
 

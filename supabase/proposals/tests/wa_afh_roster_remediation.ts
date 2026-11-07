@@ -68,6 +68,22 @@ test("official coordinates are accepted only inside the Washington rectangle", (
   assert.equal(officialCoordinate({ latitude: Number.NaN, longitude: -122.3, currentRoster: true }), null);
 });
 
+test("execution checks live market dependencies and the function catalog", () => {
+  const sql = readFileSync(new URL("../20261107233000_wa_afh_roster_remediation_EXECUTE.sql", import.meta.url), "utf8");
+  assert.equal(sql.includes("one or more market views are missing"), false);
+  assert.equal(sql.includes("create view public.wa_zip_market_income"), false);
+  assert.equal(sql.includes("create view public.wa_county_market_summary"), false);
+  assert.equal(sql.includes("create view public.wa_city_market_summary"), false);
+  assert.equal(sql.includes("helper_def !~*"), false);
+  assert.match(sql, /market relation reads facilities without excluding absent rows/);
+  assert.match(sql, /proc\.prosecdef/);
+  assert.match(sql, /proc\.proconfig/);
+  assert.match(sql, /proc\.proacl/);
+  assert.match(sql, /split_part\(setting, '=', 1\) = 'search_path'/);
+  assert.match(sql, /nchf\.roster_previous_presence/);
+  assert.match(sql, /owner or administrator row counts changed/);
+});
+
 test("directory and map counts hide four archived rows and add seventeen located homes", () => {
   const counts = expectedPublicCounts({
     listedBefore: 6265,

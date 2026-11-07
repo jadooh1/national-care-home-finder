@@ -34,8 +34,12 @@ declare
   lock_count integer;
   approved_edit_count integer;
   market_blocker text;
-  helper_def text;
-  view_def text;
+  helper_acl text;
+  helper_owner text;
+  owner_counts text;
+  archived_presence text;
+  listed_columns text;
+  mapped_columns text;
 begin
   if to_regclass('public.facilities') is null
      or to_regclass('public.wa_dshs_listed_facilities') is null
@@ -120,29 +124,56 @@ begin
     raise exception 'an approved owner edit protects one of the four corrections';
   end if;
 
-  if (
-    select count(*)
-    from pg_class as c
-    join pg_namespace as n on n.oid = c.relnamespace
-    where c.relkind = 'v'
-      and n.nspname = 'public'
-      and c.relname in ('wa_zip_market_income', 'wa_county_market_summary', 'wa_city_market_summary')
-  ) <> 3 then
-    raise exception 'one or more market views are missing';
-  end if;
-
-  select string_agg(format('%I.%I', n.nspname, c.relname), ', ' order by c.relname)
+  -- The application queries wa_zip_market_income, wa_county_market_summary,
+  -- and wa_city_market_summary, but those relations are not part of the
+  -- development schema. Missing relations are not created and are not a
+  -- failure. Any live market relation that reads facilities directly must
+  -- already exclude absent rows. A market relation that reads only the
+  -- family views is safe once those views gain the absence filter below.
+  select string_agg(format('%I.%I:%s', n.nspname, c.relname, c.relkind), ', ' order by n.nspname, c.relname)
     into market_blocker
   from pg_class as c
   join pg_namespace as n on n.oid = c.relnamespace
-  where c.relkind = 'v'
-    and n.nspname = 'public'
-    and c.relname in ('wa_zip_market_income', 'wa_county_market_summary', 'wa_city_market_summary')
-    and pg_get_viewdef(c.oid) ~* 'public\.facilities|from\s+facilities'
-    and pg_get_viewdef(c.oid) !~* 'wa_dshs_listed_facilities|wa_afh_map_facilities'
-    and pg_get_viewdef(c.oid) !~* 'presence';
+  where n.nspname not in ('pg_catalog', 'information_schema')
+    and (
+      (
+        c.relname in ('wa_zip_market_income', 'wa_county_market_summary', 'wa_city_market_summary')
+        and c.relkind in ('r', 'p')
+      )
+      or (
+        c.relkind in ('v', 'm')
+        and (
+          c.relname in ('wa_zip_market_income', 'wa_county_market_summary', 'wa_city_market_summary')
+          or c.relname like '%market%'
+        )
+        and exists (
+        select 1
+        from pg_depend as dependency
+        join pg_rewrite as rewrite on rewrite.oid = dependency.objid
+        where rewrite.ev_class = c.oid
+          and dependency.refclassid = 'pg_class'::regclass
+          and dependency.refobjid = 'public.facilities'::regclass
+          and strpos(lower(pg_get_viewdef(c.oid)), 'absent') = 0
+      )
+    )
+  );
   if market_blocker is not null then
-    raise exception 'market view still counts facilities without an absence filter: %', market_blocker;
+    raise exception 'market relation reads facilities without excluding absent rows: %', market_blocker;
+  end if;
+
+  select string_agg(format('%I.%I', n.nspname, proc.proname), ', ' order by n.nspname, proc.proname)
+    into market_blocker
+  from pg_proc as proc
+  join pg_namespace as n on n.oid = proc.pronamespace
+  where n.nspname not in ('pg_catalog', 'information_schema')
+    and (
+      proc.proname in ('wa_zip_market_income', 'wa_county_market_summary', 'wa_city_market_summary')
+      or proc.proname like '%market%'
+    )
+    and strpos(lower(proc.prosrc), 'facilities') > 0
+    and strpos(lower(proc.prosrc), 'absent') = 0;
+  if market_blocker is not null then
+    raise exception 'market function reads facilities without excluding absent rows: %', market_blocker;
   end if;
 
   if not exists (
@@ -192,21 +223,102 @@ begin
     raise exception 'a required facility column has no source value: %', missing_required;
   end if;
 
-  select pg_get_functiondef('public.nchf_phase5g_facility_is_listed(uuid)'::regprocedure)
-    into helper_def;
-  if helper_def !~* 'security definer'
-     or helper_def !~* 'search_path = '''' '
-     or helper_def !~* 'source_matched'
-     or helper_def !~* '00000000-0000-4000-8000-000000000002' then
-    raise exception 'the publication helper signature or safeguards changed';
+  select proc.proacl::text, proc.proowner::text
+    into helper_acl, helper_owner
+  from pg_proc as proc
+  where proc.oid = 'public.nchf_phase5g_facility_is_listed(uuid)'::regprocedure
+    and proc.prosecdef
+    and proc.prokind = 'f'
+    and proc.provolatile = 's'
+    and proc.pronargs = 1
+    and proc.proargtypes[0] = 'uuid'::regtype
+    and proc.prorettype = 'boolean'::regtype
+    and proc.prolang = (select language.oid from pg_language as language where language.lanname = 'sql')
+    and proc.proacl is not null
+    and not exists (
+      select 1
+      from aclexplode(proc.proacl) as acl
+      where acl.grantee = 0
+        and acl.privilege_type = 'EXECUTE'
+    )
+    and exists (
+      select 1
+      from unnest(proc.proconfig) as setting
+      where split_part(setting, '=', 1) = 'search_path'
+        and btrim(split_part(setting, '=', 2), '"') = ''
+    )
+    and strpos(proc.prosrc, 'source_matched') > 0
+    and strpos(proc.prosrc, '00000000-0000-4000-8000-000000000002') > 0
+    and strpos(proc.prosrc, 'DEVELOPMENT TEST HOME - NOT REAL') > 0;
+  if helper_acl is null or helper_owner is null then
+    raise exception 'the publication helper signature, definer, empty search_path, or execute grants changed';
   end if;
 
-  select pg_get_viewdef('public.wa_afh_published_owner_content'::regclass) into view_def;
-  if view_def !~* 'nchf_phase5g_facility_is_listed' then
+  if not exists (
+    select 1
+    from pg_depend as dependency
+    join pg_rewrite as rewrite on rewrite.oid = dependency.objid
+    where rewrite.ev_class = 'public.wa_afh_published_owner_content'::regclass
+      and dependency.refobjid = 'public.nchf_phase5g_facility_is_listed(uuid)'::regprocedure
+  ) then
     raise exception 'published owner content no longer uses the listing safeguard';
   end if;
 
+  select string_agg(attribute.attname, ',' order by attribute.attnum)
+    into listed_columns
+  from pg_attribute as attribute
+  where attribute.attrelid = 'public.wa_dshs_listed_facilities'::regclass
+    and attribute.attnum > 0
+    and not attribute.attisdropped;
+  select string_agg(attribute.attname, ',' order by attribute.attnum)
+    into mapped_columns
+  from pg_attribute as attribute
+  where attribute.attrelid = 'public.wa_afh_map_facilities'::regclass
+    and attribute.attnum > 0
+    and not attribute.attisdropped;
+  if listed_columns is distinct from 'id,canonical_name,address_line1,city,county,license_number,state_code,postal_code,licensed_capacity,record_status'
+     or mapped_columns is distinct from 'id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,latitude,longitude' then
+    raise exception 'a family view column list differs from the reviewed definition';
+  end if;
+  if not exists (
+    select 1 from pg_class
+    where oid = 'public.wa_dshs_listed_facilities'::regclass
+      and 'security_invoker=true' = any (reloptions)
+  ) or not exists (
+    select 1 from pg_class
+    where oid = 'public.wa_afh_map_facilities'::regclass
+      and 'security_invoker=true' = any (reloptions)
+  ) then
+    raise exception 'a family view is not security invoker';
+  end if;
+
+  if to_regclass('public.owner_claims') is null
+     or to_regclass('public.listing_edits') is null
+     or to_regclass('public.published_owner_listings') is null
+     or to_regclass('public.published_owner_listing_events') is null
+     or to_regclass('public.app_admins') is null then
+    raise exception 'an owner or administrator table is missing';
+  end if;
+  select (select count(*) from public.owner_claims)::text
+      || ',' || (select count(*) from public.listing_edits)::text
+      || ',' || (select count(*) from public.published_owner_listings)::text
+      || ',' || (select count(*) from public.published_owner_listing_events)::text
+      || ',' || (select count(*) from public.app_admins)::text
+    into owner_counts;
+  select string_agg(facility.license_number || '=' || coalesce(facility.presence, 'null'), ',' order by facility.license_number)
+    into archived_presence
+  from public.facilities as facility
+  where facility.source_name = 'wa_dshs_afh'
+    and facility.license_number in ('752686', '755649', '757132', '758334');
+  if owner_counts is null or archived_presence is null then
+    raise exception 'owner counts or archived presence could not be saved for rollback';
+  end if;
+
   perform set_config('nchf.roster_jurisdiction_id', jurisdiction::text, true);
+  perform set_config('nchf.roster_helper_acl', helper_acl, true);
+  perform set_config('nchf.roster_helper_owner', helper_owner, true);
+  perform set_config('nchf.roster_owner_counts', owner_counts, true);
+  perform set_config('nchf.roster_previous_presence', archived_presence, true);
 end
 $precheck$;
 
@@ -214,37 +326,61 @@ $precheck$;
 -- The statements below are part of this same transaction. A later
 -- verification failure aborts the transaction before commit.
 
-update public.facilities
-set presence = 'absent'
-where source_name = 'wa_dshs_afh'
-  and license_number in ('752686', '755649', '757132', '758334')
-  and record_status = 'source_matched';
+do $apply$
+declare
+  changed bigint;
+begin
+  update public.facilities
+  set presence = 'absent'
+  where source_name = 'wa_dshs_afh'
+    and license_number in ('752686', '755649', '757132', '758334')
+    and record_status = 'source_matched';
+  get diagnostics changed = row_count;
+  if changed <> 4 then
+    raise exception 'archived presence update changed % rows, expected 4', changed;
+  end if;
 
-update public.facilities
-set licensed_capacity = 6
-where source_name = 'wa_dshs_afh'
-  and license_number = '759147'
-  and licensed_capacity is null;
+  update public.facilities
+  set licensed_capacity = 6
+  where source_name = 'wa_dshs_afh'
+    and license_number = '759147'
+    and licensed_capacity is null;
+  get diagnostics changed = row_count;
+  if changed <> 1 then
+    raise exception 'capacity update for 759147 changed % rows, expected 1', changed;
+  end if;
 
-update public.facilities
-set licensed_capacity = 2
-where source_name = 'wa_dshs_afh'
-  and license_number = '759176'
-  and licensed_capacity is null;
+  update public.facilities
+  set licensed_capacity = 2
+  where source_name = 'wa_dshs_afh'
+    and license_number = '759176'
+    and licensed_capacity is null;
+  get diagnostics changed = row_count;
+  if changed <> 1 then
+    raise exception 'capacity update for 759176 changed % rows, expected 1', changed;
+  end if;
 
-update public.facilities
-set licensed_capacity = 8
-where source_name = 'wa_dshs_afh'
-  and license_number = '757641'
-  and licensed_capacity = 6;
+  update public.facilities
+  set licensed_capacity = 8
+  where source_name = 'wa_dshs_afh'
+    and license_number = '757641'
+    and licensed_capacity = 6;
+  get diagnostics changed = row_count;
+  if changed <> 1 then
+    raise exception 'capacity update for 757641 changed % rows, expected 1', changed;
+  end if;
 
-update public.facilities
-set canonical_name = 'Harmony Senior Home LLC'
-where source_name = 'wa_dshs_afh'
-  and license_number = '754130'
-  and canonical_name = '#1 Samantha & Yoanna''s Care Home LLC';
+  update public.facilities
+  set canonical_name = 'Harmony Senior Home LLC'
+  where source_name = 'wa_dshs_afh'
+    and license_number = '754130'
+    and canonical_name = '#1 Samantha & Yoanna''s Care Home LLC';
+  get diagnostics changed = row_count;
+  if changed <> 1 then
+    raise exception 'name update for 754130 changed % rows, expected 1', changed;
+  end if;
 
-insert into public.facilities (
+  insert into public.facilities (
   canonical_name, address_line1, city, county, state_code, postal_code,
   license_number, licensed_capacity, latitude, longitude, facility_type,
   jurisdiction_id, record_status, normalized_license_number, license_category,
@@ -291,6 +427,12 @@ from (
   canonical_name, address_line1, city, county, postal_code, license_number,
   licensed_capacity, latitude, longitude
 );
+  get diagnostics changed = row_count;
+  if changed <> 17 then
+    raise exception 'addition insert changed % rows, expected 17', changed;
+  end if;
+end
+$apply$;
 
 create or replace view public.wa_dshs_listed_facilities
 with (security_invoker = true) as
@@ -355,6 +497,9 @@ declare
   additions bigint;
   hidden bigint;
   retained bigint;
+  mapped_additions bigint;
+  mapped_hidden bigint;
+  market_blocker text;
 begin
   select count(*) into listed_count from public.wa_dshs_listed_facilities;
   select count(*) into mapped_count from public.wa_afh_map_facilities;
@@ -382,9 +527,89 @@ begin
     and license_number in ('752686','755649','757132','758334')
     and presence = 'absent'
     and record_status = 'source_matched';
-  if hidden <> 0 or retained <> 4 then
-    raise exception 'archived licenses were not both hidden and retained';
+  select count(*) into mapped_hidden
+  from public.wa_afh_map_facilities
+  where license_number in ('752686','755649','757132','758334');
+  select count(*) into mapped_additions
+  from public.wa_afh_map_facilities
+  where license_number in (
+    '759434','759435','759436','759437','759438','759439','759440','759441',
+    '759442','759443','759444','759445','759446','759447','759448','759449','759450'
+  );
+  if hidden <> 0 or mapped_hidden <> 0 or retained <> 4 or mapped_additions <> 17 then
+    raise exception 'archived licenses were not both hidden and retained, or a mapped addition is missing';
   end if;
+
+  select string_agg(format('%I.%I:%s', n.nspname, c.relname, c.relkind), ', ' order by n.nspname, c.relname)
+    into market_blocker
+  from pg_class as c
+  join pg_namespace as n on n.oid = c.relnamespace
+  where n.nspname not in ('pg_catalog', 'information_schema')
+    and (
+      (
+        c.relname in ('wa_zip_market_income', 'wa_county_market_summary', 'wa_city_market_summary')
+        and c.relkind in ('r', 'p')
+      )
+      or (
+        c.relkind in ('v', 'm')
+        and (
+          c.relname in ('wa_zip_market_income', 'wa_county_market_summary', 'wa_city_market_summary')
+          or c.relname like '%market%'
+        )
+        and exists (
+        select 1
+        from pg_depend as dependency
+        join pg_rewrite as rewrite on rewrite.oid = dependency.objid
+        where rewrite.ev_class = c.oid
+          and dependency.refclassid = 'pg_class'::regclass
+          and dependency.refobjid = 'public.facilities'::regclass
+          and strpos(lower(pg_get_viewdef(c.oid)), 'absent') = 0
+      )
+    )
+  );
+  if market_blocker is not null then
+    raise exception 'market relation reads facilities without excluding absent rows: %', market_blocker;
+  end if;
+
+  if not exists (
+    select 1
+    from pg_proc as proc
+    where proc.oid = 'public.nchf_phase5g_facility_is_listed(uuid)'::regprocedure
+      and proc.prosecdef
+      and proc.prokind = 'f'
+      and proc.provolatile = 's'
+      and proc.pronargs = 1
+      and proc.proargtypes[0] = 'uuid'::regtype
+      and proc.prorettype = 'boolean'::regtype
+      and proc.proacl::text = current_setting('nchf.roster_helper_acl')
+      and proc.proowner::text = current_setting('nchf.roster_helper_owner')
+      and exists (
+        select 1
+        from unnest(proc.proconfig) as setting
+        where split_part(setting, '=', 1) = 'search_path'
+          and btrim(split_part(setting, '=', 2), '"') = ''
+      )
+      and strpos(proc.prosrc, 'presence is distinct from ''absent''') > 0
+      and strpos(proc.prosrc, '00000000-0000-4000-8000-000000000002') > 0
+      and not exists (
+        select 1
+        from aclexplode(proc.proacl) as acl
+        where acl.grantee = 0
+          and acl.privilege_type = 'EXECUTE'
+      )
+  ) then
+    raise exception 'the publication helper lost its signature, definer, empty search_path, or execute grants';
+  end if;
+
+  if (select count(*) from public.owner_claims)::text
+      || ',' || (select count(*) from public.listing_edits)::text
+      || ',' || (select count(*) from public.published_owner_listings)::text
+      || ',' || (select count(*) from public.published_owner_listing_events)::text
+      || ',' || (select count(*) from public.app_admins)::text
+     is distinct from current_setting('nchf.roster_owner_counts') then
+    raise exception 'owner or administrator row counts changed';
+  end if;
+  raise notice 'archived presence before this change: %', current_setting('nchf.roster_previous_presence');
 
   if not exists (
     select 1 from public.facilities
