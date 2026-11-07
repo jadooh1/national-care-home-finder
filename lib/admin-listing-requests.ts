@@ -171,3 +171,51 @@ export function authorizationDecision(gate: ListingRequestGate, requestId: numbe
   if (!gate.isLatest(requestId)) return "stale";
   return allowed ? "allowed" : "denied";
 }
+
+export type AdminActionGate = {
+  tryBegin(): number | null;
+  isCurrent(token: number): boolean;
+  finish(token: number): void;
+};
+
+export function createAdminActionGate(): AdminActionGate {
+  let next = 0;
+  let held: number | null = null;
+  return {
+    tryBegin() {
+      if (held !== null) return null;
+      next += 1;
+      held = next;
+      return next;
+    },
+    isCurrent(token) {
+      return held === token;
+    },
+    finish(token) {
+      if (held === token) held = null;
+    },
+  };
+}
+
+export async function runAdminAction<T>(
+  gate: AdminActionGate,
+  perform: () => Promise<T>,
+  apply: (result: T) => Promise<void> | void,
+  onSettled: () => void,
+): Promise<"ignored" | "done"> {
+  const token = gate.tryBegin();
+  if (token === null) return "ignored";
+  try {
+    const result = await perform();
+    if (gate.isCurrent(token)) await apply(result);
+    return "done";
+  } finally {
+    if (gate.isCurrent(token)) {
+      try {
+        onSettled();
+      } finally {
+        gate.finish(token);
+      }
+    }
+  }
+}
