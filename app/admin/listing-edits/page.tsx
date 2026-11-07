@@ -11,6 +11,27 @@ type Edit = { id: string; facility_id: string; submitted_by_user_id: string | nu
 type PublicationEvent = { id: string; facility_id: string; field_name: string; event_type: string; previous_value: string | null; published_value: string; created_at: string; actor_user_id: string };
 type Facility = { id: string; canonical_name: string; license_number: string | null };
 type Cursor = { before: string; beforeId: string };
+type ProposalTotals = { pending: number; approved: number; rejected: number };
+function proposalTotals(data: unknown): ProposalTotals | null {
+  if (!Array.isArray(data) || data.length !== 3) return null;
+  const totals: ProposalTotals = { pending: Number.NaN, approved: Number.NaN, rejected: Number.NaN };
+  for (const row of data) {
+    if (!row || typeof row !== "object") return null;
+    const record = row as { review_status?: unknown; proposal_count?: unknown };
+    const name = record.review_status;
+    if (name !== "pending" && name !== "approved" && name !== "rejected") return null;
+    const count = typeof record.proposal_count === "number" ? record.proposal_count : typeof record.proposal_count === "string" ? Number(record.proposal_count) : Number.NaN;
+    if (!Number.isFinite(count)) return null;
+    totals[name] = count;
+  }
+  if (!Number.isFinite(totals.pending) || !Number.isFinite(totals.approved) || !Number.isFinite(totals.rejected)) return null;
+  return totals;
+}
+function matchingProposals(totals: ProposalTotals, selected: string) {
+  if (selected === "all") return totals.pending + totals.approved + totals.rejected;
+  if (selected === "pending" || selected === "approved" || selected === "rejected") return totals[selected];
+  return null;
+}
 const panel: React.CSSProperties = { border: "1px solid #dbe5eb", borderRadius: 14, background: "white", padding: 22, marginTop: 18 };
 const btn: React.CSSProperties = { padding: "11px 17px", color: "white", background: "#176b53", border: 0, borderRadius: 9, cursor: "pointer" };
 const pageSize = 20;
@@ -18,6 +39,7 @@ export default function AdminListingEdits() {
   const router = useRouter();
   const editCursor = useRef<Cursor | null>(null);
   const historyCursor = useRef<Cursor | null>(null);
+  const reviewStatus = useRef("pending");
   const [adminId, setAdminId] = useState("");
   const [edits, setEdits] = useState<Edit[]>([]);
   const [history, setHistory] = useState<PublicationEvent[]>([]);
@@ -28,13 +50,17 @@ export default function AdminListingEdits() {
   const [publishId, setPublishId] = useState<string | null>(null);
   const [withdrawId, setWithdrawId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [counts, setCounts] = useState<ProposalTotals | null>(null);
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
-  const refresh = useCallback(async () => {
+  const refresh = useCallback(async (nextStatus?: string) => {
+    const selected = nextStatus ?? reviewStatus.current;
+    reviewStatus.current = selected;
     const result = await supabase.rpc("admin_list_listing_edits", {
       p_limit: pageSize,
       p_before: editCursor.current?.before ?? null,
       p_before_id: editCursor.current?.beforeId ?? null,
+      p_status: selected,
     });
     if (result.error) { setError("Unable to load proposals. Check administrator access."); return; }
     const rows = (result.data ?? []) as Edit[];
@@ -45,8 +71,12 @@ export default function AdminListingEdits() {
     });
     if (events.error) { setError("Unable to load publication history. Check administrator access."); return; }
     const eventRows = (events.data ?? []) as PublicationEvent[];
+    const totals = await supabase.rpc("admin_count_listing_edits");
+    const parsed = totals.error ? null : proposalTotals(totals.data);
+    if (!parsed) { setError("Unable to load proposals. Check administrator access."); return; }
     setEdits(rows);
     setHistory(eventRows);
+    setCounts(parsed);
     setError("");
     const ids = [...new Set([...rows.map(r => r.facility_id), ...eventRows.map(r => r.facility_id)])];
     if (ids.length) {
@@ -99,14 +129,14 @@ export default function AdminListingEdits() {
     else { setNotice("Owner text was removed from the public profile. The audit history remains. Official DSHS name, address, license, and capacity were not changed."); await refresh(); }
     setWithdrawId(null); setBusy(false);
   }
-  const visible = edits.filter(e => status === "all" || e.review_status === status);
+  const matching = counts ? matchingProposals(counts, status) : null;
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", color: "#123c59", padding: "30px 5%", fontFamily: "Arial,sans-serif" }}><div style={{ maxWidth: 1050, margin: "auto" }}>
     <Link href="/admin/claims" style={{ color: "#176b53" }}>← Administrator claim reviews</Link><h1>Listing proposal reviews</h1>
     <p>Review owner-provided descriptions, services, and amenities independently. Approving records a decision only. A separate publication action stores the approved text apart from official DSHS name, address, license, and capacity.</p>
     {loading && <p>Checking administrator access…</p>}{error && <p role="alert" style={{ color: "#9f2626" }}>{error}</p>}{notice && <p role="status" style={{ color: "#176b53" }}>{notice}</p>}
-    {adminId && !loading && <><section style={panel}><label htmlFor="status">Review status </label><select id="status" value={status} onChange={e => setStatus(e.target.value)} style={{ padding: 10, margin: 8 }}><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All</option></select><button type="button" style={btn} onClick={() => void refresh()}>Refresh</button> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { editCursor.current = null; void refresh(); }}>First page</button>{edits.length === pageSize && <> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { const last = edits[edits.length - 1]; editCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(); }}>Older records</button></>}<p>{visible.length} matching proposals (20 records per page)</p></section>
-      {visible.length === 0 && <section style={panel}>No matching proposals.</section>}
-      {visible.map(edit => {
+    {adminId && !loading && <><section style={panel}><label htmlFor="status">Review status </label><select id="status" value={status} onChange={e => { const next = e.target.value; reviewStatus.current = next; setStatus(next); editCursor.current = null; void refresh(next); }} style={{ padding: 10, margin: 8 }}><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All</option></select><button type="button" style={btn} onClick={() => void refresh()}>Refresh</button> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { editCursor.current = null; void refresh(); }}>First page</button>{edits.length === pageSize && <> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { const last = edits[edits.length - 1]; editCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(); }}>Older records</button></>}{counts && <p>Pending {counts.pending} · Approved {counts.approved} · Rejected {counts.rejected}</p>}{matching !== null && <p>{matching} matching proposals (20 records per page)</p>}</section>
+      {edits.length === 0 && <section style={panel}>No matching proposals.</section>}
+      {edits.map(edit => {
         const isCurrent = edit.current_publication;
         return <article key={edit.id} style={panel}><h2>{facilities[edit.facility_id]?.canonical_name ?? "Facility listing"}</h2><p>License: {facilities[edit.facility_id]?.license_number ?? "Not available"} · Field: <strong>{edit.field_name}</strong> · Status: <strong>{edit.review_status}</strong></p><p>Submitted: {new Date(edit.created_at).toLocaleString()}</p><p>Submitting user: <code style={{ overflowWrap: "anywhere" }}>{edit.submitted_by_user_id ?? "Unknown"}</code></p><div style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", background: "#f4f8fb", padding: 15, borderRadius: 8 }}>{typeof edit.proposed_value === "string" ? edit.proposed_value : JSON.stringify(edit.proposed_value)}</div>
         {isCurrent && <p>Currently published owner content as of {edit.current_published_at ? new Date(edit.current_published_at).toLocaleString() : "the latest publication"}. Official DSHS fields were not changed.</p>}
