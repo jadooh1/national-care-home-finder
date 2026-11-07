@@ -63,3 +63,6 @@ jobs:
 
       - name: Validate Phase 5G owner publication
         run: python3 supabase/proposals/tests/validate_phase5g_owner_publication.py
+
+      - name: Validate Phase 5H owner withdrawal
+        run: python3 supabase/proposals/tests/validate_phase5h_owner_withdrawal.py

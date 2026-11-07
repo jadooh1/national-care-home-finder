@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
@@ -12,8 +12,12 @@ type Facility = { id: string; canonical_name: string; license_number: string | n
 type Edit = { id: string; facility_id: string; field_name: string; review_status: string; created_at: string };
 type EditEvent = { id: string; edit_id: string; event_type: string; from_status: string | null; to_status: string; created_at: string };
 type Published = { facility_id: string; field_name: string; published_value: string; published_at: string };
+type PublicationEvent = { id: string; facility_id: string; field_name: string; event_type: string; previous_value: string | null; published_value: string; created_at: string };
+type Cursor = { before: string; beforeId: string };
 const panel: React.CSSProperties = { background: "white", padding: 22, border: "1px solid #dbe5eb", borderRadius: 14, marginTop: 18 };
 const field: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: 12, borderRadius: 9, border: "1px solid #cad9e2", fontSize: 16 };
+const quietButton: React.CSSProperties = { border: 0, borderRadius: 9, background: "#536b7c", color: "white", padding: "11px 16px", cursor: "pointer" };
+const pageSize = 20;
 export default function OwnerListingEdits() {
   const router = useRouter();
   const [uid, setUid] = useState("");
@@ -22,6 +26,10 @@ export default function OwnerListingEdits() {
   const [edits, setEdits] = useState<Edit[]>([]);
   const [events, setEvents] = useState<EditEvent[]>([]);
   const [published, setPublished] = useState<Published[]>([]);
+  const [publications, setPublications] = useState<PublicationEvent[]>([]);
+  const editCursor = useRef<Cursor | null>(null);
+  const eventCursor = useRef<Cursor | null>(null);
+  const historyCursor = useRef<Cursor | null>(null);
   const [facilityId, setFacilityId] = useState("");
   const [fieldName, setFieldName] = useState("description");
   const [value, setValue] = useState("");
@@ -34,17 +42,34 @@ export default function OwnerListingEdits() {
     if (claims.error) { setError("Unable to load approved ownership claims."); return; }
     const ids = [...new Set(((claims.data ?? []) as Claim[]).map(c => c.facility_id))];
     setApprovedIds(ids);
-    const history = await supabase.from("listing_edits").select("id,facility_id,field_name,review_status,created_at").eq("submitted_by_user_id", userId).order("created_at", { ascending: false }).limit(100);
+    const history = await supabase.rpc("owner_list_listing_edits", {
+      p_limit: pageSize,
+      p_before: editCursor.current?.before ?? null,
+      p_before_id: editCursor.current?.beforeId ?? null,
+    });
     if (history.error) { setError("Unable to load submitted proposals."); return; }
     const rows = (history.data ?? []) as Edit[];
     setEdits(rows);
-    const activity = await supabase.from("listing_edit_events").select("id,edit_id,event_type,from_status,to_status,created_at").order("created_at", { ascending: false }).limit(100);
-    setEvents(activity.error ? [] : (activity.data ?? []) as EditEvent[]);
+    const activity = await supabase.rpc("owner_list_listing_edit_events", {
+      p_limit: pageSize,
+      p_before: eventCursor.current?.before ?? null,
+      p_before_id: eventCursor.current?.beforeId ?? null,
+    });
+    if (activity.error) { setError("Unable to load proposal activity."); return; }
+    setEvents((activity.data ?? []) as EditEvent[]);
+    const publicationHistory = await supabase.rpc("owner_list_publication_history", {
+      p_limit: pageSize,
+      p_before: historyCursor.current?.before ?? null,
+      p_before_id: historyCursor.current?.beforeId ?? null,
+    });
+    if (publicationHistory.error) { setError("Unable to load publication history."); return; }
+    const publicationRows = (publicationHistory.data ?? []) as PublicationEvent[];
+    setPublications(publicationRows);
     if (ids.length) {
       const content = await supabase.from("wa_afh_published_owner_content").select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
       setPublished(content.error ? [] : (content.data ?? []) as Published[]);
     } else setPublished([]);
-    const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id)])];
+    const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
     if (detailIds.length) {
       const homes = await supabase.from("wa_dshs_listed_facilities").select("id,canonical_name,license_number").in("id", detailIds);
       if (homes.error) { setError("Unable to load facility details."); return; }
@@ -90,8 +115,10 @@ export default function OwnerListingEdits() {
         <p style={{ fontSize: 13 }}>Do not include any resident personal information, health records, identity documents, or passwords.</p>
         <button disabled={busy} style={{ border: 0, borderRadius: 9, background: "#176b53", color: "white", padding: "12px 19px" }}>{busy ? "Submitting…" : "Submit proposal"}</button>
       </form>}</section>
-      <section style={panel}><h2>Published on the public profile</h2><p>This is the owner-provided text an administrator has published. It is stored separately from the official DSHS licensing record.</p>{published.length === 0 && <p>No owner text is published for your approved facilities.</p>}{published.map(item => <article key={`${item.facility_id}-${item.field_name}`} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities.find(f => f.id === item.facility_id)?.canonical_name ?? "Facility details are unavailable"}</strong> — {item.field_name}<p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
-      <section style={panel}><h2>My proposals</h2><p>The proposed text is stored for administrator review and is not shown on this page. Approval does not publish it.</p>{edits.length === 0 && <p>No proposals yet.</p>}{edits.map(e => <article key={e.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities.find(f => f.id === e.facility_id)?.canonical_name ?? "Facility details are unavailable"}</strong> — {e.field_name}<p>Status: <strong>{e.review_status}</strong> · {new Date(e.created_at).toLocaleString()}</p>{events.filter(event => event.edit_id === e.id).map(event => <p key={event.id}>Activity: {event.event_type}{event.from_status ? `, ${event.from_status} → ${event.to_status}` : `, ${event.to_status}`}</p>)}</article>)}</section>
+      <section style={panel}><h2>Published on the public profile</h2><p>This is the owner-provided text an administrator has published. It is stored separately from the official DSHS licensing record. Withdrawn text is removed from this section.</p>{published.length === 0 && <p>No owner text is published for your approved facilities.</p>}{published.map(item => <article key={`${item.facility_id}-${item.field_name}`} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities.find(f => f.id === item.facility_id)?.canonical_name ?? "Facility details are unavailable"}</strong> — {item.field_name}<p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
+      <section style={panel}><h2>Publication history</h2><p>This history covers facilities with your approved ownership claim. It does not show administrator accounts.</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { historyCursor.current = null; void refresh(uid); }}>First page</button>{publications.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = publications[publications.length - 1]; historyCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>Older records</button>}</div><p>20 records per page</p>{publications.length === 0 && <p>No publication history for your approved facilities.</p>}{publications.map(item => <article key={item.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities.find(f => f.id === item.facility_id)?.canonical_name ?? "Facility details are unavailable"}</strong> — {item.field_name}<p>{item.event_type === "withdrawn" ? "No longer on the public profile" : "Published"} · {new Date(item.created_at).toLocaleString()}</p><p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
+      <section style={panel}><h2>My proposals</h2><p>The proposed text is stored for administrator review and is not shown on this page. Approval does not publish it.</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { editCursor.current = null; void refresh(uid); }}>First page</button>{edits.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = edits[edits.length - 1]; editCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>Older records</button>}</div><p>20 records per page</p>{edits.length === 0 && <p>No proposals yet.</p>}{edits.map(e => <article key={e.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities.find(f => f.id === e.facility_id)?.canonical_name ?? "Facility details are unavailable"}</strong> — {e.field_name}<p>Status: <strong>{e.review_status}</strong> · {new Date(e.created_at).toLocaleString()}</p></article>)}</section>
+      <section style={panel}><h2>Proposal activity</h2><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { eventCursor.current = null; void refresh(uid); }}>First page</button>{events.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = events[events.length - 1]; eventCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>Older records</button>}</div><p>20 records per page</p>{events.length === 0 && <p>No proposal activity yet.</p>}{events.map(event => <article key={event.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><p>Activity: {event.event_type}{event.from_status ? `, ${event.from_status} → ${event.to_status}` : `, ${event.to_status}`} · {new Date(event.created_at).toLocaleString()}</p></article>)}</section>
     </>}
   </div></main>;
 }
