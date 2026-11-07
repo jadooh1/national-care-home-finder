@@ -15,6 +15,7 @@ alwaysApply: false
 - Publication of approved owner text goes through `admin_publish_listing_edit`. Store it in `published_owner_listings`, not in `facilities` or a directory view. Do not change official DSHS name, address, license, capacity, or record status from owner content.
 - Withdrawal goes through `admin_withdraw_published_owner_listing`. It deletes only the current `published_owner_listings` row, appends a withdrawn audit event, and does not change official DSHS fields or audit history.
 - Read `evidence_notes` and `proposed_value` only through `admin_list_owner_claims` and `admin_list_listing_edits`. Do not select those columns from the browser tables.
+- Administrator proposal status filtering goes through `admin_list_listing_edits` and the totals through `admin_count_listing_edits`; do not filter a page of proposals in the browser.
 - Keep self-review blocked. Do not widen `app_admins` reads or writes.
 - Escape is React's default. Do not inject listing text with `dangerouslySetInnerHTML`. Leaflet popups must stay DOM text nodes, as in `app/washington/map/page.tsx`.
 - Quote or parameterize PostgREST filters. Do not interpolate raw search text into `.or()`.

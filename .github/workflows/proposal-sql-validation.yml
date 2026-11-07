@@ -66,3 +66,6 @@ jobs:
 
       - name: Validate Phase 5H owner withdrawal
         run: python3 supabase/proposals/tests/validate_phase5h_owner_withdrawal.py
+
+      - name: Validate Phase 5I proposal status filter
+        run: python3 supabase/proposals/tests/validate_phase5i_listing_edit_status_filter.py
