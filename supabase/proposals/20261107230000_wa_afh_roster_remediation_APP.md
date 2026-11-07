@@ -1,12 +1,27 @@
 # Washington AFH roster remediation
 
-Execution was not started. The passwordless pooler was not retried. No Supabase MCP server is connected, the Supabase CLI is not installed, and no CLI login file is present. The Cursor browser is on the Supabase sign-in page. Chrome has the development SQL editor open at project `ajjsyloyihcqdomywhik` (`national-care-home-finder-dev`), but clicks do not stay in that editor. Live database prechecks therefore did not run. No directory, map, facility, view, or function change was applied. Production project `yiehgstweswxjakbcdzc` was not contacted.
+Development execution is complete on project `ajjsyloyihcqdomywhik` and was not repeated during this review. Production project `yiehgstweswxjakbcdzc` was not contacted.
+
+Verified development result:
+
+- `wa_dshs_listed_facilities`: 6,278 rows
+- `wa_afh_map_facilities`: 6,278 rows
+- 17 additions are present with coordinates
+- Licenses 752686, 755649, 757132, and 758334 remain stored with `presence = 'absent'` and are excluded from the directory and map
+- 759147 capacity 6, 759176 capacity 2, 757641 capacity 8, and 754130 named Harmony Senior Home LLC
+- Owner claims 3, listing edits 3, administrators 1
+
+The guarded script remains `20261107233000_wa_afh_roster_remediation_EXECUTE.sql` at commit `ae95045`. This review did not run it again.
 
 A fresh public ArcGIS read of licenses 759434–759450 returned 17 current rows. Names, addresses, and coordinates matched the November 7 roster and `wa_afh_addition_coordinates_20261107.json`. That source check does not replace the unread database prechecks.
 
-`20261107233000_wa_afh_roster_remediation_EXECUTE.sql` is the guarded transaction. It raises and aborts unless the session already names this development project and every precheck passes. It was not run against development.
+`20261107233000_wa_afh_roster_remediation_EXECUTE.sql` is the guarded transaction. It raises and aborts unless the session already names this development project and every precheck passes. The development run recorded above is the execution of that transaction. Do not run it again.
 
 The script no longer requires `wa_zip_market_income`, `wa_county_market_summary`, or `wa_city_market_summary` to exist, and it does not create them. It stops when a live market relation reads `public.facilities` without excluding absent rows. The publication-helper check reads `pg_proc` instead of searching function text for `search_path = ''`. A disposable local PostgreSQL 17 run confirmed that the old text search misses `SET search_path TO ''`, the catalog check accepts that function, a missing market relation is allowed, and a market view that counts `public.facilities` without mentioning absent is rejected. The replacement views and helper were created on a stub table and rolled back. That local proof is not a development execution.
+
+Code and security review of commit `ae95045` found no blocking defect in the completed development run. The helper remains security definer, with an empty search path, its existing execute grants, and the reserved test-home rejection. Archived rows are retained and filtered from the directory, map, and publication helper.
+
+One decision remains. The public facility read policy and owner-claim eligibility still accept `record_status = 'source_matched'` without checking `presence`. Family, owner, and administrator screens read `wa_dshs_listed_facilities`, so the four archived licenses are not offered there. A caller who already knows a facility id could still read that row or submit a claim. This review did not change that policy.
 
 The companion file `20261107230000_wa_afh_roster_remediation_REVIEW.sql` raises before any read or write. It is not a migration.
 
