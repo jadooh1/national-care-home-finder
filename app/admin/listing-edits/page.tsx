@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
-import { authorizationDecision, createAdminActionGate, createListingRequestGate, currentListingInput, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, loadAdminListing, olderCursor, runAdminAction, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
+import { authorizationDecision, createAdminActionGate, createListingRequestGate, currentListingInput, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, loadAdminListing, olderCursor, settleAdminAction, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
 
 captureAndStripAuthCallback();
 
@@ -68,14 +68,15 @@ export default function AdminListingEdits() {
     const request = requests.current.start(input ?? listingInput());
     reviewStatus.current = request.status;
     const outcome = await loadAdminListing(listingSource(), requests.current, request);
-    if (!requests.current.isLatest(request.id) || outcome.status === "stale") return;
-    if (outcome.status === "error") { setError(outcome.error); setLoading(false); return; }
+    if (!requests.current.isLatest(request.id) || outcome.status === "stale") return "stale";
+    if (outcome.status === "error") { setError(outcome.error); setLoading(false); return "error"; }
     setEdits(outcome.proposals as Edit[]);
     setHistory(outcome.history as PublicationEvent[]);
     setCounts(outcome.counts);
     setError("");
     setLoading(false);
     if (outcome.facilities !== null) setFacilities(outcome.facilities);
+    return "applied";
   }, [listingInput, listingSource]);
   useEffect(() => {
     let active = true;
@@ -93,36 +94,30 @@ export default function AdminListingEdits() {
     })();
     return () => { active = false; };
   }, [listingInput, router, refresh]);
+  function reportAction(update: { error: string; notice: string }) {
+    setError(update.error);
+    setNotice(update.notice);
+  }
   async function review() {
     if (!confirm || !adminId) return;
     const item = edits.find(e => e.id === confirm.id);
     if (!item || item.review_status !== "pending" || !item.submitted_by_user_id || item.submitted_by_user_id === adminId) { setError("Cannot review this proposal."); setConfirm(null); return; }
     const decision = confirm.decision;
     const editId = confirm.id;
-    await runAdminAction(actions.current, async () => {
+    await settleAdminAction(actions.current, "review", async () => {
       setBusy(true); setError(""); setNotice("");
       return supabase.rpc("admin_review_listing_edit", { p_edit_id: editId, p_decision: decision });
-    }, async (result) => {
-      if (result.error || result.data !== true) setError(result.error?.message ?? "Review was not completed.");
-      else setNotice(`Proposal ${decision}. This records a decision but does NOT publish changes.`);
-      setConfirm(null);
-      if (result.data === true && !result.error) await refresh();
-    }, () => setBusy(false));
+    }, () => refresh(), `Proposal ${decision}. This records a decision but does NOT publish changes.`, reportAction, () => setConfirm(null), () => setBusy(false));
   }
   async function publish() {
     if (!publishId || !adminId) return;
     const item = edits.find(e => e.id === publishId);
     if (!item || item.review_status !== "approved" || !item.submitted_by_user_id || item.submitted_by_user_id === adminId || item.current_publication) { setError("Cannot publish this proposal."); setPublishId(null); return; }
     const editId = publishId;
-    await runAdminAction(actions.current, async () => {
+    await settleAdminAction(actions.current, "publish", async () => {
       setBusy(true); setError(""); setNotice("");
       return supabase.rpc("admin_publish_listing_edit", { p_edit_id: editId });
-    }, async (result) => {
-      if (result.error || result.data !== true) setError(result.error?.message ?? "Publication was not completed.");
-      else setNotice("Owner text was published separately. Official DSHS name, address, license, and capacity were not changed.");
-      setPublishId(null);
-      if (result.data === true && !result.error) await refresh();
-    }, () => setBusy(false));
+    }, () => refresh(), "Owner text was published separately. Official DSHS name, address, license, and capacity were not changed.", reportAction, () => setPublishId(null), () => setBusy(false));
   }
   async function withdraw() {
     if (!withdrawId || !adminId) return;
@@ -130,15 +125,10 @@ export default function AdminListingEdits() {
     if (!item || !item.current_publication || item.submitted_by_user_id === adminId) { setError("Cannot withdraw this owner text."); setWithdrawId(null); return; }
     const facilityId = item.facility_id;
     const fieldName = item.field_name;
-    await runAdminAction(actions.current, async () => {
+    await settleAdminAction(actions.current, "withdraw", async () => {
       setBusy(true); setError(""); setNotice("");
       return supabase.rpc("admin_withdraw_published_owner_listing", { p_facility_id: facilityId, p_field_name: fieldName });
-    }, async (result) => {
-      if (result.error || result.data !== true) setError(result.error?.message ?? "Withdrawal was not completed.");
-      else setNotice("Owner text was removed from the public profile. The audit history remains. Official DSHS name, address, license, and capacity were not changed.");
-      setWithdrawId(null);
-      if (result.data === true && !result.error) await refresh();
-    }, () => setBusy(false));
+    }, () => refresh(), "Owner text was removed from the public profile. The audit history remains. Official DSHS name, address, license, and capacity were not changed.", reportAction, () => setWithdrawId(null), () => setBusy(false));
   }
   const matching = counts ? matchingProposals(counts, status) : null;
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", color: "#123c59", padding: "30px 5%", fontFamily: "Arial,sans-serif" }}><div style={{ maxWidth: 1050, margin: "auto" }}>

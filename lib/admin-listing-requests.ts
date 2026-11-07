@@ -219,3 +219,79 @@ export async function runAdminAction<T>(
     }
   }
 }
+
+export type AdminActionKind = "review" | "publish" | "withdraw";
+export type AdminWriteResult = { data: unknown; error: { message?: string } | null };
+export type AdminReloadResult = "applied" | "stale" | "error";
+export type AdminActionReport = { error: string; notice: string };
+
+export const UNCERTAIN_ADMIN_ACTION = "The connection failed before the result was confirmed. It was not retried. Use Refresh to check the latest saved state.";
+export const INTERRUPTED_ADMIN_RELOAD = "The action was recorded, but the latest list did not load. It was not retried. Use Refresh to check the latest saved state.";
+
+const KNOWN_ACTION_ERRORS: Record<string, string> = {
+  "administrator required": "Administrator access is required.",
+  "self-review is not allowed": "You cannot review, publish, or withdraw your own submission.",
+  "decision is not allowed": "That review decision is not available.",
+  "listing edit was not found": "That proposal was not found.",
+  "proposal is not pending": "That proposal is no longer pending.",
+  "proposal is not approved": "Only an approved proposal can be published.",
+  "field is not allowed": "That listing field cannot be changed.",
+  "proposed text is not available": "The proposed text is not available.",
+  "proposed text must be 1 to 2000 characters": "The proposed text must be 1 to 2000 characters.",
+  "facility is not eligible": "That facility is not eligible.",
+  "approved claim required": "An approved ownership claim is required.",
+  "published owner text was not found": "There is no published owner text to withdraw.",
+};
+
+export function safeAdminActionError(kind: AdminActionKind, message: string | undefined): string {
+  const known = typeof message === "string" ? KNOWN_ACTION_ERRORS[message.trim()] : undefined;
+  const lead = known ?? (kind === "review" ? "The review was not completed." : kind === "publish" ? "Publication was not completed." : "Withdrawal was not completed.");
+  return `${lead} It was not retried. Use Refresh to check the latest saved state.`;
+}
+
+export async function settleAdminAction(
+  gate: AdminActionGate,
+  kind: AdminActionKind,
+  perform: () => Promise<AdminWriteResult>,
+  reload: () => Promise<AdminReloadResult>,
+  savedNotice: string,
+  report: (update: AdminActionReport) => void,
+  close: () => void,
+  onSettled: () => void,
+): Promise<"ignored" | "done"> {
+  return runAdminAction(gate, async () => {
+    try {
+      return await perform();
+    } catch {
+      return { data: null, error: null, uncertain: true as const };
+    }
+  }, async (result) => {
+    if ("uncertain" in result && result.uncertain) {
+      report({ error: UNCERTAIN_ADMIN_ACTION, notice: "" });
+      close();
+      return;
+    }
+    if (result.error || result.data !== true) {
+      report({ error: safeAdminActionError(kind, result.error?.message), notice: "" });
+      close();
+      return;
+    }
+    let loaded: AdminReloadResult;
+    try {
+      loaded = await reload();
+    } catch {
+      loaded = "error";
+    }
+    if (loaded === "stale") {
+      close();
+      return;
+    }
+    if (loaded === "error") {
+      report({ error: INTERRUPTED_ADMIN_RELOAD, notice: "" });
+      close();
+      return;
+    }
+    report({ error: "", notice: savedNotice });
+    close();
+  }, onSettled);
+}
