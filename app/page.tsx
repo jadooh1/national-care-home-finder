@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { HOMEPAGE_DIRECTORY_NOTE, stateFilterStatus } from "../lib/family-journey";
+import { homepageDirectoryNote, oregonPublicDirectoryAvailable } from "../lib/oregon-public-directory";
 
 const states = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California",
@@ -21,6 +22,7 @@ const states = [
 
 export default function Home() {
   const [search, setSearch] = useState("");
+  const oregonAvailable = oregonPublicDirectoryAvailable(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
 
   const filteredStates = useMemo(
     () =>
@@ -226,6 +228,18 @@ export default function Home() {
   >
     {state}
   </Link>
+) : state === "Oregon" && oregonAvailable ? (
+  <Link
+    href="/oregon"
+    style={{
+      color: "#176b53",
+      textDecoration: "underline",
+      textUnderlineOffset: 3,
+      display: "block",
+    }}
+  >
+    {state}
+  </Link>
 ) : (
   state
 )}
@@ -242,7 +256,7 @@ export default function Home() {
               lineHeight: 1.7,
             }}
           >
-            {HOMEPAGE_DIRECTORY_NOTE}
+            {homepageDirectoryNote(oregonAvailable) ?? HOMEPAGE_DIRECTORY_NOTE}
           </p>
         </div>
       </section>
