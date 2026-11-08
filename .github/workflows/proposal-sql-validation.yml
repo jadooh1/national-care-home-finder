@@ -74,6 +74,17 @@ jobs:
         if: matrix.postgres_version == '17'
         run: psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/browser_write_grant_checks.sql
 
+      - name: Check a partial browser write grant set stops remediation
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/browser_write_grant_partial.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "partial browser write remediation is present"
+
       - name: Check an unreviewed browser write grant stops remediation
         if: matrix.postgres_version == '17'
         run: |

@@ -5,6 +5,19 @@ begin;
 
 savepoint before_effect;
 
+do $truncate_before$
+begin
+  execute 'set local role anon';
+  truncate table public.owner_claims;
+  execute 'reset role';
+  if (select count(*) from public.owner_claims) <> 0 then
+    raise exception 'FAIL anon truncate was already denied';
+  end if;
+end;
+$truncate_before$;
+
+rollback to savepoint before_effect;
+
 do $before$
 declare
   sample uuid;
@@ -95,6 +108,15 @@ begin
       end if;
   end;
   begin
+    truncate table public.owner_claims;
+    raise exception 'FAIL anon truncate was accepted';
+  exception
+    when insufficient_privilege then
+      if position('permission denied' in sqlerrm) = 0 then
+        raise;
+      end if;
+  end;
+  begin
     insert into public.owner_claims (
       facility_id, claimant_user_id, verification_status, evidence_notes
     ) values (
@@ -108,6 +130,14 @@ begin
       end if;
   end;
   execute 'reset role';
+  if pg_catalog.has_table_privilege('anon', 'public.facilities', 'MAINTAIN')
+     or pg_catalog.has_table_privilege('authenticated', 'public.facilities', 'TRIGGER')
+     or pg_catalog.has_table_privilege('anon', 'public.owner_claims', 'UPDATE')
+     or pg_catalog.has_table_privilege('authenticated', 'public.owner_claims', 'DELETE')
+     or pg_catalog.has_table_privilege('authenticated', 'public.owner_claims', 'MAINTAIN')
+     or not pg_catalog.has_table_privilege('anon', 'public.facilities', 'SELECT') then
+    raise exception 'FAIL a confirmed browser write grant remains';
+  end if;
 
   execute 'set local role authenticated';
   begin
@@ -182,6 +212,10 @@ declare
   sample uuid;
 begin
   if pg_catalog.has_table_privilege('anon', 'public.facilities', 'INSERT') is not true
+     or pg_catalog.has_table_privilege('anon', 'public.facilities', 'TRUNCATE') is not true
+     or pg_catalog.has_table_privilege('anon', 'public.facilities', 'MAINTAIN') is not true
+     or pg_catalog.has_table_privilege('authenticated', 'public.owner_claims', 'UPDATE') is not true
+     or pg_catalog.has_table_privilege('authenticated', 'public.owner_claims', 'MAINTAIN') is not true
      or pg_catalog.has_table_privilege('authenticated', 'public.listing_edits', 'INSERT') is not true
      or pg_catalog.has_table_privilege('anon', 'public.listing_edits', 'INSERT')
      or to_regclass('public.nchf_browser_write_remediation_audit') is not null

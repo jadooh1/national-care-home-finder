@@ -15,6 +15,7 @@ declare
   source_matched_count bigint;
   exact_grants boolean;
   grants_absent boolean;
+  extra_grants boolean;
   audit_exists boolean;
   directory_acl text;
   map_acl text;
@@ -118,11 +119,31 @@ begin
       ('facilities', 'anon', 'INSERT'),
       ('facilities', 'anon', 'UPDATE'),
       ('facilities', 'anon', 'DELETE'),
+      ('facilities', 'anon', 'TRUNCATE'),
+      ('facilities', 'anon', 'REFERENCES'),
+      ('facilities', 'anon', 'TRIGGER'),
+      ('facilities', 'anon', 'MAINTAIN'),
       ('facilities', 'authenticated', 'INSERT'),
       ('facilities', 'authenticated', 'UPDATE'),
       ('facilities', 'authenticated', 'DELETE'),
+      ('facilities', 'authenticated', 'TRUNCATE'),
+      ('facilities', 'authenticated', 'REFERENCES'),
+      ('facilities', 'authenticated', 'TRIGGER'),
+      ('facilities', 'authenticated', 'MAINTAIN'),
       ('owner_claims', 'anon', 'INSERT'),
+      ('owner_claims', 'anon', 'UPDATE'),
+      ('owner_claims', 'anon', 'DELETE'),
+      ('owner_claims', 'anon', 'TRUNCATE'),
+      ('owner_claims', 'anon', 'REFERENCES'),
+      ('owner_claims', 'anon', 'TRIGGER'),
+      ('owner_claims', 'anon', 'MAINTAIN'),
       ('owner_claims', 'authenticated', 'INSERT'),
+      ('owner_claims', 'authenticated', 'UPDATE'),
+      ('owner_claims', 'authenticated', 'DELETE'),
+      ('owner_claims', 'authenticated', 'TRUNCATE'),
+      ('owner_claims', 'authenticated', 'REFERENCES'),
+      ('owner_claims', 'authenticated', 'TRIGGER'),
+      ('owner_claims', 'authenticated', 'MAINTAIN'),
       ('listing_edits', 'authenticated', 'INSERT')
   ),
   actual as (
@@ -145,8 +166,9 @@ begin
   select
     not exists (select * from expected except select * from actual)
       and not exists (select * from actual except select * from expected),
-    not exists (select 1 from actual)
-  into exact_grants, grants_absent;
+    not exists (select 1 from actual),
+    exists (select * from actual except select * from expected)
+  into exact_grants, grants_absent, extra_grants;
 
   audit_exists := to_regclass('public.nchf_browser_write_remediation_audit') is not null;
   if to_regclass('public.wa_dshs_listed_facilities') is not null then
@@ -161,8 +183,10 @@ begin
   end if;
 
   if exact_grants and not audit_exists then
-    revoke insert, update, delete on table public.facilities from anon, authenticated;
-    revoke insert on table public.owner_claims from anon, authenticated;
+    revoke insert, update, delete, truncate, references, trigger, maintain
+      on table public.facilities from anon, authenticated;
+    revoke insert, update, delete, truncate, references, trigger, maintain
+      on table public.owner_claims from anon, authenticated;
     revoke insert on table public.listing_edits from authenticated;
 
     create table public.nchf_browser_write_remediation_audit (
@@ -184,24 +208,53 @@ begin
     null;
   elsif grants_absent and not audit_exists then
     raise exception 'browser write grants are already absent without this proposal';
-  elsif audit_exists then
-    raise exception 'partial browser write remediation is present';
-  else
+  elsif extra_grants then
     raise exception 'unreviewed browser write grant';
+  else
+    raise exception 'partial browser write remediation is present';
   end if;
 
-  if pg_catalog.has_table_privilege('anon', 'public.facilities', 'INSERT')
-     or pg_catalog.has_table_privilege('anon', 'public.facilities', 'UPDATE')
-     or pg_catalog.has_table_privilege('anon', 'public.facilities', 'DELETE')
-     or pg_catalog.has_table_privilege('authenticated', 'public.facilities', 'INSERT')
-     or pg_catalog.has_table_privilege('authenticated', 'public.facilities', 'UPDATE')
-     or pg_catalog.has_table_privilege('authenticated', 'public.facilities', 'DELETE')
-     or pg_catalog.has_table_privilege('anon', 'public.owner_claims', 'INSERT')
-     or pg_catalog.has_table_privilege('authenticated', 'public.owner_claims', 'INSERT')
-     or pg_catalog.has_table_privilege('anon', 'public.listing_edits', 'INSERT')
-     or pg_catalog.has_table_privilege('authenticated', 'public.listing_edits', 'INSERT')
-     or not pg_catalog.has_table_privilege('anon', 'public.facilities', 'SELECT')
-     or not pg_catalog.has_table_privilege('authenticated', 'public.facilities', 'SELECT') then
+  if exists (
+    select 1
+    from (
+      values
+        ('anon', 'public.facilities', 'INSERT'),
+        ('anon', 'public.facilities', 'UPDATE'),
+        ('anon', 'public.facilities', 'DELETE'),
+        ('anon', 'public.facilities', 'TRUNCATE'),
+        ('anon', 'public.facilities', 'REFERENCES'),
+        ('anon', 'public.facilities', 'TRIGGER'),
+        ('anon', 'public.facilities', 'MAINTAIN'),
+        ('authenticated', 'public.facilities', 'INSERT'),
+        ('authenticated', 'public.facilities', 'UPDATE'),
+        ('authenticated', 'public.facilities', 'DELETE'),
+        ('authenticated', 'public.facilities', 'TRUNCATE'),
+        ('authenticated', 'public.facilities', 'REFERENCES'),
+        ('authenticated', 'public.facilities', 'TRIGGER'),
+        ('authenticated', 'public.facilities', 'MAINTAIN'),
+        ('anon', 'public.owner_claims', 'INSERT'),
+        ('anon', 'public.owner_claims', 'UPDATE'),
+        ('anon', 'public.owner_claims', 'DELETE'),
+        ('anon', 'public.owner_claims', 'TRUNCATE'),
+        ('anon', 'public.owner_claims', 'REFERENCES'),
+        ('anon', 'public.owner_claims', 'TRIGGER'),
+        ('anon', 'public.owner_claims', 'MAINTAIN'),
+        ('authenticated', 'public.owner_claims', 'INSERT'),
+        ('authenticated', 'public.owner_claims', 'UPDATE'),
+        ('authenticated', 'public.owner_claims', 'DELETE'),
+        ('authenticated', 'public.owner_claims', 'TRUNCATE'),
+        ('authenticated', 'public.owner_claims', 'REFERENCES'),
+        ('authenticated', 'public.owner_claims', 'TRIGGER'),
+        ('authenticated', 'public.owner_claims', 'MAINTAIN'),
+        ('authenticated', 'public.listing_edits', 'INSERT'),
+        ('anon', 'public.listing_edits', 'INSERT')
+    ) as removed(role_name, relation_name, privilege_type)
+    where pg_catalog.has_table_privilege(
+      removed.role_name, removed.relation_name, removed.privilege_type
+    )
+  )
+  or not pg_catalog.has_table_privilege('anon', 'public.facilities', 'SELECT')
+  or not pg_catalog.has_table_privilege('authenticated', 'public.facilities', 'SELECT') then
     raise exception 'browser write grants remain or select was removed';
   end if;
 

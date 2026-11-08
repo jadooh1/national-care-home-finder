@@ -73,14 +73,16 @@ insert into public.app_admins (user_id)
 values ('00000000-0000-4000-8000-0000000000bb');
 
 alter table public.facilities enable row level security;
-grant select, insert, update, delete on table public.facilities to anon, authenticated;
+grant select, insert, update, delete, truncate, references, trigger, maintain
+  on table public.facilities to anon, authenticated;
 create policy "Public read verified facilities"
   on public.facilities
   for select
   to anon, authenticated
   using (record_status = 'verified');
 
-grant insert on table public.owner_claims to anon, authenticated;
+grant insert, update, delete, truncate, references, trigger, maintain
+  on table public.owner_claims to anon, authenticated;
 grant insert on table public.listing_edits to authenticated;
 
 create view public.wa_dshs_listed_facilities
