@@ -60,6 +60,15 @@ begin
      or (select count(*) from public.wa_afh_map_facilities) <> 6231
      or (select count(*) from public.wa_dshs_license_comparison) <> 6231
      or (select count(distinct btrim(license_number)) from public.wa_dshs_license_comparison) <> 6231
+     or (
+       select count(*)
+       from public.wa_dshs_license_comparison as comparison
+       where not exists (
+         select 1
+         from public.facilities as facility
+         where btrim(facility.license_number) = btrim(comparison.license_number)
+       )
+     ) <> 0
      or (select count(*) from public.owner_claims) <> 0
      or (select count(*) from public.listing_edits) <> 0
      or (select count(*) from public.published_owner_listings) <> 0
@@ -243,7 +252,7 @@ begin
   $fn$;
 
   create or replace view public.wa_afh_published_owner_content
-  with (security_barrier = true) as
+  with (security_barrier = true, security_invoker = false) as
   select content.facility_id,
          content.field_name,
          content.published_value,

@@ -139,7 +139,7 @@ begin
   $fn$;
 
   create or replace view public.wa_afh_published_owner_content
-  with (security_barrier = true) as
+  with (security_barrier = true, security_invoker = false) as
   select content.facility_id,
          content.field_name,
          content.published_value,
