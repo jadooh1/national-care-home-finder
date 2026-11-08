@@ -4,7 +4,7 @@ This proposal is not applied. It adds the ten functions and two relations the de
 
 The file does not set `nchf.owner_admin_surface_authorization` or `nchf.owner_admin_surface_target`. A later human sets those to `authorize-owner-admin-surface` and `yiehgstweswxjakbcdzc` before running it. Any other target is refused. A second run is a no-op. Rollback drops only the objects this proposal created, and only while the new tables are empty.
 
-Anonymous roles receive no execute privilege and no write privilege on the new tables. Administrator list, publish, and withdraw functions require an `app_admins` row and reject self-review. Listing submission uses the same source-matched AFH predicate as `submit_owner_claim`.
+Anonymous roles receive no execute privilege on the helper or mutating functions. The new tables enable row-level security with an explicit deny policy for `anon` and `authenticated`, plus privilege revocation. Security-definer functions run as the table owner, so those policies do not block them, and each function checks the caller itself. Administrator lists, publication, and withdrawal require an `app_admins` row and reject self-review. Owner lists require a signed-in user. Listing submission uses the same source-matched AFH predicate as `submit_owner_claim`. The proposal refuses to run when `anon` or `authenticated` can write `owner_claims` or `listing_edits` directly.
 
 ## Claim eligibility dry run
 

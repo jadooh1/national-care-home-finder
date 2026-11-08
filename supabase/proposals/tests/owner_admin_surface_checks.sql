@@ -67,11 +67,26 @@ begin
     raise exception 'eligible listing edit was not stored';
   end if;
 
+  perform set_config('request.jwt.claim.sub', '', true);
+  begin
+    perform public.owner_list_listing_edits(20, null, null);
+    raise exception 'anonymous owner list was accepted';
+  exception
+    when others then
+      if sqlerrm <> 'authentication required' then
+        raise;
+      end if;
+  end;
   perform set_config('request.jwt.claim.sub', other_admin::text, true);
-  select count(*) into claim_rows from public.admin_list_owner_claims(20, null);
-  if claim_rows <> 0 then
+  begin
+    select count(*) into claim_rows from public.admin_list_owner_claims(20, null);
     raise exception 'non-administrator listed claims';
-  end if;
+  exception
+    when others then
+      if sqlerrm <> 'administrator required' then
+        raise;
+      end if;
+  end;
 
   insert into public.app_admins (user_id) values (other_admin);
   update public.listing_edits set review_status = 'approved' where id = edit_id;
@@ -98,12 +113,27 @@ begin
 
   set local role anon;
   begin
-    insert into public.listing_edit_events (edit_id, facility_id, actor_user_id, event_type, to_status)
-    values (edit_id, v_facility_id, owner_id, 'submitted', 'pending');
-    raise exception 'anonymous event insert was accepted';
+    perform public.nchf_owner_admin_facility_is_listed(v_facility_id);
+    raise exception 'anonymous eligibility helper was executable';
   exception
     when insufficient_privilege then
       null;
+  end;
+  reset role;
+  grant select, insert on public.listing_edit_events to anon;
+  set local role anon;
+  if (select count(*) from public.listing_edit_events) <> 0 then
+    raise exception 'restored anonymous select saw event rows';
+  end if;
+  begin
+    insert into public.listing_edit_events (edit_id, facility_id, actor_user_id, event_type, to_status)
+    values (edit_id, v_facility_id, owner_id, 'submitted', 'pending');
+    raise exception 'restored anonymous insert was accepted';
+  exception
+    when others then
+      if sqlerrm not like '%row-level security%' then
+        raise;
+      end if;
   end;
   reset role;
 

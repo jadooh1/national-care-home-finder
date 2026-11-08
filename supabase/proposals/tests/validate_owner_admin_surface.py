@@ -87,6 +87,18 @@ def main():
         if code == 0 or "owner admin surface target is not the reviewed production project" not in output:
             print(output, file=sys.stderr)
             return 1
+        direct_write = "\n".join([
+            "begin;",
+            FIXTURE.read_text(encoding="utf-8"),
+            "grant insert on public.listing_edits to anon;",
+            settings(),
+            PROPOSAL.read_text(encoding="utf-8"),
+            "rollback;",
+        ])
+        code, output = psql(DATABASE, direct_write)
+        if code == 0 or "direct browser writes on owner claims or listing edits are present" not in output:
+            print(output, file=sys.stderr)
+            return 1
         admin("DROP DATABASE IF EXISTS eligibility_dry_run WITH (FORCE); CREATE DATABASE eligibility_dry_run;")
         classifier = """
 create table public.facilities (

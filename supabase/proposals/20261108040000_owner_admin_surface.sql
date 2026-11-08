@@ -36,6 +36,23 @@ begin
     raise exception 'owner admin surface counts are not the reviewed baseline';
   end if;
 
+  if exists (
+    select 1
+    from (values ('anon'), ('authenticated')) as browser(role_name)
+    cross join (values ('public.owner_claims'), ('public.listing_edits')) as target(table_name)
+    cross join (values ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE')) as privilege(privilege_type)
+    where has_table_privilege(browser.role_name, target.table_name, privilege.privilege_type)
+  ) or exists (
+    select 1
+    from information_schema.column_privileges
+    where table_schema = 'public'
+      and table_name in ('owner_claims', 'listing_edits')
+      and grantee in ('anon', 'authenticated', 'PUBLIC')
+      and privilege_type in ('INSERT', 'UPDATE')
+  ) then
+    raise exception 'direct browser writes on owner claims or listing edits are present';
+  end if;
+
   complete := to_regclass('public.nchf_owner_admin_surface_audit') is not null
     and to_regclass('public.listing_edit_events') is not null
     and to_regclass('public.published_owner_listings') is not null
@@ -90,6 +107,14 @@ begin
   );
   alter table public.listing_edit_events enable row level security;
   revoke all on table public.listing_edit_events from public, anon, authenticated;
+  -- No browser policy can succeed. Security-definer functions run as the
+  -- table owner and are not subject to this policy.
+  create policy listing_edit_events_no_browser_access
+    on public.listing_edit_events
+    for all
+    to anon, authenticated
+    using (false)
+    with check (false);
 
   create table public.published_owner_listings (
     id uuid primary key default pg_catalog.gen_random_uuid(),
@@ -108,6 +133,12 @@ begin
   );
   alter table public.published_owner_listings enable row level security;
   revoke all on table public.published_owner_listings from public, anon, authenticated;
+  create policy published_owner_listings_no_browser_access
+    on public.published_owner_listings
+    for all
+    to anon, authenticated
+    using (false)
+    with check (false);
 
   create table public.published_owner_listing_events (
     id uuid primary key default pg_catalog.gen_random_uuid(),
@@ -134,6 +165,12 @@ begin
   );
   alter table public.published_owner_listing_events enable row level security;
   revoke all on table public.published_owner_listing_events from public, anon, authenticated;
+  create policy published_owner_listing_events_no_browser_access
+    on public.published_owner_listing_events
+    for all
+    to anon, authenticated
+    using (false)
+    with check (false);
 
   create function public.nchf_owner_admin_publication_guard()
   returns trigger
@@ -190,7 +227,22 @@ begin
          content.published_value,
          content.published_at
   from public.published_owner_listings as content
-  where public.nchf_owner_admin_facility_is_listed(content.facility_id);
+  where exists (
+    select 1
+    from public.facilities as facility
+    where facility.id = content.facility_id
+      and facility.id is distinct from '00000000-0000-4000-8000-000000000002'::uuid
+      and facility.canonical_name is distinct from 'DEVELOPMENT TEST HOME - NOT REAL'
+      and facility.source_name = 'wa_dshs_afh'
+      and facility.license_category = 'afh'
+      and facility.facility_type = 'AFH'
+      and facility.state_code = 'WA'
+      and facility.record_status = 'source_matched'
+      and facility.normalized_license_number is not null
+      and pg_catalog.btrim(facility.normalized_license_number, E' \t\r\n') <> ''
+      and facility.license_number ~ '^[0-9]{1,20}$'
+      and facility.presence is distinct from 'absent'
+  );
   revoke all on table public.wa_afh_published_owner_content from public, anon, authenticated;
   grant select on table public.wa_afh_published_owner_content to anon, authenticated;
 
@@ -284,7 +336,7 @@ begin
     if auth.uid() is null or not exists (
       select 1 from public.app_admins as admin_row where admin_row.user_id = auth.uid()
     ) then
-      return;
+      raise exception 'administrator required';
     end if;
     return query
     select claim.id, claim.facility_id, claim.claimant_user_id,
@@ -340,7 +392,7 @@ begin
     if auth.uid() is null or not exists (
       select 1 from public.app_admins as admin_row where admin_row.user_id = auth.uid()
     ) then
-      return;
+      raise exception 'administrator required';
     end if;
     return query
     select edit.id, edit.facility_id, edit.submitted_by_user_id, edit.field_name,
@@ -382,7 +434,7 @@ begin
     if auth.uid() is null or not exists (
       select 1 from public.app_admins as admin_row where admin_row.user_id = auth.uid()
     ) then
-      return;
+      raise exception 'administrator required';
     end if;
     return query
     select status.name,
@@ -561,7 +613,7 @@ begin
     if auth.uid() is null or not exists (
       select 1 from public.app_admins as admin_row where admin_row.user_id = auth.uid()
     ) then
-      return;
+      raise exception 'administrator required';
     end if;
     return query
     select event_row.id, event_row.facility_id, event_row.field_name, event_row.source_edit_id,
@@ -604,7 +656,7 @@ begin
     end if;
     v_actor := auth.uid();
     if v_actor is null then
-      return;
+      raise exception 'authentication required';
     end if;
     return query
     select edit.id, edit.facility_id, edit.field_name, edit.review_status, edit.created_at
@@ -647,7 +699,7 @@ begin
     end if;
     v_actor := auth.uid();
     if v_actor is null then
-      return;
+      raise exception 'authentication required';
     end if;
     return query
     select event_row.id, event_row.edit_id, event_row.event_type,
@@ -695,7 +747,7 @@ begin
     end if;
     v_actor := auth.uid();
     if v_actor is null then
-      return;
+      raise exception 'authentication required';
     end if;
     return query
     select event_row.id, event_row.facility_id, event_row.field_name, event_row.event_type,
@@ -714,8 +766,7 @@ begin
   $fn$;
 
   revoke all on function public.nchf_owner_admin_publication_guard() from public, anon, authenticated;
-  revoke all on function public.nchf_owner_admin_facility_is_listed(uuid) from public;
-  grant execute on function public.nchf_owner_admin_facility_is_listed(uuid) to anon, authenticated;
+  revoke all on function public.nchf_owner_admin_facility_is_listed(uuid) from public, anon, authenticated;
   revoke all on function public.submit_listing_edit(uuid, text, text) from public, anon, authenticated;
   revoke all on function public.admin_list_owner_claims(integer, uuid) from public, anon, authenticated;
   revoke all on function public.admin_list_listing_edits(integer, timestamptz, uuid, text) from public, anon, authenticated;
@@ -738,15 +789,72 @@ begin
   grant execute on function public.owner_list_listing_edit_events(integer, timestamptz, uuid) to authenticated;
   grant execute on function public.owner_list_publication_history(integer, timestamptz, uuid) to authenticated;
 
-  if has_function_privilege('anon', 'public.submit_listing_edit(uuid, text, text)', 'EXECUTE')
-     or has_function_privilege('anon', 'public.admin_publish_listing_edit(uuid)', 'EXECUTE')
-     or has_function_privilege('anon', 'public.admin_list_owner_claims(integer, uuid)', 'EXECUTE')
-     or has_table_privilege('anon', 'public.listing_edit_events', 'INSERT')
-     or has_table_privilege('authenticated', 'public.listing_edit_events', 'INSERT')
-     or has_table_privilege('anon', 'public.published_owner_listings', 'INSERT')
-     or has_table_privilege('authenticated', 'public.published_owner_listings', 'UPDATE')
-     or has_table_privilege('anon', 'public.wa_afh_published_owner_content', 'SELECT') is not true
-     or has_function_privilege('authenticated', 'public.submit_listing_edit(uuid, text, text)', 'EXECUTE') is not true then
+  if exists (
+    select 1
+    from (values ('anon'), ('authenticated')) as browser(role_name)
+    where has_table_privilege(browser.role_name, 'public.published_owner_listings', 'INSERT')
+       or has_table_privilege(browser.role_name, 'public.published_owner_listings', 'UPDATE')
+       or has_table_privilege(browser.role_name, 'public.published_owner_listings', 'DELETE')
+       or has_table_privilege(browser.role_name, 'public.published_owner_listings', 'TRUNCATE')
+       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'SELECT')
+       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'INSERT')
+       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'UPDATE')
+       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'DELETE')
+       or has_table_privilege(browser.role_name, 'public.listing_edit_events', 'SELECT')
+       or has_table_privilege(browser.role_name, 'public.listing_edit_events', 'INSERT')
+       or has_column_privilege(browser.role_name, 'public.published_owner_listings', 'published_by_user_id', 'SELECT')
+       or has_column_privilege(browser.role_name, 'public.published_owner_listings', 'source_edit_id', 'SELECT')
+       or has_function_privilege(browser.role_name, 'public.nchf_owner_admin_facility_is_listed(uuid)', 'EXECUTE')
+  ) or exists (
+    select 1
+    from pg_catalog.pg_class as relation
+    cross join lateral pg_catalog.aclexplode(relation.relacl) as acl
+    where relation.oid = any (array[
+      'public.published_owner_listings'::regclass,
+      'public.published_owner_listing_events'::regclass,
+      'public.listing_edit_events'::regclass
+    ])
+      and acl.grantee = 0
+      and acl.privilege_type in ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE')
+  ) or exists (
+    select 1
+    from pg_catalog.pg_class as relation
+    where relation.oid = any (array[
+      'public.published_owner_listings'::regclass,
+      'public.published_owner_listing_events'::regclass,
+      'public.listing_edit_events'::regclass
+    ])
+      and relation.relacl is null
+  ) or exists (
+    select 1
+    from pg_catalog.pg_proc as proc
+    where proc.oid = any (array[
+      'public.submit_listing_edit(uuid, text, text)'::regprocedure,
+      'public.admin_list_owner_claims(integer, uuid)'::regprocedure,
+      'public.admin_list_listing_edits(integer, timestamptz, uuid, text)'::regprocedure,
+      'public.admin_count_listing_edits()'::regprocedure,
+      'public.admin_publish_listing_edit(uuid)'::regprocedure,
+      'public.admin_withdraw_published_owner_listing(uuid, text)'::regprocedure,
+      'public.admin_list_owner_publication_events(integer, timestamptz, uuid)'::regprocedure,
+      'public.owner_list_listing_edits(integer, timestamptz, uuid)'::regprocedure,
+      'public.owner_list_listing_edit_events(integer, timestamptz, uuid)'::regprocedure,
+      'public.owner_list_publication_history(integer, timestamptz, uuid)'::regprocedure,
+      'public.nchf_owner_admin_facility_is_listed(uuid)'::regprocedure,
+      'public.nchf_owner_admin_publication_guard()'::regprocedure
+    ])
+      and (
+        proc.proacl is null
+        or exists (
+          select 1
+          from pg_catalog.aclexplode(proc.proacl) as acl
+          where acl.grantee = 0
+            and acl.privilege_type = 'EXECUTE'
+        )
+        or has_function_privilege('anon', proc.oid, 'EXECUTE')
+      )
+  ) or has_table_privilege('anon', 'public.wa_afh_published_owner_content', 'SELECT') is not true
+     or has_function_privilege('authenticated', 'public.submit_listing_edit(uuid, text, text)', 'EXECUTE') is not true
+     or has_function_privilege('authenticated', 'public.admin_publish_listing_edit(uuid)', 'EXECUTE') is not true then
     raise exception 'owner admin surface privileges were not limited';
   end if;
 
@@ -756,6 +864,12 @@ begin
   );
   alter table public.nchf_owner_admin_surface_audit enable row level security;
   revoke all on table public.nchf_owner_admin_surface_audit from public, anon, authenticated;
+  create policy nchf_owner_admin_surface_audit_no_browser_access
+    on public.nchf_owner_admin_surface_audit
+    for all
+    to anon, authenticated
+    using (false)
+    with check (false);
   insert into public.nchf_owner_admin_surface_audit (surface_name)
   values ('20261108040000');
 
