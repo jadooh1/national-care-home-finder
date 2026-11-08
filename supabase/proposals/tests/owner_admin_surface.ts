@@ -1,0 +1,53 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import test from "node:test";
+
+const proposal = readFileSync(
+  "supabase/proposals/20261108040000_owner_admin_surface.sql",
+  "utf8",
+);
+const rollback = readFileSync(
+  "supabase/proposals/20261108040000_owner_admin_surface_ROLLBACK.sql",
+  "utf8",
+);
+const dryRun = readFileSync(
+  "supabase/proposals/20261108040000_claim_eligibility_dry_run.sql",
+  "utf8",
+);
+
+const functions = [
+  "public.submit_listing_edit",
+  "public.admin_list_owner_claims",
+  "public.admin_list_listing_edits",
+  "public.admin_count_listing_edits",
+  "public.admin_publish_listing_edit",
+  "public.admin_withdraw_published_owner_listing",
+  "public.admin_list_owner_publication_events",
+  "public.owner_list_listing_edits",
+  "public.owner_list_listing_edit_events",
+  "public.owner_list_publication_history",
+];
+
+test("the proposal adds the ten missing functions and does not change facility rows", () => {
+  for (const name of functions) assert.match(proposal, new RegExp(name.replace(".", "\\.")));
+  assert.match(proposal, /create table public\.listing_edit_events/);
+  assert.match(proposal, /create view public\.wa_afh_published_owner_content/);
+  assert.doesNotMatch(proposal, /update\s+public\.facilities/i);
+  assert.doesNotMatch(proposal, /delete\s+from\s+public\.facilities/i);
+  assert.doesNotMatch(proposal, /set_config\(\s*'nchf\.owner_admin_surface_authorization'/);
+  assert.match(proposal, /owner admin surface target is not the reviewed production project/);
+});
+
+test("rollback removes only empty proposal objects", () => {
+  assert.match(rollback, /refusing rollback because owner admin rows exist/);
+  assert.doesNotMatch(rollback, /delete\s+from\s+public\.facilities/i);
+  assert.match(rollback, /drop view if exists public\.wa_afh_published_owner_content/);
+});
+
+test("the eligibility dry run is read only and does not verify facilities", () => {
+  assert.match(dryRun, /begin read only/i);
+  assert.match(dryRun, /rollback;/i);
+  assert.doesNotMatch(dryRun, /\b(insert|update|delete|alter|drop|create)\b/i);
+  assert.match(dryRun, /claim_eligible_now/);
+  assert.match(dryRun, /ambiguous/);
+});

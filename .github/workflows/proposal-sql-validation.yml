@@ -69,3 +69,6 @@ jobs:
 
       - name: Validate Phase 5I proposal status filter
         run: python3 supabase/proposals/tests/validate_phase5i_listing_edit_status_filter.py
+
+      - name: Validate the owner and administrator surface
+        run: python3 supabase/proposals/tests/validate_owner_admin_surface.py
