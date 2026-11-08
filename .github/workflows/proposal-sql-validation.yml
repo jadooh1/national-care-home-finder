@@ -69,3 +69,16 @@ jobs:
 
       - name: Validate Phase 5I proposal status filter
         run: python3 supabase/proposals/tests/validate_phase5i_listing_edit_status_filter.py
+
+      - name: Check archived facilities stay out of public reads and new claims
+        run: psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/wa_afh_absent_visibility_checks.sql
+
+      - name: Check an unexpected public read policy stops the migration
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/wa_afh_absent_visibility_unexpected.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "another public read policy still exposes archived facilities"
