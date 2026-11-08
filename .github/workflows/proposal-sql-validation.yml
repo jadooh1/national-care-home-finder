@@ -69,3 +69,51 @@ jobs:
 
       - name: Validate Phase 5I proposal status filter
         run: python3 supabase/proposals/tests/validate_phase5i_listing_edit_status_filter.py
+
+      - name: Check browser write grant remediation on PostgreSQL 17
+        if: matrix.postgres_version == '17'
+        run: psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/browser_write_grant_checks.sql
+
+      - name: Check a partial browser write grant set stops remediation
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/browser_write_grant_partial.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "partial browser write remediation is present"
+
+      - name: Check an unreviewed browser write grant stops remediation
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/browser_write_grant_unexpected.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "unreviewed browser write grant"
+
+      - name: Check a different facility count stops browser write remediation
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/browser_write_grant_count.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "facility count is not the reviewed production baseline"
+
+      - name: Check the development project is refused for browser write remediation
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/browser_write_grant_target.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "browser write remediation target is not the reviewed production project"
