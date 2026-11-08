@@ -69,3 +69,6 @@ jobs:
 
       - name: Validate Phase 5I proposal status filter
         run: python3 supabase/proposals/tests/validate_phase5i_listing_edit_status_filter.py
+
+      - name: Check archived facilities stay out of public reads and new claims
+        run: psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/wa_afh_absent_visibility_checks.sql

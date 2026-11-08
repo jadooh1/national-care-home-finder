@@ -50,5 +50,8 @@ jobs:
       - name: Check the Washington family journey
         run: node --experimental-strip-types --test supabase/proposals/tests/family_washington_journey.ts
 
+      - name: Check archived facilities stay out of public reads and new claims
+        run: node --experimental-strip-types --test supabase/proposals/tests/wa_afh_absent_visibility.ts
+
       - name: Build
         run: npm run build
