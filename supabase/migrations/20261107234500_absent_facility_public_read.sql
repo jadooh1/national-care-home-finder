@@ -3,47 +3,76 @@
 
 do $policy$
 declare
+  policy_name text;
   current_expression text;
   other_public text;
 begin
-  select pg_catalog.pg_get_expr(policy.polqual, policy.polrelid)
-    into current_expression
-  from pg_catalog.pg_policy as policy
-  where policy.polrelid = 'public.facilities'::regclass
-    and policy.polname = 'facilities_public_read_wa_afh_source_matched'
-    and policy.polcmd = 'r';
-  if current_expression is null then
-    raise exception 'public facility read policy is missing';
-  end if;
-  if pg_catalog.strpos(pg_catalog.lower(current_expression), 'source_matched') = 0
-     or pg_catalog.strpos(pg_catalog.lower(current_expression), 'wa_dshs_afh') = 0
-     or pg_catalog.strpos(pg_catalog.lower(current_expression), 'license_number') = 0 then
-    raise exception 'public facility read policy does not match the reviewed predicate';
-  end if;
+  foreach policy_name in array array[
+    'facilities_public_read_wa_afh_source_matched',
+    'Public read verified facilities'
+  ]
+  loop
+    select pg_catalog.pg_get_expr(policy.polqual, policy.polrelid)
+      into current_expression
+    from pg_catalog.pg_policy as policy
+    where policy.polrelid = 'public.facilities'::regclass
+      and policy.polname = policy_name
+      and policy.polcmd = 'r';
+    if current_expression is null then
+      raise exception 'public facility read policy is missing: %', policy_name;
+    end if;
+    if policy_name = 'facilities_public_read_wa_afh_source_matched' then
+      if pg_catalog.strpos(pg_catalog.lower(current_expression), 'source_matched') = 0
+         or pg_catalog.strpos(pg_catalog.lower(current_expression), 'wa_dshs_afh') = 0
+         or pg_catalog.strpos(pg_catalog.lower(current_expression), 'license_number') = 0 then
+        raise exception 'public facility read policy does not match the reviewed predicate: %', policy_name;
+      end if;
+    elsif pg_catalog.strpos(pg_catalog.lower(current_expression), 'verified') = 0
+          or pg_catalog.strpos(pg_catalog.lower(current_expression), 'source_matched') > 0 then
+      raise exception 'verified public read policy does not match the reviewed predicate';
+    end if;
+  end loop;
 
   select pg_catalog.string_agg(policy.polname, ', ' order by policy.polname)
     into other_public
   from pg_catalog.pg_policy as policy
   where policy.polrelid = 'public.facilities'::regclass
     and policy.polcmd = 'r'
-    and policy.polname <> 'facilities_public_read_wa_afh_source_matched'
+    and policy.polname not in (
+      'facilities_public_read_wa_afh_source_matched',
+      'Public read verified facilities'
+    )
     and (
       policy.polroles = '{0}'
       or 0 = any (policy.polroles)
       or (select role_row.oid from pg_catalog.pg_roles as role_row where role_row.rolname = 'anon') = any (policy.polroles)
+      or (select role_row.oid from pg_catalog.pg_roles as role_row where role_row.rolname = 'authenticated') = any (policy.polroles)
     )
     and pg_catalog.strpos(pg_catalog.lower(coalesce(pg_catalog.pg_get_expr(policy.polqual, policy.polrelid), ''::text)), 'absent') = 0;
   if other_public is not null then
     raise exception 'another public read policy still exposes archived facilities: %', other_public;
   end if;
 
-  if pg_catalog.strpos(pg_catalog.lower(current_expression), 'absent') = 0 then
-    execute format(
-      'alter policy facilities_public_read_wa_afh_source_matched on public.facilities using ((%s) and presence is distinct from %L)',
-      current_expression,
-      'absent'
-    );
-  end if;
+  foreach policy_name in array array[
+    'facilities_public_read_wa_afh_source_matched',
+    'Public read verified facilities'
+  ]
+  loop
+    select pg_catalog.pg_get_expr(policy.polqual, policy.polrelid)
+      into current_expression
+    from pg_catalog.pg_policy as policy
+    where policy.polrelid = 'public.facilities'::regclass
+      and policy.polname = policy_name
+      and policy.polcmd = 'r';
+    if pg_catalog.strpos(pg_catalog.lower(current_expression), 'absent') = 0 then
+      execute format(
+        'alter policy %I on public.facilities using ((%s) and presence is distinct from %L)',
+        policy_name,
+        current_expression,
+        'absent'
+      );
+    end if;
+  end loop;
 end
 $policy$;
 

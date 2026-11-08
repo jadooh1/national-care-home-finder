@@ -57,7 +57,9 @@ insert into public.facilities (
 ) values
   ('00000000-0000-4000-8000-000000000201', 'Active Home', 'AFH', 'WA', '200001', 'source_matched', '200001', 'afh', 'wa_dshs_afh', 'active'),
   ('00000000-0000-4000-8000-000000000202', 'Unspecified Home', 'AFH', 'WA', '200002', 'source_matched', '200002', 'afh', 'wa_dshs_afh', null),
-  ('00000000-0000-4000-8000-000000000203', 'Archived Home', 'AFH', 'WA', '752686', 'source_matched', '752686', 'afh', 'wa_dshs_afh', 'absent');
+  ('00000000-0000-4000-8000-000000000203', 'Archived Home', 'AFH', 'WA', '752686', 'source_matched', '752686', 'afh', 'wa_dshs_afh', 'absent'),
+  ('00000000-0000-4000-8000-000000000204', 'Verified Home', 'AFH', 'WA', '300001', 'verified', '300001', 'afh', 'wa_dshs_afh', 'active'),
+  ('00000000-0000-4000-8000-000000000205', 'Archived Verified Home', 'AFH', 'WA', '300002', 'verified', '300002', 'afh', 'wa_dshs_afh', 'absent');
 
 create table public.owner_claims (
   id uuid primary key default gen_random_uuid(),
@@ -119,6 +121,12 @@ create policy facilities_public_read_wa_afh_source_matched
     and license_number ~ '^[0-9]{1,20}$'
   );
 
+create policy "Public read verified facilities"
+  on public.facilities
+  for select
+  to anon, authenticated
+  using (record_status = 'verified');
+
 create function public.submit_owner_claim(p_facility_id uuid, p_evidence_notes text)
 returns uuid
 language plpgsql
@@ -150,6 +158,9 @@ do $checks$
 declare
   archived_visible integer;
   current_visible integer;
+  verified_visible integer;
+  verified_archived integer;
+  verified_predicate text;
   directory_count integer;
   map_count integer;
   stored_claim integer;
@@ -174,13 +185,29 @@ begin
   select count(*) into current_visible
   from public.facilities
   where license_number in ('200001', '200002');
+  select count(*) into verified_visible
+  from public.facilities
+  where license_number = '300001';
+  select count(*) into verified_archived
+  from public.facilities
+  where license_number = '300002';
   select count(*) into directory_count from public.wa_dshs_listed_facilities;
   select count(*) into map_count from public.wa_afh_map_facilities;
   reset role;
 
-  if archived_visible <> 0 or current_visible <> 2 or directory_count <> 2 or map_count <> 2 then
-    raise exception 'FAIL public read visibility archived %, current %, directory %, map %',
-      archived_visible, current_visible, directory_count, map_count;
+  if archived_visible <> 0 or verified_archived <> 0
+     or current_visible <> 2 or verified_visible <> 1
+     or directory_count <> 2 or map_count <> 2 then
+    raise exception 'FAIL public read visibility archived %, verified archived %, current %, verified %, directory %, map %',
+      archived_visible, verified_archived, current_visible, verified_visible, directory_count, map_count;
+  end if;
+  select pg_catalog.pg_get_expr(policy.polqual, policy.polrelid)
+    into verified_predicate
+  from pg_catalog.pg_policy as policy
+  where policy.polname = 'Public read verified facilities';
+  if pg_catalog.strpos(pg_catalog.lower(verified_predicate), 'verified') = 0
+     or pg_catalog.strpos(pg_catalog.lower(verified_predicate), 'absent') = 0 then
+    raise exception 'FAIL verified policy lost its reviewed predicate';
   end if;
 
   perform set_config('request.jwt.claim.sub', '00000000-0000-4000-8000-0000000000a1', true);
