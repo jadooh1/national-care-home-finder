@@ -77,7 +77,12 @@ export default function AdminClaimsPage() {
     const fn = confirm.action === "approve" ? "admin_approve_owner_claim" : "admin_reject_owner_claim";
     const { data, error: e } = await supabase.rpc(fn, { p_claim_id: confirm.id });
     if (e || data !== true) setError(e?.message ?? "The review was not completed.");
-    else { setNotice(`Claim ${confirm.action === "approve" ? "approved" : "rejected"}. This does not grant facility-editing rights.`); await refresh(); }
+    else {
+      setNotice(confirm.action === "approve"
+        ? "Claim approved. The owner can propose listing text. Approval does not publish it."
+        : "Claim rejected. The owner cannot propose listing text for this facility.");
+      await refresh();
+    }
     setReviewing(null); setConfirm(null);
   }
 
