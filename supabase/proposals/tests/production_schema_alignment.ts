@@ -30,7 +30,9 @@ test("production alignment preserves the reviewed baseline", () => {
   assert.match(migration, /Public read verified facilities/);
   assert.match(migration, /facilities_public_read_wa_afh_source_matched/);
   assert.match(migration, /presence is distinct from 'absent'/);
-  assert.match(migration, /production directory view already exists/);
+  assert.match(migration, /directory view membership changed/);
+  assert.match(migration, /reviewed_at/);
+  assert.doesNotMatch(migration, /production directory view already exists/);
   assert.doesNotMatch(migration, /\binsert\s+into\s+public\.facilities\b/i);
   assert.doesNotMatch(migration, /\bdelete\s+from\s+public\.facilities\b/i);
   assert.doesNotMatch(migration, /\bupdate\s+public\.facilities\b/i);

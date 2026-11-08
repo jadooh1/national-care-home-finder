@@ -44,16 +44,13 @@ create table public.facilities (
   record_status text not null,
   latitude double precision,
   longitude double precision,
-  source_name text,
-  license_category text,
-  facility_type text,
-  normalized_license_number text
+  facility_type text
 );
 
 insert into public.facilities (
   id, canonical_name, address_line1, city, county, state_code, postal_code,
   license_number, licensed_capacity, record_status, latitude, longitude,
-  source_name, license_category, facility_type, normalized_license_number
+  facility_type
 )
 select pg_catalog.gen_random_uuid(),
        'Synthetic facility ' || series.n,
@@ -65,12 +62,9 @@ select pg_catalog.gen_random_uuid(),
        series.n::text,
        6,
        'unclassified',
-       null,
-       null,
-       'unclassified',
-       'unclassified',
-       'unclassified',
-       series.n::text
+       47.0,
+       -122.0,
+       'AFH'
 from pg_catalog.generate_series(1, 8121) as series(n);
 
 create table public.owner_claims (
@@ -78,8 +72,7 @@ create table public.owner_claims (
   facility_id uuid not null references public.facilities (id),
   claimant_user_id uuid not null,
   verification_status text not null,
-  evidence_notes text,
-  reviewed_at timestamptz
+  evidence_notes text
 );
 
 create table public.listing_edits (
@@ -104,3 +97,39 @@ create policy "Public read verified facilities"
   for select
   to anon, authenticated
   using (record_status = 'verified');
+
+create view public.wa_dshs_listed_facilities
+with (security_invoker = true) as
+select id,
+       canonical_name,
+       address_line1,
+       city,
+       county,
+       state_code,
+       postal_code,
+       license_number,
+       licensed_capacity,
+       record_status
+from public.facilities;
+
+create view public.wa_afh_map_facilities
+with (security_invoker = true) as
+select id,
+       canonical_name,
+       address_line1,
+       city,
+       county,
+       state_code,
+       postal_code,
+       license_number,
+       licensed_capacity,
+       latitude,
+       longitude
+from public.facilities
+where state_code = 'WA'
+  and latitude is not null
+  and longitude is not null
+  and postal_code is not null
+  and facility_type = 'AFH';
+
+grant select on table public.wa_dshs_listed_facilities, public.wa_afh_map_facilities to anon, authenticated;

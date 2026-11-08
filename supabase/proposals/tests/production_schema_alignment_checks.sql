@@ -34,19 +34,21 @@ begin
     (archived, 'Synthetic archived home', '3 Example St', 'Example', 'Example', 'WA', '98001',
      '9000000002', 6, 'source_matched', 47.1, -122.1, 'wa_dshs_afh', 'afh', 'AFH', '9000000002', 'absent'),
     (verified_current, 'Synthetic verified home', '4 Example St', 'Example', 'Example', 'WA', '98001',
-     '9000000003', 6, 'verified', 47.2, -122.2, 'unclassified', 'unclassified', 'unclassified', '9000000003', 'active'),
+     '9000000003', 6, 'verified', 47.2, -122.2, null, null, 'AFH', null, 'active'),
     (verified_archived, 'Synthetic verified archive', '5 Example St', 'Example', 'Example', 'WA', '98001',
-     '9000000004', 6, 'verified', 47.3, -122.3, 'unclassified', 'unclassified', 'unclassified', '9000000004', 'absent');
+     '9000000004', 6, 'verified', 47.3, -122.3, null, null, 'AFH', null, 'absent');
 
   execute 'set local role anon';
   if (select count(*) from public.facilities where id = verified_current) <> 1
      or (select count(*) from public.facilities where id = verified_archived) <> 0
      or (select count(*) from public.facilities where id = eligible) <> 1
      or (select count(*) from public.facilities where id = archived) <> 0
-     or (select count(*) from public.wa_dshs_listed_facilities) <> 1
-     or (select count(*) from public.wa_afh_map_facilities) <> 1
-     or exists (select 1 from public.wa_dshs_listed_facilities where id = archived)
-     or exists (select 1 from public.wa_afh_map_facilities where id = archived) then
+     or (select count(*) from public.wa_dshs_listed_facilities where id = eligible) <> 1
+     or (select count(*) from public.wa_dshs_listed_facilities where id = archived) <> 0
+     or (select count(*) from public.wa_dshs_listed_facilities where id = verified_current) <> 1
+     or (select count(*) from public.wa_afh_map_facilities where id = eligible) <> 1
+     or (select count(*) from public.wa_afh_map_facilities where id = archived) <> 0
+     or (select count(*) from public.wa_afh_map_facilities where id = verified_archived) <> 0 then
     raise exception 'FAIL public read, directory, or map visibility';
   end if;
   execute 'reset role';
@@ -108,20 +110,32 @@ $after_probe$;
 do $after_rollback$
 declare
   policy_expr text;
+  directory_def text;
+  map_def text;
 begin
   if (select count(*) from public.facilities) <> 8121
      or (select count(*) from public.owner_claims) <> 0
      or (select count(*) from public.listing_edits) <> 0
      or (select count(*) from public.app_admins) <> 1
+     or (select count(*) from public.wa_dshs_listed_facilities) <> 8121
+     or (select count(*) from public.wa_afh_map_facilities) <> 8121
      or exists (
        select 1 from information_schema.columns
-       where table_schema = 'public' and table_name = 'facilities' and column_name = 'presence'
+       where table_schema = 'public' and table_name = 'facilities'
+         and column_name in ('presence', 'source_name', 'license_category', 'normalized_license_number')
+     )
+     or exists (
+       select 1 from information_schema.columns
+       where table_schema = 'public' and table_name = 'owner_claims' and column_name = 'reviewed_at'
      )
      or to_regprocedure('public.submit_owner_claim(uuid, text)') is not null
-     or to_regclass('public.wa_dshs_listed_facilities') is not null
-     or to_regclass('public.wa_afh_map_facilities') is not null
      or to_regclass('public.nchf_production_schema_alignment_audit') is not null then
     raise exception 'FAIL rollback did not restore the fixture';
+  end if;
+  select pg_catalog.pg_get_viewdef('public.wa_dshs_listed_facilities'::regclass, true) into directory_def;
+  select pg_catalog.pg_get_viewdef('public.wa_afh_map_facilities'::regclass, true) into map_def;
+  if position('absent' in directory_def) > 0 or position('absent' in map_def) > 0 then
+    raise exception 'FAIL existing views were not restored';
   end if;
   select pg_catalog.pg_get_expr(policy.polqual, policy.polrelid) into policy_expr
   from pg_policy as policy

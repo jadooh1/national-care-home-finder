@@ -12,6 +12,19 @@ declare
   edit_count integer;
   admin_count integer;
   created_events boolean;
+  created_directory boolean;
+  created_map boolean;
+  added_source_name boolean;
+  added_license_category boolean;
+  added_facility_type boolean;
+  added_normalized_license boolean;
+  added_claim_reviewed_at boolean;
+  added_edit_created_at boolean;
+  added_edit_reviewed_at boolean;
+  directory_viewdef text;
+  map_viewdef text;
+  directory_options text;
+  map_options text;
 begin
   if pg_catalog.current_setting('nchf.production_schema_alignment_authorization', true)
      is distinct from 'authorize-production-schema-alignment' then
@@ -29,8 +42,18 @@ begin
     in share row exclusive mode;
 
   select audit.verified_policy_expression, audit.facility_count, audit.claim_count,
-         audit.edit_count, audit.admin_count, audit.created_owner_claim_events
-    into saved_expr, facility_count, claim_count, edit_count, admin_count, created_events
+         audit.edit_count, audit.admin_count, audit.created_owner_claim_events,
+         audit.created_directory, audit.created_map,
+         audit.added_source_name, audit.added_license_category, audit.added_facility_type,
+         audit.added_normalized_license, audit.added_claim_reviewed_at,
+         audit.added_edit_created_at, audit.added_edit_reviewed_at,
+         audit.directory_viewdef, audit.map_viewdef, audit.directory_options, audit.map_options
+    into saved_expr, facility_count, claim_count, edit_count, admin_count, created_events,
+         created_directory, created_map,
+         added_source_name, added_license_category, added_facility_type,
+         added_normalized_license, added_claim_reviewed_at,
+         added_edit_created_at, added_edit_reviewed_at,
+         directory_viewdef, map_viewdef, directory_options, map_options
   from public.nchf_production_schema_alignment_audit as audit
   where audit.alignment_name = '20261108014500';
   if saved_expr is null
@@ -62,12 +85,45 @@ begin
     || ' on public.facilities using (' || saved_expr || ')';
   drop policy facilities_public_read_wa_afh_source_matched on public.facilities;
   drop function public.submit_owner_claim(uuid, text);
-  drop view public.wa_dshs_listed_facilities;
-  drop view public.wa_afh_map_facilities;
+  if created_directory then
+    drop view public.wa_dshs_listed_facilities;
+  else
+    execute 'create or replace view public.wa_dshs_listed_facilities '
+      || case when directory_options = '' then '' else 'with (' || directory_options || ') ' end
+      || 'as ' || directory_viewdef;
+  end if;
+  if created_map then
+    drop view public.wa_afh_map_facilities;
+  else
+    execute 'create or replace view public.wa_afh_map_facilities '
+      || case when map_options = '' then '' else 'with (' || map_options || ') ' end
+      || 'as ' || map_viewdef;
+  end if;
   if created_events then
     drop table public.owner_claim_events;
   end if;
+  if added_claim_reviewed_at then
+    alter table public.owner_claims drop column reviewed_at;
+  end if;
+  if added_edit_created_at then
+    alter table public.listing_edits drop column created_at;
+  end if;
+  if added_edit_reviewed_at then
+    alter table public.listing_edits drop column reviewed_at;
+  end if;
   alter table public.facilities drop column presence;
+  if added_source_name then
+    alter table public.facilities drop column source_name;
+  end if;
+  if added_license_category then
+    alter table public.facilities drop column license_category;
+  end if;
+  if added_facility_type then
+    alter table public.facilities drop column facility_type;
+  end if;
+  if added_normalized_license then
+    alter table public.facilities drop column normalized_license_number;
+  end if;
   drop table public.nchf_production_schema_alignment_audit;
 
   if (select count(*) from public.facilities) <> 8121
@@ -75,7 +131,11 @@ begin
        select 1 from information_schema.columns
        where table_schema = 'public' and table_name = 'facilities' and column_name = 'presence'
      )
-     or to_regprocedure('public.submit_owner_claim(uuid, text)') is not null then
+     or to_regprocedure('public.submit_owner_claim(uuid, text)') is not null
+     or (created_directory and to_regclass('public.wa_dshs_listed_facilities') is not null)
+     or (created_map and to_regclass('public.wa_afh_map_facilities') is not null)
+     or (not created_directory and to_regclass('public.wa_dshs_listed_facilities') is null)
+     or (not created_map and to_regclass('public.wa_afh_map_facilities') is null) then
     raise exception 'rollback did not restore the reviewed schema baseline';
   end if;
 end;
