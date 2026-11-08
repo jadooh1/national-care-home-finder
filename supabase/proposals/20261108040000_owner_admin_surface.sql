@@ -68,10 +68,7 @@ begin
     and to_regprocedure('public.owner_list_listing_edits(integer, timestamptz, uuid)') is not null
     and to_regprocedure('public.owner_list_listing_edit_events(integer, timestamptz, uuid)') is not null
     and to_regprocedure('public.owner_list_publication_history(integer, timestamptz, uuid)') is not null;
-  if complete then
-    return;
-  end if;
-
+  if not complete then
   any_present := to_regclass('public.nchf_owner_admin_surface_audit') is not null
     or to_regclass('public.listing_edit_events') is not null
     or to_regclass('public.published_owner_listings') is not null
@@ -789,42 +786,77 @@ begin
   grant execute on function public.owner_list_listing_edit_events(integer, timestamptz, uuid) to authenticated;
   grant execute on function public.owner_list_publication_history(integer, timestamptz, uuid) to authenticated;
 
+  create table public.nchf_owner_admin_surface_audit (
+    surface_name text primary key,
+    applied_at timestamptz not null default pg_catalog.clock_timestamp()
+  );
+  alter table public.nchf_owner_admin_surface_audit enable row level security;
+  revoke all on table public.nchf_owner_admin_surface_audit from public, anon, authenticated;
+  create policy nchf_owner_admin_surface_audit_no_browser_access
+    on public.nchf_owner_admin_surface_audit
+    for all
+    to anon, authenticated
+    using (false)
+    with check (false);
+  insert into public.nchf_owner_admin_surface_audit (surface_name)
+  values ('20261108040000');
+  end if;
+
   if exists (
     select 1
     from (values ('anon'), ('authenticated')) as browser(role_name)
-    where has_table_privilege(browser.role_name, 'public.published_owner_listings', 'INSERT')
-       or has_table_privilege(browser.role_name, 'public.published_owner_listings', 'UPDATE')
-       or has_table_privilege(browser.role_name, 'public.published_owner_listings', 'DELETE')
-       or has_table_privilege(browser.role_name, 'public.published_owner_listings', 'TRUNCATE')
-       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'SELECT')
-       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'INSERT')
-       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'UPDATE')
-       or has_table_privilege(browser.role_name, 'public.published_owner_listing_events', 'DELETE')
-       or has_table_privilege(browser.role_name, 'public.listing_edit_events', 'SELECT')
-       or has_table_privilege(browser.role_name, 'public.listing_edit_events', 'INSERT')
-       or has_column_privilege(browser.role_name, 'public.published_owner_listings', 'published_by_user_id', 'SELECT')
-       or has_column_privilege(browser.role_name, 'public.published_owner_listings', 'source_edit_id', 'SELECT')
-       or has_function_privilege(browser.role_name, 'public.nchf_owner_admin_facility_is_listed(uuid)', 'EXECUTE')
+    cross join (values
+      ('public.listing_edit_events'),
+      ('public.published_owner_listings'),
+      ('public.published_owner_listing_events'),
+      ('public.nchf_owner_admin_surface_audit')
+    ) as protected_table(table_name)
+    cross join (values ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE')) as privilege(privilege_type)
+    where has_table_privilege(browser.role_name, protected_table.table_name, privilege.privilege_type)
+  ) or exists (
+    select 1
+    from (values ('anon'), ('authenticated')) as browser(role_name)
+    cross join (values ('public.owner_claims'), ('public.listing_edits')) as claim_table(table_name)
+    cross join (values ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE')) as privilege(privilege_type)
+    where has_table_privilege(browser.role_name, claim_table.table_name, privilege.privilege_type)
+  ) or exists (
+    select 1
+    from information_schema.column_privileges
+    where table_schema = 'public'
+      and (
+        (
+          table_name in (
+            'listing_edit_events',
+            'published_owner_listings',
+            'published_owner_listing_events',
+            'nchf_owner_admin_surface_audit'
+          )
+          and privilege_type in ('SELECT', 'INSERT', 'UPDATE')
+        )
+        or (
+          table_name in ('owner_claims', 'listing_edits')
+          and privilege_type in ('INSERT', 'UPDATE')
+        )
+      )
+      and grantee in ('anon', 'authenticated', 'PUBLIC')
   ) or exists (
     select 1
     from pg_catalog.pg_class as relation
-    cross join lateral pg_catalog.aclexplode(relation.relacl) as acl
     where relation.oid = any (array[
+      'public.listing_edit_events'::regclass,
       'public.published_owner_listings'::regclass,
       'public.published_owner_listing_events'::regclass,
-      'public.listing_edit_events'::regclass
+      'public.nchf_owner_admin_surface_audit'::regclass
     ])
-      and acl.grantee = 0
-      and acl.privilege_type in ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE')
-  ) or exists (
-    select 1
-    from pg_catalog.pg_class as relation
-    where relation.oid = any (array[
-      'public.published_owner_listings'::regclass,
-      'public.published_owner_listing_events'::regclass,
-      'public.listing_edit_events'::regclass
-    ])
-      and relation.relacl is null
+      and (
+        relation.relacl is null
+        or exists (
+          select 1
+          from pg_catalog.aclexplode(relation.relacl) as acl
+          where acl.grantee = 0
+            and acl.privilege_type in ('SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE')
+        )
+      )
   ) or exists (
     select 1
     from pg_catalog.pg_proc as proc
@@ -851,27 +883,39 @@ begin
             and acl.privilege_type = 'EXECUTE'
         )
         or has_function_privilege('anon', proc.oid, 'EXECUTE')
+        or (
+          has_function_privilege('authenticated', proc.oid, 'EXECUTE')
+          and proc.oid = any (array[
+            'public.nchf_owner_admin_facility_is_listed(uuid)'::regprocedure,
+            'public.nchf_owner_admin_publication_guard()'::regprocedure
+          ])
+        )
       )
-  ) or has_table_privilege('anon', 'public.wa_afh_published_owner_content', 'SELECT') is not true
-     or has_function_privilege('authenticated', 'public.submit_listing_edit(uuid, text, text)', 'EXECUTE') is not true
-     or has_function_privilege('authenticated', 'public.admin_publish_listing_edit(uuid)', 'EXECUTE') is not true then
+  ) or exists (
+    select 1
+    from unnest(array[
+      'public.submit_listing_edit(uuid, text, text)'::regprocedure,
+      'public.admin_list_owner_claims(integer, uuid)'::regprocedure,
+      'public.admin_list_listing_edits(integer, timestamptz, uuid, text)'::regprocedure,
+      'public.admin_count_listing_edits()'::regprocedure,
+      'public.admin_publish_listing_edit(uuid)'::regprocedure,
+      'public.admin_withdraw_published_owner_listing(uuid, text)'::regprocedure,
+      'public.admin_list_owner_publication_events(integer, timestamptz, uuid)'::regprocedure,
+      'public.owner_list_listing_edits(integer, timestamptz, uuid)'::regprocedure,
+      'public.owner_list_listing_edit_events(integer, timestamptz, uuid)'::regprocedure,
+      'public.owner_list_publication_history(integer, timestamptz, uuid)'::regprocedure
+    ]) as app_function(oid)
+    where has_function_privilege('authenticated', app_function.oid, 'EXECUTE') is not true
+       or has_function_privilege('anon', app_function.oid, 'EXECUTE')
+  ) or exists (
+    select 1
+    from (values ('anon'), ('authenticated')) as browser(role_name)
+    cross join (values ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE')) as privilege(privilege_type)
+    where has_table_privilege(browser.role_name, 'public.wa_afh_published_owner_content', privilege.privilege_type)
+       or has_table_privilege(browser.role_name, 'public.wa_afh_published_owner_content', 'SELECT') is not true
+  ) then
     raise exception 'owner admin surface privileges were not limited';
   end if;
-
-  create table public.nchf_owner_admin_surface_audit (
-    surface_name text primary key,
-    applied_at timestamptz not null default pg_catalog.clock_timestamp()
-  );
-  alter table public.nchf_owner_admin_surface_audit enable row level security;
-  revoke all on table public.nchf_owner_admin_surface_audit from public, anon, authenticated;
-  create policy nchf_owner_admin_surface_audit_no_browser_access
-    on public.nchf_owner_admin_surface_audit
-    for all
-    to anon, authenticated
-    using (false)
-    with check (false);
-  insert into public.nchf_owner_admin_surface_audit (surface_name)
-  values ('20261108040000');
 
   if (select count(*) from public.facilities) <> 8121
      or (select count(*) from public.owner_claims) <> 0

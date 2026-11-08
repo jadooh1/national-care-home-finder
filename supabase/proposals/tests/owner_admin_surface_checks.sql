@@ -6,7 +6,7 @@ declare
   v_facility_id uuid;
   edit_id uuid;
   listed_count integer;
-  claim_rows integer;
+  statement text;
 begin
   if to_regclass('public.listing_edit_events') is null
      or to_regclass('public.wa_afh_published_owner_content') is null
@@ -67,26 +67,54 @@ begin
     raise exception 'eligible listing edit was not stored';
   end if;
 
+  perform set_config('request.jwt.claim.sub', owner_id::text, true);
+  foreach statement in array array[
+    'select public.owner_list_listing_edits(20, null, null)',
+    'select public.owner_list_listing_edit_events(20, null, null)',
+    'select public.owner_list_publication_history(20, null, null)'
+  ]
+  loop
+    execute statement;
+  end loop;
+
   perform set_config('request.jwt.claim.sub', '', true);
-  begin
-    perform public.owner_list_listing_edits(20, null, null);
-    raise exception 'anonymous owner list was accepted';
-  exception
-    when others then
-      if sqlerrm <> 'authentication required' then
-        raise;
-      end if;
-  end;
+  foreach statement in array array[
+    'select public.owner_list_listing_edits(20, null, null)',
+    'select public.owner_list_listing_edit_events(20, null, null)',
+    'select public.owner_list_publication_history(20, null, null)'
+  ]
+  loop
+    begin
+      execute statement;
+      raise exception 'anonymous owner list was accepted';
+    exception
+      when others then
+        if sqlerrm <> 'authentication required' then
+          raise;
+        end if;
+    end;
+  end loop;
+
   perform set_config('request.jwt.claim.sub', other_admin::text, true);
-  begin
-    select count(*) into claim_rows from public.admin_list_owner_claims(20, null);
-    raise exception 'non-administrator listed claims';
-  exception
-    when others then
-      if sqlerrm <> 'administrator required' then
-        raise;
-      end if;
-  end;
+  foreach statement in array array[
+    'select public.admin_list_owner_claims(20, null)',
+    'select public.admin_list_listing_edits(20, null, null, null)',
+    'select public.admin_count_listing_edits()',
+    'select public.admin_list_owner_publication_events(20, null, null)',
+    format('select public.admin_publish_listing_edit(%L)', edit_id),
+    format('select public.admin_withdraw_published_owner_listing(%L, %L)', v_facility_id, 'description')
+  ]
+  loop
+    begin
+      execute statement;
+      raise exception 'non-administrator listing function was accepted';
+    exception
+      when others then
+        if sqlerrm <> 'administrator required' then
+          raise;
+        end if;
+    end;
+  end loop;
 
   insert into public.app_admins (user_id) values (other_admin);
   update public.listing_edits set review_status = 'approved' where id = edit_id;
@@ -111,15 +139,25 @@ begin
     raise exception 'withdrawn owner text remained visible';
   end if;
 
-  set local role anon;
-  begin
-    perform public.nchf_owner_admin_facility_is_listed(v_facility_id);
-    raise exception 'anonymous eligibility helper was executable';
-  exception
-    when insufficient_privilege then
-      null;
-  end;
-  reset role;
+  foreach statement in array array['anon', 'authenticated']
+  loop
+    execute format('set local role %I', statement);
+    begin
+      perform public.nchf_owner_admin_facility_is_listed(v_facility_id);
+      raise exception 'eligibility helper was executable';
+    exception
+      when insufficient_privilege then
+        null;
+    end;
+    begin
+      perform public.nchf_owner_admin_publication_guard();
+      raise exception 'publication guard was executable';
+    exception
+      when insufficient_privilege then
+        null;
+    end;
+    reset role;
+  end loop;
   grant select, insert on public.listing_edit_events to anon;
   set local role anon;
   if (select count(*) from public.listing_edit_events) <> 0 then
