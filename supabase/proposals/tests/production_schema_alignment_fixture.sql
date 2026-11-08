@@ -24,10 +24,16 @@ begin
   if not exists (select 1 from pg_roles where rolname = 'authenticated') then
     create role authenticated nologin;
   end if;
+  if not exists (select 1 from pg_roles where rolname = 'service_role') then
+    create role service_role nologin;
+  end if;
+  if not exists (select 1 from pg_roles where rolname = 'postgres') then
+    create role postgres nologin;
+  end if;
 end;
 $roles$;
 
-grant usage on schema public to anon, authenticated;
+grant usage on schema public to anon, authenticated, service_role, postgres;
 grant usage on schema auth to anon, authenticated;
 grant execute on function auth.uid() to anon, authenticated;
 
@@ -64,7 +70,14 @@ select pg_catalog.gen_random_uuid(),
        'unclassified',
        47.0,
        -122.0,
-       'AFH'
+       'AF'
+from pg_catalog.generate_series(1, 8121) as series(n);
+
+create table public.wa_dshs_license_comparison (
+  license_number text
+);
+insert into public.wa_dshs_license_comparison (license_number)
+select series.n::text
 from pg_catalog.generate_series(1, 8121) as series(n);
 
 create table public.owner_claims (
@@ -98,38 +111,50 @@ create policy "Public read verified facilities"
   to anon, authenticated
   using (record_status = 'verified');
 
+-- Reproduces the read-only production view structure:
+-- directory columns, Washington AF filter, trimmed license match,
+-- security_barrier, and the map join with coordinate bounds.
 create view public.wa_dshs_listed_facilities
-with (security_invoker = true) as
-select id,
-       canonical_name,
-       address_line1,
-       city,
-       county,
-       state_code,
-       postal_code,
-       license_number,
-       licensed_capacity,
-       record_status
-from public.facilities;
+with (security_barrier = true) as
+select facilities.id,
+       facilities.canonical_name,
+       facilities.address_line1,
+       facilities.city,
+       facilities.county,
+       facilities.state_code,
+       facilities.postal_code,
+       facilities.license_number,
+       facilities.licensed_capacity,
+       facilities.record_status
+from public.facilities as facilities
+where facilities.state_code = 'WA'
+  and facilities.facility_type = 'AF'
+  and exists (
+    select 1
+    from public.wa_dshs_license_comparison as comparison
+    where pg_catalog.btrim(comparison.license_number) = pg_catalog.btrim(facilities.license_number)
+  );
 
-create view public.wa_afh_map_facilities
-with (security_invoker = true) as
-select id,
-       canonical_name,
-       address_line1,
-       city,
-       county,
-       state_code,
-       postal_code,
-       license_number,
-       licensed_capacity,
-       latitude,
-       longitude
-from public.facilities
-where state_code = 'WA'
-  and latitude is not null
-  and longitude is not null
-  and postal_code is not null
-  and facility_type = 'AFH';
+create view public.wa_afh_map_facilities as
+select listed.id,
+       listed.canonical_name,
+       listed.address_line1,
+       listed.city,
+       listed.county,
+       listed.state_code,
+       listed.postal_code,
+       listed.license_number,
+       listed.licensed_capacity,
+       listed.record_status,
+       facilities.latitude,
+       facilities.longitude
+from public.wa_dshs_listed_facilities as listed
+join public.facilities as facilities on facilities.id = listed.id
+where facilities.latitude >= 45
+  and facilities.latitude <= 50
+  and facilities.longitude >= -125
+  and facilities.longitude <= -116;
 
-grant select on table public.wa_dshs_listed_facilities, public.wa_afh_map_facilities to anon, authenticated;
+revoke all on table public.wa_dshs_listed_facilities, public.wa_afh_map_facilities from public;
+grant select on table public.wa_dshs_listed_facilities, public.wa_afh_map_facilities
+  to anon, authenticated, service_role, postgres;

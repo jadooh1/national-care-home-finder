@@ -8,6 +8,14 @@ PostgreSQL 17.11 on project `yiehgstweswxjakbcdzc`: 8,121 facilities, 0 owner cl
 
 Development row counts are not production expectations. The development directory count of 6,278 is not used.
 
+Read-only inspection of the existing production views:
+
+- `wa_dshs_listed_facilities` selects id, name, address, city, county, state, ZIP, license, capacity, and record status. It keeps Washington rows whose facility type is `AF` and whose trimmed license number matches `wa_dshs_license_comparison`. Its view option is `security_barrier=true`.
+- `wa_afh_map_facilities` joins that directory view to `facilities` by id, adds latitude and longitude, and keeps latitude 45–50 and longitude −125 to −116.
+- Both views grant `SELECT` to `anon`, `authenticated`, `service_role`, and `postgres`.
+
+The proposal wraps those definitions. It does not replace them with the development source-matched views.
+
 ## What the proposal adds
 
 On that baseline, one transaction adds nullable columns the reviewed policies need when they are absent: `presence`, `source_name`, `license_category`, `facility_type`, and `normalized_license_number` on `facilities`, plus `owner_claims.reviewed_at` and the listing-edit timestamps. It keeps `Public read verified facilities` and appends `presence is distinct from 'absent'`. It adds `facilities_public_read_wa_afh_source_matched` for anonymous and authenticated readers, and creates `submit_owner_claim(uuid, text)` for authenticated users. It does not write values into existing facility rows.
