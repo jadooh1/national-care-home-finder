@@ -53,5 +53,8 @@ jobs:
       - name: Check the owner-claim review guard
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_claim_review_guard.ts
 
+      - name: Check the Oregon adult foster home dry run
+        run: node --experimental-strip-types --test supabase/proposals/tests/oregon_odhs_roster.ts
+
       - name: Build
         run: npm run build
