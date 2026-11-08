@@ -69,3 +69,40 @@ jobs:
 
       - name: Validate Phase 5I proposal status filter
         run: python3 supabase/proposals/tests/validate_phase5i_listing_edit_status_filter.py
+
+      - name: Check production schema alignment on PostgreSQL 17
+        if: matrix.postgres_version == '17'
+        run: psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/production_schema_alignment_checks.sql
+
+      - name: Check an unexpected facility policy stops production alignment
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/production_schema_alignment_unexpected.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "unreviewed facility policy"
+
+      - name: Check a different facility count stops production alignment
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/production_schema_alignment_count.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "facility count is not the reviewed production baseline"
+
+      - name: Check the development project is refused
+        if: matrix.postgres_version == '17'
+        run: |
+          set +e
+          output=$(psql -v ON_ERROR_STOP=1 -f supabase/proposals/tests/production_schema_alignment_target.sql 2>&1)
+          status=$?
+          set -e
+          printf '%s\n' "$output"
+          test "$status" -ne 0
+          printf '%s\n' "$output" | grep -q "production schema alignment target is not the reviewed production project"
