@@ -50,5 +50,8 @@ jobs:
       - name: Check the Washington family journey
         run: node --experimental-strip-types --test supabase/proposals/tests/family_washington_journey.ts
 
+      - name: Check the owner and administrator surface proposal
+        run: node --experimental-strip-types --test supabase/proposals/tests/owner_admin_surface.ts
+
       - name: Build
         run: npm run build
