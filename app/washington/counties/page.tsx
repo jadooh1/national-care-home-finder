@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { supabase } from "../../../lib/supabase";
 
 type CountyMarket = {
@@ -55,12 +56,7 @@ export default function WashingtonCountyComparisonPage() {
   const totalBeds = rows.reduce((sum, r) => sum + Number(r.known_licensed_beds), 0);
 
   return <main style={{ background: "#f4f8fb", minHeight: "100vh", color: navy, fontFamily: "Arial, sans-serif" }}>
-    <header style={{ background: "white", borderBottom: `1px solid ${border}`, padding: "18px 5%" }}>
-      <nav style={{ maxWidth: 1140, margin: "auto", display: "flex", gap: 18, justifyContent: "space-between", flexWrap: "wrap" }}>
-        <Link href="/" style={{ color: navy, textDecoration: "none", fontWeight: 800 }}>National Care Home Finder</Link>
-        <Link href="/washington" style={{ color: green, fontWeight: 700 }}>← Washington directory</Link>
-      </nav>
-    </header>
+    <WashingtonPublicHeader current="counties" />
     <section style={{ color: "#fff", background: `linear-gradient(120deg,${navy},${green})`, padding: "44px 5%" }}>
       <div style={{ maxWidth: 1140, margin: "auto" }}>
         <p style={{ fontSize: 12, letterSpacing: 2, fontWeight: 700 }}>WASHINGTON MARKET INTELLIGENCE · PHASE 6</p>

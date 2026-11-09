@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { supabase } from "../../../lib/supabase";
 
 type CityMarket = {
@@ -75,10 +76,7 @@ const locationLabel = (r: CityMarket) =>
   const countyQuery = (r: CityMarket) => `/washington?${new URLSearchParams({ city: r.city_name, county: r.county_name })}`;
 
   return <main style={{minHeight:"100vh",background:"#f4f8fb",color:navy,fontFamily:"Arial, sans-serif"}}>
-    <header style={{background:"white",padding:"18px 5%",borderBottom:`1px solid ${border}`,display:"flex",justifyContent:"space-between",gap:16,flexWrap:"wrap"}}>
-      <strong>National Care Home Finder</strong>
-      <Link href="/washington" style={{color:teal,fontWeight:700}}>← Washington Directory</Link>
-    </header>
+    <WashingtonPublicHeader current="cities" />
     <section style={{padding:"44px 5%",background:`linear-gradient(125deg,${navy},${teal})`,color:"white"}}>
       <div style={{maxWidth:1150,margin:"auto"}}>
         <div style={{fontSize:12,fontWeight:800,letterSpacing:1.5}}>WASHINGTON MARKET INTELLIGENCE · PHASE 7</div>

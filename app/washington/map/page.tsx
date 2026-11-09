@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader } from "../../../components/washington-public";
 import type * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../../../lib/supabase";
@@ -188,12 +189,7 @@ export default function WashingtonMarketMapPage() {
   const statBox: React.CSSProperties = { flex: "1 1 180px", background: "#fff", border: `1px solid ${border}`, borderRadius: 12, padding: 18 };
   return (
     <main style={{ minHeight: "100vh", background: "#f4f8fb", color: navy, fontFamily: "Arial, sans-serif" }}>
-      <header style={{ padding: "17px 5%", background: "white", borderBottom: `1px solid ${border}` }}>
-        <nav style={{ maxWidth: 1160, margin: "auto", display: "flex", gap: 20, justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
-          <Link href="/" style={{ fontWeight: 800, textDecoration: "none", color: navy }}>National Care Home Finder</Link>
-          <Link href="/washington" style={{ color: teal, fontWeight: 700 }}>← Washington directory</Link>
-        </nav>
-      </header>
+      <WashingtonPublicHeader current="map" />
       <section style={{ background: `linear-gradient(125deg, ${navy}, ${teal})`, color: "white", padding: "38px 5%" }}>
         <div style={{ maxWidth: 1160, margin: "auto" }}>
           <p style={{ letterSpacing: 2, fontSize: 12, fontWeight: 700 }}>WASHINGTON MARKET INTELLIGENCE</p>

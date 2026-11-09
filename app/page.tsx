@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader, WelcomeScene } from "../components/washington-public";
 import { HOMEPAGE_DIRECTORY_NOTE, stateFilterStatus } from "../lib/family-journey";
 import { homepageDirectoryNote, oregonPublicDirectoryAvailable } from "../lib/oregon-public-directory";
 
@@ -41,74 +42,98 @@ export default function Home() {
         fontFamily: "Arial, sans-serif",
       }}
     >
-      <header
-        style={{
-          background: "#ffffff",
-          borderBottom: "1px solid #e2e8f0",
-          padding: "22px 6%",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1200,
-            margin: "auto",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            flexWrap: "wrap",
-            gap: 16,
-          }}
-        >
-          <strong style={{ fontSize: 22 }}>
-            National Care Home Finder
-          </strong>
-          <a href="#states" style={{ color: "#176b53" }}>
-            Explore by State
-          </a>
-        </div>
-      </header>
+      <WashingtonPublicHeader />
 
       <section
         style={{
           background: "linear-gradient(135deg, #123c59, #176b53)",
           color: "white",
-          padding: "85px 7%",
-          textAlign: "center",
+          padding: "72px 7%",
         }}
       >
-        <div style={{ maxWidth: 850, margin: "auto" }}>
-          <p style={{ fontWeight: 700, letterSpacing: 2 }}>
-            RESIDENTIAL CARE DIRECTORY
-          </p>
-          <h1
-            style={{
-              fontSize: "clamp(34px, 5vw, 58px)",
-              lineHeight: 1.15,
-              margin: "22px 0",
-            }}
-          >
-            Find the right care home for your loved one.
-          </h1>
-          <p style={{ fontSize: 19, lineHeight: 1.7 }}>
-            Explore residential care options across the United
-            States. Understand care types, discover official
-            licensing resources, and make informed decisions.
-          </p>
-          <a
-            href="#states"
-            style={{
-              display: "inline-block",
-              background: "#ffffff",
-              color: "#123c59",
-              padding: "15px 26px",
-              borderRadius: 9,
-              marginTop: 25,
-              fontWeight: 700,
-              textDecoration: "none",
-            }}
-          >
-            Explore Care Options
-          </a>
+        <div className="wa-hero-split" style={{ maxWidth: 1100, margin: "auto" }}>
+          <div>
+            <p style={{ fontWeight: 700, letterSpacing: 2 }}>
+              RESIDENTIAL CARE DIRECTORY
+            </p>
+            <h1
+              style={{
+                fontSize: "clamp(34px, 5vw, 58px)",
+                lineHeight: 1.15,
+                margin: "22px 0",
+              }}
+            >
+              Find the right care home for your loved one.
+            </h1>
+            <p style={{ fontSize: 19, lineHeight: 1.7 }}>
+              Explore residential care options across the United
+              States. Understand care types, discover official
+              licensing resources, and make informed decisions.
+            </p>
+            <form
+              action="/washington"
+              method="get"
+              style={{
+                marginTop: 28,
+                background: "#ffffff",
+                color: "#123c59",
+                borderRadius: 16,
+                padding: 18,
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 190px), 1fr))",
+                gap: 14,
+                textAlign: "left",
+                boxShadow: "0 14px 36px rgba(0,0,0,.18)",
+              }}
+            >
+              <div>
+                <label htmlFor="home-facility-query" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>
+                  Facility name, ZIP, or license
+                </label>
+                <input
+                  id="home-facility-query"
+                  name="q"
+                  type="search"
+                  placeholder="e.g. 759392"
+                  style={{ boxSizing: "border-box", width: "100%", padding: "14px 12px", border: "1px solid #dbe5eb", borderRadius: 10, fontSize: 16, color: "#123c59" }}
+                />
+              </div>
+              <div>
+                <label htmlFor="home-city-query" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>
+                  City
+                </label>
+                <input
+                  id="home-city-query"
+                  name="city"
+                  type="search"
+                  placeholder="e.g. Puyallup"
+                  style={{ boxSizing: "border-box", width: "100%", padding: "14px 12px", border: "1px solid #dbe5eb", borderRadius: 10, fontSize: 16, color: "#123c59" }}
+                />
+              </div>
+              <button
+                type="submit"
+                style={{ gridColumn: "1 / -1", background: "#176b53", color: "#ffffff", border: 0, borderRadius: 10, padding: "15px 18px", fontWeight: 800, fontSize: 17, cursor: "pointer" }}
+              >
+                Search Washington homes
+              </button>
+            </form>
+            <a
+              href="#states"
+              style={{
+                display: "inline-block",
+                background: "#ffffff",
+                color: "#123c59",
+                padding: "15px 26px",
+                borderRadius: 9,
+                marginTop: 18,
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
+            >
+              Explore Care Options
+            </a>
+          </div>
+          <WelcomeScene />
         </div>
       </section>
 
