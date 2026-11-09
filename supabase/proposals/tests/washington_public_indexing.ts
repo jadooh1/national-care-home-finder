@@ -38,15 +38,41 @@ test("indexing follows the verified public domain and stays off elsewhere", () =
 
   const publicEnv = { vercelEnv: "production" as const, productionHost: PUBLIC_CANONICAL_HOST };
   assert.equal(responseIndexingAllowed(publicEnv, PUBLIC_CANONICAL_HOST), true);
+  assert.equal(responseIndexingAllowed(publicEnv, "https://www.nationalcarehomefinder.com/washington"), true);
   assert.equal(responseIndexingAllowed(publicEnv, "www.nationalcarehomefinder.com, nationalcarehomefinder.com"), true);
-  assert.equal(responseIndexingAllowed(publicEnv), true);
-  for (const host of ["nationalcarehomefinder.com", "national-care-home-finder.vercel.app", "national-care-home-finder-kkfa.vercel.app", "national-care-home-finder-dev.vercel.app"]) {
-    assert.equal(responseIndexingAllowed(publicEnv, host), false, host);
+  assert.equal(robotsPolicy(responseIndexingAllowed(publicEnv, PUBLIC_CANONICAL_HOST)).sitemap, `${PUBLIC_CANONICAL_ORIGIN}/sitemap.xml`);
+  const hiddenHosts = [
+    undefined,
+    "",
+    "   ",
+    ",",
+    "not a host",
+    "https://",
+    "localhost",
+    "www.nationalcarehomefinder.com.evil.example",
+    "nationalcarehomefinder.com",
+    "national-care-home-finder.vercel.app",
+    "national-care-home-finder-kkfa.vercel.app",
+    "national-care-home-finder-kkfa-amrasjad-6298.vercel.app",
+    "national-care-home-finder-kkfa-git-main-amrasjad-6298.vercel.app",
+    "national-care-home-finder-dev.vercel.app",
+  ];
+  for (const host of hiddenHosts) {
+    assert.equal(responseIndexingAllowed(publicEnv, host), false, host ?? "<missing>");
     assert.equal(robotsPolicy(responseIndexingAllowed(publicEnv, host)).disallow, "/");
+    assert.equal(robotsPolicy(responseIndexingAllowed(publicEnv, host)).sitemap, undefined);
     assert.equal(sitemapUrls(responseIndexingAllowed(publicEnv, host), ["100001"]).length, 0);
   }
+  assert.equal(responseIndexingAllowed(publicEnv), false);
   assert.equal(responseIndexingAllowed({ vercelEnv: "preview", productionHost: PUBLIC_CANONICAL_HOST }, PUBLIC_CANONICAL_HOST), false);
+  assert.equal(responseIndexingAllowed({ vercelEnv: "preview", productionHost: "national-care-home-finder-dev.vercel.app" }, "national-care-home-finder-dev.vercel.app"), false);
+  assert.equal(responseIndexingAllowed({ vercelEnv: "production", productionHost: "national-care-home-finder-dev.vercel.app" }, PUBLIC_CANONICAL_HOST), false);
+  assert.equal(responseIndexingAllowed({ vercelEnv: "production", productionHost: "national-care-home-finder-dev.vercel.app" }), false);
+  assert.equal(responseIndexingAllowed({ vercelEnv: "production", productionHost: "national-care-home-finder.vercel.app" }, PUBLIC_CANONICAL_HOST), false);
   assert.equal(responseIndexingAllowed({ vercelEnv: "production", productionHost: "national-care-home-finder.vercel.app" }, "national-care-home-finder.vercel.app"), false);
+  for (const url of sitemapUrls(true, ["100001"])) {
+    assert.equal(new URL(url).hostname, PUBLIC_CANONICAL_HOST, url);
+  }
 });
 
 test("development and preview robots block the site and omit the sitemap", () => {

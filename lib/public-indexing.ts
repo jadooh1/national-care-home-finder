@@ -80,8 +80,7 @@ export function publicIndexingAllowed(env: SiteEnv): boolean {
 
 export function responseIndexingAllowed(env: SiteEnv, requestHost?: string): boolean {
   if (!publicIndexingAllowed(env)) return false;
-  const host = normalizeHost(requestHost);
-  return host.length === 0 || host === PUBLIC_CANONICAL_HOST;
+  return normalizeHost(requestHost) === PUBLIC_CANONICAL_HOST;
 }
 
 export function readSiteEnv(source: Record<string, string | undefined>): SiteEnv {
