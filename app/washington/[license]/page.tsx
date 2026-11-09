@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { VisitorFeedback } from "../../../components/visitor-feedback";
 import { WashingtonPublicHeader, WelcomeScene } from "../../../components/washington-public";
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { useParams } from "next/navigation";
+import { publicOwnerContentView } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
 import type { Locale } from "../../../lib/locale";
@@ -74,7 +76,7 @@ export default function WashingtonFacilityProfile() {
         const home = data as Facility;
         setFacility(home);
         const content = await supabase
-          .from("wa_afh_published_owner_content")
+          .from(publicOwnerContentView(process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""))
           .select("field_name,published_value,published_at")
           .eq("facility_id", home.id);
         if (!cancelled && !content.error) {
@@ -164,6 +166,7 @@ export default function WashingtonFacilityProfile() {
             </div>
           </div>
         )}
+        {/^\d{1,20}$/.test(license) && <VisitorFeedback pagePath={`/washington/${license}`} />}
         <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>{text.footer}</footer>
       </div>
     </main>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useLanguage, usePageTitle } from "../../components/language";
+import { VisitorFeedback } from "../../components/visitor-feedback";
 import { WashingtonPublicHeader } from "../../components/washington-public";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
@@ -237,6 +238,7 @@ export default function WashingtonPage() {
             <button disabled={end >= total} onClick={() => setPage(p => p + 1)} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.next}</button>
           </nav>
         )}
+        <VisitorFeedback pagePath="/washington" />
         <footer style={{ marginTop: 45, paddingTop: 20, borderTop: `1px solid ${C.border}`, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>
           {t.footer}
         </footer>

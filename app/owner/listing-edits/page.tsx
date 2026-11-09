@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
+import { manageableOwnerContentView } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 
 captureAndStripAuthCallback();
@@ -99,7 +100,7 @@ export default function OwnerListingEdits() {
     const publicationRows = (publicationHistory.data ?? []) as PublicationEvent[];
     setPublications(publicationRows);
     if (ids.length) {
-      const content = await supabase.from("wa_afh_published_owner_content").select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
+      const content = await supabase.from(manageableOwnerContentView(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "")).select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
       setPublished(content.error ? [] : (content.data ?? []) as Published[]);
     } else setPublished([]);
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
