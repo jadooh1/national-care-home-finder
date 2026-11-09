@@ -510,7 +510,7 @@ export const copy: Record<Locale, {
         "Which care needs can your staff support?",
         "May I schedule a tour and review inspection history?",
       ],
-      footer: "Independent informational directory based on a DSHS locator download from October 23, 2026. Official name, address, license number, and capacity are not edited by facility owners. Owner-provided description, services, and amenities appear only after a separate administrator publication. Withdrawn owner text is removed from the public profile. Contact details, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations.",
+      footer: "Independent informational directory based on a DSHS locator download from November 9, 2026. Official name, address, license number, and capacity are not edited by facility owners. Owner-provided description, services, and amenities appear only after a separate administrator publication. Withdrawn owner text is removed from the public profile. Contact details, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations.",
     },
   },
   es: {
@@ -763,7 +763,7 @@ export const copy: Record<Locale, {
         "¿Qué necesidades de cuidado puede atender el personal?",
         "¿Puedo programar una visita y revisar el historial de inspecciones?",
       ],
-      footer: "Directorio informativo independiente basado en una descarga del localizador de DSHS del 23 de octubre de 2026. El nombre oficial, la dirección, el número de licencia y la capacidad no los editan los propietarios del establecimiento. La descripción, los servicios y las comodidades proporcionados por el propietario aparecen solo después de una publicación separada del administrador. El texto del propietario que se retira se elimina del perfil público. Los datos de contacto, los precios, las vacantes y la vigencia actual de la licencia no se han verificado de forma independiente. Los listados no son recomendaciones.",
+      footer: "Directorio informativo independiente basado en una descarga del localizador de DSHS del 9 de noviembre de 2026. El nombre oficial, la dirección, el número de licencia y la capacidad no los editan los propietarios del establecimiento. La descripción, los servicios y las comodidades proporcionados por el propietario aparecen solo después de una publicación separada del administrador. El texto del propietario que se retira se elimina del perfil público. Los datos de contacto, los precios, las vacantes y la vigencia actual de la licencia no se han verificado de forma independiente. Los listados no son recomendaciones.",
     },
   },
 };
