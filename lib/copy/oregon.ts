@@ -32,6 +32,7 @@ type OregonCopy = {
   careType: (licenseType: string) => string;
   summaryLine: (licenseType: string, status: string, beds: number) => string;
   directoryProfile: string;
+  officialSource: string;
   officialProfile: string;
   backToDirectory: string;
   loadingProfile: string;
@@ -81,6 +82,7 @@ export const copy: Record<Locale, OregonCopy> = {
       return `${localizedOregonCareType("en", licenseType)} · License status: ${localizedOregonLicenseStatus("en", status)} · ${beds} licensed beds`;
     },
     directoryProfile: "Directory profile",
+    officialSource: "Official ODHS provider search",
     officialProfile: "Official ODHS profile",
     backToDirectory: "← Oregon directory",
     loadingProfile: "Loading this Oregon adult foster home…",
@@ -128,6 +130,7 @@ export const copy: Record<Locale, OregonCopy> = {
       return `${localizedOregonCareType("es", licenseType)} · Estado de la licencia: ${localizedOregonLicenseStatus("es", status)} · ${spanishBeds(beds)}`;
     },
     directoryProfile: "Perfil del directorio",
+    officialSource: "Búsqueda oficial de proveedores de ODHS",
     officialProfile: "Perfil oficial de ODHS",
     backToDirectory: "← Directorio de Oregon",
     loadingProfile: "Cargando este hogar de acogida para adultos de Oregon…",

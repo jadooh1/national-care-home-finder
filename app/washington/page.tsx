@@ -8,6 +8,7 @@ import { WashingtonPublicHeader } from "../../components/washington-public";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
 import { facilityProfilePath } from "../../lib/family-journey";
+import { WASHINGTON_DSHS_LOCATOR } from "../../lib/state-directory";
 
 type Facility = {
   id: string; canonical_name: string; address_line1: string | null;
@@ -17,7 +18,6 @@ type Facility = {
 };
 
 const PAGE_SIZE = 20;
-const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const fieldStyle: React.CSSProperties = {
   boxSizing: "border-box", width: "100%", minWidth: 0, padding: "13px 14px",
@@ -108,7 +108,7 @@ export default function WashingtonPage() {
             </div>
             <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
               <button onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>{t.clearFilters}</button>
-              <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.officialLocator}</a>
+              <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.officialLocator}</a>
             </div>
           </section>
         </div>
@@ -225,7 +225,7 @@ export default function WashingtonPage() {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 13, alignItems: "center" }}>
                   {facilityProfilePath(facility.license_number) && <Link href={facilityProfilePath(facility.license_number) as string} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>{t.viewDetails}</Link>}
                   {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.viewMap}</a>}
-                  <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.checkDshs}</a>
+                  <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.checkDshs}</a>
                 </div>
               </article>
             );

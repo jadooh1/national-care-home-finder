@@ -7,6 +7,7 @@ import { WashingtonPublicHeader, WelcomeScene } from "../../../components/washin
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { useParams } from "next/navigation";
 import { publicOwnerContentView } from "../../../lib/premium-option-a";
+import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../../lib/state-directory";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
 import type { Locale } from "../../../lib/locale";
@@ -32,8 +33,6 @@ function isPublishedField(field: string): field is PublishedField {
 }
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
-const DSHS_URL = "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx";
-const disclosureUrl = (license: string) => `https://fortress.wa.gov/dshs/adsaapps/lookup/AFHServices.aspx?ref=adv&Lic=${encodeURIComponent(license)}`;
 const card: React.CSSProperties = { background: "white", border: `1px solid ${C.border}`, borderRadius: 16, padding: 24, boxShadow: "0 5px 16px rgba(18,60,89,.045)" };
 const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 };
 
@@ -148,10 +147,10 @@ export default function WashingtonFacilityProfile() {
               <section style={card} aria-labelledby="verify-heading">
                 <h2 id="verify-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>{text.verifyTitle}</h2>
                 <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.verifyLead}<strong>{text.verifyNot}</strong>{text.verifyTail}</p>
-                <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={linkStyle}>{text.dshsLocator}</a>
-                {facility.license_number && (
+                <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={linkStyle}>{text.dshsLocator}</a>
+                {facility.license_number && washingtonDisclosureUrl(facility.license_number) && (
                   <p style={{ marginTop: 12 }}>
-                    <a href={disclosureUrl(facility.license_number)} target="_blank" rel="noopener noreferrer" style={linkStyle}>
+                    <a href={washingtonDisclosureUrl(facility.license_number) ?? undefined} target="_blank" rel="noopener noreferrer" style={linkStyle}>
                       {text.disclosure}
                     </a>
                   </p>
