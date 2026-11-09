@@ -3,20 +3,35 @@
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { supabase } from "../../lib/supabase";
+import { LanguageSelector, useLanguage, usePageTitle } from "../../components/language";
+import { copy, localizedAuthServerMessage } from "../../lib/copy/account";
 import { captureAndStripAuthCallback, clearRecoveryPending, recoveryPending, recoveryRedirectUrl } from "../../lib/password-recovery";
+import { supabase } from "../../lib/supabase";
 
 captureAndStripAuthCallback();
 
 const field: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: 13, borderRadius: 9, border: "1px solid #cbd5e1", fontSize: 16, marginTop: 6 };
+const languageStyle = `
+.wa-lang { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 16px; }
+.wa-lang button { min-height: 44px; padding: 8px 12px; border-radius: 999px; font-weight: 800; border: 1px solid #dbe5eb; background: #ffffff; color: #123c59; cursor: pointer; font-family: inherit; }
+.wa-lang button[aria-pressed="true"] { background: #123c59; color: #ffffff; border-color: #123c59; }
+`;
+
+type OwnerErrorId = "" | "server" | keyof typeof copy.en.owner.errors;
+type OwnerNoticeId = "" | keyof typeof copy.en.owner.notices;
+
 export default function OwnerPage() {
   const router = useRouter();
+  const { locale } = useLanguage();
+  const text = copy[locale].owner;
+  usePageTitle(text.title);
   const [mode, setMode] = useState<"register" | "login" | "recover">("register");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
-  const [notice, setNotice] = useState("");
-  const [error, setError] = useState("");
+  const [noticeId, setNoticeId] = useState<OwnerNoticeId>("");
+  const [errorId, setErrorId] = useState<OwnerErrorId>("");
+  const [serverMessage, setServerMessage] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -27,8 +42,14 @@ export default function OwnerPage() {
     return () => { active = false; };
   }, [router]);
 
+  function clearMessages() {
+    setErrorId("");
+    setNoticeId("");
+    setServerMessage("");
+  }
+
   async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setBusy(true); setError(""); setNotice("");
+    event.preventDefault(); setBusy(true); clearMessages();
     try {
       if (mode === "register") {
         const { data, error: authError } = await supabase.auth.signUp({
@@ -42,7 +63,7 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
           clearRecoveryPending();
           router.replace("/owner/dashboard");
         }
-        else setNotice("Check your email for a confirmation message. Follow the link to finish registration. Check spam if necessary.");
+        else setNoticeId("confirmEmail");
       } else if (mode === "login") {
         const { error: authError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (authError) throw authError;
@@ -50,43 +71,53 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
         router.replace("/owner/dashboard");
       } else {
         const redirectTo = recoveryRedirectUrl();
-        if (!redirectTo) throw new Error("Password reset is unavailable from this address.");
+        if (!redirectTo) throw new Error(copy.en.owner.errors.resetUnavailable);
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo });
-        if (resetError) throw new Error("The reset email could not be sent. Try again later.");
+        if (resetError) throw new Error(copy.en.owner.errors.resetFailed);
         setPassword("");
-        setNotice("If an account exists for that email, a password reset message is on its way. The link expires after a short time.");
+        setNoticeId("resetSent");
       }
     } catch (e) {
       if (mode === "recover") setPassword("");
-      const unavailable = e instanceof Error && e.message === "Password reset is unavailable from this address.";
-      setError(unavailable ? e.message : mode === "recover" ? "The reset email could not be sent. Try again later." : e instanceof Error ? e.message : "Unable to sign in. Please retry.");
+      const unavailable = e instanceof Error && e.message === copy.en.owner.errors.resetUnavailable;
+      if (unavailable) setErrorId("resetUnavailable");
+      else if (mode === "recover") setErrorId("resetFailed");
+      else if (e instanceof Error) {
+        setErrorId("server");
+        setServerMessage(e.message);
+      } else setErrorId("signInFailed");
     } finally { setBusy(false); }
   }
 
+  const errorText = errorId === "server" ? localizedAuthServerMessage(locale, serverMessage) : errorId ? text.errors[errorId] : "";
+  const noticeText = noticeId ? text.notices[noticeId] : "";
+
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", fontFamily: "Arial,sans-serif", color: "#123c59", padding: "32px 5%" }}>
+    <style>{languageStyle}</style>
     <div style={{ maxWidth: 530, margin: "auto" }}>
-      <Link href="/washington" style={{ color: "#176b53" }}>← Washington directory</Link>
-      <h1 style={{ fontSize: 35, marginTop: 34 }}>Care home owner portal</h1>
-      <p style={{ lineHeight: 1.7 }}>Create an account or sign in. Registration does not verify facility ownership or grant editing access.</p>
+      <LanguageSelector />
+      <Link href="/washington" style={{ color: "#176b53" }}>{text.back}</Link>
+      <h1 style={{ fontSize: 35, marginTop: 34 }}>{text.title}</h1>
+      <p style={{ lineHeight: 1.7 }}>{text.intro}</p>
       <section style={{ background: "white", padding: 28, borderRadius: 15, border: "1px solid #dbe5eb" }}>
         <div style={{ display: "flex", gap: 10, marginBottom: 25 }}>
-          {(["register", "login"] as const).map(choice => <button key={choice} type="button" aria-pressed={mode === choice} onClick={() => { setMode(choice); setPassword(""); setError(""); setNotice(""); }} style={{ padding: 12, border: 0, borderRadius: 9, cursor: "pointer", background: mode === choice ? "#176b53" : "#edf2f5", color: mode === choice ? "#fff" : "#123c59" }}>{choice === "register" ? "Create account" : "Sign in"}</button>)}
+          {(["register", "login"] as const).map(choice => <button key={choice} type="button" aria-pressed={mode === choice} onClick={() => { setMode(choice); setPassword(""); clearMessages(); }} style={{ padding: 12, border: 0, borderRadius: 9, cursor: "pointer", background: mode === choice ? "#176b53" : "#edf2f5", color: mode === choice ? "#fff" : "#123c59" }}>{choice === "register" ? text.createAccount : text.signIn}</button>)}
         </div>
         <form onSubmit={submit}>
-          <label htmlFor="owner-email">Email address</label>
+          <label htmlFor="owner-email">{text.email}</label>
           <input id="owner-email" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} style={field} />
           {mode !== "recover" && <>
-            <label htmlFor="owner-password" style={{ display: "block", marginTop: 20 }}>Password</label>
+            <label htmlFor="owner-password" style={{ display: "block", marginTop: 20 }}>{text.password}</label>
             <input id="owner-password" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={6} required value={password} onChange={e => setPassword(e.target.value)} style={field} />
           </>}
-          {mode === "login" && <button type="button" onClick={() => { setMode("recover"); setPassword(""); setError(""); setNotice(""); }} style={{ marginTop: 14, border: 0, background: "transparent", color: "#176b53", cursor: "pointer", padding: 0 }}>Forgot password?</button>}
-          {mode === "recover" && <p style={{ lineHeight: 1.6 }}>Enter the account email. If it has an account, the reset link will open a page where a new password can be chosen.</p>}
-          {error && <p role="alert" style={{ color: "#af2424" }}>{error}</p>}
-          {notice && <p role="status" style={{ color: "#176b53", lineHeight: 1.6 }}>{notice}</p>}
-          <button disabled={busy} type="submit" style={{ width: "100%", padding: 14, marginTop: 24, border: 0, borderRadius: 9, background: "#176b53", color: "white", fontSize: 16, fontWeight: 700, cursor: "pointer" }}>{busy ? "Please wait…" : mode === "register" ? "Create account" : mode === "recover" ? "Send reset link" : "Sign in"}</button>
+          {mode === "login" && <button type="button" onClick={() => { setMode("recover"); setPassword(""); clearMessages(); }} style={{ marginTop: 14, border: 0, background: "transparent", color: "#176b53", cursor: "pointer", padding: 0 }}>{text.forgot}</button>}
+          {mode === "recover" && <p style={{ lineHeight: 1.6 }}>{text.recoverHelp}</p>}
+          {errorText && <p role="alert" style={{ color: "#af2424" }}>{errorText}</p>}
+          {noticeText && <p role="status" style={{ color: "#176b53", lineHeight: 1.6 }}>{noticeText}</p>}
+          <button disabled={busy} type="submit" style={{ width: "100%", padding: 14, marginTop: 24, border: 0, borderRadius: 9, background: "#176b53", color: "white", fontSize: 16, fontWeight: 700, cursor: "pointer" }}>{busy ? text.pleaseWait : mode === "register" ? text.createAccount : mode === "recover" ? text.sendResetLink : text.signIn}</button>
         </form>
       </section>
-      <p style={{ fontSize: 13, lineHeight: 1.6, color: "#536b7c" }}>Registration does not verify facility ownership. A confirmed account can submit a claim, and an administrator must approve it before any listing proposal.</p>
+      <p style={{ fontSize: 13, lineHeight: 1.6, color: "#536b7c" }}>{text.footnote}</p>
     </div>
   </main>;
 }

@@ -65,5 +65,8 @@ jobs:
       - name: Check the Washington public index
         run: node --experimental-strip-types --test supabase/proposals/tests/washington_public_indexing.ts
 
+      - name: Check the language selector
+        run: node --experimental-strip-types --test supabase/proposals/tests/bilingual_language.ts
+
       - name: Build
         run: npm run build
