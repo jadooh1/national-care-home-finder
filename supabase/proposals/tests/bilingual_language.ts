@@ -5,6 +5,8 @@ import { invalidZipMessage, mapResultSummary, stateFilterStatus } from "../../..
 import {
   localizedInvalidZip,
   localizedMapSummary,
+  localizedOregonCareType,
+  localizedOregonLicenseStatus,
   localizedPasswordProblem,
   localizedStateStatus,
   navigationCopy,
@@ -41,6 +43,23 @@ test("spanish keeps place names and license-like numbers unchanged", () => {
   assert.equal(navigationCopy.en.directory, "Directory");
   assert.equal(navigationCopy.es.summary, "Washington");
   assert.deepEqual(Object.keys(navigationCopy.en).sort(), Object.keys(navigationCopy.es).sort());
+});
+
+test("spanish display labels do not rewrite official oregon records", () => {
+  assert.equal(localizedOregonCareType("en", "Oregon adult foster home"), "Oregon adult foster home");
+  assert.equal(localizedOregonLicenseStatus("en", "Open"), "Open");
+  assert.equal(localizedOregonCareType("es", "Oregon adult foster home"), "Hogar de acogida para adultos de Oregon");
+  assert.equal(localizedOregonLicenseStatus("es", "Open"), "Abierta");
+  assert.equal(localizedOregonCareType("es", "Adult family home"), "Adult family home");
+  assert.equal(localizedOregonLicenseStatus("es", "Closed"), "Closed");
+  const oregonCopy = readFileSync("lib/copy/oregon.ts", "utf8");
+  const profile = readFileSync("app/oregon/[sourceId]/page.tsx", "utf8");
+  const owner = readFileSync("app/owner/page.tsx", "utf8");
+  assert.equal(oregonCopy.includes("localizedOregonCareType"), true);
+  assert.equal(oregonCopy.includes("localizedOregonLicenseStatus"), true);
+  assert.equal(profile.includes("t.careType(row.license_type)"), true);
+  assert.equal(owner.includes("localizedPasswordProblem"), true);
+  assert.equal(owner.includes('minLength={mode === "register" ? 12 : 6}'), true);
 });
 
 test("the selector is shared and washington pages stay free of oregon routes", () => {

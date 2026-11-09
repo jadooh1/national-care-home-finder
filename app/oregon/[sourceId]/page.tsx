@@ -83,7 +83,7 @@ function ProfileState({ result }: { result: OregonPublicProfileLoad }) {
       <p style={{ fontSize: 12, letterSpacing: 1.5, fontWeight: 700, color: C.teal }}>{t.profileEyebrow}</p>
       <h1 style={{ fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.15, margin: "8px 0 16px" }}>{row.facility_name}</h1>
       <p style={{ margin: "8px 0" }}>{row.city}, {t.countyLine(row.county)}</p>
-      <p style={{ margin: "8px 0" }}>{row.license_type}</p>
+      <p style={{ margin: "8px 0" }}>{t.careType(row.license_type)}</p>
       <p style={{ margin: "8px 0" }}>{t.licenseStatus(row.status)}</p>
       <p style={{ margin: "8px 0" }}>{t.licensedBeds(row.licensed_beds)}</p>
       <p style={{ lineHeight: 1.7 }}>{locale === "es" ? t.bedsNote : OREGON_BEDS_NOTE}</p>

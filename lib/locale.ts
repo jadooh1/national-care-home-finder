@@ -70,6 +70,16 @@ export function localizedInvalidZip(locale: Locale, currentZip: string): string 
   return `Enter a five-digit ZIP code. The map is still showing ZIP ${currentZip}.`;
 }
 
+export function localizedOregonCareType(locale: Locale, value: string): string {
+  if (locale === "es" && value === "Oregon adult foster home") return "Hogar de acogida para adultos de Oregon";
+  return value;
+}
+
+export function localizedOregonLicenseStatus(locale: Locale, value: string): string {
+  if (locale === "es" && value === "Open") return "Abierta";
+  return value;
+}
+
 export function localizedPasswordProblem(locale: Locale, password: string, confirmation: string): string | null {
   let english: string | null = null;
   if (password.length < 12 || password.length > 72) english = "Use 12 to 72 characters.";
