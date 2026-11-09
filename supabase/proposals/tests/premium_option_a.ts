@@ -11,6 +11,7 @@ import {
   developmentBillingAllowed,
   developmentCheckoutIntent,
   premiumPeriodOpen,
+  manageableOwnerContentView,
   publicOwnerContentView,
 } from "../../../lib/premium-option-a.ts";
 
@@ -24,6 +25,11 @@ const rollback = readFileSync(
 );
 const home = readFileSync("lib/copy/home.ts", "utf8");
 const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+const ownerEdits = readFileSync("app/owner/listing-edits/page.tsx", "utf8");
+const ownerTextGrants = readFileSync(
+  "supabase/proposals/20261109140000_development_owner_text_grants.sql",
+  "utf8",
+);
 const now = new Date("2026-11-09T12:00:00Z");
 const later = new Date("2026-12-09T12:00:00Z");
 const earlier = new Date("2026-11-08T12:00:00Z");
@@ -87,6 +93,20 @@ test("public owner text uses the premium view only on development", () => {
   assert.equal(publicOwnerContentView("https://www.nationalcarehomefinder.com"), "wa_afh_published_owner_content");
   assert.match(profile, /publicOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
   assert.doesNotMatch(profile, /\.from\("wa_afh_published_owner_content"\)/);
+  assert.equal(
+    manageableOwnerContentView(`https://${DEVELOPMENT_SUPABASE_HOST}`),
+    "wa_afh_claimed_owner_content",
+  );
+  assert.equal(
+    manageableOwnerContentView(`https://${PRODUCTION_SUPABASE_HOST}`),
+    "wa_afh_published_owner_content",
+  );
+  assert.match(ownerEdits, /manageableOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
+  assert.match(ownerTextGrants, /revoke all on table public\.wa_afh_published_owner_content from public, anon, authenticated/);
+  assert.match(ownerTextGrants, /grant select on table public\.wa_afh_claimed_owner_content to authenticated/);
+  assert.doesNotMatch(ownerTextGrants, /drop\s+table/i);
+  assert.doesNotMatch(ownerTextGrants, /delete\s+from\s+public\.published_owner_listing_events/i);
+  assert.doesNotMatch(ownerTextGrants, /update\s+public\.facilities/i);
 });
 
 test("the ledger refuses production, browser writes, and official-record edits", () => {

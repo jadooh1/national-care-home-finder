@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { VisitorFeedback } from "../../../components/visitor-feedback";
 import { WashingtonPublicHeader, WelcomeScene } from "../../../components/washington-public";
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { useParams } from "next/navigation";
@@ -165,6 +166,7 @@ export default function WashingtonFacilityProfile() {
             </div>
           </div>
         )}
+        {/^\d{1,20}$/.test(license) && <VisitorFeedback pagePath={`/washington/${license}`} />}
         <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>{text.footer}</footer>
       </div>
     </main>

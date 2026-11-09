@@ -20,7 +20,7 @@ import {
   sitemapUrls,
 } from "../../../lib/public-indexing.ts";
 
-const privatePaths = ["/oregon", "/oregon/529480", "/development/oregon", "/owner", "/owner/dashboard", "/owner/listing-edits", "/owner/reset-password", "/admin/claims", "/admin/listing-edits", "/auth/callback"];
+const privatePaths = ["/oregon", "/oregon/529480", "/development/oregon", "/owner", "/owner/dashboard", "/owner/listing-edits", "/owner/reset-password", "/admin/claims", "/admin/listing-edits", "/admin/feedback", "/auth/callback"];
 
 test("indexing follows the verified public domain and stays off elsewhere", () => {
   assert.equal(PUBLIC_CANONICAL_HOST, "www.nationalcarehomefinder.com");

@@ -97,6 +97,7 @@ export function premiumPeriodOpen(status: string, periodEnd: Date, now: Date): b
 
 export const PUBLISHED_OWNER_CONTENT_VIEW = "wa_afh_published_owner_content";
 export const PREMIUM_OWNER_CONTENT_VIEW = "wa_afh_premium_owner_content";
+export const CLAIMED_OWNER_CONTENT_VIEW = "wa_afh_claimed_owner_content";
 
 export function developmentBillingAllowed(supabaseUrl: string): boolean {
   try {
@@ -109,6 +110,12 @@ export function developmentBillingAllowed(supabaseUrl: string): boolean {
 export function publicOwnerContentView(supabaseUrl: string): string {
   return developmentBillingAllowed(supabaseUrl)
     ? PREMIUM_OWNER_CONTENT_VIEW
+    : PUBLISHED_OWNER_CONTENT_VIEW;
+}
+
+export function manageableOwnerContentView(supabaseUrl: string): string {
+  return developmentBillingAllowed(supabaseUrl)
+    ? CLAIMED_OWNER_CONTENT_VIEW
     : PUBLISHED_OWNER_CONTENT_VIEW;
 }
 

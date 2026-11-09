@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { developmentBillingAllowed } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
 
@@ -108,6 +109,11 @@ export default function AdminClaimsPage() {
   >
     Review listing proposals
   </Link>
+  {developmentBillingAllowed(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "") && (
+    <Link href="/admin/feedback" style={{ marginLeft: 12, color: "#176b53", fontWeight: 700 }}>
+      Review visitor feedback
+    </Link>
+  )}
 </div>
   <p>Claims must be independently verified before approval. Approval records a decision only; it does not publish listing text.</p>
       {loading && <p role="status">Checking administrator access…</p>}
