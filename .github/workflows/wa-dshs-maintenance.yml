@@ -1,0 +1,58 @@
+# Downloads the public Washington DSHS adult-family-home list and compares it
+# with the approved November 9, 2026 catalog. The job has no secrets and no
+# database access. It writes a report artifact only.
+name: Washington DSHS maintenance
+
+on:
+  schedule:
+    - cron: "0 14 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wa-dshs-maintenance
+  cancel-in-progress: false
+
+jobs:
+  reconcile:
+    name: Read-only DSHS reconciliation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+
+      - name: Set up Python
+        # actions/setup-python v7.1.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: "3.12"
+
+      - name: Download the current public DSHS list
+        run: python scripts/dshs/acquire_wa_afh.py --output-dir "${{ runner.temp }}/dshs"
+
+      - name: Compare the download with the approved catalog
+        run: |
+          source_csv="$(find "${{ runner.temp }}/dshs" -name 'wa_afh_normalized_*.csv' | sort | tail -n 1)"
+          validation="$(find "${{ runner.temp }}/dshs" -name 'wa_afh_validation_*.txt' | sort | tail -n 1)"
+          retrieved="$(sed -n 's/^Retrieval started: //p' "$validation")"
+          python scripts/dshs/reconcile_wa_afh.py \
+            --source "$source_csv" \
+            --catalog scripts/dshs/baselines/wa_afh_published_20261109.csv \
+            --retrieved-at "$retrieved" \
+            --report "${{ runner.temp }}/wa-dshs-reconciliation.txt" \
+            --changes "${{ runner.temp }}/wa-dshs-changes.csv"
+
+      - name: Save the reconciliation report
+        if: always()
+        # actions/upload-artifact v7.0.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: wa-dshs-reconciliation
+          path: |
+            ${{ runner.temp }}/wa-dshs-reconciliation.txt
+            ${{ runner.temp }}/wa-dshs-changes.csv
+            ${{ runner.temp }}/dshs/wa_afh_validation_*.txt
+          if-no-files-found: warn
