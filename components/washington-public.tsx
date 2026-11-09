@@ -1,22 +1,28 @@
 "use client";
 
 import Link from "next/link";
-
-const links = [
-  { id: "directory", href: "/washington", label: "Directory" },
-  { id: "map", href: "/washington/map", label: "Map" },
-  { id: "cities", href: "/washington/cities", label: "Cities" },
-  { id: "counties", href: "/washington/counties", label: "Counties" },
-  { id: "demographics", href: "/washington/demographics", label: "Aging" },
-  { id: "opportunity", href: "/washington/opportunity", label: "Market" },
-] as const;
+import { LanguageSelector, useLanguage } from "./language";
+import { navigationCopy } from "../lib/locale";
 
 export function WashingtonPublicHeader({ current }: { current?: "directory" | "map" | "cities" | "counties" | "demographics" | "opportunity" | "profile" }) {
+  const { locale } = useLanguage();
+  const copy = navigationCopy[locale];
+  const links = [
+    { id: "directory", href: "/washington", label: copy.directory },
+    { id: "map", href: "/washington/map", label: copy.map },
+    { id: "cities", href: "/washington/cities", label: copy.cities },
+    { id: "counties", href: "/washington/counties", label: copy.counties },
+    { id: "demographics", href: "/washington/demographics", label: copy.aging },
+    { id: "opportunity", href: "/washington/opportunity", label: copy.market },
+  ] as const;
   return (
     <header style={{ position: "relative", zIndex: 20, background: "#ffffff", color: "#123c59", borderBottom: "1px solid #dbe5eb", padding: "14px 5%" }}>
       <style>{`
         .wa-brand { color: #123c59; font-weight: 800; font-size: 19px; line-height: 1.3; text-decoration: none; }
-        .wa-bar { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px 22px; }
+        .wa-bar { max-width: 1160px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px 22px; flex-wrap: wrap; }
+        .wa-lang { display: flex; gap: 6px; align-items: center; }
+        .wa-lang button { min-height: 40px; padding: 8px 12px; border-radius: 999px; border: 1px solid #dbe5eb; background: #ffffff; color: #123c59; font-weight: 800; cursor: pointer; }
+        .wa-lang button[aria-pressed="true"] { background: #123c59; color: #ffffff; border-color: #123c59; }
         .wa-menu summary { display: none; }
         .wa-nav { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 0; padding: 0; }
         .wa-nav a { color: #176b53; font-weight: 700; text-decoration: none; padding: 6px 2px; }
@@ -31,8 +37,9 @@ export function WashingtonPublicHeader({ current }: { current?: "directory" | "m
           outline-offset: 3px;
         }
         @media (max-width: 760px) {
-          .wa-brand { font-size: 16px; max-width: 68%; }
+          .wa-brand { font-size: 16px; max-width: 100%; }
           .wa-bar { align-items: flex-start; }
+          .wa-lang button { min-height: 44px; }
           .wa-menu { position: relative; margin-left: auto; }
           .wa-menu summary { display: list-item; cursor: pointer; font-weight: 800; color: #176b53; padding: 8px 2px; list-style-position: inside; }
           .wa-menu:not([open])::details-content { display: none !important; content-visibility: hidden !important; }
@@ -57,9 +64,10 @@ export function WashingtonPublicHeader({ current }: { current?: "directory" | "m
       `}</style>
       <div className="wa-bar">
         <Link href="/" className="wa-brand">National Care Home Finder</Link>
+        <LanguageSelector />
         <details className="wa-menu">
-          <summary>Washington</summary>
-          <nav aria-label="Washington" className="wa-nav">
+          <summary>{copy.summary}</summary>
+          <nav aria-label={copy.navLabel} className="wa-nav">
             {links.map((link) => (
               <Link key={link.id} href={link.href} aria-current={current === link.id ? "page" : undefined}>
                 {link.label}

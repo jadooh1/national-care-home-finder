@@ -2,8 +2,11 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useLanguage, usePageTitle } from "../components/language";
 import { WashingtonPublicHeader, WelcomeScene } from "../components/washington-public";
+import { copy } from "../lib/copy/home";
 import { HOMEPAGE_DIRECTORY_NOTE, stateFilterStatus } from "../lib/family-journey";
+import { localizedStateStatus } from "../lib/locale";
 import { homepageDirectoryNote, oregonPublicDirectoryAvailable } from "../lib/oregon-public-directory";
 
 const states = [
@@ -22,6 +25,9 @@ const states = [
 ];
 
 export default function Home() {
+  const { locale } = useLanguage();
+  const t = copy[locale];
+  usePageTitle(t.pageTitle);
   const [search, setSearch] = useState("");
   const oregonAvailable = oregonPublicDirectoryAvailable(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
 
@@ -54,7 +60,7 @@ export default function Home() {
         <div className="wa-hero-split" style={{ maxWidth: 1100, margin: "auto" }}>
           <div>
             <p style={{ fontWeight: 700, letterSpacing: 2 }}>
-              RESIDENTIAL CARE DIRECTORY
+              {t.eyebrow}
             </p>
             <h1
               style={{
@@ -63,12 +69,10 @@ export default function Home() {
                 margin: "22px 0",
               }}
             >
-              Find the right care home for your loved one.
+              {t.heading}
             </h1>
             <p style={{ fontSize: 19, lineHeight: 1.7 }}>
-              Explore residential care options across the United
-              States. Understand care types, discover official
-              licensing resources, and make informed decisions.
+              {t.lead}
             </p>
             <form
               action="/washington"
@@ -88,25 +92,25 @@ export default function Home() {
             >
               <div>
                 <label htmlFor="home-facility-query" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>
-                  Facility name, ZIP, or license
+                  {t.facilityLabel}
                 </label>
                 <input
                   id="home-facility-query"
                   name="q"
                   type="search"
-                  placeholder="e.g. 759392"
+                  placeholder={t.facilityPlaceholder}
                   style={{ boxSizing: "border-box", width: "100%", padding: "14px 12px", border: "1px solid #dbe5eb", borderRadius: 10, fontSize: 16, color: "#123c59" }}
                 />
               </div>
               <div>
                 <label htmlFor="home-city-query" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>
-                  City
+                  {t.cityLabel}
                 </label>
                 <input
                   id="home-city-query"
                   name="city"
                   type="search"
-                  placeholder="e.g. Puyallup"
+                  placeholder={t.cityPlaceholder}
                   style={{ boxSizing: "border-box", width: "100%", padding: "14px 12px", border: "1px solid #dbe5eb", borderRadius: 10, fontSize: 16, color: "#123c59" }}
                 />
               </div>
@@ -114,7 +118,7 @@ export default function Home() {
                 type="submit"
                 style={{ gridColumn: "1 / -1", background: "#176b53", color: "#ffffff", border: 0, borderRadius: 10, padding: "15px 18px", fontWeight: 800, fontSize: 17, cursor: "pointer" }}
               >
-                Search Washington homes
+                {t.searchButton}
               </button>
             </form>
             <a
@@ -130,7 +134,7 @@ export default function Home() {
                 textDecoration: "none",
               }}
             >
-              Explore Care Options
+              {t.exploreCare}
             </a>
           </div>
           <WelcomeScene />
@@ -145,7 +149,7 @@ export default function Home() {
         }}
       >
         <h2 style={{ fontSize: 30, textAlign: "center" }}>
-          Helping families make informed care decisions
+          {t.helpingHeading}
         </h2>
         <div
           style={{
@@ -156,20 +160,7 @@ export default function Home() {
             marginTop: 35,
           }}
         >
-          {[
-            {
-              title: "Explore Care Types",
-              text: "Learn about residential care homes, assisted living, and other state-specific care settings.",
-            },
-            {
-              title: "Official Resources",
-              text: "Use state licensing and regulatory information to support your research.",
-            },
-            {
-              title: "Compare Your Options",
-              text: "Prepare questions about services, costs, staffing, and individual care needs.",
-            },
-          ].map((item) => (
+          {t.cards.map((item) => (
             <article
               key={item.title}
               style={{
@@ -198,17 +189,16 @@ export default function Home() {
       >
         <div style={{ maxWidth: 1150, margin: "auto" }}>
           <h2 style={{ fontSize: 32 }}>
-            Explore care options by state
+            {t.statesHeading}
           </h2>
           <p style={{ color: "#526776", lineHeight: 1.7 }}>
-            Select a state to begin exploring residential care
-            options and official licensing resources.
+            {t.statesLead}
           </p>
 
           <input
             type="search"
-            aria-label="Search states"
-            placeholder="Search for a state..."
+            aria-label={t.searchStatesLabel}
+            placeholder={t.searchStatesPlaceholder}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             style={{
@@ -272,7 +262,7 @@ export default function Home() {
             ))}
           </div>
 
-          <p aria-live="polite">{stateFilterStatus(filteredStates.length)}</p>
+          <p aria-live="polite">{locale === "es" ? localizedStateStatus(locale, filteredStates.length) : stateFilterStatus(filteredStates.length)}</p>
 
           <p
             style={{
@@ -281,7 +271,9 @@ export default function Home() {
               lineHeight: 1.7,
             }}
           >
-            {homepageDirectoryNote(oregonAvailable) ?? HOMEPAGE_DIRECTORY_NOTE}
+            {locale === "es"
+              ? (oregonAvailable ? t.noteWithOregon : t.noteWithoutOregon)
+              : (homepageDirectoryNote(oregonAvailable) ?? HOMEPAGE_DIRECTORY_NOTE)}
           </p>
         </div>
       </section>
@@ -295,14 +287,12 @@ export default function Home() {
           lineHeight: 1.8,
         }}
       >
-        <strong>National Care Home Finder</strong>
+        <strong>{t.brand}</strong>
         <p>
-          Helping families explore residential care options
-          across America.
+          {t.footerLead}
         </p>
         <small>
-          Independent informational directory. Verify all
-          facility details with official state sources.
+          {t.footerDisclaimer}
         </small>
       </footer>
     </main>

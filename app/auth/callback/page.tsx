@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
+import { copy } from "../../../lib/copy/account";
 import { supabase } from "../../../lib/supabase";
 import {
   captureAndStripAuthCallback,
@@ -13,11 +15,20 @@ import {
 } from "../../../lib/password-recovery";
 
 const captured: CapturedAuthCallback = captureAndStripAuthCallback();
-const EXPIRED = "This link is invalid or has expired. Request a new message from the owner portal.";
+const languageStyle = `
+.wa-lang { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 16px; }
+.wa-lang button { min-height: 44px; padding: 8px 12px; border-radius: 999px; font-weight: 800; border: 1px solid #dbe5eb; background: #ffffff; color: #123c59; cursor: pointer; font-family: inherit; }
+.wa-lang button[aria-pressed="true"] { background: #123c59; color: #ffffff; border-color: #123c59; }
+`;
+
+type CallbackPhase = keyof typeof copy.en.callback.phases;
 
 export default function AuthCallbackPage() {
   const router = useRouter();
-  const [message, setMessage] = useState("Completing email confirmation…");
+  const { locale } = useLanguage();
+  const text = copy[locale].callback;
+  usePageTitle(text.title);
+  const [phase, setPhase] = useState<CallbackPhase>("completing");
 
   useEffect(() => {
     let active = true;
@@ -57,7 +68,7 @@ export default function AuthCallbackPage() {
         if (error || !data.user) throw new Error("expired");
         if (!active) return;
         if (recovery) {
-          setMessage("Confirming your password reset…");
+          setPhase("confirming");
           router.replace("/owner/reset-password");
           return;
         }
@@ -69,7 +80,7 @@ export default function AuthCallbackPage() {
           router.replace("/owner/reset-password");
           return;
         }
-        if (active) setMessage(captured.hadAuthParams ? EXPIRED : "Confirmation could not be completed. Return to the owner portal and try signing in, or request a new confirmation email.");
+        if (active) setPhase(captured.hadAuthParams ? "expired" : "incomplete");
       } finally {
         captured.code = null;
         captured.tokenHash = null;
@@ -83,10 +94,12 @@ export default function AuthCallbackPage() {
   }, [router]);
 
   return <main style={{ fontFamily: "Arial,sans-serif", background: "#f4f8fb", minHeight: "100vh", padding: "75px 6%", color: "#123c59" }}>
+    <style>{languageStyle}</style>
     <section style={{ maxWidth: 580, margin: "auto", padding: 30, background: "white", borderRadius: 16 }}>
-      <h1>Email confirmation</h1>
-      <p role="status" style={{ lineHeight: 1.7 }}>{message}</p>
-      <Link href="/owner" style={{ color: "#176b53" }}>Return to owner portal</Link>
+      <LanguageSelector />
+      <h1>{text.title}</h1>
+      <p role="status" style={{ lineHeight: 1.7 }}>{text.phases[phase]}</p>
+      <Link href="/owner" style={{ color: "#176b53" }}>{text.returnLink}</Link>
     </section>
   </main>;
 }

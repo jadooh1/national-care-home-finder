@@ -1,10 +1,13 @@
+import { cookies } from "next/headers";
+import { LanguageProvider } from "../components/language";
+import { LANGUAGE_COOKIE, parseLocale } from "../lib/locale";
 import { publicPageMetadataFor } from "../lib/public-metadata";
 
 export function generateMetadata() {
   return publicPageMetadataFor("/");
 }
 
-export default function RootLayout({
+export default async function RootLayout({
 
   children,
 
@@ -14,13 +17,16 @@ export default function RootLayout({
 
 }>) {
 
+  const jar = await cookies();
+  const locale = parseLocale(jar.get(LANGUAGE_COOKIE)?.value);
+
   return (
 
-    <html lang="en">
+    <html lang={locale}>
 
       <body style={{ margin: 0 }}>
 
-        {children}
+        <LanguageProvider initialLocale={locale}>{children}</LanguageProvider>
 
       </body>
 
