@@ -95,12 +95,21 @@ export function premiumPeriodOpen(status: string, periodEnd: Date, now: Date): b
   return (OPEN_STATUSES as readonly string[]).includes(status) && periodEnd.getTime() > now.getTime();
 }
 
+export const PUBLISHED_OWNER_CONTENT_VIEW = "wa_afh_published_owner_content";
+export const PREMIUM_OWNER_CONTENT_VIEW = "wa_afh_premium_owner_content";
+
 export function developmentBillingAllowed(supabaseUrl: string): boolean {
   try {
     return new URL(supabaseUrl).hostname === DEVELOPMENT_SUPABASE_HOST;
   } catch {
     return false;
   }
+}
+
+export function publicOwnerContentView(supabaseUrl: string): string {
+  return developmentBillingAllowed(supabaseUrl)
+    ? PREMIUM_OWNER_CONTENT_VIEW
+    : PUBLISHED_OWNER_CONTENT_VIEW;
 }
 
 export function developmentCheckoutIntent(supabaseUrl: string): DevelopmentCheckout {

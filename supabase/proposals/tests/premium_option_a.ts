@@ -11,6 +11,7 @@ import {
   developmentBillingAllowed,
   developmentCheckoutIntent,
   premiumPeriodOpen,
+  publicOwnerContentView,
 } from "../../../lib/premium-option-a.ts";
 
 const proposal = readFileSync(
@@ -22,6 +23,7 @@ const rollback = readFileSync(
   "utf8",
 );
 const home = readFileSync("lib/copy/home.ts", "utf8");
+const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
 const now = new Date("2026-11-09T12:00:00Z");
 const later = new Date("2026-12-09T12:00:00Z");
 const earlier = new Date("2026-11-08T12:00:00Z");
@@ -71,6 +73,20 @@ test("the development checkout cannot charge and refuses every other project", (
   );
   assert.equal(developmentBillingAllowed("https://www.nationalcarehomefinder.com"), false);
   assert.equal(developmentBillingAllowed("not a url"), false);
+});
+
+test("public owner text uses the premium view only on development", () => {
+  assert.equal(
+    publicOwnerContentView(`https://${DEVELOPMENT_SUPABASE_HOST}`),
+    "wa_afh_premium_owner_content",
+  );
+  assert.equal(
+    publicOwnerContentView(`https://${PRODUCTION_SUPABASE_HOST}`),
+    "wa_afh_published_owner_content",
+  );
+  assert.equal(publicOwnerContentView("https://www.nationalcarehomefinder.com"), "wa_afh_published_owner_content");
+  assert.match(profile, /publicOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
+  assert.doesNotMatch(profile, /\.from\("wa_afh_published_owner_content"\)/);
 });
 
 test("the ledger refuses production, browser writes, and official-record edits", () => {
