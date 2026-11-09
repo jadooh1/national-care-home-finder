@@ -50,6 +50,9 @@ test("California source rows keep their original category, license id, and offic
   assert.equal(report.records[0]?.official_fields.file_date, "5252025");
   assert.equal(report.records[1]?.license_category, "RCFE-CONTINUING CARE RETIREMENT COMMUNITY");
   assert.equal(report.raw_file_dates.includes("2025-05-25"), false);
+  assert.equal(report.iso_file_dates, 0);
+  assert.equal(report.status_counts.LICENSED, 1);
+  assert.equal(report.status_counts["ON PROBATION"], 1);
   assert.equal(report.recorded_export_date, null);
   assert.equal(adoptExportDate(null, report.raw_file_dates), null);
   assert.equal(adoptExportDate("2025-05-25", report.raw_file_dates), null);
@@ -123,6 +126,30 @@ test("California stays unpublished when the table is clean", () => {
   assert.equal(directoryContract("California")?.publication, "unpublished");
   assert.equal(directoryContract("Washington")?.mapPath, "/washington/map");
   assert.equal(directoryContract("Oregon")?.mapPath, null);
+});
+
+test("address and ZIP checks keep the official text and do not invent a coordinate", () => {
+  const report = validateStateSource(CALIFORNIA_RCFE_PROFILE, [
+    HEADER,
+    row({
+      facility_type: "RESIDENTIAL CARE ELDERLY",
+      facility_number: "300",
+      facility_name: "Zip Home",
+      facility_address: "95814",
+      facility_city: "Sacramento",
+      facility_state: "CA",
+      facility_zip: "95814-1234",
+      facility_status: "LICENSED",
+      file_date: "5252025",
+    }),
+  ]);
+  assert.equal(report.records[0]?.official_fields.facility_zip, "95814-1234");
+  assert.equal(report.records[0]?.official_fields.facility_address, "95814");
+  assert.equal(report.non_five_digit_zips, 1);
+  assert.equal(report.addresses_without_street_text, 1);
+  assert.equal(report.blank_addresses, 0);
+  assert.equal(report.coordinate_columns, false);
+  assert.equal(report.directory_ready, false);
 });
 
 test("a mismatched header accepts nothing", () => {
