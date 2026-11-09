@@ -11,3 +11,7 @@ next-env.d.ts
 
 npm-debug.log*
 *.log
+
+__pycache__/
+*.py[cod]
+scripts/dshs/output/
