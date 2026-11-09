@@ -62,6 +62,16 @@ test("spanish display labels do not rewrite official oregon records", () => {
   assert.equal(owner.includes('minLength={mode === "register" ? 12 : 6}'), true);
 });
 
+test("washington source dates use the November 9 download in both languages", () => {
+  const directory = readFileSync("lib/copy/washington-directory.ts", "utf8");
+  const detail = readFileSync("lib/copy/washington-detail.ts", "utf8");
+  assert.equal(directory.includes("downloaded November 9, 2026"), true);
+  assert.equal(directory.includes("descargada el 9 de noviembre de 2026"), true);
+  assert.equal(directory.includes("November 9, 2026. La información"), false);
+  assert.equal(detail.includes("from November 9, 2026"), true);
+  assert.equal(detail.includes("del 9 de noviembre de 2026"), true);
+});
+
 test("the selector is shared and washington pages stay free of oregon routes", () => {
   const layout = readFileSync("app/layout.tsx", "utf8");
   const localeSource = readFileSync("lib/locale.ts", "utf8");

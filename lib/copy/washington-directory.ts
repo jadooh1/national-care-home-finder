@@ -161,6 +161,6 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
       return `Página ${page} de ${pages}`;
     },
     next: "Siguiente →",
-    footer: "Directorio informativo independiente que usa una lista del localizador de DSHS descargada el November 9, 2026. La información puede estar desactualizada; confirme las licencias y los servicios actuales directamente con el DSHS de Washington. Los listados no son recomendaciones.",
+    footer: "Directorio informativo independiente que usa una lista del localizador de DSHS descargada el 9 de noviembre de 2026. La información puede estar desactualizada; confirme las licencias y los servicios actuales directamente con el DSHS de Washington. Los listados no son recomendaciones.",
   },
 };
