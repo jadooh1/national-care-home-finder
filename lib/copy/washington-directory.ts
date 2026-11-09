@@ -104,7 +104,7 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
       return `Page ${page} of ${pages}`;
     },
     next: "Next →",
-    footer: "Independent informational directory using a DSHS locator list downloaded October 23, 2026. Information may be outdated; confirm current licensing and services directly with Washington DSHS. Listings are not recommendations.",
+    footer: "Independent informational directory using a DSHS locator list downloaded November 9, 2026. Information may be outdated; confirm current licensing and services directly with Washington DSHS. Listings are not recommendations.",
   },
   es: {
     pageTitle: "Hogares AFH de Washington",
@@ -161,6 +161,6 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
       return `Página ${page} de ${pages}`;
     },
     next: "Siguiente →",
-    footer: "Directorio informativo independiente que usa una lista del localizador de DSHS descargada el October 23, 2026. La información puede estar desactualizada; confirme las licencias y los servicios actuales directamente con el DSHS de Washington. Los listados no son recomendaciones.",
+    footer: "Directorio informativo independiente que usa una lista del localizador de DSHS descargada el November 9, 2026. La información puede estar desactualizada; confirme las licencias y los servicios actuales directamente con el DSHS de Washington. Los listados no son recomendaciones.",
   },
 };
