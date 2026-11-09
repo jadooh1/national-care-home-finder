@@ -1,11 +1,14 @@
-# Validates a pull request with the repository's existing build script.
-# Pull-request events only. contents: read. No secrets, deploy, or database access.
+# Validates the development branch. contents: read.
+# No secrets, deploy, or database access. This does not run for main.
 name: Pull request validation
 
 on:
   pull_request:
     branches:
-      - main
+      - development
+  push:
+    branches:
+      - development
 
 permissions:
   contents: read
