@@ -93,6 +93,8 @@ const OREGON_BLOCKERS = [
 const CALIFORNIA_BLOCKERS = [
   "open-data-has-no-coordinate-columns",
   "catalog-timestamps-are-not-an-export-date",
+  "file-date-values-are-not-iso-export-dates",
+  "arf-file-mixes-other-license-categories",
   "no-facility-type-is-accepted",
   "address-and-contact-fields-are-not-accepted",
   "no-per-facility-disclosure-link-is-recorded",
