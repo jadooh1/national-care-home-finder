@@ -7,12 +7,14 @@ import {
   PRIVATE_INDEX_PREFIXES,
   PUBLIC_CANONICAL_HOST,
   PUBLIC_CANONICAL_ORIGIN,
+  PUBLIC_PRODUCTION_HOSTS,
   WASHINGTON_PUBLIC_PAGES,
   absolutePublicUrl,
   eligibleProfilePath,
   listIndexableLicenses,
   profileSitemapPaths,
   publicIndexingAllowed,
+  responseIndexingAllowed,
   robotsPolicy,
   sitemapPaths,
   sitemapUrls,
@@ -20,14 +22,31 @@ import {
 
 const privatePaths = ["/oregon", "/oregon/529480", "/development/oregon", "/owner", "/owner/dashboard", "/owner/listing-edits", "/owner/reset-password", "/admin/claims", "/admin/listing-edits", "/auth/callback"];
 
-test("indexing is limited to the public production host", () => {
-  assert.equal(PUBLIC_CANONICAL_HOST, "national-care-home-finder.vercel.app");
+test("indexing follows the verified public domain and stays off elsewhere", () => {
+  assert.equal(PUBLIC_CANONICAL_HOST, "www.nationalcarehomefinder.com");
+  assert.equal(PUBLIC_CANONICAL_ORIGIN, "https://www.nationalcarehomefinder.com");
   assert.equal(publicIndexingAllowed({}), false);
   assert.equal(publicIndexingAllowed({ vercelEnv: "preview", productionHost: PUBLIC_CANONICAL_HOST }), false);
   assert.equal(publicIndexingAllowed({ vercelEnv: "production", productionHost: "national-care-home-finder-dev.vercel.app" }), false);
   assert.equal(publicIndexingAllowed({ vercelEnv: "production", productionHost: "https://national-care-home-finder-dev.vercel.app" }), false);
-  assert.equal(publicIndexingAllowed({ vercelEnv: "production", productionHost: PUBLIC_CANONICAL_HOST }), true);
+  assert.equal(publicIndexingAllowed({ vercelEnv: "production", productionHost: "national-care-home-finder.vercel.app" }), false);
+  for (const host of PUBLIC_PRODUCTION_HOSTS) {
+    assert.equal(publicIndexingAllowed({ vercelEnv: "production", productionHost: host }), true, host);
+  }
   assert.equal(publicIndexingAllowed({ vercelEnv: "production", productionHost: `${PUBLIC_CANONICAL_ORIGIN}/` }), true);
+  assert.equal(publicIndexingAllowed({ vercelEnv: "production", productionHost: "www.nationalcarehomefinder.com:443" }), true);
+
+  const publicEnv = { vercelEnv: "production" as const, productionHost: PUBLIC_CANONICAL_HOST };
+  assert.equal(responseIndexingAllowed(publicEnv, PUBLIC_CANONICAL_HOST), true);
+  assert.equal(responseIndexingAllowed(publicEnv, "www.nationalcarehomefinder.com, nationalcarehomefinder.com"), true);
+  assert.equal(responseIndexingAllowed(publicEnv), true);
+  for (const host of ["nationalcarehomefinder.com", "national-care-home-finder.vercel.app", "national-care-home-finder-kkfa.vercel.app", "national-care-home-finder-dev.vercel.app"]) {
+    assert.equal(responseIndexingAllowed(publicEnv, host), false, host);
+    assert.equal(robotsPolicy(responseIndexingAllowed(publicEnv, host)).disallow, "/");
+    assert.equal(sitemapUrls(responseIndexingAllowed(publicEnv, host), ["100001"]).length, 0);
+  }
+  assert.equal(responseIndexingAllowed({ vercelEnv: "preview", productionHost: PUBLIC_CANONICAL_HOST }, PUBLIC_CANONICAL_HOST), false);
+  assert.equal(responseIndexingAllowed({ vercelEnv: "production", productionHost: "national-care-home-finder.vercel.app" }, "national-care-home-finder.vercel.app"), false);
 });
 
 test("development and preview robots block the site and omit the sitemap", () => {
@@ -82,6 +101,8 @@ test("private routes stay out of the sitemap paths", () => {
   assert.equal(source.includes("or_odhs_listed_afh"), false);
   assert.equal(source.includes("oregon_odhs_afh_public"), false);
   assert.equal(source.includes(DIRECTORY_VIEW), true);
+  assert.equal(source.includes("responseIndexingAllowed"), true);
+  assert.equal(source.includes("national-care-home-finder.vercel.app"), false);
 });
 
 test("a license read uses the public directory and fails closed", async () => {

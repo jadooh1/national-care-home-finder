@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
-import { publicPageMetadata } from "../../../lib/public-metadata";
+import { publicPageMetadataFor } from "../../../lib/public-metadata";
 
-export const metadata: Metadata = publicPageMetadata("/washington/counties");
+export function generateMetadata() {
+  return publicPageMetadataFor("/washington/counties");
+}
 
 export default function WashingtonCountiesLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return children;

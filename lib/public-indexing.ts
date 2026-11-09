@@ -1,5 +1,11 @@
-export const PUBLIC_CANONICAL_HOST = "national-care-home-finder.vercel.app";
+export const PUBLIC_CANONICAL_HOST = "www.nationalcarehomefinder.com";
 export const PUBLIC_CANONICAL_ORIGIN = `https://${PUBLIC_CANONICAL_HOST}`;
+
+export const PUBLIC_PRODUCTION_HOSTS = [
+  PUBLIC_CANONICAL_HOST,
+  "nationalcarehomefinder.com",
+  "national-care-home-finder-kkfa.vercel.app",
+] as const;
 
 export const PRIVATE_INDEX_PREFIXES = ["/oregon", "/development", "/owner", "/admin", "/auth"] as const;
 
@@ -57,18 +63,25 @@ export type SiteEnv = {
 };
 
 export function normalizeHost(value: string | undefined): string {
-  const trimmed = (value ?? "").trim();
+  const trimmed = (value ?? "").split(",")[0].trim();
   if (!trimmed) return "";
   try {
     const withProtocol = trimmed.includes("://") ? trimmed : `https://${trimmed}`;
-    return new URL(withProtocol).host.toLowerCase();
+    return new URL(withProtocol).hostname.toLowerCase();
   } catch {
     return "";
   }
 }
 
 export function publicIndexingAllowed(env: SiteEnv): boolean {
-  return env.vercelEnv === "production" && normalizeHost(env.productionHost) === PUBLIC_CANONICAL_HOST;
+  const host = normalizeHost(env.productionHost);
+  return env.vercelEnv === "production" && (PUBLIC_PRODUCTION_HOSTS as readonly string[]).includes(host);
+}
+
+export function responseIndexingAllowed(env: SiteEnv, requestHost?: string): boolean {
+  if (!publicIndexingAllowed(env)) return false;
+  const host = normalizeHost(requestHost);
+  return host.length === 0 || host === PUBLIC_CANONICAL_HOST;
 }
 
 export function readSiteEnv(source: Record<string, string | undefined>): SiteEnv {
