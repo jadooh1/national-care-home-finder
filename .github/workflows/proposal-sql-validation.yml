@@ -69,3 +69,6 @@ jobs:
 
       - name: Validate Phase 5I proposal status filter
         run: python3 supabase/proposals/tests/validate_phase5i_listing_edit_status_filter.py
+
+      - name: Validate the Option A premium ledger
+        run: python3 supabase/proposals/tests/validate_premium_option_a.py
