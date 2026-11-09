@@ -62,5 +62,8 @@ jobs:
       - name: Check the Oregon public directory
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_public_directory.ts
 
+      - name: Check the Washington public index
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_public_indexing.ts
+
       - name: Build
         run: npm run build
