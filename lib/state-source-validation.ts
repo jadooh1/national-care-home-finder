@@ -13,6 +13,7 @@ export type StateSourceProfile = {
   acceptedStatuses: readonly string[];
   stateField: string;
   expectedState: string;
+  zipField: string;
   dateField: string;
   disclosureUrl: string | null;
 };
@@ -37,10 +38,16 @@ export type SourceValidationReport = {
   blank_license_ids: number;
   blank_names: number;
   blank_addresses: number;
+  blank_zips: number;
+  non_five_digit_zips: number;
+  addresses_without_street_text: number;
   blank_categories: number;
+  status_counts: Record<string, number>;
+  category_counts: Record<string, number>;
   unrecognized_status: number;
   unexpected_state: number;
   raw_file_dates: string[];
+  iso_file_dates: number;
   recorded_export_date: null;
   coordinate_columns: false;
   disclosure_url: string | null;
@@ -89,6 +96,7 @@ const CALIFORNIA_PROFILE = {
   acceptedStatuses: CALIFORNIA_ACCEPTED_STATUSES,
   stateField: "facility_state",
   expectedState: "CA",
+  zipField: "facility_zip",
   dateField: "file_date",
   disclosureUrl: null,
 } as const;
@@ -123,6 +131,7 @@ export function validateStateSource(
   const records = data.map(row => normalizeRow(profile, header, row));
   const ids = records.map(record => record.license_id);
   const duplicateLicenseIds = duplicates(ids.filter(id => id.trim() !== ""));
+  const rawFileDates = [...new Set(records.map(record => record.official_fields[profile.dateField] ?? "").filter(value => value.trim() !== ""))].sort();
   return {
     ...base,
     header_ok: true,
@@ -132,10 +141,22 @@ export function validateStateSource(
     blank_license_ids: countBlank(records, profile.idField),
     blank_names: countBlank(records, profile.nameField),
     blank_addresses: countBlank(records, profile.addressField),
+    blank_zips: countBlank(records, profile.zipField),
+    non_five_digit_zips: records.filter(record => {
+      const zip = (record.official_fields[profile.zipField] ?? "").trim();
+      return zip !== "" && !/^\d{5}$/.test(zip);
+    }).length,
+    addresses_without_street_text: records.filter(record => {
+      const address = (record.official_fields[profile.addressField] ?? "").trim();
+      return address !== "" && !/[A-Za-z]/.test(address);
+    }).length,
     blank_categories: countBlank(records, profile.categoryField),
+    status_counts: tally(records, profile.statusField),
+    category_counts: tally(records, profile.categoryField),
     unrecognized_status: records.filter(record => !profile.acceptedStatuses.includes(record.official_fields[profile.statusField] ?? "")).length,
     unexpected_state: records.filter(record => (record.official_fields[profile.stateField] ?? "") !== profile.expectedState).length,
-    raw_file_dates: [...new Set(records.map(record => record.official_fields[profile.dateField] ?? "").filter(value => value.trim() !== ""))].sort(),
+    raw_file_dates: rawFileDates,
+    iso_file_dates: rawFileDates.filter(value => ISO_DATE.test(value)).length,
   };
 }
 
@@ -161,6 +182,15 @@ function countBlank(records: readonly OfficialLicenseRecord[], field: string): n
   return records.filter(record => (record.official_fields[field] ?? "").trim() === "").length;
 }
 
+function tally(records: readonly OfficialLicenseRecord[], field: string): Record<string, number> {
+  const counts: Record<string, number> = {};
+  for (const record of records) {
+    const value = record.official_fields[field] ?? "";
+    counts[value] = (counts[value] ?? 0) + 1;
+  }
+  return counts;
+}
+
 function duplicates(values: readonly string[]): string[] {
   const counts = new Map<string, number>();
   for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1);
@@ -180,10 +210,16 @@ function emptyReport(profile: StateSourceProfile): SourceValidationReport {
     blank_license_ids: 0,
     blank_names: 0,
     blank_addresses: 0,
+    blank_zips: 0,
+    non_five_digit_zips: 0,
+    addresses_without_street_text: 0,
     blank_categories: 0,
+    status_counts: {},
+    category_counts: {},
     unrecognized_status: 0,
     unexpected_state: 0,
     raw_file_dates: [],
+    iso_file_dates: 0,
     recorded_export_date: null,
     coordinate_columns: false,
     disclosure_url: profile.disclosureUrl,
