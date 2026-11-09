@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../components/language";
 import { copy, localizedAuthServerMessage } from "../../lib/copy/account";
+import { localizedPasswordProblem } from "../../lib/locale";
 import { captureAndStripAuthCallback, clearRecoveryPending, recoveryPending, recoveryRedirectUrl } from "../../lib/password-recovery";
 import { supabase } from "../../lib/supabase";
 
@@ -32,6 +33,7 @@ export default function OwnerPage() {
   const [noticeId, setNoticeId] = useState<OwnerNoticeId>("");
   const [errorId, setErrorId] = useState<OwnerErrorId>("");
   const [serverMessage, setServerMessage] = useState("");
+  const [passwordProblem, setPasswordProblem] = useState<string | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -46,12 +48,18 @@ export default function OwnerPage() {
     setErrorId("");
     setNoticeId("");
     setServerMessage("");
+    setPasswordProblem(null);
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); clearMessages();
     try {
       if (mode === "register") {
+        const problem = localizedPasswordProblem(locale, password, password);
+        if (problem) {
+          setPasswordProblem(problem);
+          return;
+        }
         const { data, error: authError } = await supabase.auth.signUp({
           email: email.trim(), password,
           options: { 
@@ -89,7 +97,7 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
     } finally { setBusy(false); }
   }
 
-  const errorText = errorId === "server" ? localizedAuthServerMessage(locale, serverMessage) : errorId ? text.errors[errorId] : "";
+  const errorText = passwordProblem ?? (errorId === "server" ? localizedAuthServerMessage(locale, serverMessage) : errorId ? text.errors[errorId] : "");
   const noticeText = noticeId ? text.notices[noticeId] : "";
 
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", fontFamily: "Arial,sans-serif", color: "#123c59", padding: "32px 5%" }}>
@@ -108,7 +116,8 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
           <input id="owner-email" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} style={field} />
           {mode !== "recover" && <>
             <label htmlFor="owner-password" style={{ display: "block", marginTop: 20 }}>{text.password}</label>
-            <input id="owner-password" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={6} required value={password} onChange={e => setPassword(e.target.value)} style={field} />
+            <input id="owner-password" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={mode === "register" ? 12 : 6} maxLength={mode === "register" ? 72 : undefined} required value={password} onChange={e => setPassword(e.target.value)} style={field} />
+            {mode === "register" && <p style={{ margin: "8px 0 0", color: "#536b7c", lineHeight: 1.5 }}>{text.passwordHelp}</p>}
           </>}
           {mode === "login" && <button type="button" onClick={() => { setMode("recover"); setPassword(""); clearMessages(); }} style={{ marginTop: 14, border: 0, background: "transparent", color: "#176b53", cursor: "pointer", padding: 0 }}>{text.forgot}</button>}
           {mode === "recover" && <p style={{ lineHeight: 1.6 }}>{text.recoverHelp}</p>}

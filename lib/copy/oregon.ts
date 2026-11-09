@@ -1,4 +1,4 @@
-import type { Locale } from "../locale";
+import { localizedOregonCareType, localizedOregonLicenseStatus, type Locale } from "../locale";
 import {
   OREGON_BEDS_NOTE,
   OREGON_FRESHNESS_NOTE,
@@ -29,6 +29,7 @@ type OregonCopy = {
   noMatch: string;
   resultCount: (total: number) => string;
   countyLine: (name: string) => string;
+  careType: (licenseType: string) => string;
   summaryLine: (licenseType: string, status: string, beds: number) => string;
   directoryProfile: string;
   officialProfile: string;
@@ -73,8 +74,11 @@ export const copy: Record<Locale, OregonCopy> = {
     countyLine(name) {
       return `${name} County`;
     },
+    careType(licenseType) {
+      return localizedOregonCareType("en", licenseType);
+    },
     summaryLine(licenseType, status, beds) {
-      return `${licenseType} · License status: ${status} · ${beds} licensed beds`;
+      return `${localizedOregonCareType("en", licenseType)} · License status: ${localizedOregonLicenseStatus("en", status)} · ${beds} licensed beds`;
     },
     directoryProfile: "Directory profile",
     officialProfile: "Official ODHS profile",
@@ -84,7 +88,7 @@ export const copy: Record<Locale, OregonCopy> = {
     missing: "This Oregon adult foster home is not in the directory.",
     profileEyebrow: "OREGON ADULT FOSTER HOME",
     licenseStatus(status) {
-      return `License status: ${status}`;
+      return `License status: ${localizedOregonLicenseStatus("en", status)}`;
     },
     licensedBeds(beds) {
       return `${beds} licensed beds`;
@@ -117,8 +121,11 @@ export const copy: Record<Locale, OregonCopy> = {
     countyLine(name) {
       return `Condado de ${name}`;
     },
+    careType(licenseType) {
+      return localizedOregonCareType("es", licenseType);
+    },
     summaryLine(licenseType, status, beds) {
-      return `${licenseType} · Estado de la licencia: ${status} · ${spanishBeds(beds)}`;
+      return `${localizedOregonCareType("es", licenseType)} · Estado de la licencia: ${localizedOregonLicenseStatus("es", status)} · ${spanishBeds(beds)}`;
     },
     directoryProfile: "Perfil del directorio",
     officialProfile: "Perfil oficial de ODHS",
@@ -128,7 +135,7 @@ export const copy: Record<Locale, OregonCopy> = {
     missing: "Este hogar de acogida para adultos de Oregon no está en el directorio.",
     profileEyebrow: "HOGAR DE ACOGIDA PARA ADULTOS DE OREGON",
     licenseStatus(status) {
-      return `Estado de la licencia: ${status}`;
+      return `Estado de la licencia: ${localizedOregonLicenseStatus("es", status)}`;
     },
     licensedBeds(beds) {
       return spanishBeds(beds);
