@@ -30,6 +30,10 @@ const ownerTextGrants = readFileSync(
   "supabase/proposals/20261109140000_development_owner_text_grants.sql",
   "utf8",
 );
+const ownerTextMigration = readFileSync(
+  "supabase/migrations/20261109140000_development_owner_text_grants.sql",
+  "utf8",
+);
 const now = new Date("2026-11-09T12:00:00Z");
 const later = new Date("2026-12-09T12:00:00Z");
 const earlier = new Date("2026-11-08T12:00:00Z");
@@ -102,11 +106,14 @@ test("public owner text uses the premium view only on development", () => {
     "wa_afh_published_owner_content",
   );
   assert.match(ownerEdits, /manageableOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
-  assert.match(ownerTextGrants, /revoke all on table public\.wa_afh_published_owner_content from public, anon, authenticated/);
-  assert.match(ownerTextGrants, /grant select on table public\.wa_afh_claimed_owner_content to authenticated/);
-  assert.doesNotMatch(ownerTextGrants, /drop\s+table/i);
-  assert.doesNotMatch(ownerTextGrants, /delete\s+from\s+public\.published_owner_listing_events/i);
-  assert.doesNotMatch(ownerTextGrants, /update\s+public\.facilities/i);
+  for (const sql of [ownerTextGrants, ownerTextMigration]) {
+    assert.match(sql, /revoke all on table public\.wa_afh_published_owner_content from public, anon, authenticated/);
+    assert.match(sql, /grant select on table public\.wa_afh_claimed_owner_content to authenticated/);
+    assert.match(sql, /refusing the production project/);
+    assert.doesNotMatch(sql, /drop\s+table/i);
+    assert.doesNotMatch(sql, /delete\s+from\s+public\.published_owner_listing_events/i);
+    assert.doesNotMatch(sql, /update\s+public\.facilities/i);
+  }
 });
 
 test("the ledger refuses production, browser writes, and official-record edits", () => {
