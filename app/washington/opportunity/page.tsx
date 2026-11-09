@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { supabase } from "../../../lib/supabase";
 
 type ZipMarket = {
@@ -91,12 +92,7 @@ export default function WashingtonOpportunityPage() {
   ];
 
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", color: navy, fontFamily: "Arial, sans-serif" }}>
-    <header style={{ background: "white", padding: "18px 5%", borderBottom: `1px solid ${border}` }}>
-      <nav style={{ maxWidth: 1150, margin: "auto", display: "flex", justifyContent: "space-between", gap: 14, flexWrap: "wrap" }}>
-        <Link href="/" style={{ color: navy, textDecoration: "none", fontWeight: 800 }}>National Care Home Finder</Link>
-        <Link href="/washington" style={{ color: green, fontWeight: 700 }}>← Washington directory</Link>
-      </nav>
-    </header>
+    <WashingtonPublicHeader current="opportunity" />
     <section style={{ background: `linear-gradient(120deg,${navy},${green})`, padding: "44px 5%", color: "white" }}>
       <div style={{ maxWidth: 1150, margin: "auto" }}>
         <div style={{ fontSize: 12, letterSpacing: 1.6, fontWeight: 800 }}>WASHINGTON MARKET INTELLIGENCE · PHASE 8</div>

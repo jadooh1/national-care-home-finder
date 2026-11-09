@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader } from "../../components/washington-public";
 import { supabase } from "../../lib/supabase";
 import { facilityProfilePath } from "../../lib/family-journey";
 
@@ -35,6 +36,16 @@ export default function WashingtonPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q");
+    const cityParam = params.get("city");
+    const countyParam = params.get("county");
+    if (query) setSearch(query);
+    if (cityParam) setCity(cityParam);
+    if (countyParam) setCounty(countyParam);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -71,12 +82,7 @@ export default function WashingtonPage() {
 
   return (
     <main style={{ minHeight: "100vh", background: C.pale, color: C.navy, fontFamily: "Arial, sans-serif" }}>
-      <header style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "16px 5%" }}>
-        <div style={{ maxWidth: 1100, margin: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
-          <strong style={{ fontSize: 19 }}>National Care Home Finder</strong>
-          <Link href="/" style={{ color: C.teal, fontWeight: 600 }}>← All states</Link>
-        </div>
-      </header>
+      <WashingtonPublicHeader current="directory" />
       <section style={{ background: `linear-gradient(125deg, ${C.navy}, ${C.teal})`, color: "white", padding: "48px 5%" }}>
         <div style={{ maxWidth: 1100, margin: "auto" }}>
           <p style={{ fontSize: 12, letterSpacing: 2, fontWeight: 700 }}>WASHINGTON DIRECTORY</p>
@@ -84,6 +90,21 @@ export default function WashingtonPage() {
           <p style={{ maxWidth: 780, lineHeight: 1.7, fontSize: 16, opacity: 0.95 }}>
             Browse facilities appearing in a Washington DSHS locator download. A license-number match is not independent verification of current standing, vacancies, cost, or suitability.
           </p>
+          <section aria-label="Search and filter facilities" style={{ background: "white", color: C.navy, marginTop: 26, padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 10px 28px rgba(0,0,0,.12)" }}>
+            <h2 style={{ fontSize: 21, margin: "0 0 18px" }}>Find care homes</h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 230px), 1fr))", gap: 15 }}>
+              <div><label htmlFor="name-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>Name, ZIP, or license</label>
+                <input id="name-filter" type="search" value={search} placeholder="e.g. 759392" style={fieldStyle} onChange={e => { setSearch(e.target.value); setPage(0); }} /></div>
+              <div><label htmlFor="city-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>City</label>
+                <input id="city-filter" type="search" value={city} placeholder="e.g. Puyallup" style={fieldStyle} onChange={e => { setCity(e.target.value); setPage(0); }} /></div>
+              <div><label htmlFor="county-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>County</label>
+                <input id="county-filter" type="search" value={county} placeholder="e.g. Pierce" style={fieldStyle} onChange={e => { setCounty(e.target.value); setPage(0); }} /></div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
+              <button onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>Clear filters</button>
+              <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Official Washington DSHS locator ↗</a>
+            </div>
+          </section>
         </div>
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 60px" }}>
@@ -182,37 +203,23 @@ export default function WashingtonPage() {
 
 </section>
 
-        <section aria-label="Search and filter facilities" style={{ background: "white", padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 6px 20px rgba(18,60,89,.05)" }}>
-          <h2 style={{ fontSize: 21, margin: "0 0 18px" }}>Find care homes</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 230px), 1fr))", gap: 15 }}>
-            <div><label htmlFor="name-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>Name, ZIP, or license</label>
-              <input id="name-filter" type="search" value={search} placeholder="e.g. 759392" style={fieldStyle} onChange={e => { setSearch(e.target.value); setPage(0); }} /></div>
-            <div><label htmlFor="city-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>City</label>
-              <input id="city-filter" type="search" value={city} placeholder="e.g. Puyallup" style={fieldStyle} onChange={e => { setCity(e.target.value); setPage(0); }} /></div>
-            <div><label htmlFor="county-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>County</label>
-              <input id="county-filter" type="search" value={county} placeholder="e.g. Pierce" style={fieldStyle} onChange={e => { setCounty(e.target.value); setPage(0); }} /></div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
-            <button onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>Clear filters</button>
-            <a href={DSHS_URL} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>Official Washington DSHS locator ↗</a>
-          </div>
-        </section>
         <div aria-live="polite" style={{ margin: "23px 0 15px", color: C.muted, fontWeight: 600 }}>
           {loading ? "Loading listings…" : error ? "Unable to display listings" : total === 0 ? "No matches found" : `Showing ${start.toLocaleString()}–${end.toLocaleString()} of ${total.toLocaleString()} listings`}
         </div>
         {error && <p role="alert" style={{ color: "#a62a2a" }}>{error}</p>}
         {!loading && !error && total === 0 && <p>Try another city, county, name, ZIP code, or license number.</p>}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))", gap: 17 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 17, minWidth: 0 }}>
           {!error && facilities.map(facility => {
             const address = [facility.address_line1, facility.city, facility.state_code, facility.postal_code].filter(Boolean).join(", ");
             const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
             return (
-              <article key={facility.id} style={{ border: `1px solid ${C.border}`, borderRadius: 14, background: "#fff", padding: 22, boxShadow: "0 3px 12px rgba(18,60,89,.035)" }}>
+              <article key={facility.id} style={{ border: `1px solid ${C.border}`, borderTop: `4px solid ${C.navy}`, borderRadius: 14, background: "#fff", padding: 22, boxShadow: "0 3px 12px rgba(18,60,89,.035)", minWidth: 0, overflowWrap: "anywhere" }}>
+                <p style={{ margin: "0 0 8px", color: C.teal, fontSize: 12, fontWeight: 800, letterSpacing: 0.4 }}>Adult family home</p>
                 <h2 style={{ margin: "0 0 12px", fontSize: 22, lineHeight: 1.3 }}>{displayName(facility.canonical_name)}</h2>
                 {address && <p style={{ margin: "8px 0", lineHeight: 1.5 }}>{address}</p>}
                 {facility.county && <p style={{ margin: "8px 0", color: C.muted }}>{facility.county} County</p>}
                 <p style={{ margin: "8px 0" }}><strong>License:</strong> {facility.license_number ?? "Not available"}</p>
-                {facility.licensed_capacity !== null && <p style={{ margin: "8px 0" }}><strong>Recorded capacity:</strong> {facility.licensed_capacity}</p>}
+                {facility.licensed_capacity !== null && <p style={{ margin: "8px 0" }}><span style={{ display: "inline-block", background: C.pale, color: C.navy, border: `1px solid ${C.border}`, borderRadius: 999, padding: "4px 10px", fontWeight: 700, fontSize: 14 }}>Recorded capacity: {facility.licensed_capacity}</span></p>}
                 <p style={{ borderTop: `1px solid ${C.border}`, paddingTop: 13, marginTop: 15, color: C.muted, fontSize: 14, lineHeight: 1.5 }}>
                   {facility.record_status === "verified" ? "Independently verified listing" : "DSHS license-number match — not independently verified"}
                 </p>

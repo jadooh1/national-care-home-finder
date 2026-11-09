@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { supabase } from "../../../lib/supabase";
 
 type Market = {
@@ -76,12 +77,7 @@ export default function WashingtonDemographicsPage() {
   }
 
   return <main style={{ fontFamily: "Arial, sans-serif", background: "#f4f8fb", minHeight: "100vh", color: navy }}>
-    <header style={{ background: "white", borderBottom: `1px solid ${border}`, padding: "18px 5%" }}>
-      <nav style={{ maxWidth: 1140, margin: "auto", display: "flex", flexWrap: "wrap", gap: 18, justifyContent: "space-between" }}>
-        <Link href="/" style={{ color: navy, fontWeight: 800, textDecoration: "none" }}>National Care Home Finder</Link>
-        <Link href="/washington/map" style={{ color: teal, fontWeight: 700 }}>← AFH market map</Link>
-      </nav>
-    </header>
+    <WashingtonPublicHeader current="demographics" />
     <section style={{ background: `linear-gradient(120deg, ${navy}, ${teal})`, color: "white", padding: "40px 5%" }}>
       <div style={{ maxWidth: 1140, margin: "auto" }}>
         <p style={{ letterSpacing: 2, fontSize: 12, fontWeight: 700 }}>WASHINGTON MARKET INTELLIGENCE · PHASE 4B</p>

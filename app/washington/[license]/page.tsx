@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { WashingtonPublicHeader, WelcomeScene } from "../../../components/washington-public";
 import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 
@@ -81,19 +82,19 @@ export default function WashingtonFacilityProfile() {
 
   return (
     <main style={{ minHeight: "100vh", background: C.pale, color: C.navy, fontFamily: "Arial, sans-serif" }}>
-      <header style={{ background: "white", borderBottom: `1px solid ${C.border}`, padding: "17px 5%" }}>
-        <nav aria-label="Main navigation" style={{ maxWidth: 1100, margin: "auto", display: "flex", justifyContent: "space-between", flexWrap: "wrap", alignItems: "center", gap: 12 }}>
-          <Link href="/" style={{ color: C.navy, textDecoration: "none", fontSize: 19, fontWeight: 800 }}>National Care Home Finder</Link>
-          <Link href="/washington" style={linkStyle}>← Washington directory</Link>
-        </nav>
-      </header>
+      <WashingtonPublicHeader current="profile" />
       <section style={{ background: `linear-gradient(125deg, ${C.navy}, ${C.teal})`, padding: "45px 5%", color: "white" }}>
-        <div style={{ maxWidth: 1100, margin: "auto" }}>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>WASHINGTON · ADULT FAMILY HOME</p>
-          <h1 style={{ fontSize: "clamp(29px, 5vw, 44px)", lineHeight: 1.15, margin: "12px 0" }}>
-            {facility ? displayName(facility.canonical_name) : loading ? "Loading facility profile…" : "Facility profile"}
-          </h1>
-          <p style={{ opacity: 0.95, lineHeight: 1.6, maxWidth: 740 }}>Directory information is provided for research, not as an endorsement or confirmation of current licensing, vacancies, pricing, or services.</p>
+        <div style={{ maxWidth: 1100, margin: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
+          <div style={{ flex: "1 1 280px", minWidth: 0 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>WASHINGTON · ADULT FAMILY HOME</p>
+            <h1 style={{ fontSize: "clamp(29px, 5vw, 44px)", lineHeight: 1.15, margin: "12px 0" }}>
+              {facility ? displayName(facility.canonical_name) : loading ? "Loading facility profile…" : "Facility profile"}
+            </h1>
+            <p style={{ opacity: 0.95, lineHeight: 1.6, maxWidth: 740 }}>Directory information is provided for research, not as an endorsement or confirmation of current licensing, vacancies, pricing, or services.</p>
+          </div>
+          <div style={{ width: 148, flex: "0 0 auto" }}>
+            <WelcomeScene />
+          </div>
         </div>
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 64px" }}>
