@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
+import { publicPageMetadata } from "../lib/public-metadata";
 
-export const metadata: Metadata = {
-
-  title: "National Care Home Finder",
-
-  description:
-
-    "Explore residential care options and official licensing resources across the United States.",
-
-};
+export const metadata: Metadata = publicPageMetadata("/");
 
 export default function RootLayout({
 
