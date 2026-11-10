@@ -1,4 +1,5 @@
 import csv
+import os
 import re
 import tempfile
 import unittest
@@ -97,10 +98,40 @@ class NorthCarolinaMappingTest(unittest.TestCase):
         ).read_text(encoding="utf-8").lower()
         self.assertIsNone(re.search(r"(?m)^\s*create\s+role\b", source))
         self.assertIsNone(re.search(r"(?m)^\s*grant\b", source))
-        self.assertNotIn("'public'", source)
+        self.assertNotIn("publication = 'public'", source)
+        self.assertNotIn(", 'public'", source)
         self.assertIsNone(re.search(r"(?m)^\s*create\s+role\b", rollback))
         self.assertIsNone(re.search(r"(?m)^\s*grant\b", rollback))
+        self.assertIn("north-carolina-dhhs-roster-pilot-20261110", rollback)
+        self.assertIn("ingestion_batch_id = 'north-carolina-dhhs-roster-pilot-20261110'", rollback)
         self.assertNotIn("/north-carolina", source)
+
+    def test_development_adapter_rejects_an_unauthorized_target(self):
+        from north_carolina_development_adapter import EXECUTION_AUTHORIZATION, assert_execution_target
+
+        keys = ("PGHOST", "PGUSER", "NCHF_NC_DEVELOPMENT_EXECUTION", "NCHF_NC_EXECUTION_TARGET")
+        saved = {key: os.environ.get(key) for key in keys}
+        try:
+            os.environ["PGHOST"] = "127.0.0.1"
+            os.environ["PGUSER"] = "proposal_test"
+            os.environ["NCHF_NC_EXECUTION_TARGET"] = "disposable"
+            os.environ.pop("NCHF_NC_DEVELOPMENT_EXECUTION", None)
+            with self.assertRaises(RuntimeError):
+                assert_execution_target()
+            os.environ["NCHF_NC_DEVELOPMENT_EXECUTION"] = EXECUTION_AUTHORIZATION
+            assert_execution_target()
+            os.environ["NCHF_NC_EXECUTION_TARGET"] = "development"
+            with self.assertRaises(RuntimeError):
+                assert_execution_target()
+            os.environ["PGHOST"] = "aws-0-us-west-1.pooler.supabase.com"
+            with self.assertRaises(RuntimeError):
+                assert_execution_target()
+        finally:
+            for key, value in saved.items():
+                if value is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = value
         directory = Path(__file__).resolve().parents[2].joinpath("lib/state-directory.ts").read_text(encoding="utf-8")
         self.assertNotIn("/north-carolina", directory)
         self.assertIn('directoryPath: null', directory)

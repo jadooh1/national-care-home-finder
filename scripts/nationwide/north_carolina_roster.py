@@ -20,6 +20,7 @@ AUTHORITY = (
 GENERIC_SEARCH = "https://info.ncdhhs.gov/dhsr/acls/star/search.asp"
 INGEST_AUTHORIZATION = "authorize-development-north-carolina-roster-ingestion"
 ROLLBACK_AUTHORIZATION = "authorize-development-north-carolina-roster-rollback"
+PILOT_BATCH = "north-carolina-dhhs-roster-pilot-20261110"
 LICENSE_PATTERN = re.compile(r"^[A-Z]{3}-\d{3}-\d{3}$")
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 MAIN = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
@@ -261,8 +262,8 @@ def stage_csv(records):
     return buffer.getvalue()
 
 
-def psql(database, sql):
-    refuse_remote()
+def psql(database, sql, guard=refuse_remote):
+    guard()
     completed = subprocess.run(
         [PSQL, "-d", database, "-X", "-v", "ON_ERROR_STOP=1", "-f", "-"],
         input=sql,
@@ -276,7 +277,7 @@ def psql(database, sql):
     return output
 
 
-def ingestion_sql(csv_text):
+def ingestion_sql(csv_text, batch_id=PILOT_BATCH):
     return f"""
 select set_config('nchf.north_carolina_roster_ingestion_authorization', '{INGEST_AUTHORIZATION}', false);
 begin;
@@ -288,6 +289,14 @@ begin
   end if;
   if to_regclass('public.nationwide_roster') is null then
     raise exception 'north carolina roster ingestion refused: nationwide_roster is not present';
+  end if;
+  if not exists (
+    select 1 from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'nationwide_roster'
+      and column_name = 'ingestion_batch_id'
+  ) then
+    raise exception 'north carolina roster ingestion refused: ingestion_batch_id is not present';
   end if;
 end
 $guard$;
@@ -336,7 +345,8 @@ begin
      or existing.disclosure_kind is distinct from 'generic-search'
      or existing.disclosure_url is distinct from '{GENERIC_SEARCH}'
      or existing.publication is distinct from 'unpublished'
-     or existing.coordinate_source is distinct from 'absent';
+     or existing.coordinate_source is distinct from 'absent'
+     or existing.ingestion_batch_id is distinct from '{batch_id}';
   if conflict_count > 0 then
     raise exception 'north carolina roster ingestion conflict: %', conflict_count;
   end if;
@@ -356,7 +366,8 @@ begin
     freshness_verified, original_category, normalized_category,
     original_status, normalized_status,
     disclosure_url, disclosure_kind, disclosure_verified, disclosure_verification_evidence,
-    latitude, longitude, coordinate_source, coordinate_accuracy, publication
+    latitude, longitude, coordinate_source, coordinate_accuracy, publication,
+    ingestion_batch_id
   )
   select
     'North Carolina', incoming.license_identifier, null, null,
@@ -368,7 +379,7 @@ begin
     false, incoming.original_category, null,
     null, null,
     '{GENERIC_SEARCH}', 'generic-search', false, null,
-    null, null, 'absent', null, 'unpublished'
+    null, null, 'absent', null, 'unpublished', '{batch_id}'
   from nc_stage as incoming
   where not exists (
     select 1 from public.nationwide_roster as existing
@@ -389,11 +400,11 @@ commit;
 """
 
 
-def ingest(database, records):
+def ingest(database, records, guard=refuse_remote, batch_id=PILOT_BATCH):
     if not records:
         return {"inserted": 0, "already_present": 0, "conflicts": 0}
     try:
-        output = psql(database, ingestion_sql(stage_csv(records)))
+        output = psql(database, ingestion_sql(stage_csv(records), batch_id), guard=guard)
     except RuntimeError as error:
         message = str(error)
         match = re.search(r"ingestion conflict: (\d+)", message)
@@ -409,7 +420,7 @@ def ingest(database, records):
     raise RuntimeError(output)
 
 
-def rollback(database):
+def rollback(database, guard=refuse_remote):
     rollback_file = (
         Path(__file__).resolve().parents[2]
         / "supabase"
@@ -421,6 +432,7 @@ def rollback(database):
         "select set_config('nchf.north_carolina_roster_rollback_authorization', "
         f"'{ROLLBACK_AUTHORIZATION}', false);\n"
         + rollback_file.read_text(encoding="utf-8"),
+        guard=guard,
     )
     if "COMMIT" not in output:
         raise RuntimeError(output)

@@ -1,8 +1,9 @@
--- Development-only rollback for a future North Carolina roster pilot.
+-- Development-only rollback for one North Carolina roster batch.
 -- Do not run this against Supabase unless a later authorization names that
 -- exact action. A session setting does not prove which database is connected.
--- This deletes unpublished North Carolina rows from public.nationwide_roster.
--- It does not delete another state, drop the table, or change privileges.
+-- This deletes unpublished rows whose ingestion_batch_id is
+-- north-carolina-dhhs-roster-pilot-20261110.
+-- It does not delete another batch, another state, or the table.
 
 begin;
 
@@ -18,16 +19,20 @@ begin
   if exists (
     select 1
     from public.nationwide_roster
-    where state_name = 'North Carolina'
-      and publication is distinct from 'unpublished'
+    where ingestion_batch_id = 'north-carolina-dhhs-roster-pilot-20261110'
+      and (
+        state_name is distinct from 'North Carolina'
+        or publication is distinct from 'unpublished'
+      )
   ) then
-    raise exception 'north carolina roster rollback refused: a North Carolina row is not unpublished';
+    raise exception 'north carolina roster rollback refused: the pilot batch is not an unpublished North Carolina batch';
   end if;
 end
 $rollback$;
 
 delete from public.nationwide_roster
 where state_name = 'North Carolina'
-  and publication = 'unpublished';
+  and publication = 'unpublished'
+  and ingestion_batch_id = 'north-carolina-dhhs-roster-pilot-20261110';
 
 commit;

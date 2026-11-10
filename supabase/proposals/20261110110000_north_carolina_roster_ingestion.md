@@ -43,12 +43,35 @@ The workbooks contain 1,088 nonempty body rows.
 
 Of the accepted rows, 902 keep a distinct facility address as the mailing address. 184 facility addresses are omitted because the composed text is the same as the physical site address.
 
+## Batch identifier
+
+Development's existing `nationwide_roster` table has no batch column. `supabase/proposals/20261110120000_nationwide_roster_ingestion_batch.sql` proposes adding nullable `ingestion_batch_id`. It does not create the table, load rows, or add privileges. It is not applied. Its rollback drops the column only when no row has a batch id.
+
+The pilot batch id is `north-carolina-dhhs-roster-pilot-20261110`. Every inserted pilot row stores that value. A repeated load of the same batch inserts nothing. A changed row, or the same license already stored under another batch, rolls the transaction back.
+
 ## Ingestion and rollback
 
-`scripts/nationwide/north_carolina_roster.py` validates the local file, then loads accepted rows in one transaction. A repeated load inserts nothing and reports the rows already present. A changed existing row raises a conflict and rolls the transaction back. The script refuses a host other than localhost. It does not create roles or add privileges.
+`scripts/nationwide/north_carolina_roster.py` remains localhost-only unless a caller supplies another guard. It does not create roles or add privileges.
 
-`supabase/proposals/20261110110000_north_carolina_roster_ingestion_ROLLBACK.sql` deletes only unpublished North Carolina rows. It refuses to run without `nchf.north_carolina_roster_rollback_authorization`. It leaves other states in place. A session setting is not proof of which database is connected.
+`scripts/nationwide/north_carolina_development_adapter.py` is the separate execution path. It runs only when `NCHF_NC_DEVELOPMENT_EXECUTION` is `authorize-development-north-carolina-roster-execution` and `NCHF_NC_EXECUTION_TARGET` is either `disposable` on localhost or `development` on `aws-1-us-west-2.pooler.supabase.com` as `postgres.ajjsyloyihcqdomywhik`. It refuses a production host. It was exercised on disposable PostgreSQL and was not run against Supabase.
+
+`supabase/proposals/20261110110000_north_carolina_roster_ingestion_ROLLBACK.sql` deletes only unpublished North Carolina rows with the pilot batch id. Another North Carolina batch and every other state remain.
+
+## Execution procedure
+
+Do not run this until a person authorizes the development load itself.
+
+1. Confirm the development server by its host, login, and migration `20261108221940`. Confirm `public.nationwide_roster` already exists. Do not recreate it.
+2. In that confirmed session, set `nchf.nationwide_roster_batch_authorization` to `authorize-development-nationwide-roster-batch` and run the batch-column proposal. Confirm the column exists and that table privileges are unchanged.
+3. Set `NCHF_NC_DEVELOPMENT_EXECUTION` and `NCHF_NC_EXECUTION_TARGET=development`, using the development pooler environment, then run the adapter against the local adult and family workbooks.
+4. Expect 1,086 inserted rows, 2 rejected non-records, 902 mailing addresses, 184 omitted duplicate addresses, batch `north-carolina-dhhs-roster-pilot-20261110`, and no public rows.
+5. A second run expects 0 inserted and 1,086 already present.
+6. To undo it, set `nchf.north_carolina_roster_rollback_authorization` to `authorize-development-north-carolina-roster-rollback` and run the batch rollback. A session setting does not prove which database is connected.
 
 ## Disposable validation
 
-PostgreSQL 17 on `127.0.0.1` validated the synthetic load, the idempotent repeat, the conflict rollback, the Washington row remaining after North Carolina rollback, unchanged stand-in Washington and Oregon views, and no privileges for any role other than the local table owner. The same run then loaded the official workbooks: 1,086 inserted, the repeat was already present, no public rows, and rollback removed only North Carolina. The validator printed `NC_OFFICIAL_READY 1086 2 902 184` and `NORTH_CAROLINA_ROSTER_PILOT_READY`. The cluster was removed. Supabase was not loaded.
+PostgreSQL 17 on `127.0.0.1` applied the table proposal and the unapplied batch-column proposal. The adapter inserted the synthetic pilot batch, treated a repeat as already present, and rolled back a changed row without altering the stored name. Rollback removed only the pilot batch. An unrelated North Carolina row, a Washington row, and an Oregon row remained. Washington and Oregon stand-in views were unchanged. No privilege was added for any role other than the local table owner. The column rollback refused while a batch id was present. The official workbooks still produced `NC_OFFICIAL_READY 1086 2 902 184` and `NORTH_CAROLINA_ROSTER_PILOT_READY`. The cluster was removed. Supabase was not changed.
+
+## Outstanding risks
+
+The batch column is not on the development table yet, so the adapter cannot load development until that proposal is authorized and applied. The roster table is still absent from `schema_migrations`. `service_role` bypasses row security but has no table privilege. Official export date, per-row status, and facility-specific disclosure remain unresolved, so the rows stay unpublished. North Carolina has no directory or map route.
