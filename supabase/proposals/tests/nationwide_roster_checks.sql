@@ -18,6 +18,28 @@ begin
     if preserved is distinct from current_definition then
       raise exception 'FAIL % definition changed', relation_name;
     end if;
+    if (select relation_acl from nchf_roster_fixture.preserved where name = relation_name)
+       is distinct from (
+         select cls.relacl::text
+         from pg_class as cls
+         join pg_namespace as namespace on namespace.oid = cls.relnamespace
+         where namespace.nspname = 'public' and cls.relname = relation_name
+       ) then
+      raise exception 'FAIL % privileges changed', relation_name;
+    end if;
+  end loop;
+
+  foreach relation_name in array ARRAY['anon', 'authenticated', 'service_role']
+  loop
+    if has_table_privilege(relation_name, 'public.nationwide_roster', 'SELECT')
+       or has_table_privilege(relation_name, 'public.nationwide_roster', 'INSERT')
+       or has_table_privilege(relation_name, 'public.nationwide_roster', 'UPDATE')
+       or has_table_privilege(relation_name, 'public.nationwide_roster', 'DELETE')
+       or has_table_privilege(relation_name, 'public.nationwide_roster', 'TRUNCATE')
+       or has_table_privilege(relation_name, 'public.nationwide_roster', 'REFERENCES')
+       or has_table_privilege(relation_name, 'public.nationwide_roster', 'TRIGGER') then
+      raise exception 'FAIL % retains a nationwide_roster privilege', relation_name;
+    end if;
   end loop;
 
   if (select count(*) from public.nationwide_roster) <> 0 then

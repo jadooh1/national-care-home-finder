@@ -204,6 +204,9 @@ begin
   if exists (select 1 from pg_roles where rolname = 'authenticated') then
     revoke all on table public.nationwide_roster from authenticated;
   end if;
+  if exists (select 1 from pg_roles where rolname = 'service_role') then
+    revoke all on table public.nationwide_roster from service_role;
+  end if;
 end
 $grants$;
 

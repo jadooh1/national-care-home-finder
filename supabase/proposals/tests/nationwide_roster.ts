@@ -117,6 +117,9 @@ test("the proposal and rollback stay unexecuted and limited to the new table", (
   assert.equal(rollback.includes("authorize-development-nationwide-roster-populated-rollback"), true);
   assert.equal(proposal.includes("disclosure_verification_evidence"), true);
   assert.equal(proposal.includes("issuing_authority"), true);
+  assert.equal(proposal.includes("revoke all on table public.nationwide_roster from service_role"), true);
+  assert.equal(/revoke\s+all\s+on\s+table\s+public\.(wa_|or_)/i.test(proposal), false);
+  assert.equal(plan.includes("nationwide_roster_ingest"), true);
   assert.equal(/drop\s+(table|view).*(wa_|or_odhs|facilities)/i.test(rollback), false);
   assert.equal(plan.includes("Validation procedure"), true);
   assert.equal(plan.includes("Rollback"), true);

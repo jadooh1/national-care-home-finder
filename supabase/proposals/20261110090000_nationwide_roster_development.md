@@ -16,7 +16,9 @@ A facility-specific disclosure link requires a URL and recorded verification evi
 
 The same identifier value can be stored for different issuing authorities, different identifier types, or different states. The same state, issuing authority, identifier type, and identifier value cannot be stored twice.
 
-Row level security is enabled and no public policy is created.
+Row level security is enabled and no public policy is created. The proposal revokes all privileges on `public.nationwide_roster` from `anon`, `authenticated`, and `service_role`. It does not change privileges on any other table or view.
+
+A later authorized ingestion change can add one non-login role, `nationwide_roster_ingest`, and grant that role only `SELECT` and `INSERT` on `public.nationwide_roster`. That grant must name this table only. It must not grant `anon`, `authenticated`, or `service_role`, and it must not change default privileges. The ingestion role must not bypass row security. This proposal does not create that role or that grant.
 
 ## Execution plan
 
@@ -34,7 +36,8 @@ Do not run this plan until a person authorizes that exact development action.
 After a future authorized run, and before any roster row is loaded:
 
 - `public.nationwide_roster` exists, row level security is on, and the table has no rows.
-- `anon` and `authenticated` have no privileges on it.
+- `anon`, `authenticated`, and `service_role` have no privileges on it.
+- Privileges on the Washington and Oregon relations are unchanged.
 - The Washington listed count and the Oregon listed count are unchanged.
 - No directory or map path was added.
 - A rolled-back probe rejects a certification stored in `license_identifier`, a date of `2026-02-31`, a public row with a generic search disclosure, and a supplemental address copied into the physical address.
