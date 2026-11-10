@@ -8,8 +8,6 @@ Do not run it against Supabase unless that person authorizes the exact
 development action. This module does not open a connection by itself.
 """
 
-import os
-
 from north_carolina_roster import (
     PILOT_BATCH,
     combine,
@@ -18,7 +16,7 @@ from north_carolina_roster import (
     rollback,
     summary,
 )
-from roster_ingestion import assert_authorized_target, verify_development_identity
+from roster_ingestion import assert_authorized_target, preflight_before_write
 
 EXECUTION_AUTHORIZATION = "authorize-development-north-carolina-roster-execution"
 DEVELOPMENT_HOST = "aws-1-us-west-2.pooler.supabase.com"
@@ -35,8 +33,7 @@ def assert_execution_target():
 
 def execute(adult_path, family_path, database):
     assert_execution_target()
-    if os.environ.get("NCHF_NC_EXECUTION_TARGET") == "development":
-        verify_development_identity(database, guard=assert_execution_target)
+    preflight_before_write(database, assert_execution_target)
     mapped = combine([map_source(adult_path, "adult"), map_source(family_path, "family")])
     totals = summary(mapped)
     if totals["publication_public"] != 0 or totals["publication_unpublished"] != totals["accepted"]:
@@ -48,5 +45,7 @@ def execute(adult_path, family_path, database):
 
 
 def execute_rollback(database):
+    assert_execution_target()
+    preflight_before_write(database, assert_execution_target)
     rollback(database, guard=assert_execution_target)
     return {"batch_id": PILOT_BATCH}

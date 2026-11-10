@@ -5,10 +5,8 @@ adapter runs only when a person sets both the execution authorization and an
 explicit target. It does not open a connection by itself.
 """
 
-import os
-
 from delaware_roster import PILOT_BATCH, ingest, map_path, rollback, summary
-from roster_ingestion import assert_authorized_target, verify_development_identity
+from roster_ingestion import assert_authorized_target, preflight_before_write
 
 EXECUTION_AUTHORIZATION = "authorize-development-delaware-roster-execution"
 DEVELOPMENT_HOST = "aws-1-us-west-2.pooler.supabase.com"
@@ -25,8 +23,7 @@ def assert_execution_target():
 
 def execute(listing_path, database):
     assert_execution_target()
-    if os.environ.get("NCHF_DE_EXECUTION_TARGET") == "development":
-        verify_development_identity(database, guard=assert_execution_target)
+    preflight_before_write(database, assert_execution_target)
     mapped = map_path(listing_path)
     totals = summary(mapped)
     if totals["publication_public"] != 0 or totals["physical_addresses"] != 0:
@@ -40,5 +37,7 @@ def execute(listing_path, database):
 
 
 def execute_rollback(database):
+    assert_execution_target()
+    preflight_before_write(database, assert_execution_target)
     rollback(database, guard=assert_execution_target)
     return {"batch_id": PILOT_BATCH}
