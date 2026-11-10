@@ -104,5 +104,8 @@ jobs:
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
+      - name: Check the North Carolina roster mapping
+        run: python -m unittest discover -s scripts/nationwide -p "test_*.py"
+
       - name: Build
         run: npm run build
