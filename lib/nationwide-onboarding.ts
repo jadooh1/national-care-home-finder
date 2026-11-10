@@ -267,3 +267,44 @@ export function adoptPennsylvaniaExportDate(catalogTimestamp: string): null {
   void catalogTimestamp;
   return null;
 }
+
+export const PENNSYLVANIA_PUBLICATION_REQUIREMENTS = [
+  { requirement: "license-identifier", blocker: "open-data-object-id-is-not-a-license-number" },
+  { requirement: "per-row-licensing-status", blocker: "no-per-row-licensing-status" },
+  { requirement: "facility-disclosure-link", blocker: "no-per-facility-disclosure-link-is-recorded" },
+  { requirement: "iso-export-date", blocker: "catalog-timestamp-is-not-an-export-date" },
+] as const;
+
+export const NORTH_CAROLINA_FEASIBILITY = {
+  state: "North Carolina",
+  selected: false,
+  publicationFeasible: false,
+  adultCareHomes: 566,
+  familyCareHomes: 520,
+  uniqueLicenseIdentifiers: 1086,
+  siteAddresses: 1086,
+  perRowStatus: false,
+  disclosureVerified: false,
+  listingsPageUpdated: "10/28/2026",
+  workbookAsOf: "10/2026",
+  recordedExportDate: null,
+} as const;
+
+export const IOWA_FEASIBILITY = {
+  state: "Iowa",
+  selected: false,
+  publicationFeasible: false,
+  certifiedPrograms: 335,
+  certificationIdentifiers: 335,
+  facilityAddresses: 335,
+  fiveDigitZips: 85,
+  nineDigitZips: 250,
+  perRowStatus: false,
+  disclosureVerified: false,
+  recordedExportDate: null,
+} as const;
+
+export function adoptListingDate(observedDate: string): null {
+  void observedDate;
+  return null;
+}
