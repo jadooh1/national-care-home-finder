@@ -7,6 +7,7 @@ import {
   CALIFORNIA_CDSS_HEADER,
   CALIFORNIA_RCFE_PROFILE,
   adoptExportDate,
+  publicationReadiness,
   validateStateSource,
 } from "../../../lib/state-source-validation.ts";
 
@@ -150,6 +151,71 @@ test("address and ZIP checks keep the official text and do not invent a coordina
   assert.equal(report.blank_addresses, 0);
   assert.equal(report.coordinate_columns, false);
   assert.equal(report.directory_ready, false);
+});
+
+test("publication readiness excludes exceptions and keeps their original text", () => {
+  const report = validateStateSource(CALIFORNIA_ARF_PROFILE, [
+    HEADER,
+    row({
+      facility_type: "ADULT RESIDENTIAL",
+      facility_number: "400",
+      facility_name: "Licensed Home",
+      facility_address: "4 Main St",
+      facility_state: "CA",
+      facility_zip: "95814",
+      facility_status: "LICENSED",
+      file_date: "05252025",
+    }),
+    row({
+      facility_type: "ADULT DAY PROGRAM",
+      facility_number: "401",
+      facility_name: "Day Program",
+      facility_address: "5 Main St",
+      facility_state: "CA",
+      facility_zip: "95814",
+      facility_status: "LICENSED",
+      file_date: "05252025",
+    }),
+    row({
+      facility_type: "ADULT RESIDENTIAL",
+      facility_number: "402",
+      facility_name: "Shifted Home",
+      facility_address: "6 Main St",
+      facility_state: "92354",
+      facility_zip: "9/2/1997",
+      facility_status: "9/2/1997",
+      file_date: "05252025",
+    }),
+    row({
+      facility_type: "",
+      facility_number: "403",
+      facility_name: "Blank Category",
+      facility_address: "7 Main St",
+      facility_state: "CA",
+      facility_zip: "95814",
+      facility_status: "PENDING",
+      file_date: "05252025",
+    }),
+  ]);
+  const readiness = publicationReadiness(CALIFORNIA_ARF_PROFILE, report);
+  assert.equal(readiness.eligible, 1);
+  assert.equal(readiness.eligible_by_status.LICENSED, 1);
+  assert.equal(readiness.excluded, 3);
+  assert.equal(readiness.excluded_by_reason.unverified_category, 2);
+  assert.equal(readiness.excluded_by_reason.unrecognized_status, 1);
+  assert.equal(readiness.unresolved_exceptions.blank_categories, 1);
+  assert.equal(readiness.unresolved_exceptions.unrecognized_status, 1);
+  assert.equal(readiness.unresolved_exceptions.unexpected_state, 1);
+  assert.equal(readiness.unresolved_exceptions.non_five_digit_zips, 1);
+  assert.equal(report.records[1]?.license_category, "ADULT DAY PROGRAM");
+  assert.equal(report.records[2]?.official_fields.facility_status, "9/2/1997");
+  assert.equal(report.records[2]?.official_fields.facility_state, "92354");
+  assert.equal(report.records[2]?.official_fields.facility_zip, "9/2/1997");
+  assert.equal(report.records[3]?.license_category, "");
+  assert.equal(readiness.source_fields_rewritten, false);
+  assert.equal(readiness.disclosure_url, null);
+  assert.equal(readiness.recorded_export_date, null);
+  assert.equal(readiness.directory_ready, false);
 });
 
 test("a mismatched header accepts nothing", () => {
