@@ -8,8 +8,6 @@ Do not run it against Supabase unless that person authorizes the exact
 development action. This module does not open a connection by itself.
 """
 
-import os
-
 from north_carolina_roster import (
     PILOT_BATCH,
     combine,
@@ -18,6 +16,7 @@ from north_carolina_roster import (
     rollback,
     summary,
 )
+from roster_ingestion import assert_authorized_target, preflight_before_write
 
 EXECUTION_AUTHORIZATION = "authorize-development-north-carolina-roster-execution"
 DEVELOPMENT_HOST = "aws-1-us-west-2.pooler.supabase.com"
@@ -25,27 +24,16 @@ DEVELOPMENT_USER = "postgres.ajjsyloyihcqdomywhik"
 
 
 def assert_execution_target():
-    host = os.environ.get("PGHOST", "")
-    user = os.environ.get("PGUSER", "")
-    target = os.environ.get("NCHF_NC_EXECUTION_TARGET", "")
-    authorization = os.environ.get("NCHF_NC_DEVELOPMENT_EXECUTION", "")
-    lowered = f"{host} {user}".lower()
-    if "us-west-1" in lowered or "yiehgstweswxjakbcdzc" in lowered:
-        raise RuntimeError("development execution refused: production is not a target")
-    if authorization != EXECUTION_AUTHORIZATION:
-        raise RuntimeError("development execution refused: explicit authorization is required")
-    if target == "disposable" and host in {"localhost", "127.0.0.1", "::1"}:
-        return
-    if (
-        target == "development"
-        and host == DEVELOPMENT_HOST
-        and user == DEVELOPMENT_USER
-    ):
-        return
-    raise RuntimeError("development execution refused: the target is not authorized")
+    assert_authorized_target(
+        "NCHF_NC_EXECUTION_TARGET",
+        "NCHF_NC_DEVELOPMENT_EXECUTION",
+        EXECUTION_AUTHORIZATION,
+    )
 
 
 def execute(adult_path, family_path, database):
+    assert_execution_target()
+    preflight_before_write(database, assert_execution_target)
     mapped = combine([map_source(adult_path, "adult"), map_source(family_path, "family")])
     totals = summary(mapped)
     if totals["publication_public"] != 0 or totals["publication_unpublished"] != totals["accepted"]:
@@ -57,5 +45,7 @@ def execute(adult_path, family_path, database):
 
 
 def execute_rollback(database):
+    assert_execution_target()
+    preflight_before_write(database, assert_execution_target)
     rollback(database, guard=assert_execution_target)
     return {"batch_id": PILOT_BATCH}
