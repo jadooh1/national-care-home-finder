@@ -2,15 +2,20 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
+  MICHIGAN_ADDRESS_COUNTS,
+  MICHIGAN_ADDRESS_INTERPRETATION,
   MICHIGAN_DESCRIBED_TYPES,
   MICHIGAN_OFFICIAL_VALIDATION,
   MICHIGAN_PROFILE_PREFIX,
   MICHIGAN_RECORDED_EXPORT_DATE,
+  MICHIGAN_STREET_TEXT_BY_TYPE,
   MICHIGAN_UNDESCRIBED_TYPE,
   adoptMichiganExportDate,
   michiganDirectoryReady,
   michiganFacilityProfileUrl,
   normalizedZip,
+  retainedAddressFields,
+  usablePhysicalStreet,
   validateMichiganRoster,
 } from "../../../lib/michigan-licensing.ts";
 import { MICHIGAN_PROFILE_PREFIX as FRAMEWORK_PREFIX, onboardingProfile, publicPublicationPermitted } from "../../../lib/nationwide-onboarding.ts";
@@ -114,6 +119,7 @@ test("Michigan stays unpublished and the existing states keep their contracts", 
   const michigan = onboardingProfile("Michigan");
   assert.equal(publicPublicationPermitted(michigan), false);
   assert.ok(michigan.blockers.includes("street-address-column-is-not-filled-from-the-supplemental-column"));
+  assert.ok(michigan.blockers.includes("supplemental-address-is-not-defined-as-a-physical-or-mailing-address"));
   assert.ok(michigan.blockers.includes("nine-digit-zips-are-not-corrected"));
   assert.equal(directoryContract("Michigan")?.publication, "unpublished");
   assert.equal(directoryContract("Michigan")?.directoryPath, null);
@@ -129,6 +135,8 @@ test("Michigan stays unpublished and the existing states keep their contracts", 
   assert.equal(page.includes("not an available placement"), true);
   assert.equal(page.includes("No category name is assigned"), true);
   assert.equal(page.includes("original value is not modified"), true);
+  assert.equal(page.includes("Publication-eligible records"), true);
+  assert.equal(page.includes("not copied into the street column"), true);
   assert.equal(page.includes("supabase"), false);
   assert.equal(page.includes("fetch("), false);
   assert.equal(page.includes("latitude"), false);
@@ -137,4 +145,27 @@ test("Michigan stays unpublished and the existing states keep their contracts", 
   assert.equal(source.includes("fetch("), false);
   assert.equal(source.includes("supabase"), false);
   assert.equal(source.includes("insert"), false);
+});
+
+test("a supplemental value is not copied into a blank street field", () => {
+  const described = MICHIGAN_DESCRIBED_TYPES.reduce((sum, type) => sum + MICHIGAN_STREET_TEXT_BY_TYPE[type.code], 0);
+  const total = described + MICHIGAN_STREET_TEXT_BY_TYPE.XH;
+  assert.equal(MICHIGAN_ADDRESS_INTERPRETATION, "unresolved");
+  assert.equal(total, MICHIGAN_ADDRESS_COUNTS.usablePhysicalStreetRows);
+  assert.equal(total, OBSERVED.streetLetterAndDigit);
+  assert.equal(described, MICHIGAN_ADDRESS_COUNTS.describedUsablePhysicalStreetRows);
+  assert.equal(MICHIGAN_STREET_TEXT_BY_TYPE.XH, MICHIGAN_ADDRESS_COUNTS.undescribedStreetTextRows);
+  assert.equal(MICHIGAN_ADDRESS_COUNTS.unresolvedBlankStreetRows, OBSERVED.streetBlank);
+  assert.equal(MICHIGAN_ADDRESS_COUNTS.usablePhysicalStreetRows + MICHIGAN_ADDRESS_COUNTS.unresolvedBlankStreetRows, OBSERVED.rows);
+  assert.equal(MICHIGAN_ADDRESS_COUNTS.publicationEligibleRows, 0);
+  assert.equal(MICHIGAN_ADDRESS_COUNTS.supplementalEqualsStreet, 0);
+  assert.equal(MICHIGAN_ADDRESS_COUNTS.profileShowsStreetBeforeSupplemental + MICHIGAN_ADDRESS_COUNTS.profileShowsSupplementalBeforeStreet, OBSERVED.streetLetterAndDigit);
+  const blank = { street: "", supplemental: "100 Oak Street" };
+  const kept = retainedAddressFields(blank);
+  assert.equal(kept.usablePhysicalStreet, null);
+  assert.equal(kept.publicationEligible, false);
+  assert.equal(blank.street, "");
+  assert.equal(blank.supplemental, "100 Oak Street");
+  assert.equal(usablePhysicalStreet(" 12 Oak Street "), "12 Oak Street");
+  assert.equal(usablePhysicalStreet("Oak"), null);
 });

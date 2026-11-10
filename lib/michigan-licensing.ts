@@ -72,6 +72,54 @@ export const MICHIGAN_OFFICIAL_VALIDATION = {
   profilePathsReturned200: 8,
 } as const;
 
+export const MICHIGAN_ADDRESS_FIELD_KEY = {
+  supplemental: "Facility Supplemental Address",
+  street: "Street Address",
+  licensee: "Licensee Address",
+  licenseeSupplemental: "Licensee Supplemental Address",
+} as const;
+
+export const MICHIGAN_ADDRESS_INTERPRETATION = "unresolved" as const;
+
+export const MICHIGAN_STREET_TEXT_BY_TYPE = {
+  AF: 6,
+  AS: 17,
+  AM: 7,
+  AL: 19,
+  AG: 0,
+  AI: 0,
+  AH: 6,
+  XH: 2,
+} as const;
+
+export const MICHIGAN_ADDRESS_COUNTS = {
+  usablePhysicalStreetRows: 57,
+  describedUsablePhysicalStreetRows: 55,
+  undescribedStreetTextRows: 2,
+  unresolvedBlankStreetRows: 4423,
+  publicationEligibleRows: 0,
+  supplementalEqualsLicenseeAddress: 904,
+  streetEqualsLicenseeAddress: 4,
+  supplementalEqualsStreet: 0,
+  profileShowsStreetBeforeSupplemental: 56,
+  profileShowsSupplementalBeforeStreet: 1,
+} as const;
+
+export function usablePhysicalStreet(street: string): string | null {
+  const value = street.trim();
+  if (/[A-Za-z]/.test(value) && /\d/.test(value)) return value;
+  return null;
+}
+
+export function retainedAddressFields(row: { street: string; supplemental: string }) {
+  return {
+    street: row.street,
+    supplemental: row.supplemental,
+    usablePhysicalStreet: usablePhysicalStreet(row.street),
+    publicationEligible: false as const,
+  };
+}
+
 export type MichiganRowCheck = {
   typeCode: string;
   describedType: boolean;
