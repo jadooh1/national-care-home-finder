@@ -34,6 +34,14 @@ export function invalidZipMessage(currentZip: string): string {
 const FIVE_DIGIT_ZIP = /^\d{5}$/;
 const NINE_DIGIT_ZIP = /^\d{9}$/;
 
+export const WASHINGTON_MAP_DEFAULT_ZIP = "98056";
+export const WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP = "98038";
+
+export function washingtonZipFromSearch(value: string | null | undefined, fallback: string): string {
+  const candidate = value?.trim() ?? "";
+  return FIVE_DIGIT_ZIP.test(candidate) ? candidate : fallback;
+}
+
 export function washingtonMapZipMatch(storedPostalCode: string | null | undefined, searchZip: string): boolean {
   if (!FIVE_DIGIT_ZIP.test(searchZip)) return false;
   const stored = storedPostalCode?.trim() ?? "";

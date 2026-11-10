@@ -5,6 +5,7 @@ import Link from "next/link";
 import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { supabase } from "../../../lib/supabase";
+import { WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP, washingtonZipFromSearch } from "../../../lib/family-journey";
 import { copy } from "../../../lib/copy/washington-detail";
 import type { Locale } from "../../../lib/locale";
 
@@ -44,11 +45,17 @@ export default function WashingtonDemographicsPage() {
   const fmt = (n: number | null | undefined) => n == null ? text.notAvailable : locale === "es" ? n.toLocaleString("es") : n.toLocaleString();
   const amount = (n: number) => locale === "es" ? n.toLocaleString("es") : n.toLocaleString();
   const [rows, setRows] = useState<Market[]>([]);
-  const [zipInput, setZipInput] = useState("98038");
-  const [zip, setZip] = useState("98038");
+  const [zipInput, setZipInput] = useState("");
+  const [zip, setZip] = useState<string | null>(null);
   const [sort, setSort] = useState<"senior" | "afh" | "beds">("senior");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<"" | "invalid" | "unavailable">("");
+
+  useEffect(() => {
+    const resolved = washingtonZipFromSearch(new URLSearchParams(window.location.search).get("zip"), WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP);
+    setZipInput(resolved);
+    setZip(resolved);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -97,11 +104,11 @@ export default function WashingtonDemographicsPage() {
           <input id="zip-analysis" value={zipInput} onChange={e => setZipInput(e.target.value)} inputMode="numeric" maxLength={5} placeholder={text.zipPlaceholder} style={{ padding: 12, fontSize: 17, border: `1px solid ${border}`, borderRadius: 9, color: navy }}/>
         </label>
         <button type="submit" style={{ background: teal, color: "white", border: 0, borderRadius: 9, padding: "14px 22px", fontWeight: 700, cursor: "pointer" }}>{text.analyze}</button>
-        <Link href={`/washington/map?zip=${encodeURIComponent(zip)}`} style={{ color: teal, fontWeight: 700, padding: "12px 0" }}>{text.openMap}</Link>
+        {zip && <Link href={`/washington/map?zip=${encodeURIComponent(zip)}`} style={{ color: teal, fontWeight: 700, padding: "12px 0" }}>{text.openMap}</Link>}
       </form>
       {loading && <p role="status">{text.loading}</p>}
       {error && <p role="alert" style={{ color: "#a62a2a" }}>{error === "invalid" ? text.invalidZip : text.unavailable}</p>}
-      {!loading && !error && !current && <p role="status">{text.noMatch(zip)}</p>}
+      {!loading && zip && !error && !current && <p role="status">{text.noMatch(zip)}</p>}
       {!loading && current && <>
         <h2 style={{ marginTop: 28 }}>{text.overview(current.zip_code)}</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(170px,1fr))", gap: 12 }}>

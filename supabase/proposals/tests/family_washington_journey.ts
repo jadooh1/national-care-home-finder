@@ -9,8 +9,11 @@ import {
   invalidZipMessage,
   mapResultSummary,
   stateFilterStatus,
+  WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP,
+  WASHINGTON_MAP_DEFAULT_ZIP,
   washingtonMapPostalOrFilter,
   washingtonMapZipMatch,
+  washingtonZipFromSearch,
 } from "../../../lib/family-journey.ts";
 
 test("only a numeric license opens a facility profile", () => {
@@ -56,6 +59,31 @@ test("a five-digit map search matches a stored ZIP and its nine-digit ZIP+4", ()
   const map = readFileSync("app/washington/map/page.tsx", "utf8");
   assert.equal(map.includes("washingtonMapPostalOrFilter"), true);
   assert.equal(map.includes('.eq("postal_code", zip)'), false);
+});
+
+test("map and demographics navigation keeps a valid ZIP query", () => {
+  assert.equal(washingtonZipFromSearch("98101", WASHINGTON_MAP_DEFAULT_ZIP), "98101");
+  assert.equal(washingtonZipFromSearch(" 98101 ", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98101");
+  assert.equal(washingtonZipFromSearch(null, WASHINGTON_MAP_DEFAULT_ZIP), "98056");
+  assert.equal(washingtonZipFromSearch(undefined, WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98038");
+  assert.equal(washingtonZipFromSearch("", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
+  assert.equal(washingtonZipFromSearch("9805", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98038");
+  assert.equal(washingtonZipFromSearch("980560", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
+  assert.equal(washingtonZipFromSearch("98056-1234", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98038");
+  assert.equal(washingtonZipFromSearch("980561234", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
+  assert.equal(washingtonZipFromSearch("98a56", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
+  const map = readFileSync("app/washington/map/page.tsx", "utf8");
+  const demographics = readFileSync("app/washington/demographics/page.tsx", "utf8");
+  const opportunity = readFileSync("app/washington/opportunity/page.tsx", "utf8");
+  assert.equal(map.includes("washingtonZipFromSearch"), true);
+  assert.equal(map.includes('get("zip")'), true);
+  assert.equal(map.includes("WASHINGTON_MAP_DEFAULT_ZIP"), true);
+  assert.equal(map.includes("if (!zip) return;"), true);
+  assert.equal(demographics.includes("washingtonZipFromSearch"), true);
+  assert.equal(demographics.includes('get("zip")'), true);
+  assert.equal(demographics.includes("WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP"), true);
+  assert.equal(demographics.includes("/washington/map?zip="), true);
+  assert.equal(opportunity.includes("/washington/demographics?zip="), true);
 });
 
 test("the concentration legend uses the same colors as the markers", () => {
