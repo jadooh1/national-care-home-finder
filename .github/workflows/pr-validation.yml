@@ -86,6 +86,9 @@ jobs:
       - name: Check the state onboarding gate
         run: node --experimental-strip-types --test supabase/proposals/tests/state_onboarding.ts
 
+      - name: Check the nationwide state onboarding framework
+        run: node --experimental-strip-types --test supabase/proposals/tests/nationwide_onboarding.ts
+
       - name: Check the California CDSS source validation
         run: node --experimental-strip-types --test supabase/proposals/tests/california_cdss_roster.ts
 
