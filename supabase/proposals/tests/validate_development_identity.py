@@ -76,9 +76,28 @@ def apply_roster():
     )
 
 
+def ensure_postgres_login():
+    password = os.environ.get("PGPASSWORD", "").replace("'", "''")
+    psql(
+        "postgres",
+        f"""
+        do $$
+        begin
+          if not exists (select 1 from pg_roles where rolname = 'postgres') then
+            create role postgres login superuser;
+          else
+            alter role postgres with login superuser;
+          end if;
+        end
+        $$;
+        alter role postgres with password '{password}';
+        """,
+    )
+
+
 def main():
     refuse_remote()
-    psql("postgres", "create role postgres login superuser;")
+    ensure_postgres_login()
     psql("postgres", "create database identity_decoy;")
     os.environ["PGUSER"] = "postgres"
     expect("project identity", lambda: verify_development_session("identity_decoy"))
