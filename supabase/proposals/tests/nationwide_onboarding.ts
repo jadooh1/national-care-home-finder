@@ -9,8 +9,16 @@ import {
   MICHIGAN_NINE_DIGIT_ZIPS,
   MICHIGAN_OBSERVED_STATUSES,
   MICHIGAN_OBSERVED_TYPES,
+  MICHIGAN_OFFICIAL_SOURCE_BLOCKERS,
   MICHIGAN_PROFILE_PREFIX,
   MICHIGAN_RECORDED_EXPORT_DATE,
+  NEXT_STATE_REVIEW,
+  PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT,
+  PENNSYLVANIA_LETTER_ONLY_STREET_ROWS,
+  PENNSYLVANIA_PUBLICATION_ELIGIBLE_ROWS,
+  PENNSYLVANIA_ROWS,
+  PENNSYLVANIA_USABLE_STREET_ROWS,
+  adoptPennsylvaniaExportDate,
   michiganDescribedRows,
   michiganProfileUrl,
   onboardingProfile,
@@ -72,7 +80,39 @@ test("Michigan stays unpublished and its file observation is not treated as avai
   assert.equal(MICHIGAN_OBSERVED_TYPES.find(category => category.code === "XH")?.label, null);
   assert.equal(MICHIGAN_OBSERVED_TYPES.find(category => category.code === "XH")?.eligible, false);
   assert.ok(michigan.blockers.includes("undescribed-type-code-xh-is-not-corrected"));
+  assert.ok(michigan.blockers.includes("supplemental-address-is-not-defined-as-a-physical-or-mailing-address"));
   assert.ok(michigan.blockers.includes("file-server-clock-is-not-an-export-date"));
+  assert.deepEqual([...MICHIGAN_OFFICIAL_SOURCE_BLOCKERS].sort(), [
+    "supplemental-address-is-not-defined-as-a-physical-or-mailing-address",
+    "undescribed-type-code-xh-is-not-corrected",
+  ]);
+  for (const blocker of MICHIGAN_OFFICIAL_SOURCE_BLOCKERS) {
+    assert.ok(michigan.blockers.includes(blocker));
+  }
+});
+
+test("Pennsylvania is the selected unpublished candidate and the other two states are not", () => {
+  const pennsylvania = onboardingProfile("Pennsylvania");
+  assert.equal(pennsylvania.role, "candidate");
+  assert.equal(pennsylvania.publication, "unpublished");
+  assert.equal(pennsylvania.coordinateColumns, false);
+  assert.equal(pennsylvania.recordedExportDate, null);
+  assert.equal(pennsylvania.disclosurePrefix, null);
+  assert.equal(pennsylvania.disclosureVerified, false);
+  assert.equal(publicPublicationPermitted(pennsylvania), false);
+  assert.equal(directoryContract("Pennsylvania")?.publication, "unpublished");
+  assert.equal(directoryContract("Pennsylvania")?.directoryPath, null);
+  assert.equal(directoryHref("Pennsylvania", "https://ajjsyloyihcqdomywhik.supabase.co"), null);
+  assert.equal(PENNSYLVANIA_USABLE_STREET_ROWS + PENNSYLVANIA_LETTER_ONLY_STREET_ROWS, PENNSYLVANIA_ROWS);
+  assert.equal(pennsylvania.categories[0].observedRows, PENNSYLVANIA_ROWS);
+  assert.equal(PENNSYLVANIA_PUBLICATION_ELIGIBLE_ROWS, 0);
+  assert.equal(adoptPennsylvaniaExportDate(PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT), null);
+  assert.ok(pennsylvania.blockers.includes("catalog-timestamp-is-not-an-export-date"));
+  assert.ok(pennsylvania.blockers.includes("georeferenced-coordinates-are-not-licensing-coordinates"));
+  assert.ok(pennsylvania.blockers.includes("letter-only-street-values-are-not-corrected"));
+  assert.deepEqual(NEXT_STATE_REVIEW.map(candidate => candidate.state), ["Pennsylvania", "Wisconsin", "Minnesota"]);
+  assert.deepEqual(NEXT_STATE_REVIEW.map(candidate => candidate.rank), [1, 2, 3]);
+  assert.deepEqual(NEXT_STATE_REVIEW.filter(candidate => candidate.selected).map(candidate => candidate.state), ["Pennsylvania"]);
 });
 
 test("a Michigan profile link is built only from the observed prefix and license shape", () => {
@@ -88,6 +128,9 @@ test("the development review is not linked from the home page and does not publi
   const source = readFileSync(new URL("../../../lib/nationwide-onboarding.ts", import.meta.url), "utf8");
   assert.equal(home.includes("/development/onboarding"), false);
   assert.equal(home.includes("/michigan"), false);
+  assert.equal(home.includes("/pennsylvania"), false);
+  assert.equal(page.includes("Pennsylvania is unpublished"), true);
+  assert.equal(page.includes("Official-source blockers"), true);
   assert.equal(page.includes("Michigan is unpublished"), true);
   assert.equal(page.includes("not an available placement"), true);
   assert.equal(page.includes("supabase"), false);

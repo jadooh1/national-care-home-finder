@@ -12,7 +12,7 @@ export type OnboardingCategory = {
 };
 
 export type OnboardingProfile = {
-  state: "Washington" | "Oregon" | "California" | "Michigan";
+  state: "Washington" | "Oregon" | "California" | "Michigan" | "Pennsylvania";
   role: OnboardingRole;
   publication: PublicationControl;
   categories: readonly OnboardingCategory[];
@@ -62,6 +62,19 @@ const MICHIGAN_BLOCKERS = [
   "address-phone-and-licensee-fields-are-not-accepted",
 ] as const;
 
+export const MICHIGAN_OFFICIAL_SOURCE_BLOCKERS = [
+  "supplemental-address-is-not-defined-as-a-physical-or-mailing-address",
+  "undescribed-type-code-xh-is-not-corrected",
+] as const;
+
+const PENNSYLVANIA_BLOCKERS = [
+  "catalog-timestamp-is-not-an-export-date",
+  "georeferenced-coordinates-are-not-licensing-coordinates",
+  "no-per-facility-disclosure-link-is-recorded",
+  "letter-only-street-values-are-not-corrected",
+  "phone-and-capacity-fields-are-not-accepted",
+] as const;
+
 export const MICHIGAN_SOURCE_URL = "https://documents.apps.lara.state.mi.us/bchs/afc_sw.txt";
 export const MICHIGAN_RECORD_DESCRIPTION_URL =
   "https://www.michigan.gov/lara/bureau-list/bchs/adult/online-lookups/adult-foster-care-record-description";
@@ -93,6 +106,18 @@ export const MICHIGAN_OBSERVED_STATUSES = [
   { code: "EXEMPT", observedRows: 234 },
   { code: "NONE", observedRows: 2 },
 ] as const;
+
+export const PENNSYLVANIA_DATASET_URL =
+  "https://data.pa.gov/Services-Near-You/Licensed-Personal-Care-Homes-Current-Statewide-Hum/pqf4-d4xn";
+export const PENNSYLVANIA_SOURCE_URL = "https://data.pa.gov/api/views/pqf4-d4xn/rows.csv?accessType=DOWNLOAD";
+export const PENNSYLVANIA_PROVIDER_DIRECTORY =
+  "https://www.humanservices.dhs.pa.gov/human_service_provider_directory/";
+export const PENNSYLVANIA_RECORDED_EXPORT_DATE = null;
+export const PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT = "2026-11-08T06:09:03Z";
+export const PENNSYLVANIA_ROWS = 989;
+export const PENNSYLVANIA_USABLE_STREET_ROWS = 976;
+export const PENNSYLVANIA_LETTER_ONLY_STREET_ROWS = 13;
+export const PENNSYLVANIA_PUBLICATION_ELIGIBLE_ROWS = 0;
 
 const PROFILES = [
   {
@@ -154,6 +179,21 @@ const PROFILES = [
     disclosureVerified: true,
     blockers: MICHIGAN_BLOCKERS,
   },
+  {
+    state: "Pennsylvania",
+    role: "candidate",
+    publication: "unpublished",
+    categories: [
+      { code: "personal-care-home", label: "Personal care home", eligible: true, observedRows: PENNSYLVANIA_ROWS },
+    ],
+    sourceUrl: PENNSYLVANIA_SOURCE_URL,
+    sourceFormat: "comma-delimited-open-data",
+    coordinateColumns: false,
+    recordedExportDate: PENNSYLVANIA_RECORDED_EXPORT_DATE,
+    disclosurePrefix: null,
+    disclosureVerified: false,
+    blockers: PENNSYLVANIA_BLOCKERS,
+  },
 ] as const satisfies readonly OnboardingProfile[];
 
 export function onboardingProfiles(): readonly OnboardingProfile[] {
@@ -184,4 +224,42 @@ export function michiganProfileUrl(license: string): string | null {
 
 export function michiganDescribedRows(): number {
   return MICHIGAN_OBSERVED_TYPES.filter(category => category.eligible).reduce((sum, category) => sum + category.observedRows, 0);
+}
+
+export const NEXT_STATE_REVIEW = [
+  {
+    state: "Pennsylvania",
+    rank: 1,
+    selected: true,
+    source: "Department of Human Services open-data CSV",
+    rows: 989,
+    usableStreetRows: 976,
+    unresolvedStreetRows: 13,
+    note: "One delimited file, one facility class, and street text on 976 rows. The catalog timestamp is not an export date, georeferenced coordinates are not licensing coordinates, and no per-facility disclosure prefix is recorded.",
+  },
+  {
+    state: "Wisconsin",
+    rank: 2,
+    selected: false,
+    source: "DHS adult family home PDF directory and a separate GIS layer",
+    rows: null,
+    usableStreetRows: null,
+    unresolvedStreetRows: null,
+    note: "The PDF directory has 1,980 distinct parenthetical identifiers and a separate mailing-address label. The GIS layer has 2,203 adult family home features, no editing timestamp, and 9 features without a license number. Those counts are not reconciled, so the GIS layer is not the accepted directory.",
+  },
+  {
+    state: "Minnesota",
+    rank: 3,
+    selected: false,
+    source: "DHS Licensing Information Lookup",
+    rows: null,
+    usableStreetRows: null,
+    unresolvedStreetRows: null,
+    note: "The lookup can post back a CSV and links profiles at Details.aspx. One response contained 1,148 profile links. The rendered summary said 1,149 licenses, 1,025 active and 124 non-active. Those figures are not reconciled, and the response had no Last-Modified header.",
+  },
+] as const;
+
+export function adoptPennsylvaniaExportDate(catalogTimestamp: string): null {
+  void catalogTimestamp;
+  return null;
 }
