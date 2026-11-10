@@ -1,11 +1,16 @@
-# Validates the development branch. contents: read.
+# Validates development and the stacked roster pull requests. contents: read.
 # No secrets, deploy, or database access. This does not run for main.
+# Push events stay limited to development.
 name: Pull request validation
 
 on:
   pull_request:
     branches:
       - development
+      - feature/north-carolina-roster-ingestion
+      - feature/delaware-roster-ingestion
+      - feature/nationwide-ingestion-framework
+      - feature/ingestion-baseline-manifest
   push:
     branches:
       - development
