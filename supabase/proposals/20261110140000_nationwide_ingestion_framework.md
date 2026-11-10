@@ -18,9 +18,13 @@ Development already holds 1,125 unpublished roster rows: 1,086 North Carolina an
 - Unknown official export dates, licensing statuses, and facility-specific disclosures stay null or unverified. A generic search page is not treated as a verified disclosure.
 - An unverified listed address is not copied into the physical address.
 - Rollback deletes only unpublished rows for the named state and batch. Removing Delaware does not remove North Carolina.
-- The default database guard accepts only localhost. A development target is accepted only for the development pooler host and login, and only after the development migration marker, roster table, and batch column are present. Production host `us-west-1` and the production project login are refused.
+- Every development import and rollback runs the identity preflight before a write. The preflight is part of the load itself, so an adapter cannot skip it.
+- The development connection must be the development pooler host `aws-1-us-west-2.pooler.supabase.com`, port 5432, database `postgres`, login `postgres.ajjsyloyihcqdomywhik`, and `verify-full` TLS. The production host `us-west-1` and the production project login are refused before a connection is used for a write.
+- The session check then requires `current_database()` and `current_user` to be `postgres`, migration `20261108221940` named `development_oregon_directory`, the roster and its batch column, and the verified baseline: 1,125 roster rows, 1,086 North Carolina, 39 Delaware, 0 public, 6,278 Washington directory rows, 6,278 Washington map rows, and 1,584 Oregon directory rows. A mismatch raises before the import writes. Session settings are not treated as proof of the database.
 - The engine does not create roles and does not grant privileges.
 
 ## Validation
 
 `supabase/proposals/tests/validate_roster_framework.py` applies the existing roster and batch proposals to disposable PostgreSQL, then loads both pilots. It checks a repeat import, a conflicting record, rollback isolation, and rejection of an unauthorized target. Official North Carolina workbooks and the Delaware HTML snapshot are included only when their local paths are supplied. Those files are not committed.
+
+`supabase/proposals/tests/validate_development_identity.py` checks the session preflight on disposable PostgreSQL: the wrong database name, a missing migration, an unexpected baseline, and a matching baseline. It does not connect to Supabase. Unit tests cover a production target and a development import that has no authorization; both raise before a query is sent.
