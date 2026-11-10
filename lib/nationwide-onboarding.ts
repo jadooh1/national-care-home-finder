@@ -58,6 +58,7 @@ const MICHIGAN_BLOCKERS = [
   "undescribed-type-code-xh-is-not-corrected",
   "nine-digit-zips-are-not-corrected",
   "street-address-column-is-not-filled-from-the-supplemental-column",
+  "supplemental-address-is-not-defined-as-a-physical-or-mailing-address",
   "address-phone-and-licensee-fields-are-not-accepted",
 ] as const;
 
