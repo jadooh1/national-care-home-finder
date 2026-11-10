@@ -1,6 +1,42 @@
 export type CompatibilityClass = "A" | "B" | "C" | "D";
 export type CompatibilityPublication = "public" | "development" | "unpublished";
 export type CompatibilityConfidence = "high" | "medium";
+export type EvidenceObservation = "present" | "absent" | "not-verified" | "rejected";
+export type EvidenceConfidence = CompatibilityConfidence | "low";
+
+export const EVIDENCE_FIELDS = [
+  "regulatory-identifier",
+  "identifier-type",
+  "issuing-authority",
+  "source-record-id",
+  "physical-address",
+  "mailing-address",
+  "supplemental-address",
+  "unverified-address",
+  "official-export-date",
+  "source-publication-date",
+  "retrieval-timestamp",
+  "freshness-verification",
+  "facility-disclosure",
+  "generic-search",
+  "unverified-url-pattern",
+  "original-category",
+  "original-status",
+  "normalized-category",
+  "normalized-status",
+  "coordinates",
+  "coordinate-source",
+  "coordinate-accuracy",
+] as const;
+
+export type EvidenceField = (typeof EVIDENCE_FIELDS)[number];
+
+export type FieldEvidence = {
+  field: EvidenceField;
+  observation: EvidenceObservation;
+  confidence: EvidenceConfidence;
+  detail: string | null;
+};
 
 export type StateCompatibility = {
   state: string;
@@ -18,6 +54,7 @@ export type StateCompatibility = {
   coordinateColumns: boolean | null;
   adjustment: string;
   confidence: CompatibilityConfidence;
+  evidence: readonly FieldEvidence[];
 };
 
 export const DIRECTORY_REQUIRES_COORDINATES = false;
@@ -79,7 +116,7 @@ const ASSESSMENTS = [
   row("West Virginia", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Wisconsin", "C", "unpublished", "Wisconsin adult family home PDF and GIS layer", null, null, null, null, null, null, null, "high", "The PDF and GIS counts are not reconciled, so neither source is the accepted directory."),
   row("Wyoming", "D", "unpublished", "Wyoming healthcare facility directory", "https://health.wyo.gov/aging/hls/healthcare-facility-directory/", null, null, null, null, null, null, "medium", "An Excel directory updated November 2, 2026 is linked. Its columns were not read."),
-] as const satisfies readonly StateCompatibility[];
+] as const satisfies readonly Omit<StateCompatibility, "evidence">[];
 
 function row(
   state: string,
@@ -95,7 +132,7 @@ function row(
   coordinateColumns: boolean | null,
   confidence: CompatibilityConfidence,
   adjustment: string,
-): StateCompatibility {
+): Omit<StateCompatibility, "evidence"> {
   return {
     state,
     compatibility,
@@ -115,12 +152,219 @@ function row(
   };
 }
 
+type EvidenceFact = { observation: EvidenceObservation; confidence: EvidenceConfidence; detail: string | null };
+
+function fact(observation: EvidenceObservation, confidence: EvidenceConfidence, detail: string | null = null): EvidenceFact {
+  return { observation, confidence, detail };
+}
+
+const FIELD_EVIDENCE: Record<string, Partial<Record<EvidenceField, EvidenceFact>>> = {
+  Washington: {
+    "regulatory-identifier": fact("present", "high", "license"),
+    "identifier-type": fact("present", "high", "license"),
+    "issuing-authority": fact("present", "high", "Washington DSHS"),
+    "physical-address": fact("present", "high", "physical"),
+    "official-export-date": fact("present", "high", "2026-11-09"),
+    "freshness-verification": fact("present", "high"),
+    "facility-disclosure": fact("present", "high", "facility-specific"),
+    "generic-search": fact("absent", "high"),
+    "original-category": fact("present", "high"),
+    "original-status": fact("present", "high"),
+    "normalized-category": fact("absent", "high"),
+    "normalized-status": fact("absent", "high"),
+    "coordinates": fact("present", "high"),
+    "coordinate-source": fact("present", "high", "licensing"),
+  },
+  Oregon: {
+    "regulatory-identifier": fact("absent", "high"),
+    "identifier-type": fact("present", "high", "source-id"),
+    "issuing-authority": fact("present", "high", "Oregon ODHS"),
+    "source-record-id": fact("present", "high", "source-id"),
+    "physical-address": fact("absent", "high"),
+    "official-export-date": fact("absent", "high"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("present", "high", "facility-specific"),
+    "generic-search": fact("absent", "high"),
+    "original-category": fact("present", "high"),
+    "original-status": fact("present", "high"),
+    "normalized-category": fact("absent", "high"),
+    "normalized-status": fact("absent", "high"),
+    "coordinates": fact("absent", "high"),
+    "coordinate-source": fact("absent", "high"),
+  },
+  California: {
+    "regulatory-identifier": fact("present", "high", "license"),
+    "identifier-type": fact("present", "high", "license"),
+    "issuing-authority": fact("present", "high", "CDSS"),
+    "physical-address": fact("present", "high", "physical"),
+    "official-export-date": fact("rejected", "high"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("absent", "high"),
+    "original-category": fact("present", "high"),
+    "original-status": fact("present", "high"),
+    "normalized-category": fact("absent", "high"),
+    "normalized-status": fact("absent", "high"),
+    "coordinates": fact("absent", "high"),
+    "coordinate-source": fact("absent", "high"),
+  },
+  Michigan: {
+    "regulatory-identifier": fact("present", "high", "license"),
+    "identifier-type": fact("present", "high", "license"),
+    "issuing-authority": fact("present", "high"),
+    "physical-address": fact("absent", "high"),
+    "supplemental-address": fact("rejected", "high", "supplemental"),
+    "official-export-date": fact("rejected", "high"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("present", "high", "facility-specific"),
+    "original-category": fact("present", "high"),
+    "original-status": fact("present", "high"),
+    "normalized-category": fact("rejected", "high"),
+    "normalized-status": fact("absent", "high"),
+    "coordinates": fact("absent", "high"),
+    "coordinate-source": fact("absent", "high"),
+  },
+  Pennsylvania: {
+    "regulatory-identifier": fact("rejected", "high", "object-id"),
+    "identifier-type": fact("rejected", "high", "object-id"),
+    "source-record-id": fact("present", "high", "object-id"),
+    "physical-address": fact("present", "high", "physical"),
+    "official-export-date": fact("rejected", "high"),
+    "retrieval-timestamp": fact("present", "high", "catalog-timestamp"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("absent", "high"),
+    "original-status": fact("absent", "high"),
+    "normalized-status": fact("absent", "high"),
+    "coordinates": fact("rejected", "high", "georeferenced"),
+    "coordinate-source": fact("present", "high", "georeferenced"),
+  },
+  Iowa: {
+    "regulatory-identifier": fact("absent", "high"),
+    "identifier-type": fact("present", "high", "certification"),
+    "issuing-authority": fact("present", "high"),
+    "physical-address": fact("present", "high", "physical"),
+    "official-export-date": fact("absent", "high"),
+    "facility-disclosure": fact("absent", "high"),
+    "original-status": fact("absent", "high"),
+    "normalized-status": fact("absent", "high"),
+    "coordinates": fact("rejected", "high", "georeferenced"),
+    "coordinate-source": fact("rejected", "high", "georeferenced"),
+  },
+  Illinois: {
+    "regulatory-identifier": fact("present", "high", "license"),
+    "identifier-type": fact("present", "high", "license"),
+    "issuing-authority": fact("present", "high", "IDPH"),
+    "unverified-address": fact("present", "high", "unverified"),
+    "official-export-date": fact("absent", "high"),
+    "retrieval-timestamp": fact("present", "high", "2024-02-16"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("absent", "high"),
+    "original-status": fact("absent", "high"),
+  },
+  "North Carolina": {
+    "regulatory-identifier": fact("present", "high", "license"),
+    "identifier-type": fact("present", "high", "license"),
+    "issuing-authority": fact("present", "high"),
+    "physical-address": fact("present", "high", "physical"),
+    "official-export-date": fact("rejected", "high"),
+    "source-publication-date": fact("present", "high"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("absent", "high"),
+    "generic-search": fact("present", "high", "generic-search"),
+    "original-status": fact("absent", "high"),
+    "coordinates": fact("absent", "high"),
+  },
+  Kentucky: {
+    "regulatory-identifier": fact("present", "high", "license"),
+    "identifier-type": fact("present", "high", "license"),
+    "issuing-authority": fact("present", "high"),
+    "unverified-address": fact("present", "high", "unverified"),
+    "official-export-date": fact("rejected", "high"),
+    "source-publication-date": fact("present", "high"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("absent", "high"),
+    "original-status": fact("absent", "high"),
+  },
+  Oklahoma: {
+    "regulatory-identifier": fact("present", "high", "facility-id"),
+    "identifier-type": fact("present", "high", "facility-id"),
+    "issuing-authority": fact("present", "high"),
+    "unverified-address": fact("present", "high", "unverified"),
+    "official-export-date": fact("rejected", "high"),
+    "freshness-verification": fact("absent", "high"),
+    "facility-disclosure": fact("absent", "high"),
+    "original-status": fact("absent", "high"),
+  },
+  Indiana: {
+    "regulatory-identifier": fact("present", "medium", "license"),
+    "identifier-type": fact("present", "medium", "license"),
+    "issuing-authority": fact("present", "medium"),
+    "unverified-address": fact("present", "medium", "unverified"),
+    "official-export-date": fact("absent", "medium"),
+    "source-publication-date": fact("present", "medium"),
+    "facility-disclosure": fact("absent", "medium"),
+    "original-status": fact("absent", "medium"),
+  },
+  Delaware: {
+    "regulatory-identifier": fact("present", "medium", "license"),
+    "identifier-type": fact("present", "medium", "license"),
+    "issuing-authority": fact("present", "medium"),
+    "unverified-address": fact("present", "medium", "unverified"),
+    "official-export-date": fact("absent", "medium"),
+    "facility-disclosure": fact("absent", "medium"),
+    "original-status": fact("absent", "medium"),
+  },
+  Minnesota: {
+    "facility-disclosure": fact("present", "medium", "facility-specific"),
+    "generic-search": fact("present", "medium", "generic-search"),
+    "freshness-verification": fact("absent", "high"),
+  },
+  Arkansas: {
+    "regulatory-identifier": fact("rejected", "medium"),
+    "unverified-address": fact("present", "medium", "unverified"),
+  },
+  Louisiana: {
+    "regulatory-identifier": fact("absent", "medium"),
+    "unverified-address": fact("present", "medium", "unverified"),
+  },
+  Massachusetts: {
+    "regulatory-identifier": fact("absent", "medium"),
+    "physical-address": fact("absent", "medium"),
+  },
+  Vermont: {
+    "source-publication-date": fact("present", "medium"),
+    "official-export-date": fact("not-verified", "low"),
+  },
+  Wyoming: {
+    "source-publication-date": fact("present", "medium"),
+  },
+};
+
+for (const state of ["Alabama", "Florida", "Nebraska", "Nevada", "New Jersey", "New Mexico", "Ohio", "Rhode Island"]) {
+  FIELD_EVIDENCE[state] = {
+    "generic-search": fact("present", "medium", "generic-search"),
+    "facility-disclosure": fact("not-verified", "low"),
+  };
+}
+
+function fieldEvidence(item: Omit<StateCompatibility, "evidence">): readonly FieldEvidence[] {
+  const known = FIELD_EVIDENCE[item.state] ?? {};
+  return EVIDENCE_FIELDS.map(field => {
+    const found = known[field];
+    if (found) return { field, ...found };
+    if (field === "issuing-authority" && item.source) return { field, ...fact("present", item.confidence) };
+    if (field === "regulatory-identifier" && item.licenseIdentifier === false) return { field, ...fact("absent", item.confidence) };
+    if (field === "facility-disclosure" && item.disclosureLink === false) return { field, ...fact("absent", item.confidence) };
+    return { field, observation: "not-verified", confidence: "low", detail: null };
+  });
+}
+
 export function compatibilityAssessments(): readonly StateCompatibility[] {
-  return ASSESSMENTS;
+  return ASSESSMENTS.map(item => ({ ...item, evidence: fieldEvidence(item) }));
 }
 
 export function compatibilityAssessment(state: string): StateCompatibility | null {
-  return ASSESSMENTS.find(item => item.state === state) ?? null;
+  const item = ASSESSMENTS.find(entry => entry.state === state);
+  return item ? { ...item, evidence: fieldEvidence(item) } : null;
 }
 
 export function compatibilityClassCounts(): Record<CompatibilityClass, number> {

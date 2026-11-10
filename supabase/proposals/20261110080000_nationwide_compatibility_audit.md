@@ -79,16 +79,47 @@ The remaining C and D rows use only the source named in `lib/nationwide-compatib
 - Mixed facility files and unreconciled PDF/GIS pairs cannot be matched without a new rule.
 - Coordinates are optional for a directory. They matter only for a map.
 
-## Proposed schema
+## Field evidence
 
-Do not apply this. Add a later development-only roster contract beside the Washington and Oregon views. Suggested columns: state, source credential id as text, credential kind, category label, facility name, nullable site address, city, postal state, postal code, county, nullable capacity, nullable status text, nullable disclosure URL, source URL, nullable export date, nullable coordinates, and a coordinate source of licensing, georeferenced, or absent. Publication stays a separate control and defaults to unpublished.
+The matrix above is the state classification. Field evidence is recorded separately on each state in `lib/nationwide-compatibility.ts`. A field is `present`, `absent`, `rejected`, or `not-verified`, and each field has its own confidence. `not-verified` is low confidence. State class and publication do not change because a field is not verified.
 
-Backward compatibility: do not alter `wa_dshs_listed_facilities`, `wa_afh_map_facilities`, or `or_odhs_listed_afh`, and do not change `/washington` or `/oregon`. Washington’s numeric license path and Oregon’s source-id path remain as they are.
+Already recorded distinctions:
 
-Migration, when a person later approves a non-production change: create the new table only, load no production rows, and keep every new state unpublished. Tests should prove the existing Washington and Oregon counts and routes still match. Rollback is dropping that new table. This proposal contains no executable migration.
+- Washington keeps a license, a physical address, licensing coordinates, a facility-specific disclosure link, and the official export date 2026-11-09.
+- Oregon keeps a source id, not a public license. Its directory has no physical address and no coordinates, and its profile link is facility-specific. There is no official export date.
+- California, Michigan, Illinois, Kentucky, Indiana, Delaware, and North Carolina have license identifiers. Oklahoma’s identifier is a facility id. Iowa’s identifier is a certification number. Pennsylvania’s object id is a source record id and is rejected as a regulatory identifier.
+- Illinois, Kentucky, Oklahoma, Indiana, and Delaware have an address column whose role was not established. That value stays an unverified address. North Carolina’s site address, Iowa’s facility address, California’s licensing address, Pennsylvania’s street, and Washington’s street stay physical. Michigan’s supplemental column is rejected as a physical or mailing address.
+- A portal time, catalog timestamp, workbook label, posted date, or path year is a retrieval timestamp or a source publication date. It is not an official export date and it does not verify freshness.
+- Washington, Oregon, and Michigan have verified facility-specific disclosure links. North Carolina’s star search and the other state search pages are generic search pages. An unverified URL pattern is not a disclosure link.
+- Original category and status stay beside any later normalized value. No normalized value is adopted in this proposal. Michigan’s undescribed category is not normalized.
+- Coordinates stay optional. Washington’s are licensing coordinates. Pennsylvania’s and Iowa’s point fields are georeferenced and are rejected as licensing coordinates. No accuracy measure was adopted for any state.
+
+## Proposed roster contract
+
+Do not apply this. A later development-only roster contract would sit beside the Washington and Oregon views. One source row keeps these values separate:
+
+| Group | Fields |
+| --- | --- |
+| Identity | Regulatory identifier, identifier type, issuing authority, and source record id |
+| Address | Physical, mailing, supplemental, and unverified address values, each with provenance |
+| Dates | Official export date, source publication date, retrieval timestamp, and freshness verification |
+| Disclosure | Facility-specific link, generic search page, or unverified URL pattern |
+| Classification | Original category, original status, optional normalized category, and optional normalized status |
+| Location | Optional latitude and longitude, coordinate source, and coordinate accuracy |
+| Publication | `public`, `development`, or `unpublished`, defaulting to unpublished |
+
+Data-integrity rules reject an object id or certification stored as a license, a source record id collapsed into the regulatory identifier, a supplemental or unverified address copied into the physical address, an address with no provenance, a retrieval timestamp or non-ISO source publication date used as the official export date, freshness marked verified without an official export date, a normalized category or status without its original value, coordinates without a source or accuracy, and georeferenced coordinates used as a public map.
+
+Publication safeguards: a row can be public only when publication is already `public`, the official export date is an ISO date, freshness is verified, and the disclosure kind is facility-specific. A generic search page or an unverified URL pattern cannot publish a row. A new state remains unpublished.
+
+Backward compatibility: do not alter `wa_dshs_listed_facilities`, `wa_afh_map_facilities`, or `or_odhs_listed_afh`, and do not change `/washington` or `/oregon`. Washington’s numeric license path and Oregon’s source-id path remain as they are. The existing directory contracts stay the publication control. The new contract does not replace them.
+
+Migration, when a person later approves a non-production change: create the new table only, load no production rows, and keep every new state unpublished. Rollback is dropping that new table. This proposal contains no executable migration.
+
+Validation covers three groups. Data integrity covers the separations above. Publication safeguards cover the public-row rule. Backward compatibility covers the existing Washington and Oregon counts, routes, and the unchanged unpublished state of every other state.
 
 ## Order and phases
 
 Keep Washington public and Oregon on its development contract. The next structural candidates, still unpublished, are Illinois, North Carolina, Kentucky, and Oklahoma, then Indiana and Delaware once an HTML parser is specified, then California and Iowa once credential and status mapping is specified. Michigan, Pennsylvania, Wisconsin, and Minnesota stay behind their recorded blockers. Class D states need an official field check before any build.
 
-Phase 1 is this assessment. Phase 2 is review of the additive roster shape. Phase 3 is one development-only state after a person approves the schema. No phase publishes a state, changes billing, or changes public analytics.
+Phase 1 is this assessment and the roster contract. Phase 2 is review of that contract. Phase 3 is one development-only state after a person approves the schema. No phase publishes a state, changes billing, or changes public analytics.
