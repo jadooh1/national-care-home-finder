@@ -6,8 +6,10 @@ batch back. The default guard accepts only localhost. It does not create
 roles or add privileges.
 """
 
+import copy
 import csv
 import io
+import json
 import os
 import re
 import subprocess
@@ -24,26 +26,17 @@ DEVELOPMENT_MIGRATION = "20261108221940"
 DEVELOPMENT_MIGRATION_NAME = "development_oregon_directory"
 NORTH_CAROLINA_EXECUTION = "authorize-development-north-carolina-roster-execution"
 DELAWARE_EXECUTION = "authorize-development-delaware-roster-execution"
-BASELINE_ROSTER = 1125
-BASELINE_NORTH_CAROLINA = 1086
-BASELINE_DELAWARE = 39
-BASELINE_PUBLIC = 0
-BASELINE_WASHINGTON_DIRECTORY = 6278
-BASELINE_WASHINGTON_MAP = 6278
-BASELINE_OREGON_DIRECTORY = 1584
+APPROVED_BASELINE_PATH = (
+    Path(__file__).resolve().parents[2]
+    / "supabase"
+    / "proposals"
+    / "baselines"
+    / "20261110.1-development-roster.json"
+)
 IDENTITY_MARKERS = ("DATABASE_POSTGRES", "SESSION_ROLE_POSTGRES")
 MIGRATION_MARKERS = ("DEVELOPMENT_MIGRATION_PRESENT", "ROSTER_PRESENT", "BATCH_COLUMN_PRESENT")
-BASELINE_MARKERS = (
-    "ROSTER_BASELINE",
-    "NORTH_CAROLINA_BASELINE",
-    "DELAWARE_BASELINE",
-    "PUBLIC_BASELINE",
-    "WASHINGTON_DIRECTORY_BASELINE",
-    "WASHINGTON_MAP_BASELINE",
-    "OREGON_DIRECTORY_BASELINE",
-)
+RELATION_NAME = re.compile(r"^[a-z_][a-z0-9_]*\.[a-z_][a-z0-9_]*$")
 MARKER = "ROSTER_INGEST_READY"
-PUBLIC_PUBLICATION = "public"
 
 
 class Pilot:
@@ -357,18 +350,174 @@ def assert_development_connection():
         raise RuntimeError("development execution refused: the database target does not match development")
 
 
-def verify_development_session(database, guard=refuse_remote):
-    public_publication = PUBLIC_PUBLICATION
+def _require_text(value, label):
+    if not isinstance(value, str) or not value.strip() or "|" in value:
+        raise RuntimeError(f"approved baseline is internally inconsistent: {label}")
+    return value
+
+
+def _require_count(value, label):
+    if not isinstance(value, int) or isinstance(value, bool) or value < 0:
+        raise RuntimeError(f"approved baseline is internally inconsistent: {label}")
+    return value
+
+
+def _validated_relation(relation):
+    if not isinstance(relation, str) or not RELATION_NAME.fullmatch(relation):
+        raise RuntimeError("approved baseline is internally inconsistent: protected relation")
+    return relation
+
+
+def validate_baseline(baseline):
+    if not isinstance(baseline, dict):
+        raise RuntimeError("approved baseline is internally inconsistent: manifest")
+    _require_text(baseline.get("baseline_version"), "version")
+    roster = baseline.get("roster")
+    batches = roster.get("batches") if isinstance(roster, dict) else None
+    directories = baseline.get("protected_directories")
+    if not isinstance(batches, list) or not batches or not isinstance(directories, list) or not directories:
+        raise RuntimeError("approved baseline is internally inconsistent: manifest")
+    seen = set()
+    total = 0
+    public_count = 0
+    for batch in batches:
+        state_name = _require_text(batch.get("state_name"), "state")
+        batch_id = _require_text(batch.get("ingestion_batch_id"), "batch")
+        authority = _require_text(batch.get("issuing_authority"), "authority")
+        _require_text(batch.get("source_url"), "source")
+        identifier_type = _require_text(batch.get("identifier_type"), "identifier type")
+        publication = _require_text(batch.get("publication"), "publication")
+        if identifier_type not in {"license", "certification", "source-id", "facility-id", "object-id"}:
+            raise RuntimeError("approved baseline is internally inconsistent: identifier type")
+        if publication not in {"unpublished", "development", "public"}:
+            raise RuntimeError("approved baseline is internally inconsistent: publication")
+        count = _require_count(batch.get("count"), "count")
+        key = (state_name, batch_id, authority, publication)
+        if key in seen:
+            raise RuntimeError("approved baseline is internally inconsistent: duplicate batch")
+        seen.add(key)
+        total += count
+        if publication == "public":
+            public_count += count
+    if total != _require_count(roster.get("total"), "total") or public_count != _require_count(roster.get("public_count"), "public count"):
+        raise RuntimeError("approved baseline is internally inconsistent: totals")
+    seen_relations = set()
+    for directory in directories:
+        relation = _validated_relation(directory.get("relation"))
+        _require_text(directory.get("state_name"), "protected state")
+        _require_text(directory.get("role"), "protected role")
+        _require_count(directory.get("count"), "protected count")
+        if relation in seen_relations:
+            raise RuntimeError("approved baseline is internally inconsistent: duplicate relation")
+        seen_relations.add(relation)
+    return baseline
+
+
+def load_approved_baseline():
+    return validate_baseline(json.loads(APPROVED_BASELINE_PATH.read_text(encoding="utf-8")))
+
+
+def candidate_baseline(baseline, batch):
+    """Return a reviewed-style manifest for a new batch without writing the approved file."""
+    updated = copy.deepcopy(validate_baseline(baseline))
+    updated["roster"]["batches"].append(copy.deepcopy(batch))
+    updated["roster"]["total"] += batch["count"]
+    if batch.get("publication") == "public":
+        updated["roster"]["public_count"] += batch["count"]
+    return validate_baseline(updated)
+
+
+def _batch_key(batch):
+    return (
+        batch["state_name"],
+        batch["ingestion_batch_id"],
+        batch["issuing_authority"],
+        batch["publication"],
+    )
+
+
+def compare_baseline(observations, baseline):
+    baseline = validate_baseline(baseline)
+    expected = {_batch_key(batch): batch["count"] for batch in baseline["roster"]["batches"]}
+    expected_ids = {batch["ingestion_batch_id"] for batch in baseline["roster"]["batches"]}
+    actual = {}
+    directories = {}
+    for observation in observations:
+        if observation.get("kind") == "roster":
+            key = (
+                observation.get("state_name"),
+                observation.get("ingestion_batch_id"),
+                observation.get("issuing_authority"),
+                observation.get("publication"),
+            )
+            actual[key] = int(observation["row_count"])
+        elif observation.get("kind") == "directory":
+            directories[observation.get("relation")] = int(observation["row_count"])
+    unexpected_ids = {key[1] for key in actual} - expected_ids
+    if unexpected_ids:
+        raise RuntimeError("development baseline check failed: unexpected batch")
+    for key in actual:
+        if key not in expected:
+            raise RuntimeError("development baseline check failed: publication change")
+    for key, count in expected.items():
+        observed = actual.get(key, 0)
+        if observed > count:
+            raise RuntimeError("development baseline check failed: unauthorized addition")
+        if observed < count:
+            raise RuntimeError("development baseline check failed: unauthorized deletion")
+    for directory in baseline["protected_directories"]:
+        if directories.get(directory["relation"]) != directory["count"]:
+            raise RuntimeError("development baseline check failed: protected directory")
+
+
+def _observation_sql(baseline):
+    selects = [
+        """
+        select 'OBS ' || row_to_json(observation)::text
+        from (
+          select 'roster'::text as kind,
+            state_name,
+            ingestion_batch_id,
+            issuing_authority,
+            publication,
+            count(*)::bigint as row_count
+          from public.nationwide_roster
+          group by state_name, ingestion_batch_id, issuing_authority, publication
+        ) as observation
+        """
+    ]
+    for directory in baseline["protected_directories"]:
+        relation = _validated_relation(directory["relation"])
+        selects.append(
+            f"""
+            select 'OBS ' || json_build_object(
+              'kind', 'directory',
+              'relation', '{relation}',
+              'row_count', (select count(*) from {relation})
+            )::text
+            """
+        )
+    return " union all ".join(selects) + ";"
+
+
+def _parse_observations(output):
+    observations = []
+    for line in output.splitlines():
+        index = line.find("OBS ")
+        if index < 0:
+            continue
+        observations.append(json.loads(line[index + 4:].strip()))
+    return observations
+
+
+def verify_development_session(database, guard=refuse_remote, baseline=None):
+    baseline = load_approved_baseline() if baseline is None else validate_baseline(baseline)
     output = psql(
         database,
         f"""
         create temp table identity_markers(marker text primary key);
         do $identity$
         declare
-          roster_count bigint;
-          state_count bigint;
-          public_count bigint;
-          relation_count bigint;
           migration_present boolean := false;
         begin
           if current_database() = '{DEVELOPMENT_DATABASE}' then
@@ -396,42 +545,6 @@ def verify_development_session(database, guard=refuse_remote):
             ) then
               insert into identity_markers(marker) values ('BATCH_COLUMN_PRESENT');
             end if;
-            select count(*) into roster_count from public.nationwide_roster;
-            if roster_count = {BASELINE_ROSTER} then
-              insert into identity_markers(marker) values ('ROSTER_BASELINE');
-            end if;
-            select count(*) into state_count from public.nationwide_roster where state_name = 'North Carolina';
-            if state_count = {BASELINE_NORTH_CAROLINA} then
-              insert into identity_markers(marker) values ('NORTH_CAROLINA_BASELINE');
-            end if;
-            select count(*) into state_count from public.nationwide_roster where state_name = 'Delaware';
-            if state_count = {BASELINE_DELAWARE} then
-              insert into identity_markers(marker) values ('DELAWARE_BASELINE');
-            end if;
-            select count(*) into public_count
-            from public.nationwide_roster
-            where publication = '{public_publication}';
-            if public_count = {BASELINE_PUBLIC} then
-              insert into identity_markers(marker) values ('PUBLIC_BASELINE');
-            end if;
-          end if;
-          if to_regclass('public.wa_dshs_listed_facilities') is not null then
-            select count(*) into relation_count from public.wa_dshs_listed_facilities;
-            if relation_count = {BASELINE_WASHINGTON_DIRECTORY} then
-              insert into identity_markers(marker) values ('WASHINGTON_DIRECTORY_BASELINE');
-            end if;
-          end if;
-          if to_regclass('public.wa_afh_map_facilities') is not null then
-            select count(*) into relation_count from public.wa_afh_map_facilities;
-            if relation_count = {BASELINE_WASHINGTON_MAP} then
-              insert into identity_markers(marker) values ('WASHINGTON_MAP_BASELINE');
-            end if;
-          end if;
-          if to_regclass('public.or_odhs_listed_afh') is not null then
-            select count(*) into relation_count from public.or_odhs_listed_afh;
-            if relation_count = {BASELINE_OREGON_DIRECTORY} then
-              insert into identity_markers(marker) values ('OREGON_DIRECTORY_BASELINE');
-            end if;
           end if;
         end
         $identity$;
@@ -439,13 +552,13 @@ def verify_development_session(database, guard=refuse_remote):
         """,
         guard=guard,
     )
-    missing = [marker for marker in (*IDENTITY_MARKERS, *MIGRATION_MARKERS, *BASELINE_MARKERS) if marker not in output]
+    missing = [marker for marker in (*IDENTITY_MARKERS, *MIGRATION_MARKERS) if marker not in output]
     if any(marker in IDENTITY_MARKERS for marker in missing):
         raise RuntimeError("development identity check failed: project identity")
     if any(marker in MIGRATION_MARKERS for marker in missing):
         raise RuntimeError("development identity check failed: migration")
-    if missing:
-        raise RuntimeError("development identity check failed: baseline")
+    observations = _parse_observations(psql(database, _observation_sql(baseline), guard=guard))
+    compare_baseline(observations, baseline)
     return output
 
 

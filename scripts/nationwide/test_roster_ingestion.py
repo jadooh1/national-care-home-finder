@@ -3,15 +3,20 @@ import re
 import unittest
 from pathlib import Path
 
+import json
+
 import roster_ingestion
 from roster_ingestion import (
-    BASELINE_MARKERS,
+    APPROVED_BASELINE_PATH,
     IDENTITY_MARKERS,
     MIGRATION_MARKERS,
     Pilot,
     assert_authorized_target,
     assert_unknown_values_stay_unknown,
+    candidate_baseline,
+    compare_baseline,
     ingest_batch,
+    load_approved_baseline,
     preflight_before_write,
     reject_duplicate_licenses,
 )
@@ -203,18 +208,109 @@ class DevelopmentPreflightTest(unittest.TestCase):
         os.environ["NCHF_NC_DEVELOPMENT_EXECUTION"] = "authorize-development-north-carolina-roster-execution"
         calls = []
 
+        approved = APPROVED_BASELINE_PATH.read_bytes()
+
         def fake_psql(database, sql, guard=None):
             calls.append(sql)
             guard()
-            if len(calls) == 1:
-                return "\n".join((*IDENTITY_MARKERS, *MIGRATION_MARKERS, *BASELINE_MARKERS))
+            if "identity_markers" in sql:
+                return "\n".join((*IDENTITY_MARKERS, *MIGRATION_MARKERS))
+            if "OBS " in sql:
+                return _approved_observations()
             return "ROSTER_INGEST_READY | 1 | 0\nCOMMIT"
 
         roster_ingestion.psql = fake_psql
         result = ingest_batch("postgres", PILOT, [record()], guard=lambda: None)
         self.assertEqual(result["inserted"], 1)
         self.assertIn("identity_markers", calls[0])
-        self.assertIn("insert into public.nationwide_roster", calls[1].lower())
+        self.assertIn("OBS ", calls[1])
+        self.assertIn("insert into public.nationwide_roster", calls[2].lower())
+        self.assertEqual(APPROVED_BASELINE_PATH.read_bytes(), approved)
+
+
+def _approved_observations():
+    baseline = load_approved_baseline()
+    lines = []
+    for batch in baseline["roster"]["batches"]:
+        lines.append("OBS " + json.dumps({
+            "kind": "roster",
+            "state_name": batch["state_name"],
+            "ingestion_batch_id": batch["ingestion_batch_id"],
+            "issuing_authority": batch["issuing_authority"],
+            "publication": batch["publication"],
+            "row_count": batch["count"],
+        }))
+    for directory in baseline["protected_directories"]:
+        lines.append("OBS " + json.dumps({
+            "kind": "directory",
+            "relation": directory["relation"],
+            "row_count": directory["count"],
+        }))
+    return "\n".join(lines)
+
+
+class BaselineManifestTest(unittest.TestCase):
+    def test_manifest_mismatches_are_rejected_without_changing_the_file(self):
+        approved = APPROVED_BASELINE_PATH.read_bytes()
+        baseline = load_approved_baseline()
+        observations = json.loads("[" + _approved_observations().replace("OBS ", "") .replace("\n", ",") + "]")
+        compare_baseline(observations, baseline)
+        shorter = json.loads(json.dumps(observations))
+        shorter[0]["row_count"] -= 1
+        with self.assertRaisesRegex(RuntimeError, "unauthorized deletion"):
+            compare_baseline(shorter, baseline)
+        longer = json.loads(json.dumps(observations))
+        longer[0]["row_count"] += 1
+        with self.assertRaisesRegex(RuntimeError, "unauthorized addition"):
+            compare_baseline(longer, baseline)
+        published = json.loads(json.dumps(observations))
+        published[0]["publication"] = "development"
+        with self.assertRaisesRegex(RuntimeError, "publication change"):
+            compare_baseline(published, baseline)
+        extra = json.loads(json.dumps(observations))
+        extra.append({
+            "kind": "roster",
+            "state_name": "Illinois",
+            "ingestion_batch_id": "illinois-candidate-20261110",
+            "issuing_authority": "Example Authority",
+            "publication": "unpublished",
+            "row_count": 1,
+        })
+        with self.assertRaisesRegex(RuntimeError, "unexpected batch"):
+            compare_baseline(extra, baseline)
+        protected = json.loads(json.dumps(observations))
+        protected[-1]["row_count"] -= 1
+        with self.assertRaisesRegex(RuntimeError, "protected directory"):
+            compare_baseline(protected, baseline)
+        self.assertEqual(APPROVED_BASELINE_PATH.read_bytes(), approved)
+
+    def test_a_new_state_candidate_does_not_replace_the_approved_manifest(self):
+        approved = APPROVED_BASELINE_PATH.read_bytes()
+        baseline = load_approved_baseline()
+        candidate = candidate_baseline(baseline, {
+            "state_name": "Illinois",
+            "ingestion_batch_id": "illinois-candidate-20261110",
+            "issuing_authority": "Example Authority",
+            "source_url": "https://example.test/illinois",
+            "identifier_type": "license",
+            "publication": "unpublished",
+            "count": 1,
+        })
+        self.assertEqual(candidate["roster"]["total"], baseline["roster"]["total"] + 1)
+        self.assertEqual(len(baseline["roster"]["batches"]), 2)
+        self.assertEqual(APPROVED_BASELINE_PATH.read_bytes(), approved)
+        observations = json.loads("[" + _approved_observations().replace("OBS ", "").replace("\n", ",") + "]")
+        observations.append({
+            "kind": "roster",
+            "state_name": "Illinois",
+            "ingestion_batch_id": "illinois-candidate-20261110",
+            "issuing_authority": "Example Authority",
+            "publication": "unpublished",
+            "row_count": 1,
+        })
+        compare_baseline(observations, candidate)
+        with self.assertRaisesRegex(RuntimeError, "unexpected batch"):
+            compare_baseline(observations, baseline)
 
 
 if __name__ == "__main__":
