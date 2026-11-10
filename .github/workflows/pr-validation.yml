@@ -89,6 +89,9 @@ jobs:
       - name: Check the nationwide state onboarding framework
         run: node --experimental-strip-types --test supabase/proposals/tests/nationwide_onboarding.ts
 
+      - name: Check the Michigan licensing validation
+        run: node --experimental-strip-types --test supabase/proposals/tests/michigan_licensing.ts
+
       - name: Check the California CDSS source validation
         run: node --experimental-strip-types --test supabase/proposals/tests/california_cdss_roster.ts
 

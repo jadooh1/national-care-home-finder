@@ -57,6 +57,7 @@ const MICHIGAN_BLOCKERS = [
   "no-coordinate-columns",
   "undescribed-type-code-xh-is-not-corrected",
   "nine-digit-zips-are-not-corrected",
+  "street-address-column-is-not-filled-from-the-supplemental-column",
   "address-phone-and-licensee-fields-are-not-accepted",
 ] as const;
 
