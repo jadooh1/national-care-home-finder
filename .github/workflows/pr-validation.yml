@@ -89,6 +89,9 @@ jobs:
       - name: Check the California CDSS source validation
         run: node --experimental-strip-types --test supabase/proposals/tests/california_cdss_roster.ts
 
+      - name: Check the California directory architecture
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_directory.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
