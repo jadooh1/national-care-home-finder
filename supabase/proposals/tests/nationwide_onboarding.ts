@@ -12,7 +12,11 @@ import {
   MICHIGAN_OFFICIAL_SOURCE_BLOCKERS,
   MICHIGAN_PROFILE_PREFIX,
   MICHIGAN_RECORDED_EXPORT_DATE,
+  IOWA_FEASIBILITY,
   NEXT_STATE_REVIEW,
+  NORTH_CAROLINA_FEASIBILITY,
+  PENNSYLVANIA_PUBLICATION_REQUIREMENTS,
+  adoptListingDate,
   PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT,
   PENNSYLVANIA_LETTER_ONLY_STREET_ROWS,
   PENNSYLVANIA_PUBLICATION_ELIGIBLE_ROWS,
@@ -113,6 +117,28 @@ test("Pennsylvania is the selected unpublished candidate and the other two state
   assert.deepEqual(NEXT_STATE_REVIEW.map(candidate => candidate.state), ["Pennsylvania", "Wisconsin", "Minnesota"]);
   assert.deepEqual(NEXT_STATE_REVIEW.map(candidate => candidate.rank), [1, 2, 3]);
   assert.deepEqual(NEXT_STATE_REVIEW.filter(candidate => candidate.selected).map(candidate => candidate.state), ["Pennsylvania"]);
+  assert.deepEqual(PENNSYLVANIA_PUBLICATION_REQUIREMENTS.map(item => item.requirement), [
+    "license-identifier",
+    "per-row-licensing-status",
+    "facility-disclosure-link",
+    "iso-export-date",
+  ]);
+  for (const item of PENNSYLVANIA_PUBLICATION_REQUIREMENTS) {
+    assert.ok(pennsylvania.blockers.includes(item.blocker));
+  }
+  assert.equal(NORTH_CAROLINA_FEASIBILITY.selected, false);
+  assert.equal(NORTH_CAROLINA_FEASIBILITY.publicationFeasible, false);
+  assert.equal(NORTH_CAROLINA_FEASIBILITY.adultCareHomes + NORTH_CAROLINA_FEASIBILITY.familyCareHomes, NORTH_CAROLINA_FEASIBILITY.uniqueLicenseIdentifiers);
+  assert.equal(adoptListingDate(NORTH_CAROLINA_FEASIBILITY.listingsPageUpdated), null);
+  assert.equal(adoptListingDate(NORTH_CAROLINA_FEASIBILITY.workbookAsOf), null);
+  assert.equal(IOWA_FEASIBILITY.selected, false);
+  assert.equal(IOWA_FEASIBILITY.publicationFeasible, false);
+  assert.equal(IOWA_FEASIBILITY.fiveDigitZips + IOWA_FEASIBILITY.nineDigitZips, IOWA_FEASIBILITY.certifiedPrograms);
+  assert.equal(directoryContract("North Carolina")?.directoryPath, null);
+  assert.equal(directoryContract("Iowa")?.directoryPath, null);
+  assert.equal(directoryHref("North Carolina", "https://ajjsyloyihcqdomywhik.supabase.co"), null);
+  assert.equal(directoryHref("Iowa", "https://ajjsyloyihcqdomywhik.supabase.co"), null);
+  assert.equal(onboardingProfiles().some(profile => profile.state === "North Carolina" || profile.state === "Iowa"), false);
 });
 
 test("a Michigan profile link is built only from the observed prefix and license shape", () => {
@@ -129,6 +155,10 @@ test("the development review is not linked from the home page and does not publi
   assert.equal(home.includes("/development/onboarding"), false);
   assert.equal(home.includes("/michigan"), false);
   assert.equal(home.includes("/pennsylvania"), false);
+  assert.equal(home.includes("/north-carolina"), false);
+  assert.equal(home.includes("/iowa"), false);
+  assert.equal(page.includes("No additional state is implemented"), true);
+  assert.equal(page.includes("Publication still requires"), true);
   assert.equal(page.includes("Pennsylvania is unpublished"), true);
   assert.equal(page.includes("Official-source blockers"), true);
   assert.equal(page.includes("Michigan is unpublished"), true);

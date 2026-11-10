@@ -14,6 +14,9 @@ import {
   PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT,
   PENNSYLVANIA_LETTER_ONLY_STREET_ROWS,
   PENNSYLVANIA_PUBLICATION_ELIGIBLE_ROWS,
+  IOWA_FEASIBILITY,
+  NORTH_CAROLINA_FEASIBILITY,
+  PENNSYLVANIA_PUBLICATION_REQUIREMENTS,
   PENNSYLVANIA_ROWS,
   PENNSYLVANIA_USABLE_STREET_ROWS,
   michiganDescribedRows,
@@ -96,6 +99,17 @@ export default function NationwideOnboardingPage() {
           </p>
           <p>
             The portal catalog timestamp {PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT} is not an export date. Latitude and longitude are georeferenced values, not accepted licensing coordinates. No per-facility disclosure prefix is recorded. Pennsylvania is unpublished.
+          </p>
+          <p>The 989-row validation stays in place. Publication still requires {PENNSYLVANIA_PUBLICATION_REQUIREMENTS.map(item => item.requirement).join(", ")}.</p>
+        </section>
+        <section style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 18 }}>
+          <h2 style={{ marginTop: 0 }}>Publication feasibility</h2>
+          <p>No additional state is implemented. A file with addresses is not a usable directory until it also has a license identifier, a per-row status, a verified facility disclosure link, and an ISO export date.</p>
+          <p>
+            {NORTH_CAROLINA_FEASIBILITY.state} has {NORTH_CAROLINA_FEASIBILITY.adultCareHomes.toLocaleString()} adult care homes and {NORTH_CAROLINA_FEASIBILITY.familyCareHomes.toLocaleString()} family care homes. All {NORTH_CAROLINA_FEASIBILITY.uniqueLicenseIdentifiers.toLocaleString()} license identifiers are unique, and all {NORTH_CAROLINA_FEASIBILITY.siteAddresses.toLocaleString()} site addresses are present. The listings page says updated {NORTH_CAROLINA_FEASIBILITY.listingsPageUpdated}, and each workbook says as of {NORTH_CAROLINA_FEASIBILITY.workbookAsOf}. Neither date is an export date. There is no per-row status column, and the star-rating search does not take a license number. Publication feasible: no.
+          </p>
+          <p>
+            {IOWA_FEASIBILITY.state} has {IOWA_FEASIBILITY.certifiedPrograms.toLocaleString()} certified assisted-living programs, {IOWA_FEASIBILITY.certificationIdentifiers.toLocaleString()} certification identifiers, and {IOWA_FEASIBILITY.facilityAddresses.toLocaleString()} facility addresses. The identifier column is a certification number. {IOWA_FEASIBILITY.fiveDigitZips} ZIP values have five digits and {IOWA_FEASIBILITY.nineDigitZips} have nine. There is no status column, no disclosure link, and no date column. Publication feasible: no.
           </p>
         </section>
       </div>
