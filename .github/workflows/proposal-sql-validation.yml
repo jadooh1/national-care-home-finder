@@ -81,3 +81,6 @@ jobs:
 
       - name: Validate the Delaware roster pilot
         run: python3 supabase/proposals/tests/validate_delaware_roster.py
+
+      - name: Validate the shared roster ingestion framework
+        run: python3 supabase/proposals/tests/validate_roster_framework.py

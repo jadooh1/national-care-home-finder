@@ -5,13 +5,12 @@ connect to Supabase, and does not create roles or add privileges.
 """
 
 import csv
-import io
-import os
 import re
-import subprocess
 import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+from roster_ingestion import Pilot, ingest_batch, refuse_remote, reject_duplicate_licenses, rollback_batch
 
 AUTHORITY = (
     "North Carolina Department of Health and Human Services, "
@@ -21,10 +20,20 @@ GENERIC_SEARCH = "https://info.ncdhhs.gov/dhsr/acls/star/search.asp"
 INGEST_AUTHORIZATION = "authorize-development-north-carolina-roster-ingestion"
 ROLLBACK_AUTHORIZATION = "authorize-development-north-carolina-roster-rollback"
 PILOT_BATCH = "north-carolina-dhhs-roster-pilot-20261110"
+PILOT = Pilot(
+    state_name="North Carolina",
+    authority=AUTHORITY,
+    batch_id=PILOT_BATCH,
+    disclosure_url=GENERIC_SEARCH,
+    ingest_guc="nchf.north_carolina_roster_ingestion_authorization",
+    ingest_authorization=INGEST_AUTHORIZATION,
+    rollback_guc="nchf.north_carolina_roster_rollback_authorization",
+    rollback_authorization=ROLLBACK_AUTHORIZATION,
+    rollback_filename="20261110110000_north_carolina_roster_ingestion_ROLLBACK.sql",
+)
 LICENSE_PATTERN = re.compile(r"^[A-Z]{3}-\d{3}-\d{3}$")
 NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 MAIN = "{http://schemas.openxmlformats.org/spreadsheetml/2006/main}"
-PSQL = os.environ.get("PSQL", "psql")
 
 WORKBOOKS = {
     "adult": {
@@ -40,11 +49,12 @@ WORKBOOKS = {
 }
 
 
-def refuse_remote():
-    host = os.environ.get("PGHOST", "")
-    lowered = host.lower()
-    if host not in {"localhost", "127.0.0.1", "::1"} or "supabase" in lowered or "pooler" in lowered:
-        raise RuntimeError("Refusing to run outside a local disposable database")
+def ingest(database, records, guard=refuse_remote, batch_id=PILOT_BATCH):
+    return ingest_batch(database, PILOT, records, guard=guard, batch_id=batch_id)
+
+
+def rollback(database, guard=refuse_remote):
+    return rollback_batch(database, PILOT, guard=guard)
 
 
 def column_index(ref):
@@ -190,13 +200,7 @@ def map_rows(rows, category, prefix, source_prefix):
                 "publication": "unpublished",
             }
         )
-    seen = {}
-    for record in accepted:
-        seen.setdefault(record["license_identifier"], []).append(record)
-    duplicates = {license_identifier for license_identifier, group in seen.items() if len(group) > 1}
-    if duplicates:
-        rejected.extend({"reason": "duplicate-license-in-source"} for _ in accepted if _["license_identifier"] in duplicates)
-        accepted = [record for record in accepted if record["license_identifier"] not in duplicates]
+    accepted, rejected = reject_duplicate_licenses(accepted, rejected, "duplicate-license-in-source")
     return {"accepted": accepted, "rejected": rejected}
 
 
@@ -240,200 +244,3 @@ def summary(mapped):
         "publication_unpublished": sum(record["publication"] == "unpublished" for record in accepted),
         "publication_public": sum(record["publication"] == "public" for record in accepted),
     }
-
-
-def stage_csv(records):
-    buffer = io.StringIO()
-    writer = csv.DictWriter(
-        buffer,
-        fieldnames=[
-            "license_identifier",
-            "source_record_id",
-            "facility_name",
-            "physical_address",
-            "mailing_address",
-            "original_category",
-        ],
-        lineterminator="\n",
-    )
-    writer.writeheader()
-    for record in records:
-        writer.writerow({name: record[name] for name in writer.fieldnames})
-    return buffer.getvalue()
-
-
-def psql(database, sql, guard=refuse_remote):
-    guard()
-    completed = subprocess.run(
-        [PSQL, "-d", database, "-X", "-v", "ON_ERROR_STOP=1", "-f", "-"],
-        input=sql,
-        text=True,
-        capture_output=True,
-        check=False,
-    )
-    output = completed.stdout + completed.stderr
-    if completed.returncode != 0:
-        raise RuntimeError(output)
-    return output
-
-
-def ingestion_sql(csv_text, batch_id=PILOT_BATCH):
-    return f"""
-select set_config('nchf.north_carolina_roster_ingestion_authorization', '{INGEST_AUTHORIZATION}', false);
-begin;
-do $guard$
-begin
-  if current_setting('nchf.north_carolina_roster_ingestion_authorization', true)
-     is distinct from '{INGEST_AUTHORIZATION}' then
-    raise exception 'north carolina roster ingestion refused: later development-only authorization is required';
-  end if;
-  if to_regclass('public.nationwide_roster') is null then
-    raise exception 'north carolina roster ingestion refused: nationwide_roster is not present';
-  end if;
-  if not exists (
-    select 1 from information_schema.columns
-    where table_schema = 'public'
-      and table_name = 'nationwide_roster'
-      and column_name = 'ingestion_batch_id'
-  ) then
-    raise exception 'north carolina roster ingestion refused: ingestion_batch_id is not present';
-  end if;
-end
-$guard$;
-lock table public.nationwide_roster in share row exclusive mode;
-create temp table nc_stage (
-  license_identifier text not null,
-  source_record_id text not null,
-  facility_name text not null,
-  physical_address text not null,
-  mailing_address text,
-  original_category text not null
-);
-copy nc_stage from stdin with (format csv, header true);
-{csv_text}\\.
-create temp table nc_result(inserted bigint, already_present bigint);
-do $load$
-declare
-  conflict_count bigint;
-  inserted_count bigint;
-  already_count bigint;
-begin
-  select count(*) into conflict_count
-  from nc_stage as incoming
-  join public.nationwide_roster as existing
-    on existing.state_name = 'North Carolina'
-   and existing.identifier_type = 'license'
-   and coalesce(existing.issuing_authority, '') = '{AUTHORITY}'
-   and existing.license_identifier = incoming.license_identifier
-  where existing.facility_name is distinct from incoming.facility_name
-     or existing.source_record_id is distinct from incoming.source_record_id
-     or existing.physical_address is distinct from incoming.physical_address
-     or existing.physical_address_provenance is distinct from 'site-address'
-     or existing.mailing_address is distinct from nullif(incoming.mailing_address, '')
-     or existing.mailing_address_provenance is distinct from case
-          when nullif(incoming.mailing_address, '') is null then null
-          else 'facility-address'
-        end
-     or existing.original_category is distinct from incoming.original_category
-     or existing.official_export_date is not null
-     or existing.source_publication_date is not null
-     or existing.retrieval_timestamp is not null
-     or existing.freshness_verified
-     or existing.original_status is not null
-     or existing.normalized_status is not null
-     or existing.disclosure_verified
-     or existing.disclosure_kind is distinct from 'generic-search'
-     or existing.disclosure_url is distinct from '{GENERIC_SEARCH}'
-     or existing.publication is distinct from 'unpublished'
-     or existing.coordinate_source is distinct from 'absent'
-     or existing.ingestion_batch_id is distinct from '{batch_id}';
-  if conflict_count > 0 then
-    raise exception 'north carolina roster ingestion conflict: %', conflict_count;
-  end if;
-  select count(*) into already_count
-  from nc_stage as incoming
-  join public.nationwide_roster as existing
-    on existing.state_name = 'North Carolina'
-   and existing.identifier_type = 'license'
-   and coalesce(existing.issuing_authority, '') = '{AUTHORITY}'
-   and existing.license_identifier = incoming.license_identifier;
-  insert into public.nationwide_roster (
-    state_name, license_identifier, certification_identifier, facility_identifier,
-    identifier_type, issuing_authority, source_record_id, facility_name,
-    physical_address, physical_address_provenance,
-    mailing_address, mailing_address_provenance,
-    official_export_date, source_publication_date, retrieval_timestamp,
-    freshness_verified, original_category, normalized_category,
-    original_status, normalized_status,
-    disclosure_url, disclosure_kind, disclosure_verified, disclosure_verification_evidence,
-    latitude, longitude, coordinate_source, coordinate_accuracy, publication,
-    ingestion_batch_id
-  )
-  select
-    'North Carolina', incoming.license_identifier, null, null,
-    'license', '{AUTHORITY}', incoming.source_record_id, incoming.facility_name,
-    incoming.physical_address, 'site-address',
-    nullif(incoming.mailing_address, ''),
-    case when nullif(incoming.mailing_address, '') is null then null else 'facility-address' end,
-    null, null, null,
-    false, incoming.original_category, null,
-    null, null,
-    '{GENERIC_SEARCH}', 'generic-search', false, null,
-    null, null, 'absent', null, 'unpublished', '{batch_id}'
-  from nc_stage as incoming
-  where not exists (
-    select 1 from public.nationwide_roster as existing
-    where existing.state_name = 'North Carolina'
-      and existing.identifier_type = 'license'
-      and coalesce(existing.issuing_authority, '') = '{AUTHORITY}'
-      and existing.license_identifier = incoming.license_identifier
-  );
-  get diagnostics inserted_count = row_count;
-  if inserted_count + already_count <> (select count(*) from nc_stage) then
-    raise exception 'north carolina roster ingestion refused: the row tally does not match';
-  end if;
-  insert into nc_result(inserted, already_present) values (inserted_count, already_count);
-end
-$load$;
-select 'NC_INGEST_READY' as marker, inserted, already_present from nc_result;
-commit;
-"""
-
-
-def ingest(database, records, guard=refuse_remote, batch_id=PILOT_BATCH):
-    if not records:
-        return {"inserted": 0, "already_present": 0, "conflicts": 0}
-    try:
-        output = psql(database, ingestion_sql(stage_csv(records), batch_id), guard=guard)
-    except RuntimeError as error:
-        message = str(error)
-        match = re.search(r"ingestion conflict: (\d+)", message)
-        if match:
-            return {"inserted": 0, "already_present": 0, "conflicts": int(match.group(1))}
-        raise
-    if "NC_INGEST_READY" not in output or "COMMIT" not in output:
-        raise RuntimeError(output)
-    for line in output.splitlines():
-        parts = [part.strip() for part in line.split("|")]
-        if len(parts) == 3 and parts[0] == "NC_INGEST_READY":
-            return {"inserted": int(parts[1]), "already_present": int(parts[2]), "conflicts": 0}
-    raise RuntimeError(output)
-
-
-def rollback(database, guard=refuse_remote):
-    rollback_file = (
-        Path(__file__).resolve().parents[2]
-        / "supabase"
-        / "proposals"
-        / "20261110110000_north_carolina_roster_ingestion_ROLLBACK.sql"
-    )
-    output = psql(
-        database,
-        "select set_config('nchf.north_carolina_roster_rollback_authorization', "
-        f"'{ROLLBACK_AUTHORIZATION}', false);\n"
-        + rollback_file.read_text(encoding="utf-8"),
-        guard=guard,
-    )
-    if "COMMIT" not in output:
-        raise RuntimeError(output)
-    return output
