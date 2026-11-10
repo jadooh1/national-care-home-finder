@@ -8,6 +8,7 @@ explicit target. It does not open a connection by itself.
 import os
 
 from delaware_roster import PILOT_BATCH, ingest, map_path, rollback, summary
+from roster_ingestion import assert_authorized_target, verify_development_identity
 
 EXECUTION_AUTHORIZATION = "authorize-development-delaware-roster-execution"
 DEVELOPMENT_HOST = "aws-1-us-west-2.pooler.supabase.com"
@@ -15,23 +16,17 @@ DEVELOPMENT_USER = "postgres.ajjsyloyihcqdomywhik"
 
 
 def assert_execution_target():
-    host = os.environ.get("PGHOST", "")
-    user = os.environ.get("PGUSER", "")
-    target = os.environ.get("NCHF_DE_EXECUTION_TARGET", "")
-    authorization = os.environ.get("NCHF_DE_DEVELOPMENT_EXECUTION", "")
-    lowered = f"{host} {user}".lower()
-    if "us-west-1" in lowered or "yiehgstweswxjakbcdzc" in lowered:
-        raise RuntimeError("development execution refused: production is not a target")
-    if authorization != EXECUTION_AUTHORIZATION:
-        raise RuntimeError("development execution refused: explicit authorization is required")
-    if target == "disposable" and host in {"localhost", "127.0.0.1", "::1"}:
-        return
-    if target == "development" and host == DEVELOPMENT_HOST and user == DEVELOPMENT_USER:
-        return
-    raise RuntimeError("development execution refused: the target is not authorized")
+    assert_authorized_target(
+        "NCHF_DE_EXECUTION_TARGET",
+        "NCHF_DE_DEVELOPMENT_EXECUTION",
+        EXECUTION_AUTHORIZATION,
+    )
 
 
 def execute(listing_path, database):
+    assert_execution_target()
+    if os.environ.get("NCHF_DE_EXECUTION_TARGET") == "development":
+        verify_development_identity(database, guard=assert_execution_target)
     mapped = map_path(listing_path)
     totals = summary(mapped)
     if totals["publication_public"] != 0 or totals["physical_addresses"] != 0:
