@@ -69,9 +69,13 @@ export const MICHIGAN_OFFICIAL_SOURCE_BLOCKERS = [
 
 const PENNSYLVANIA_BLOCKERS = [
   "catalog-timestamp-is-not-an-export-date",
+  "directory-daily-refresh-notice-is-not-an-export-date",
   "georeferenced-coordinates-are-not-licensing-coordinates",
   "no-per-facility-disclosure-link-is-recorded",
+  "open-data-object-id-is-not-a-license-number",
+  "no-per-row-licensing-status",
   "letter-only-street-values-are-not-corrected",
+  "street-additional-information-is-not-copied-into-the-street",
   "phone-and-capacity-fields-are-not-accepted",
 ] as const;
 
