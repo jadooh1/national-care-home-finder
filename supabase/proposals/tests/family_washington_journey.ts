@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readFileSync } from "node:fs";
 import {
   DENSITY_BANDS,
   HOMEPAGE_DIRECTORY_NOTE,
@@ -8,6 +9,8 @@ import {
   invalidZipMessage,
   mapResultSummary,
   stateFilterStatus,
+  washingtonMapPostalOrFilter,
+  washingtonMapZipMatch,
 } from "../../../lib/family-journey.ts";
 
 test("only a numeric license opens a facility profile", () => {
@@ -32,6 +35,27 @@ test("an invalid ZIP does not describe the current map as unavailable", () => {
   assert.equal(summary.includes("Data unavailable"), false);
   assert.equal(invalidZipMessage("98056"), "Enter a five-digit ZIP code. The map is still showing ZIP 98056.");
   assert.equal(mapResultSummary({ zip: "98056", loading: false, error: "Unable to retrieve facility map data.", count: 0 }).includes("Data unavailable"), true);
+});
+
+test("a five-digit map search matches a stored ZIP and its nine-digit ZIP+4", () => {
+  assert.equal(washingtonMapZipMatch("98056", "98056"), true);
+  assert.equal(washingtonMapZipMatch("980561234", "98056"), true);
+  assert.equal(washingtonMapZipMatch(" 980561234 ", "98056"), true);
+  assert.equal(washingtonMapZipMatch("98057", "98056"), false);
+  assert.equal(washingtonMapZipMatch("980571234", "98056"), false);
+  assert.equal(washingtonMapZipMatch("98056123", "98056"), false);
+  assert.equal(washingtonMapZipMatch("98056-1234", "98056"), false);
+  assert.equal(washingtonMapZipMatch("", "98056"), false);
+  assert.equal(washingtonMapZipMatch(null, "98056"), false);
+  assert.equal(washingtonMapZipMatch("98056", "9805"), false);
+  assert.equal(washingtonMapZipMatch("98056", "980560"), false);
+  assert.equal(
+    washingtonMapPostalOrFilter("98056"),
+    "postal_code.eq.98056,postal_code.like.98056____",
+  );
+  const map = readFileSync("app/washington/map/page.tsx", "utf8");
+  assert.equal(map.includes("washingtonMapPostalOrFilter"), true);
+  assert.equal(map.includes('.eq("postal_code", zip)'), false);
 });
 
 test("the concentration legend uses the same colors as the markers", () => {

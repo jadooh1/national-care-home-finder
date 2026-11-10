@@ -8,7 +8,7 @@ import type * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
-import { DENSITY_BANDS, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary } from "../../../lib/family-journey";
+import { DENSITY_BANDS, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary, washingtonMapPostalOrFilter } from "../../../lib/family-journey";
 import { localizedInvalidZip, localizedMapSummary, type Locale } from "../../../lib/locale";
 
 type Home = {
@@ -107,7 +107,7 @@ export default function WashingtonMarketMapPage() {
         const { data, error: queryError } = await supabase
           .from("wa_afh_map_facilities")
           .select(FIELD_LIST)
-          .eq("postal_code", zip)
+          .or(washingtonMapPostalOrFilter(zip))
           .order("license_number", { ascending: true })
           .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
         if (cancelled) return;

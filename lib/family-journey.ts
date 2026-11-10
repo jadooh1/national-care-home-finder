@@ -30,3 +30,18 @@ export function mapResultSummary(input: { zip: string; loading: boolean; error: 
 export function invalidZipMessage(currentZip: string): string {
   return `Enter a five-digit ZIP code. The map is still showing ZIP ${currentZip}.`;
 }
+
+const FIVE_DIGIT_ZIP = /^\d{5}$/;
+const NINE_DIGIT_ZIP = /^\d{9}$/;
+
+export function washingtonMapZipMatch(storedPostalCode: string | null | undefined, searchZip: string): boolean {
+  if (!FIVE_DIGIT_ZIP.test(searchZip)) return false;
+  const stored = storedPostalCode?.trim() ?? "";
+  if (stored === searchZip) return true;
+  return NINE_DIGIT_ZIP.test(stored) && stored.startsWith(searchZip);
+}
+
+export function washingtonMapPostalOrFilter(searchZip: string): string {
+  if (!FIVE_DIGIT_ZIP.test(searchZip)) return "postal_code.eq.";
+  return `postal_code.eq.${searchZip},postal_code.like.${searchZip}____`;
+}
