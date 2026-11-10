@@ -4,6 +4,8 @@ import test from "node:test";
 import {
   CALIFORNIA_CANDIDATE_FACILITY_TYPES,
   CALIFORNIA_CCLD_DATASET_URL,
+  CALIFORNIA_FACILITY_SEARCH_APPLICATION_URL,
+  CALIFORNIA_FACILITY_SEARCH_WELCOME_URL,
   CALIFORNIA_OPEN_DATA_FIELDS,
   CALIFORNIA_OUT_OF_SCOPE_RESOURCES,
   acceptedExportDate,
@@ -71,6 +73,12 @@ test("California stays unpublished and has no coordinate or disclosure adoption"
   ]);
   assert.ok(CALIFORNIA_OUT_OF_SCOPE_RESOURCES.includes("Child Care Centers"));
   assert.equal(CALIFORNIA_CCLD_DATASET_URL, "https://data.chhs.ca.gov/dataset/ccl-facilities");
+  assert.equal(CALIFORNIA_FACILITY_SEARCH_WELCOME_URL, "https://www.cdss.ca.gov/inforesources/community-care-licensing/facility-search-welcome");
+  assert.equal(CALIFORNIA_FACILITY_SEARCH_APPLICATION_URL, "https://www.ccld.dss.ca.gov/carefacilitysearch/");
+  assert.ok(decision.blockers.includes("no-per-facility-disclosure-link-is-recorded"));
+  assert.ok(decision.blockers.includes("facility-search-application-returned-503"));
+  assert.ok(decision.blockers.includes("blank-residential-care-category-is-not-corrected"));
+  assert.ok(decision.blockers.includes("shifted-adult-residential-row-is-not-corrected"));
 });
 
 test("Washington directory and map remain the public contract", () => {

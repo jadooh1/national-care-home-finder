@@ -8,6 +8,9 @@ export const CALIFORNIA_CCLD_DATASET_URL = "https://data.chhs.ca.gov/dataset/ccl
 export const CALIFORNIA_FACILITY_SEARCH_WELCOME_URL =
   "https://www.cdss.ca.gov/inforesources/community-care-licensing/facility-search-welcome";
 
+export const CALIFORNIA_FACILITY_SEARCH_APPLICATION_URL =
+  "https://www.ccld.dss.ca.gov/carefacilitysearch/";
+
 export const CALIFORNIA_OPEN_DATA_FIELDS = [
   "facility_type",
   "facility_number",
@@ -98,6 +101,9 @@ const CALIFORNIA_BLOCKERS = [
   "no-facility-type-is-accepted",
   "address-and-contact-fields-are-not-accepted",
   "no-per-facility-disclosure-link-is-recorded",
+  "facility-search-application-returned-503",
+  "blank-residential-care-category-is-not-corrected",
+  "shifted-adult-residential-row-is-not-corrected",
 ] as const;
 
 export function onboardingDecision(state: CandidateState): OnboardingDecision {
