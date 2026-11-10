@@ -28,6 +28,8 @@ export type ProposedRosterRecord = {
   normalizedStatus: string | null;
   disclosureUrl: string | null;
   disclosureKind: DisclosureKind | null;
+  disclosureVerified: boolean;
+  disclosureVerificationEvidence: string | null;
   latitude: number | null;
   longitude: number | null;
   coordinateSource: CoordinateSource;
@@ -99,7 +101,11 @@ export function rosterViolations(record: ProposedRosterRecord): string[] {
   }
   if (record.freshnessVerified && !record.officialExportDate) violations.push("freshness-verified-without-official-export-date");
   if (record.disclosureKind === "facility-specific" && !record.disclosureUrl) violations.push("facility-disclosure-missing-url");
+  if (record.disclosureKind === "facility-specific" && !presentText(record.disclosureVerificationEvidence)) violations.push("facility-disclosure-missing-verification-evidence");
+  if (record.disclosureVerified && !presentText(record.disclosureVerificationEvidence)) violations.push("disclosure-verified-without-evidence");
+  if (record.disclosureVerified && (record.disclosureKind !== "facility-specific" || !record.disclosureUrl)) violations.push("disclosure-verified-without-facility-link");
   if (record.publication === "public" && record.disclosureKind !== "facility-specific") violations.push("public-record-lacks-facility-disclosure");
+  if (record.publication === "public" && !record.disclosureVerified) violations.push("public-record-lacks-disclosure-verification");
   if (record.normalizedCategory && !record.originalCategory) violations.push("normalized-category-without-original");
   if (record.normalizedStatus && !record.originalStatus) violations.push("normalized-status-without-original");
   if (record.coordinateSource === "absent" && (record.latitude !== null || record.longitude !== null)) violations.push("coordinates-without-source");
@@ -113,6 +119,8 @@ export function publicPublicationAllowed(record: ProposedRosterRecord): boolean 
   return record.publication === "public"
     && record.freshnessVerified
     && record.disclosureKind === "facility-specific"
+    && record.disclosureVerified
+    && presentText(record.disclosureVerificationEvidence)
     && record.officialExportDate !== null
     && isCalendarDate(record.officialExportDate)
     && rosterViolations(record).length === 0;

@@ -29,6 +29,8 @@ function record(overrides: Partial<ProposedRosterRecord> = {}): ProposedRosterRe
     normalizedStatus: null,
     disclosureUrl: "https://example.gov/facility/example",
     disclosureKind: "facility-specific",
+    disclosureVerified: true,
+    disclosureVerificationEvidence: "recorded review",
     latitude: 1,
     longitude: 2,
     coordinateSource: "licensing",
@@ -75,6 +77,11 @@ test("official dates must be real calendar dates", () => {
 test("publication safeguards and backward compatibility stay in force", () => {
   assert.equal(publicPublicationAllowed(record({ publication: "public" })), true);
   assert.equal(publicPublicationAllowed(record({ publication: "public", disclosureKind: "generic-search" })), false);
+  assert.equal(publicPublicationAllowed(record({
+    publication: "public",
+    disclosureVerified: false,
+    disclosureVerificationEvidence: null,
+  })), false);
   assert.equal(publicPublicationAllowed(record({ publication: "development" })), false);
   assert.equal(directoryContract("Washington")?.directoryPath, "/washington");
   assert.equal(directoryContract("Oregon")?.directoryPath, "/oregon");
@@ -107,6 +114,9 @@ test("the proposal and rollback stay unexecuted and limited to the new table", (
   assert.equal(proposal.includes("authorize-development-nationwide-roster"), true);
   assert.equal(rollback.includes("drop table if exists public.nationwide_roster"), true);
   assert.equal(rollback.includes("authorize-development-nationwide-roster-rollback"), true);
+  assert.equal(rollback.includes("authorize-development-nationwide-roster-populated-rollback"), true);
+  assert.equal(proposal.includes("disclosure_verification_evidence"), true);
+  assert.equal(proposal.includes("issuing_authority"), true);
   assert.equal(/drop\s+(table|view).*(wa_|or_odhs|facilities)/i.test(rollback), false);
   assert.equal(plan.includes("Validation procedure"), true);
   assert.equal(plan.includes("Rollback"), true);

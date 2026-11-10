@@ -128,6 +128,8 @@ function syntheticRecord(overrides: Partial<ProposedRosterRecord> = {}): Propose
     normalizedStatus: null,
     disclosureUrl: "https://example.gov/facility/example",
     disclosureKind: "facility-specific",
+    disclosureVerified: true,
+    disclosureVerificationEvidence: "recorded review",
     latitude: 1,
     longitude: 2,
     coordinateSource: "licensing",

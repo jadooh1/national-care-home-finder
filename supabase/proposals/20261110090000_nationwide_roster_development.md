@@ -12,7 +12,9 @@ An address value requires provenance for its own role. A mailing, supplemental, 
 
 `official_export_date` and `source_publication_date` are PostgreSQL `date` columns, so an impossible calendar date is rejected. Freshness can be verified only when an official export date is present. A retrieval timestamp is a separate `timestamptz`.
 
-A facility-specific disclosure link requires a URL. A generic search page or an unverified URL pattern cannot make a row public. A normalized category or status requires the original value. Coordinates are optional. When present, they need a source, an accuracy value, and a range. Georeferenced coordinates cannot be used on a public row. Publication defaults to `unpublished`.
+A facility-specific disclosure link requires a URL and recorded verification evidence. `disclosure_verified` stays false unless that evidence is stored. A URL by itself does not verify the link and cannot make a row public. A generic search page or an unverified URL pattern cannot make a row public. A normalized category or status requires the original value. Coordinates are optional. When present, they need a source, an accuracy value, and a range. Georeferenced coordinates cannot be used on a public row. Publication defaults to `unpublished`.
+
+The same identifier value can be stored for different issuing authorities, different identifier types, or different states. The same state, issuing authority, identifier type, and identifier value cannot be stored twice.
 
 Row level security is enabled and no public policy is created.
 
@@ -41,4 +43,4 @@ After a future authorized run, and before any roster row is loaded:
 
 ## Rollback
 
-Set `nchf.nationwide_roster_rollback_authorization` to `authorize-development-nationwide-roster-rollback` in a confirmed development session, then run the rollback file. It drops only `public.nationwide_roster`. Washington and Oregon relations stay in place. Rollback before any roster load leaves no roster rows behind.
+Set `nchf.nationwide_roster_rollback_authorization` to `authorize-development-nationwide-roster-rollback` in a confirmed development session, then run the rollback file. That authorization drops `public.nationwide_roster` only when the table is empty. If the table contains rows, the same session must also set `nchf.nationwide_roster_populated_rollback_authorization` to `authorize-development-nationwide-roster-populated-rollback`. Without that second value, rollback stops and the rows remain. Washington and Oregon relations stay in place.

@@ -51,6 +51,8 @@ create table public.nationwide_roster (
   normalized_status text,
   disclosure_url text,
   disclosure_kind text,
+  disclosure_verified boolean not null default false,
+  disclosure_verification_evidence text,
   latitude numeric(9, 6),
   longitude numeric(9, 6),
   coordinate_source text not null default 'absent',
@@ -122,7 +124,18 @@ create table public.nationwide_roster (
   ),
   constraint nationwide_roster_disclosure check (
     (disclosure_kind is null or disclosure_kind in ('facility-specific', 'generic-search', 'unverified-pattern'))
-    and (disclosure_kind is distinct from 'facility-specific' or disclosure_url is not null)
+    and (disclosure_kind is distinct from 'facility-specific' or (
+      disclosure_url is not null
+      and disclosure_verified
+      and disclosure_verification_evidence is not null
+      and length(btrim(disclosure_verification_evidence)) > 0
+    ))
+    and (disclosure_verified = false or (
+      disclosure_kind = 'facility-specific'
+      and disclosure_url is not null
+      and disclosure_verification_evidence is not null
+      and length(btrim(disclosure_verification_evidence)) > 0
+    ))
   ),
   constraint nationwide_roster_classification check (
     (normalized_category is null or original_category is not null)
@@ -154,6 +167,9 @@ create table public.nationwide_roster (
         and official_export_date is not null
         and disclosure_kind = 'facility-specific'
         and disclosure_url is not null
+        and disclosure_verified
+        and disclosure_verification_evidence is not null
+        and length(btrim(disclosure_verification_evidence)) > 0
         and coordinate_source is distinct from 'georeferenced'
       )
     )
@@ -161,15 +177,19 @@ create table public.nationwide_roster (
 );
 
 create unique index nationwide_roster_license_key
-  on public.nationwide_roster (state_name, license_identifier)
+  on public.nationwide_roster (state_name, coalesce(issuing_authority, ''), identifier_type, license_identifier)
   where license_identifier is not null;
 
 create unique index nationwide_roster_certification_key
-  on public.nationwide_roster (state_name, certification_identifier)
+  on public.nationwide_roster (state_name, coalesce(issuing_authority, ''), identifier_type, certification_identifier)
   where certification_identifier is not null;
 
+create unique index nationwide_roster_facility_key
+  on public.nationwide_roster (state_name, coalesce(issuing_authority, ''), identifier_type, facility_identifier)
+  where facility_identifier is not null;
+
 create unique index nationwide_roster_source_record_key
-  on public.nationwide_roster (state_name, source_record_id)
+  on public.nationwide_roster (state_name, coalesce(issuing_authority, ''), identifier_type, source_record_id)
   where source_record_id is not null;
 
 alter table public.nationwide_roster enable row level security;
