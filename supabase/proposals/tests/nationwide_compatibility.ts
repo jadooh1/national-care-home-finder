@@ -111,7 +111,9 @@ function evidence(state: string, field: string) {
 
 function syntheticRecord(overrides: Partial<ProposedRosterRecord> = {}): ProposedRosterRecord {
   return {
-    regulatoryIdentifier: "example",
+    licenseIdentifier: "example",
+    certificationIdentifier: null,
+    facilityIdentifier: null,
     identifierType: "license",
     issuingAuthority: "Example agency",
     sourceRecordId: "source-example",
@@ -171,13 +173,20 @@ test("roster rules protect data integrity, publication, and existing directories
   assert.equal(publicPublicationAllowed(syntheticRecord({ publication: "development" })), false);
   assert.equal(rosterViolations(syntheticRecord({
     identifierType: "object-id",
-    regulatoryIdentifier: "same-example",
+    licenseIdentifier: "same-example",
     sourceRecordId: "same-example",
   })).includes("object-id-is-not-a-regulatory-identifier"), true);
   assert.equal(rosterViolations(syntheticRecord({
     identifierType: "certification",
-    regulatoryIdentifier: "example",
+    licenseIdentifier: "example",
+    certificationIdentifier: "C-100",
   })).includes("certification-is-not-stored-as-a-license"), true);
+  assert.deepEqual(rosterViolations(syntheticRecord({
+    identifierType: "certification",
+    licenseIdentifier: null,
+    certificationIdentifier: "C-100",
+    publication: "unpublished",
+  })), []);
   assert.equal(rosterViolations(syntheticRecord({
     addresses: [
       { role: "physical", value: "same example", provenance: "official column" },

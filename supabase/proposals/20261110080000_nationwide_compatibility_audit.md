@@ -114,7 +114,7 @@ Publication safeguards: a row can be public only when publication is already `pu
 
 Backward compatibility: do not alter `wa_dshs_listed_facilities`, `wa_afh_map_facilities`, or `or_odhs_listed_afh`, and do not change `/washington` or `/oregon`. Washington’s numeric license path and Oregon’s source-id path remain as they are. The existing directory contracts stay the publication control. The new contract does not replace them.
 
-Migration, when a person later approves a non-production change: create the new table only, load no production rows, and keep every new state unpublished. Rollback is dropping that new table. This proposal contains no executable migration.
+The development-only SQL proposal is `supabase/proposals/20261110090000_nationwide_roster_development.sql`. It is not in `supabase/migrations`, it refuses to run without a later authorization, and it was not executed. A certification number is stored as a certification. It is not stored as a license. Rollback is `supabase/proposals/20261110090000_nationwide_roster_development_ROLLBACK.sql`, which drops only the new roster table.
 
 Validation covers three groups. Data integrity covers the separations above. Publication safeguards cover the public-row rule. Backward compatibility covers the existing Washington and Oregon counts, routes, and the unchanged unpublished state of every other state.
 

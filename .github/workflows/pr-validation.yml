@@ -92,6 +92,9 @@ jobs:
       - name: Check the nationwide compatibility audit
         run: node --experimental-strip-types --test supabase/proposals/tests/nationwide_compatibility.ts
 
+      - name: Check the nationwide roster proposal
+        run: node --experimental-strip-types --test supabase/proposals/tests/nationwide_roster.ts
+
       - name: Check the Michigan licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/michigan_licensing.ts
 
