@@ -48,15 +48,27 @@ UNITS = "Total number of AL /SH units for license"
 MANIFEST_PATH = (
     Path(__file__).resolve().parents[2] / "supabase" / "proposals" / "onboarding" / "illinois.json"
 )
-ROSTER_SOURCE_FIELDS = {
-    FACILITY_ID,
-    FACILITY_NAME,
-    STREET,
-    CITY,
-    STATE,
-    ZIP,
-    FACILITY_TYPE,
-}
+SOURCE_RECORD_COLUMNS = (
+    "state_name",
+    "issuing_authority",
+    "identifier_type",
+    "facility_identifier",
+    "license_identifier",
+    "certification_identifier",
+    "source_record_id",
+    "original_identifiers",
+    "source_attributes",
+    "provenance",
+    "source_sha256",
+    "extraction_date",
+    "source_effective_date",
+    "source_expiration_date",
+    "review_flags",
+    "original_status",
+    "normalized_status",
+    "publication",
+    "ingestion_batch_id",
+)
 
 ROSTER_COLUMNS = (
     "state_name",
@@ -295,12 +307,8 @@ def map_source(source: dict[str, object]) -> dict[str, object]:
 
 
 def source_attributes(row: dict[str, str], flags: list[str]) -> dict[str, object]:
-    """Official values that the national roster does not have a column for."""
-    retained = {
-        key: value
-        for key, value in row.items()
-        if key not in ROSTER_SOURCE_FIELDS and str(value).strip()
-    }
+    """Official workbook values, including fields that also have typed columns."""
+    retained = {key: value for key, value in row.items() if str(value).strip()}
     retained["review_flags"] = list(flags)
     return retained
 
@@ -321,7 +329,7 @@ def source_record_row(record: dict[str, object], extraction_date: str, digest: s
     publication = record.get("publication")
     if publication != "unpublished":
         raise ValueError("Illinois source row refuses a published candidate")
-    return {
+    row = {
         "state_name": "Illinois",
         "issuing_authority": AUTHORITY,
         "identifier_type": "facility-id",
@@ -344,12 +352,11 @@ def source_record_row(record: dict[str, object], extraction_date: str, digest: s
         "normalized_status": None,
         "publication": "unpublished",
         "ingestion_batch_id": ILLINOIS_BATCH_ID,
-        "official_export_date": extraction_date,
-        "disclosure_verified": False,
-        "freshness_verified": False,
-        "physical_address": None,
-        "unverified_address": record["unverified_address"],
     }
+    projected = {column: row[column] for column in SOURCE_RECORD_COLUMNS}
+    if set(projected) != set(SOURCE_RECORD_COLUMNS):
+        raise ValueError("Illinois source row does not match the source-record table")
+    return projected
 
 
 def roster_row(record: dict[str, object]) -> dict[str, object]:

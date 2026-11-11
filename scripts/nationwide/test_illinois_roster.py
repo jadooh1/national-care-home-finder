@@ -9,6 +9,7 @@ from illinois_roster import (
     ASSISTED_LIVING_CATEGORY,
     BASELINE,
     ILLINOIS_BATCH_ID,
+    SOURCE_RECORD_COLUMNS,
     IllinoisRoster,
     illinois_source_batch,
     map_source,
@@ -196,6 +197,11 @@ class IllinoisMappingTest(unittest.TestCase):
         self.assertIsNone(flagged[0]["original_status"])
         self.assertIsNone(flagged[0]["normalized_status"])
         self.assertIn("Licensee ID", flagged[0]["original_identifiers"])
+        self.assertEqual(tuple(source_rows[0]), SOURCE_RECORD_COLUMNS)
+        self.assertEqual(source_rows[0]["source_attributes"]["Facility/Establishment Name"], "Example Home")
+        self.assertEqual(source_rows[0]["source_attributes"]["Facility Street Address"], "1 Example Street")
+        self.assertEqual(source_rows[0]["source_attributes"]["Facility County"], "Sangamon")
+        self.assertEqual(source_rows[0]["source_attributes"]["Total number of AL /SH units for license"], "12")
 
     def test_script_does_not_publish_or_open_a_directory(self):
         source = Path(__file__).with_name("illinois_roster.py").read_text(encoding="utf-8")

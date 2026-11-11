@@ -130,7 +130,10 @@ def assert_validated_extraction_date(records, extraction_date):
     if not records:
         raise RuntimeError("extraction date requires at least one source row")
     for record in records:
-        if record.get("official_export_date") != extraction_date:
+        observed_date = record.get("official_export_date")
+        if _blank(observed_date):
+            observed_date = record.get("extraction_date")
+        if observed_date != extraction_date:
             raise RuntimeError("extraction date does not match the source row")
         if record.get("publication", "unpublished") != "unpublished":
             raise RuntimeError("roster ingestion refused: a row would be published")
