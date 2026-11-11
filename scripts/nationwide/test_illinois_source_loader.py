@@ -1,5 +1,7 @@
 import os
+import re
 import unittest
+from pathlib import Path
 
 from illinois_roster import ILLINOIS_BATCH_ID, SOURCE_RECORD_COLUMNS, SOURCE_SHA256
 from illinois_source_loader import (
@@ -75,6 +77,22 @@ class IllinoisSourceLoaderTest(unittest.TestCase):
         duplicated[1]["facility_identifier"] = duplicated[0]["facility_identifier"]
         with self.assertRaisesRegex(RuntimeError, "duplicated"):
             validate_source_batch(duplicated, EXPECTED_BASELINES, 0)
+
+    def test_proposal_matches_the_loader_and_blocks_a_second_copy(self):
+        root = Path(__file__).resolve().parents[2]
+        proposal = root.joinpath("supabase/proposals/20261111180000_nationwide_source_record.sql").read_text(encoding="utf-8")
+        record = root.joinpath("supabase/proposals/20261111181000_illinois_source_load.md").read_text(encoding="utf-8")
+        for column in SOURCE_RECORD_COLUMNS:
+            self.assertIn(column, proposal)
+        self.assertIn("check (publication = 'unpublished')", proposal)
+        self.assertIn("original_status is null and normalized_status is null", proposal)
+        self.assertIn("revoke all on table public.nationwide_source_record from public", proposal.lower())
+        self.assertIsNone(re.search(r"(?m)^\s*grant\b", proposal.lower()))
+        sql = transaction_sql(synthetic_rows(), EXPECTED_BASELINES, 0)
+        guard = sql.split("insert into public.nationwide_source_record", 1)[0]
+        self.assertIn("the batch is already present", guard)
+        self.assertIn("INSERT 0 502", record)
+        self.assertIn("IDPH confirms the current license status", record)
 
     def test_execute_refuses_production_and_has_no_connection(self):
         keys = ("PGHOST", "PGUSER", "NCHF_IL_EXECUTION_TARGET", "NCHF_IL_DEVELOPMENT_EXECUTION")
