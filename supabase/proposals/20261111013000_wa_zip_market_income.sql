@@ -4,8 +4,9 @@
 -- grants no write access, and does not load the census file by itself.
 --
 -- Apply the staging file and supabase/proposals/tests/wa_zip_market_income_checks.sql
--- in the same transaction. The checks grant read access only after the
--- facility and ZCTA counts reconcile.
+-- in the same transaction. The checks grant public read access to the view
+-- only after the facility and ZCTA counts reconcile. The staging table stays
+-- closed to public clients and service_role.
 --
 -- Rollback: supabase/proposals/20261111013000_wa_zip_market_income_rollback.sql
 
@@ -19,8 +20,9 @@ begin
     raise exception 'wa_zip_market_income objects already exist';
   end if;
   if not exists (select 1 from pg_roles where rolname = 'anon')
-     or not exists (select 1 from pg_roles where rolname = 'authenticated') then
-    raise exception 'wa_zip_market_income requires anon and authenticated';
+     or not exists (select 1 from pg_roles where rolname = 'authenticated')
+     or not exists (select 1 from pg_roles where rolname = 'service_role') then
+    raise exception 'wa_zip_market_income requires anon, authenticated, and service_role';
   end if;
 end
 $roles$;
@@ -72,7 +74,7 @@ comment on table public.wa_zip_market_census_staging is
   'Development-only 2020-2024 ACS ZCTA aggregates for Washington. No facility or resident identifiers.';
 
 create view public.wa_zip_market_income
-with (security_invoker = true) as
+with (security_barrier = true, security_invoker = false) as
 with normalized as (
   select
     case
@@ -140,7 +142,7 @@ from census
 full outer join facility_zip on facility_zip.zip_code = census.zip_code;
 
 comment on view public.wa_zip_market_income is
-  'Aggregate Washington ZIP market view. Census fields come from ZCTAs; facility counts come from published listings without exposing facility identifiers.';
+  'Aggregate Washington ZIP market view. Census fields come from the closed staging table; facility counts come from the published directory view without exposing facility identifiers.';
 
-revoke all on table public.wa_zip_market_census_staging from public, anon, authenticated;
-revoke all on table public.wa_zip_market_income from public, anon, authenticated;
+revoke all on table public.wa_zip_market_census_staging from public, anon, authenticated, service_role;
+revoke all on table public.wa_zip_market_income from public, anon, authenticated, service_role;

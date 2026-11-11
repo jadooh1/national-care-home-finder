@@ -1,6 +1,7 @@
--- Reconciliation and read grants for the Washington ZIP market proposal.
+-- Reconciliation and public-view grants for the Washington ZIP market proposal.
 -- Set both expected counts in the same transaction before running this file.
 -- Development values are 6278 published facilities and 606 Washington ZCTAs.
+-- This file grants SELECT on the view only. It does not grant the staging table.
 
 do $reconcile$
 declare
@@ -87,28 +88,44 @@ begin
     raise exception 'wa_zip_market_income exposes an identifying column';
   end if;
 
-  select array_to_string(relation.reloptions, ',')
+  select coalesce(array_to_string(relation.reloptions, ','), '')
     into view_options
   from pg_class as relation
   where relation.oid = 'public.wa_zip_market_income'::regclass;
-  if position('security_invoker=true' in view_options) = 0 then
-    raise exception 'wa_zip_market_income must use security_invoker';
+  if position('security_barrier=true' in view_options) = 0
+     or position('security_invoker=false' in view_options) = 0
+     or position('security_invoker=true' in view_options) > 0 then
+    raise exception 'wa_zip_market_income must use a security barrier without security invoker';
+  end if;
+  if pg_get_viewdef('public.wa_zip_market_income'::regclass, true) ~ '\mfacilities\M' then
+    raise exception 'wa_zip_market_income reads facility records directly';
+  end if;
+  if has_table_privilege('anon', 'public.wa_zip_market_census_staging', 'SELECT')
+     or has_table_privilege('anon', 'public.wa_zip_market_census_staging', 'INSERT')
+     or has_table_privilege('anon', 'public.wa_zip_market_census_staging', 'UPDATE')
+     or has_table_privilege('anon', 'public.wa_zip_market_census_staging', 'DELETE')
+     or has_table_privilege('authenticated', 'public.wa_zip_market_census_staging', 'SELECT')
+     or has_table_privilege('service_role', 'public.wa_zip_market_census_staging', 'SELECT')
+     or has_table_privilege('service_role', 'public.wa_zip_market_census_staging', 'INSERT') then
+    raise exception 'wa_zip_market_census_staging is readable by a public or service role';
   end if;
 end
 $reconcile$;
 
-grant select on table public.wa_zip_market_census_staging to anon, authenticated;
 grant select on table public.wa_zip_market_income to anon, authenticated;
 
-do $service_role$
+do $view_grants$
 begin
-  if exists (select 1 from pg_roles where rolname = 'service_role') then
-    execute 'revoke all on table public.wa_zip_market_census_staging from service_role';
-    execute 'revoke all on table public.wa_zip_market_income from service_role';
-    execute 'grant select on table public.wa_zip_market_census_staging to service_role';
-    execute 'grant select on table public.wa_zip_market_income to service_role';
+  if not has_table_privilege('anon', 'public.wa_zip_market_income', 'SELECT')
+     or not has_table_privilege('authenticated', 'public.wa_zip_market_income', 'SELECT')
+     or has_table_privilege('anon', 'public.wa_zip_market_income', 'INSERT')
+     or has_table_privilege('authenticated', 'public.wa_zip_market_income', 'INSERT')
+     or has_table_privilege('service_role', 'public.wa_zip_market_income', 'SELECT')
+     or has_table_privilege('anon', 'public.wa_zip_market_census_staging', 'SELECT')
+     or has_table_privilege('service_role', 'public.wa_zip_market_census_staging', 'SELECT') then
+    raise exception 'wa_zip_market_income grants are not limited to public read of the view';
   end if;
 end
-$service_role$;
+$view_grants$;
 
 select 'WA_ZIP_MARKET_INCOME_READY' as result;

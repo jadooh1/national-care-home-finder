@@ -23,6 +23,12 @@ insert into public.fixture_wa_facilities (postal_code, licensed_capacity) values
   ('981010000', 4),
   ('98102-1234', null),
   ('98103', 5);
+insert into public.fixture_wa_facilities (
+  postal_code, licensed_capacity, state_code, record_status, presence, protected_phone
+) values
+  ('97201', 6, 'OR', 'source_matched', 'active', 'hidden-out-of-state'),
+  ('98104', 6, 'WA', 'draft', 'active', 'hidden-unpublished'),
+  ('98105', 6, 'WA', 'source_matched', 'absent', 'hidden-absent');
 insert into public.wa_zip_market_census_staging (
   zip_code, population_total, age_60_69, age_70_79, age_80_84, age_85_plus,
   median_household_income, median_income_margin_error, total_households, households_100k_plus
@@ -41,6 +47,15 @@ select zip_code, total_afhs, homes_with_capacity, known_licensed_beds,
        age_70_plus, households_100k_plus_pct, census_period
 from public.wa_zip_market_income
 order by zip_code;
+"""
+OWNER_PROOF = """
+\\pset format unaligned
+\\pset tuples_only on
+\\pset fieldsep '|'
+select
+  (select count(*) from public.fixture_wa_facilities),
+  (select coalesce(sum(total_afhs), 0) from public.wa_zip_market_income),
+  (select count(*) from public.wa_zip_market_income where zip_code in ('97201', '98104', '98105'));
 """
 PERIOD = "2020\u20132024"
 EXPECTED_ROWS = "\n".join([
@@ -150,23 +165,33 @@ def main():
         for expected in EXPECTED_ROWS.splitlines():
             if expected not in output:
                 raise RuntimeError(output)
+        owner_output = require_success(OWNER_PROOF, "7|4|0")
+        if "7|4|0" not in owner_output:
+            raise RuntimeError(owner_output)
+        require_success(
+            "set role anon; select count(*) from public.wa_zip_market_income; reset role;",
+            "4",
+        )
         require_failure(
-            "revoke select on table public.wa_zip_market_census_staging from anon;\n"
-            "set role anon; select count(*) from public.wa_zip_market_income;",
+            "set role anon; select count(*) from public.wa_zip_market_census_staging;",
             "permission denied",
         )
-        require_success(
-            "grant select on table public.wa_zip_market_census_staging to anon;\n"
-            "set role anon; select count(*) from public.wa_zip_market_income;\n"
-            "reset role;",
-            "4",
+        require_failure(
+            "set role service_role; select count(*) from public.wa_zip_market_census_staging;",
+            "permission denied",
+        )
+        require_failure(
+            "set role anon; select protected_phone from public.fixture_wa_facilities;",
+            "permission denied",
         )
         require_failure(
             "set role anon; insert into public.wa_zip_market_census_staging (zip_code) values ('98104');",
             "permission denied",
         )
         require_success(ROLLBACK.read_text(encoding="utf-8"), "DROP TABLE")
+        require_success("select count(*) from public.fixture_wa_facilities;", "7")
         require_failure("select count(*) from public.wa_zip_market_income;", "does not exist")
+        require_failure("select count(*) from public.wa_zip_market_census_staging;", "does not exist")
         print("PASS | Washington ZIP market income | 4 facilities and 3 ZCTAs reconcile", flush=True)
         return 0
     except RuntimeError as error:

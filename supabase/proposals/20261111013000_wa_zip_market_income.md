@@ -5,7 +5,7 @@ This proposal is ready for review. Do not apply it until a person authorizes tha
 ## Objects
 
 - `public.wa_zip_market_census_staging` — one row per Washington-intersecting 2020 ZCTA. It stores public ACS aggregates only.
-- `public.wa_zip_market_income` — `security_invoker` view. A full outer join keeps every staged ZCTA and every normalized published facility ZIP.
+- `public.wa_zip_market_income` — `security_barrier` view with `security_invoker = false`. A full outer join keeps every staged ZCTA and every normalized published facility ZIP. The view reads the published directory view rather than `public.facilities`, so the view owner cannot count unpublished, out-of-state, or absent facilities through it.
 
 The view reads `postal_code` and `licensed_capacity` from the existing `public.wa_dshs_listed_facilities` view. It does not update stored postal codes. Five digits stay as five digits, nine digits use the first five, and `NNNNN-NNNN` uses the first five. Any other postal code fails reconciliation.
 
@@ -32,7 +32,9 @@ Unavailable estimates (`-666666666`) and unavailable or jammed margins (`-222222
 
 ## Permissions
 
-`anon`, `authenticated`, and, when the role exists, `service_role` receive `SELECT` only, and only after reconciliation succeeds. `PUBLIC` keeps no privileges. There is no insert, update, or delete grant.
+Development grants new tables to `anon`, `authenticated`, and `service_role` by default. This proposal revokes all of those privileges, and `PUBLIC`, from the staging table and the view. It does not grant the staging table back.
+
+After reconciliation, `anon` and `authenticated` receive `SELECT` on `public.wa_zip_market_income` only. They receive no insert, update, or delete privilege. `service_role` receives neither the staging table nor the view. The table owner can still load the staging file.
 
 ## Development transaction
 
@@ -48,7 +50,7 @@ select set_config('nchf.wa_market_expected_zctas', '606', false);
 commit;
 ```
 
-The checks refuse to continue when either count setting is missing, any published postal code cannot be normalized, the staged row count is not 606, the summed facility count is not 6,278, a staged or facility ZIP is absent from the view, the columns differ from the demographics page, or `security_invoker` is off. A failure rolls the transaction back.
+The checks refuse to continue when either count setting is missing, any published postal code cannot be normalized, the staged row count is not 606, the summed facility count is not 6,278, a staged or facility ZIP is absent from the view, the columns differ from the demographics page, the view reads `public.facilities` directly, the security barrier is off, or a public role can read the staging table. A failure rolls the transaction back.
 
 ## Rollback
 
