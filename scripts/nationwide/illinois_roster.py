@@ -14,6 +14,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
+from roster_ingestion import assert_validated_extraction_date
 from state_adapter import StateRosterAdapter, ValidationReport, assert_listing_closed, load_manifest, publication_eligible
 
 AUTHORITY = "Illinois Department of Public Health"
@@ -21,6 +22,7 @@ FOIA_REQUEST = "DPH 26-2017"
 ASSISTED_LIVING_CATEGORY = "Assisted Living/Shared Housing Establishment"
 SOURCE_FILENAME = "3 liner with License-2026-10-28-16-16-10.xlsx"
 SOURCE_SHA256 = "de048fc9f80c73615831dffedc01474c07c0cb59c8952e92d653f3f1727b907a"
+ILLINOIS_BATCH_ID = "illinois-idph-assisted-living-20261028"
 BASELINE = {
     "facility_records": 1459,
     "assisted_living_records": 502,
@@ -303,6 +305,53 @@ def source_attributes(row: dict[str, str], flags: list[str]) -> dict[str, object
     return retained
 
 
+def _iso_date(value: object) -> str | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    parsed = _parse_date(text)
+    if parsed is None:
+        raise ValueError("source date is not parseable")
+    return parsed.isoformat()
+
+
+def source_record_row(record: dict[str, object], extraction_date: str, digest: str) -> dict[str, object]:
+    """State-specific retention row. It is not a nationwide_roster row."""
+    attributes = dict(record["source_attributes"])
+    publication = record.get("publication")
+    if publication != "unpublished":
+        raise ValueError("Illinois source row refuses a published candidate")
+    return {
+        "state_name": "Illinois",
+        "issuing_authority": AUTHORITY,
+        "identifier_type": "facility-id",
+        "facility_identifier": record["facility_identifier"],
+        "license_identifier": None,
+        "certification_identifier": None,
+        "source_record_id": record["source_record_id"],
+        "original_identifiers": {
+            "Facility ID": record["facility_identifier"],
+            "Licensee ID": attributes.get(LICENSEE_ID),
+        },
+        "source_attributes": attributes,
+        "provenance": FOIA_REQUEST,
+        "source_sha256": digest,
+        "extraction_date": extraction_date,
+        "source_effective_date": _iso_date(attributes.get(EFFECTIVE_DATE)),
+        "source_expiration_date": _iso_date(attributes.get(EXPIRATION_DATE)),
+        "review_flags": list(record["review_flags"]),
+        "original_status": None,
+        "normalized_status": None,
+        "publication": "unpublished",
+        "ingestion_batch_id": ILLINOIS_BATCH_ID,
+        "official_export_date": extraction_date,
+        "disclosure_verified": False,
+        "freshness_verified": False,
+        "physical_address": None,
+        "unverified_address": record["unverified_address"],
+    }
+
+
 def roster_row(record: dict[str, object]) -> dict[str, object]:
     """Projection that can later be staged. Review-only fields stay off the row."""
     assert_listing_closed(record)
@@ -386,6 +435,15 @@ class IllinoisRoster(StateRosterAdapter):
             publication_public=counts["publication_public"],
             issues=tuple(issues),
         )
+
+
+def illinois_source_batch(mapped: dict[str, object], digest: str) -> list[dict[str, object]]:
+    extraction_date = str(mapped["extract_date"])
+    rows = [source_record_row(record, extraction_date, digest) for record in mapped["accepted"]]
+    assert_validated_extraction_date(rows, extraction_date)
+    if any(row["publication"] != "unpublished" or row["normalized_status"] is not None for row in rows):
+        raise ValueError("Illinois source batch refuses a listing status")
+    return rows
 
 
 def matches_baseline(mapped: dict[str, object], digest: str) -> bool:

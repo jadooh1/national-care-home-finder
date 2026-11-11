@@ -8,7 +8,9 @@ from xml.etree import ElementTree as ET
 from illinois_roster import (
     ASSISTED_LIVING_CATEGORY,
     BASELINE,
+    ILLINOIS_BATCH_ID,
     IllinoisRoster,
+    illinois_source_batch,
     map_source,
     matches_baseline,
     read_xlsx,
@@ -186,6 +188,14 @@ class IllinoisMappingTest(unittest.TestCase):
         self.assertEqual(mapped["out_of_scope"]["Long Term Care Facility"], 1)
         self.assertEqual([item["reason"] for item in mapped["excluded"]], ["capacity-total-row", "non-facility-row"])
         self.assertEqual(sum(record["reported_alsh_units"] for record in mapped["accepted"]), 19)
+        source_rows = illinois_source_batch(mapped, "a" * 64)
+        self.assertTrue(all(row["publication"] == "unpublished" for row in source_rows))
+        self.assertEqual(source_rows[0]["ingestion_batch_id"], ILLINOIS_BATCH_ID)
+        flagged = [row for row in source_rows if row["review_flags"]]
+        self.assertEqual(len(flagged), 1)
+        self.assertIsNone(flagged[0]["original_status"])
+        self.assertIsNone(flagged[0]["normalized_status"])
+        self.assertIn("Licensee ID", flagged[0]["original_identifiers"])
 
     def test_script_does_not_publish_or_open_a_directory(self):
         source = Path(__file__).with_name("illinois_roster.py").read_text(encoding="utf-8")
@@ -211,6 +221,28 @@ class IllinoisMappingTest(unittest.TestCase):
         self.assertEqual(manifest["validation"]["excluded_capacity_total_rows"], 1)
         self.assertEqual(manifest["validation"]["excluded_non_facility_rows"], 1)
         self.assertEqual(manifest["validation"]["expiration_review_flags"], 17)
+        proposals = Path(__file__).resolve().parents[2].joinpath("supabase/proposals")
+        proposal = proposals.joinpath("20261111180000_nationwide_source_record.sql").read_text(encoding="utf-8")
+        rollback = proposals.joinpath("20261111181000_illinois_source_rollback.sql").read_text(encoding="utf-8")
+        table_rollback = proposals.joinpath("20261111180000_nationwide_source_record_ROLLBACK.sql").read_text(encoding="utf-8")
+        self.assertIn("check (publication = 'unpublished')", proposal)
+        self.assertIn("original_status is null and normalized_status is null", proposal)
+        self.assertNotIn("insert into", proposal.lower())
+        for text in (proposal, rollback, table_rollback):
+            self.assertIn("1086", text)
+            self.assertIn("north-carolina-dhhs-roster-pilot-20261110", text)
+            self.assertIn("39", text)
+            self.assertIn("delaware-dhcq-assisted-living-pilot-20261110", text)
+            self.assertIn("6278", text)
+            self.assertIn("wa_dshs_listed_facilities", text)
+            self.assertIn("1584", text)
+            self.assertIn("or_odhs_listed_afh", text)
+        self.assertIn("delete from public.nationwide_source_record", rollback.lower())
+        self.assertNotIn("delete from public.nationwide_roster", rollback.lower())
+        self.assertNotIn("delete from public.wa_", rollback.lower())
+        self.assertNotIn("delete from public.or_", rollback.lower())
+        self.assertIn(ILLINOIS_BATCH_ID, rollback)
+        self.assertNotIn("drop table public.nationwide_roster", table_rollback.lower())
         alternate = dict(manifest)
         alternate["publication_eligibility"] = "eligible"
         with self.assertRaises(ValueError):
@@ -244,7 +276,16 @@ class IllinoisMappingTest(unittest.TestCase):
         self.assertEqual(counts["excluded_reasons"]["capacity-total-row"], 1)
         self.assertEqual(counts["excluded_reasons"]["non-facility-row"], 1)
         flagged = [record for record in mapped["accepted"] if record["review_flags"]]
+        source_rows = illinois_source_batch(mapped, source["sha256"])
+        self.assertEqual(len(source_rows), 502)
         self.assertEqual(len(flagged), 17)
+        self.assertEqual(sum(bool(row["review_flags"]) for row in source_rows), 17)
+        self.assertTrue(all(
+            row["publication"] == "unpublished"
+            and row["original_status"] is None
+            and row["normalized_status"] is None
+            for row in source_rows
+        ))
         for record in flagged:
             self.assertEqual(record["publication"], "unpublished")
             self.assertFalse(publication_eligible(record))
