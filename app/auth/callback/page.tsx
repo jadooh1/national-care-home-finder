@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
+import { browserClaimStorage, ownerClaimHref, readClaimLicense } from "../../../lib/owner-claim";
 import { supabase } from "../../../lib/supabase";
 import {
   captureAndStripAuthCallback,
@@ -72,7 +73,8 @@ export default function AuthCallbackPage() {
           router.replace("/owner/reset-password");
           return;
         }
-        router.replace("/owner/dashboard");
+        const storage = browserClaimStorage();
+        router.replace(ownerClaimHref(storage ? readClaimLicense(storage) : null));
       } catch {
         const session = await supabase.auth.getSession();
         if (!session.data.session) clearRecoveryPending();
