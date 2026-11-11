@@ -1,11 +1,20 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
+import {
+  browserClaimStorage,
+  claimLicenseQuery,
+  claimStatusKind,
+  duplicateClaimBlocks,
+  ownerSignInHref,
+  readClaimLicense,
+  writeClaimLicense,
+} from "../../../lib/owner-claim";
 import { captureAndStripAuthCallback, recoveryPending, markRecoveryPending } from "../../../lib/password-recovery";
 import { supabase } from "../../../lib/supabase";
 
@@ -45,6 +54,7 @@ export default function OwnerDashboard() {
   const [notes, setNotes] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<DashNotice>("");
+  const prefilled = useRef(false);
 
   function codeLabel(value: string) {
     if (value === "pending" || value === "approved" || value === "rejected" || value === "submitted") return codes[value];
@@ -85,7 +95,11 @@ export default function OwnerDashboard() {
       const { data, error: authError } = await supabase.auth.getUser();
       if (!active) return;
       if (recoveryPending()) { router.replace("/owner/reset-password"); return; }
-      if (authError || !data.user) { router.replace("/owner"); return; }
+      if (authError || !data.user) {
+        const license = claimLicenseQuery(new URLSearchParams(window.location.search).get("license"));
+        router.replace(ownerSignInHref(license));
+        return;
+      }
       setUser(data.user);
       await loadClaims(data.user.id);
       if (active) setLoading(false);
@@ -99,9 +113,9 @@ export default function OwnerDashboard() {
     return () => { active = false; subscription.unsubscribe(); };
   }, [router, loadClaims]);
 
-  async function findFacility(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setSearchError(""); setNotice(""); setSelected(null); setResults([]);
-    const term = search.trim().replace(/[^a-zA-Z0-9\s-]/g, "").slice(0, 70);
+  const searchListedFacilities = useCallback(async (rawTerm: string) => {
+    setSearchError(""); setNotice(""); setSelected(null); setResults([]);
+    const term = rawTerm.trim().replace(/[^a-zA-Z0-9\s-]/g, "").slice(0, 70);
     if (term.length < 3) { setSearchError("short"); return; }
     setSearching(true);
     const pattern = `"%${term}%"`;
@@ -112,13 +126,30 @@ export default function OwnerDashboard() {
     if (queryError) setSearchError("search");
     else { setResults((data ?? []) as Facility[]); if (!data?.length) setSearchError("none"); }
     setSearching(false);
+  }, []);
+
+  useEffect(() => {
+    if (!user || prefilled.current) return;
+    const storage = browserClaimStorage();
+    const fromUrl = claimLicenseQuery(new URLSearchParams(window.location.search).get("license"));
+    if (storage && fromUrl) writeClaimLicense(storage, fromUrl);
+    const license = fromUrl ?? (storage ? readClaimLicense(storage) : null);
+    if (!license) return;
+    prefilled.current = true;
+    setSearch(license);
+    void searchListedFacilities(license);
+  }, [user, searchListedFacilities]);
+
+  function findFacility(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void searchListedFacilities(search);
   }
 
   async function submitClaim(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!selected || !user) return;
     setNotice(""); setError("");
-    if (claims.some(c => c.facility_id === selected.id && c.verification_status !== "rejected")) {
+    if (duplicateClaimBlocks(claims, selected.id)) {
       setError("duplicate"); return;
     }
     const textNotes = notes.trim();
@@ -136,6 +167,8 @@ export default function OwnerDashboard() {
     else {
       setNotice("submitted");
       setSelected(null); setNotes(""); setResults([]); setSearch("");
+      const storage = browserClaimStorage();
+      if (storage) writeClaimLicense(storage, null);
       await loadClaims(authData.user.id);
     }
     setSubmitting(false);
@@ -181,7 +214,16 @@ export default function OwnerDashboard() {
             return <div key={c.id} style={{ padding: "14px 0", borderTop: "1px solid #dbe5eb" }}>
               <div><strong>{home?.canonical_name ?? text.facilityUnavailable}</strong></div>
               <div>{text.license} {home?.license_number ?? text.notListed}{home?.city ? ` · ${home.city}` : ""}</div>
-              <div><strong>{text.status}</strong> {codeLabel(c.verification_status)}</div>
+              <div>
+                <strong>{text.status}</strong>{" "}
+                <span style={{
+                  fontWeight: 800,
+                  color: claimStatusKind(c.verification_status) === "approved" ? "#176b53" : claimStatusKind(c.verification_status) === "rejected" ? "#9f2626" : "#8a5a00",
+                }}>
+                  {claimStatusKind(c.verification_status) ? text.claimStatus[claimStatusKind(c.verification_status)!] : codeLabel(c.verification_status)}
+                </span>
+              </div>
+              {claimStatusKind(c.verification_status) && <p style={{ margin: "6px 0 0", lineHeight: 1.5 }}>{text.claimStatusNote[claimStatusKind(c.verification_status)!]}</p>}
               {c.reviewed_at && <div>{text.reviewed} {formatStamp(c.reviewed_at)}</div>}
               {events.filter(event => event.claim_id === c.id).map(event => <div key={event.id}>{text.activity} {codeLabel(event.event_type)} → {codeLabel(event.to_status)}</div>)}
             </div>;

@@ -48,6 +48,16 @@ const en = {
     license: "License:",
     notListed: "Not listed",
     status: "Status:",
+    claimStatus: {
+      pending: "Pending administrative review",
+      approved: "Approved",
+      rejected: "Rejected",
+    },
+    claimStatusNote: {
+      pending: "An administrator still needs to review this claim. Owner-submitted information is not public yet.",
+      approved: "An administrator approved this claim. Listing proposals still require a separate review and do not change the DSHS record.",
+      rejected: "An administrator rejected this claim. You may submit a new claim for this facility.",
+    },
     reviewed: "Reviewed:",
     activity: "Activity:",
     claimTitle: "Claim your facility",
@@ -214,6 +224,16 @@ const es: typeof en = {
     license: "Licencia:",
     notListed: "No figura",
     status: "Estado:",
+    claimStatus: {
+      pending: "Pendiente de revisión administrativa",
+      approved: "Aprobado",
+      rejected: "Rechazado",
+    },
+    claimStatusNote: {
+      pending: "Un administrador todavía debe revisar este reclamo. La información enviada por el propietario aún no es pública.",
+      approved: "Un administrador aprobó este reclamo. Las propuestas de la ficha todavía requieren una revisión aparte y no cambian el registro de DSHS.",
+      rejected: "Un administrador rechazó este reclamo. Puede enviar un nuevo reclamo para este establecimiento.",
+    },
     reviewed: "Revisado:",
     activity: "Actividad:",
     claimTitle: "Reclame su centro",
