@@ -5,6 +5,7 @@ import Link from "next/link";
 import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { supabase } from "../../../lib/supabase";
+import { WASHINGTON_MARKET_MAX_PAGES, WASHINGTON_MARKET_PAGE_SIZE, collectWashingtonMarketPages, washingtonMarketPageBounds, type WashingtonMarketPage } from "../../../lib/family-journey";
 import { copy } from "../../../lib/copy/washington-detail";
 import type { Locale } from "../../../lib/locale";
 
@@ -39,7 +40,7 @@ export default function WashingtonOpportunityPage() {
   const pct = (n: number | null | undefined) => n == null ? text.notAvailable : `${Number(n).toFixed(2)}%`;
   const [rows, setRows] = useState<ZipMarket[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<"" | "unavailable">("");
+  const [error, setError] = useState<"" | "unavailable" | "incomplete">("");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortKey>("senior");
   const [first, setFirst] = useState("98038");
@@ -48,20 +49,35 @@ export default function WashingtonOpportunityPage() {
   useEffect(() => {
     let active = true;
     async function load() {
-      const { data, error: queryError } = await supabase
-        .from("wa_zip_market_income")
-        .select("zip_code,total_afhs,known_licensed_beds,age_70_plus,age_85_plus,median_household_income,median_income_margin_error,households_100k_plus_pct,total_households,census_period,income_census_period")
-        .order("zip_code", { ascending: true })
-        .range(0, 499);
-      if (!active) return;
-      if (queryError) {
-        setError("unavailable");
-      } else {
-        setRows(((data ?? []) as ZipMarket[]).map(r => ({
+      setError("");
+      setRows([]);
+      const pages: WashingtonMarketPage<ZipMarket>[] = [];
+      for (let page = 0; page < WASHINGTON_MARKET_MAX_PAGES; page++) {
+        const [from, to] = washingtonMarketPageBounds(page);
+        const { data, error: queryError } = await supabase
+          .from("wa_zip_market_income")
+          .select("zip_code,total_afhs,known_licensed_beds,age_70_plus,age_85_plus,median_household_income,median_income_margin_error,households_100k_plus_pct,total_households,census_period,income_census_period")
+          .order("zip_code", { ascending: true })
+          .range(from, to);
+        if (!active) return;
+        if (queryError) {
+          pages.push({ ok: false });
+          break;
+        }
+        const batch = ((data ?? []) as ZipMarket[]).map(r => ({
           ...r,
           total_afhs: Number(r.total_afhs) || 0,
           known_licensed_beds: Number(r.known_licensed_beds) || 0,
-        })));
+        }));
+        pages.push({ ok: true, rows: batch });
+        if (batch.length < WASHINGTON_MARKET_PAGE_SIZE) break;
+      }
+      const collected = collectWashingtonMarketPages(pages);
+      if (!active) return;
+      if (collected.status === "complete") setRows(collected.rows);
+      else {
+        setRows([]);
+        setError(collected.status);
       }
       setLoading(false);
     }
@@ -108,7 +124,7 @@ export default function WashingtonOpportunityPage() {
     </section>
     <div style={{ maxWidth: 1150, margin: "auto", padding: "28px 5% 60px" }}>
       {loading && <p role="status">{text.loading}</p>}
-      {error && <p role="alert" style={{ color: "#b42318" }}>{text.unavailable}</p>}
+      {error && <p role="alert" style={{ color: "#b42318" }}>{error === "incomplete" ? text.incomplete : text.unavailable}</p>}
       {!loading && !error && <>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(190px,1fr))", gap: 14 }}>
           {[[text.zipsCovered, fmt(rows.length)], [text.recordedListings, fmt(sumHomes)], [text.recordedBeds, fmt(sumBeds)]].map(([name, value]) =>
