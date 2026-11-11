@@ -14,7 +14,7 @@ from datetime import date, datetime, timedelta
 from pathlib import Path
 from xml.etree import ElementTree as ET
 
-from state_adapter import StateRosterAdapter, ValidationReport
+from state_adapter import StateRosterAdapter, ValidationReport, assert_listing_closed, load_manifest, publication_eligible
 
 AUTHORITY = "Illinois Department of Public Health"
 FOIA_REQUEST = "DPH 26-2017"
@@ -43,6 +43,18 @@ COUNTY = "Facility County"
 FACILITY_TYPE = "Facility Type"
 ENTITY = "Type of Entity"
 UNITS = "Total number of AL /SH units for license"
+MANIFEST_PATH = (
+    Path(__file__).resolve().parents[2] / "supabase" / "proposals" / "onboarding" / "illinois.json"
+)
+ROSTER_SOURCE_FIELDS = {
+    FACILITY_ID,
+    FACILITY_NAME,
+    STREET,
+    CITY,
+    STATE,
+    ZIP,
+    FACILITY_TYPE,
+}
 
 ROSTER_COLUMNS = (
     "state_name",
@@ -237,7 +249,6 @@ def map_source(source: dict[str, object]) -> dict[str, object]:
         flags: list[str] = []
         if expiration < extract:
             flags.append("expiration-precedes-extract")
-        county = str(row.get(COUNTY, "")).strip()
         accepted.append(
             {
                 "state_name": "Illinois",
@@ -268,8 +279,7 @@ def map_source(source: dict[str, object]) -> dict[str, object]:
                 "publication": "unpublished",
                 "review_flags": flags,
                 "reported_alsh_units": int(units),
-                "source_county": county,
-                "source_entity": str(row.get(ENTITY, "")).strip(),
+                "source_attributes": source_attributes(row, flags),
             }
         )
     return {
@@ -282,15 +292,26 @@ def map_source(source: dict[str, object]) -> dict[str, object]:
     }
 
 
+def source_attributes(row: dict[str, str], flags: list[str]) -> dict[str, object]:
+    """Official values that the national roster does not have a column for."""
+    retained = {
+        key: value
+        for key, value in row.items()
+        if key not in ROSTER_SOURCE_FIELDS and str(value).strip()
+    }
+    retained["review_flags"] = list(flags)
+    return retained
+
+
 def roster_row(record: dict[str, object]) -> dict[str, object]:
     """Projection that can later be staged. Review-only fields stay off the row."""
-    if record.get("publication") != "unpublished":
-        raise ValueError("Illinois staging refuses a published row")
-    if record.get("original_status") is not None or record.get("normalized_status") is not None:
-        raise ValueError("Illinois staging refuses an invented license status")
+    assert_listing_closed(record)
     if record.get("original_category") != ASSISTED_LIVING_CATEGORY:
         raise ValueError("Illinois staging refuses a reclassified category")
-    return {column: record.get(column) for column in ROSTER_COLUMNS}
+    projected = {column: record.get(column) for column in ROSTER_COLUMNS}
+    if "source_attributes" in projected or "review_flags" in projected:
+        raise ValueError("Illinois staging refuses a source attribute on the national row")
+    return projected
 
 
 def summary(mapped: dict[str, object]) -> dict[str, object]:
@@ -325,6 +346,12 @@ def summary(mapped: dict[str, object]) -> dict[str, object]:
 class IllinoisRoster(StateRosterAdapter):
     state_name = "Illinois"
     authority = AUTHORITY
+
+    def profile(self) -> dict[str, object]:
+        return dict(self.manifest()["profile"])
+
+    def manifest(self) -> dict[str, object]:
+        return load_manifest(MANIFEST_PATH)
 
     def read(self, path: str) -> dict[str, object]:
         return read_xlsx(path)

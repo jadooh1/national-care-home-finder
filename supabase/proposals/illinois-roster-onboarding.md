@@ -46,6 +46,12 @@ The 17 early expirations are a review flag, `expiration-precedes-extract`. They 
 
 Rows with no facility ID and no facility type are excluded. One is the capacity total row, whose AL/SH unit cell equals 27,823. One other non-facility row has a numeric value in the effective-date column and no facility identity. Both stay out of ingestion.
 
+## Onboarding manifest
+
+`supabase/proposals/onboarding/illinois.json` is the reusable state record. Each future state uses the same fields: provenance, extraction date, validation counts, publication eligibility, and refresh monitoring. The profile records that state's authority, official categories, identifier type, capacity unit, status convention, and refresh schedule. Illinois is `ineligible` for publication. A manifest that says eligible while expiration flags remain is refused.
+
+Official columns that the national roster does not store stay on `source_attributes` for the review record. The roster projection omits that object. The approved development baseline file is unchanged.
+
 ## Schema gaps
 
 These are review findings, not changes to the roster table:

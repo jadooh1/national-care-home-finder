@@ -1,3 +1,4 @@
+import json
 import os
 import unittest
 import zipfile
@@ -12,8 +13,15 @@ from illinois_roster import (
     matches_baseline,
     read_xlsx,
     roster_row,
+    summary,
 )
-from state_adapter import StateRosterAdapter, ValidationReport
+from state_adapter import (
+    StateRosterAdapter,
+    ValidationReport,
+    load_manifest,
+    publication_eligible,
+    validate_manifest,
+)
 
 
 HEADERS = [
@@ -151,8 +159,22 @@ class IllinoisMappingTest(unittest.TestCase):
         staged = roster_row(record)
         self.assertNotIn("review_flags", staged)
         self.assertNotIn("reported_alsh_units", staged)
+        self.assertNotIn("source_attributes", staged)
+        self.assertEqual(record["source_attributes"]["Licensee ID"], "100")
+        self.assertEqual(record["source_attributes"]["Total number of AL /SH units for license"], "12")
         self.assertEqual(staged["facility_identifier"], "700")
         self.assertIsNone(staged["license_identifier"])
+        flagged = mapped["accepted"][1]
+        self.assertIn("expiration-precedes-extract", flagged["review_flags"])
+        self.assertFalse(publication_eligible(flagged))
+        opened = dict(flagged)
+        opened["publication"] = "development"
+        with self.assertRaises(ValueError):
+            roster_row(opened)
+        activated = dict(flagged)
+        activated["normalized_status"] = "active"
+        with self.assertRaises(ValueError):
+            roster_row(activated)
 
     def test_total_row_and_invalid_rows_do_not_enter_the_roster(self):
         with self.fixture() as path:
@@ -177,6 +199,35 @@ class IllinoisMappingTest(unittest.TestCase):
         self.assertNotIn("/illinois", directory)
         self.assertEqual(BASELINE["assisted_living_records"], 502)
         self.assertEqual(BASELINE["assisted_living_units"], 27823)
+        manifest = load_manifest(Path(__file__).resolve().parents[2] / "supabase/proposals/onboarding/illinois.json")
+        profile = IllinoisRoster().profile()
+        self.assertEqual(profile["categories"], [ASSISTED_LIVING_CATEGORY])
+        self.assertEqual(profile["identifier_type"], "facility-id")
+        self.assertEqual(profile["capacity_unit"], "alsh-units")
+        self.assertEqual(profile["status_convention"], "review-flag")
+        self.assertEqual(profile["refresh_schedule"], "on-new-official-extract")
+        self.assertEqual(manifest["publication_eligibility"], "ineligible")
+        self.assertEqual(manifest["validation"]["accepted"], 502)
+        self.assertEqual(manifest["validation"]["excluded_capacity_total_rows"], 1)
+        self.assertEqual(manifest["validation"]["excluded_non_facility_rows"], 1)
+        self.assertEqual(manifest["validation"]["expiration_review_flags"], 17)
+        alternate = dict(manifest)
+        alternate["publication_eligibility"] = "eligible"
+        with self.assertRaises(ValueError):
+            validate_manifest(alternate)
+        other_state = json.loads(json.dumps(manifest))
+        other_state["state_name"] = "Example"
+        other_state["authority"] = "Example Licensing Authority"
+        other_state["validation"] = {"accepted": 1, "expiration_review_flags": 0}
+        other_state["profile"] = {
+            "categories": ["Example Care Home"],
+            "identifier_type": "license",
+            "capacity_unit": "beds",
+            "status_convention": "source-status",
+            "refresh_schedule": "quarterly",
+        }
+        other_state["refresh_monitoring"] = {"schedule": "quarterly"}
+        self.assertEqual(validate_manifest(other_state)["profile"]["capacity_unit"], "beds")
 
     def test_official_workbook_matches_the_verified_baseline(self):
         workbook = os.environ.get("ILLINOIS_ROSTER_XLSX")
@@ -186,9 +237,20 @@ class IllinoisMappingTest(unittest.TestCase):
         mapped = map_source(source)
         self.assertTrue(matches_baseline(mapped, source["sha256"]))
         report = IllinoisRoster().validate(mapped)
+        counts = summary(mapped)
         self.assertEqual(report.facility_records, 1459)
         self.assertEqual(report.accepted, 502)
         self.assertEqual(report.rejected, 0)
+        self.assertEqual(counts["excluded_reasons"]["capacity-total-row"], 1)
+        self.assertEqual(counts["excluded_reasons"]["non-facility-row"], 1)
+        flagged = [record for record in mapped["accepted"] if record["review_flags"]]
+        self.assertEqual(len(flagged), 17)
+        for record in flagged:
+            self.assertEqual(record["publication"], "unpublished")
+            self.assertFalse(publication_eligible(record))
+            self.assertIsNone(roster_row(record)["normalized_status"])
+            self.assertIn("Licensee ID", record["source_attributes"])
+            self.assertNotIn("source_attributes", roster_row(record))
 
     def fixture(self):
         import tempfile
