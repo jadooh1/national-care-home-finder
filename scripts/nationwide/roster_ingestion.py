@@ -13,6 +13,7 @@ import json
 import os
 import re
 import subprocess
+from datetime import datetime
 from pathlib import Path
 
 PSQL = os.environ.get("PSQL", "psql")
@@ -110,6 +111,45 @@ def _text(record, name):
 
 def _blank(value):
     return value is None or value == ""
+
+
+def assert_validated_extraction_date(records, extraction_date):
+    """Accept one official ISO extraction date without relaxing the other safeguards.
+
+    The existing pilot ingest still rejects every supplied export date. This
+    check is separate and does not write to a database.
+    """
+    if not isinstance(extraction_date, str) or not re.fullmatch(r"\d{4}-\d{2}-\d{2}", extraction_date):
+        raise RuntimeError("extraction date is not an official ISO date")
+    try:
+        parsed = datetime.strptime(extraction_date, "%Y-%m-%d").date()
+    except ValueError:
+        raise RuntimeError("extraction date is not an official ISO date")
+    if parsed.isoformat() != extraction_date:
+        raise RuntimeError("extraction date is not an official ISO date")
+    if not records:
+        raise RuntimeError("extraction date requires at least one source row")
+    for record in records:
+        observed_date = record.get("official_export_date")
+        if _blank(observed_date):
+            observed_date = record.get("extraction_date")
+        if observed_date != extraction_date:
+            raise RuntimeError("extraction date does not match the source row")
+        if record.get("publication", "unpublished") != "unpublished":
+            raise RuntimeError("roster ingestion refused: a row would be published")
+        if record.get("disclosure_verified") not in (None, False):
+            raise RuntimeError("roster ingestion refused: disclosure is not verified")
+        if record.get("freshness_verified") not in (None, False):
+            raise RuntimeError("roster ingestion refused: freshness is not verified")
+        if not _blank(record.get("original_status")) or not _blank(record.get("normalized_status")):
+            raise RuntimeError("roster ingestion refused: an unknown source value was supplied")
+        if record.get("review_flags"):
+            if not _blank(record.get("original_status")) or not _blank(record.get("normalized_status")):
+                raise RuntimeError("roster ingestion refused: a review flag cannot assign a license status")
+        physical = _text(record, "physical_address")
+        unverified = _text(record, "unverified_address")
+        if physical and unverified and physical == unverified:
+            raise RuntimeError("roster ingestion refused: an unverified address was copied into the physical address")
 
 
 def assert_unknown_values_stay_unknown(pilot, records):

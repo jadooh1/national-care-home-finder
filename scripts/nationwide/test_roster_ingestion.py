@@ -13,9 +13,11 @@ from roster_ingestion import (
     Pilot,
     assert_authorized_target,
     assert_unknown_values_stay_unknown,
+    assert_validated_extraction_date,
     candidate_baseline,
     compare_baseline,
     ingest_batch,
+    ingestion_sql,
     load_approved_baseline,
     preflight_before_write,
     reject_duplicate_licenses,
@@ -67,6 +69,28 @@ class RosterIngestionEngineTest(unittest.TestCase):
         ):
             with self.assertRaises(RuntimeError):
                 assert_unknown_values_stay_unknown(PILOT, [record(**change)])
+
+    def test_validated_extraction_date_does_not_relax_the_pilot_guard(self):
+        dated = record(official_export_date="2026-10-28")
+        with self.assertRaises(RuntimeError):
+            assert_unknown_values_stay_unknown(PILOT, [dated])
+        assert_validated_extraction_date([dated], "2026-10-28")
+        flagged = record(official_export_date="2026-10-28", review_flags=["expiration-precedes-extract"])
+        assert_validated_extraction_date([flagged], "2026-10-28")
+        for change in (
+            {"official_export_date": "2026-10-29"},
+            {"publication": "development"},
+            {"original_status": "active"},
+            {"freshness_verified": True},
+        ):
+            values = {"official_export_date": "2026-10-28"}
+            values.update(change)
+            with self.assertRaises(RuntimeError):
+                assert_validated_extraction_date([record(**values)], "2026-10-28")
+        with self.assertRaises(RuntimeError):
+            assert_validated_extraction_date([record(official_export_date="2026-02-31")], "2026-02-31")
+        sql = ingestion_sql(PILOT, "license_identifier\n", PILOT.batch_id)
+        self.assertIn("null, null, null", sql)
 
     def test_duplicate_licenses_are_removed_together(self):
         accepted, rejected = reject_duplicate_licenses(

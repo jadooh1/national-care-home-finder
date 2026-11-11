@@ -1,0 +1,31 @@
+{
+  "state_name": "Illinois",
+  "authority": "Illinois Department of Public Health",
+  "provenance": "DPH 26-2017",
+  "extraction_date": "2026-10-28",
+  "source_sha256": "de048fc9f80c73615831dffedc01474c07c0cb59c8952e92d653f3f1727b907a",
+  "validation": {
+    "facility_records": 1459,
+    "accepted": 502,
+    "assisted_living_units": 27823,
+    "expiration_review_flags": 17,
+    "excluded_capacity_total_rows": 1,
+    "excluded_non_facility_rows": 1
+  },
+  "publication_eligibility": "ineligible",
+  "refresh_monitoring": {
+    "schedule": "on-new-official-extract",
+    "blocks_publication_when": [
+      "expiration-precedes-extract",
+      "unverified-disclosure",
+      "unverified-address"
+    ]
+  },
+  "profile": {
+    "categories": ["Assisted Living/Shared Housing Establishment"],
+    "identifier_type": "facility-id",
+    "capacity_unit": "alsh-units",
+    "status_convention": "review-flag",
+    "refresh_schedule": "on-new-official-extract"
+  }
+}
