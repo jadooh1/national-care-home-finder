@@ -18,9 +18,10 @@ import {
 import {
   claimSubmitGate,
   classifySubmission,
+  createFacilitySearch,
+  facilitySearchTerm,
+  reduceFacilitySearch,
   rememberSubmittedClaim,
-  shouldApplySearch,
-  startSearch,
 } from "../../../lib/owner-dashboard";
 import { captureAndStripAuthCallback, recoveryPending, markRecoveryPending } from "../../../lib/password-recovery";
 import { supabase } from "../../../lib/supabase";
@@ -65,7 +66,7 @@ export default function OwnerDashboard() {
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<DashNotice>("");
   const prefilled = useRef(false);
-  const searchTicket = useRef(0);
+  const searchModel = useRef(createFacilitySearch<Facility>());
   const dashboardMounted = useRef(true);
   const submittingRef = useRef(false);
 
@@ -141,29 +142,43 @@ export default function OwnerDashboard() {
       if (event === "PASSWORD_RECOVERY" || recoveryPending()) { router.replace("/owner/reset-password"); return; }
       if (!session) { setUser(null); router.replace("/owner"); }
     });
-    return () => { active = false; dashboardMounted.current = false; subscription.unsubscribe(); };
+    return () => {
+      active = false;
+      dashboardMounted.current = false;
+      searchModel.current = reduceFacilitySearch(searchModel.current, { type: "unmount" });
+      subscription.unsubscribe();
+    };
   }, [router, loadClaims]);
 
-  const searchListedFacilities = useCallback(async (rawTerm: string) => {
-    const ticket = startSearch(searchTicket.current);
-    searchTicket.current = ticket;
-    const current = () => shouldApplySearch(ticket, searchTicket.current, dashboardMounted.current);
-    if (current()) { setSearchError(""); setNotice(""); setSelected(null); setResults([]); }
-    const term = rawTerm.trim().replace(/[^a-zA-Z0-9\s-]/g, "").slice(0, 70);
-    if (term.length < 3) {
-      if (current()) { setSearchError("short"); setSearching(false); }
-      return;
-    }
-    if (current()) setSearching(true);
+  function publishSearch(next: ReturnType<typeof createFacilitySearch<Facility>>, clearSelection: boolean) {
+    searchModel.current = next;
+    if (!next.mounted) return;
+    setSearch(next.query);
+    setResults([...next.results]);
+    setSearching(next.searching);
+    setSearchError(next.error);
+    if (clearSelection) { setNotice(""); setSelected(null); }
+  }
+
+  const searchListedFacilities = useCallback(async (liveInput: string) => {
+    const started = reduceFacilitySearch(searchModel.current, { type: "submit", liveInput });
+    publishSearch(started, true);
+    if (!started.mounted || !started.searching) return;
+    const term = facilitySearchTerm(started.query);
+    const ticket = started.ticket;
     const pattern = `"%${term}%"`;
     const { data, error: queryError } = await supabase.from("wa_dshs_listed_facilities")
       .select("id,canonical_name,address_line1,city,county,license_number")
       .or(`canonical_name.ilike.${pattern},license_number.ilike.${pattern},city.ilike.${pattern}`)
       .order("canonical_name", { ascending: true }).limit(15);
-    if (!current()) return;
-    setSearching(false);
-    if (queryError) setSearchError("search");
-    else { setResults((data ?? []) as Facility[]); if (!data?.length) setSearchError("none"); }
+    const painted = reduceFacilitySearch(searchModel.current, {
+      type: "response",
+      ticket,
+      ok: !queryError,
+      results: (data ?? []) as Facility[],
+    });
+    if (painted === searchModel.current) return;
+    publishSearch(painted, false);
   }, []);
 
   useEffect(() => {
@@ -174,13 +189,19 @@ export default function OwnerDashboard() {
     const license = fromUrl ?? (storage ? readClaimLicense(storage) : null);
     if (!license) return;
     prefilled.current = true;
-    setSearch(license);
     void searchListedFacilities(license);
   }, [user, searchListedFacilities]);
 
+  function changeFacilityQuery(query: string) {
+    const next = reduceFacilitySearch(searchModel.current, { type: "edit", query });
+    if (next === searchModel.current) return;
+    publishSearch(next, false);
+  }
+
   function findFacility(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    void searchListedFacilities(search);
+    const live = new FormData(event.currentTarget).get("facility-search");
+    void searchListedFacilities(typeof live === "string" ? live : "");
   }
 
   async function submitClaim(event: FormEvent<HTMLFormElement>) {
@@ -293,8 +314,8 @@ export default function OwnerDashboard() {
           <form onSubmit={findFacility}>
             <label htmlFor="facility-search">{text.searchLabel}</label>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 9 }}>
-              <div style={{ flex: "1 1 230px" }}><input id="facility-search" style={field} value={search} onChange={e => setSearch(e.target.value)} maxLength={70} required /></div>
-              <button type="submit" disabled={searching} style={{ background: "#176b53", color: "white", padding: "11px 20px", border: 0, borderRadius: 9, cursor: "pointer" }}>{searching ? text.searching : text.find}</button>
+              <div style={{ flex: "1 1 230px" }}><input id="facility-search" name="facility-search" style={field} value={search} onChange={e => changeFacilityQuery(e.target.value)} maxLength={70} required /></div>
+              <button type="submit" style={{ background: "#176b53", color: "white", padding: "11px 20px", border: 0, borderRadius: 9, cursor: "pointer" }}>{searching ? text.searching : text.find}</button>
             </div>
           </form>
           {searchError && <p role="alert" style={{ color: "#9f2626" }}>{text.errors[searchError]}</p>}

@@ -6,6 +6,8 @@ import { duplicateClaimBlocks } from "../../../lib/owner-claim.ts";
 import {
   claimSubmitGate,
   classifySubmission,
+  createFacilitySearch,
+  reduceFacilitySearch,
   rememberSubmittedClaim,
   shouldApplySearch,
   startSearch,
@@ -20,8 +22,69 @@ test("an older facility search cannot replace a newer result or update an unmoun
   assert.equal(shouldApplySearch(second, second, true), true);
   assert.equal(shouldApplySearch(second, second, false), false);
   const dashboard = readFileSync(new URL("../../../app/owner/dashboard/page.tsx", import.meta.url), "utf8");
-  assert.match(dashboard, /shouldApplySearch\(/);
+  assert.match(dashboard, /reduceFacilitySearch\(/);
+  assert.match(dashboard, /new FormData\(event\.currentTarget\)/);
+  assert.doesNotMatch(dashboard, /searchListedFacilities\(search\)/);
   assert.match(dashboard, /dashboardMounted\.current = false/);
+});
+
+test("overlapping and delayed facility searches keep only the latest query", () => {
+  let model = createFacilitySearch<string>();
+  model = reduceFacilitySearch(model, { type: "submit", liveInput: "yakima" });
+  const yakima = model.ticket;
+  assert.equal(model.searching, true);
+  model = reduceFacilitySearch(model, { type: "submit", liveInput: "tacoma" });
+  const tacoma = model.ticket;
+  assert.notEqual(yakima, tacoma);
+  assert.equal(model.query, "tacoma");
+  assert.deepEqual([...model.results], []);
+  const lateResults = reduceFacilitySearch(model, { type: "response", ticket: yakima, ok: true, results: ["older-city"] });
+  assert.equal(lateResults, model);
+  assert.equal(lateResults.searching, true);
+  assert.equal(lateResults.error, "");
+  const lateFailure = reduceFacilitySearch(model, { type: "response", ticket: yakima, ok: false, results: [] });
+  assert.equal(lateFailure, model);
+  model = reduceFacilitySearch(model, { type: "response", ticket: tacoma, ok: true, results: ["newer-city"] });
+  assert.deepEqual([...model.results], ["newer-city"]);
+  assert.equal(model.searching, false);
+  assert.equal(model.error, "");
+  const delayedAfterSuccess = reduceFacilitySearch(model, { type: "response", ticket: yakima, ok: false, results: ["older-city"] });
+  assert.equal(delayedAfterSuccess, model);
+});
+
+test("rapid typing clears the previous facility search immediately", () => {
+  let model = createFacilitySearch<string>();
+  model = reduceFacilitySearch(model, { type: "edit", query: "yakima" });
+  model = reduceFacilitySearch(model, { type: "submit", liveInput: "yakima" });
+  const started = model.ticket;
+  model = reduceFacilitySearch(model, { type: "response", ticket: started, ok: true, results: ["older-city"] });
+  model = reduceFacilitySearch(model, { type: "edit", query: "y" });
+  assert.deepEqual([...model.results], []);
+  assert.equal(model.searching, false);
+  assert.equal(model.error, "");
+  model = reduceFacilitySearch(model, { type: "edit", query: "tacoma" });
+  const stale = reduceFacilitySearch(model, { type: "response", ticket: started, ok: true, results: ["older-city"] });
+  assert.equal(stale, model);
+  assert.equal(stale.query, "tacoma");
+  const raced = reduceFacilitySearch(
+    reduceFacilitySearch(createFacilitySearch<string>(), { type: "edit", query: "yakima" }),
+    { type: "submit", liveInput: "tacoma" },
+  );
+  assert.equal(raced.query, "tacoma");
+  assert.equal(raced.searching, true);
+  assert.deepEqual([...raced.results], []);
+});
+
+test("a facility search response does nothing after the dashboard unmounts", () => {
+  let model = reduceFacilitySearch(createFacilitySearch<string>(), { type: "submit", liveInput: "tacoma" });
+  const ticket = model.ticket;
+  model = reduceFacilitySearch(model, { type: "unmount" });
+  const painted = reduceFacilitySearch(model, { type: "response", ticket, ok: true, results: ["newer-city"] });
+  assert.equal(painted, model);
+  assert.equal(painted.mounted, false);
+  assert.equal(painted.searching, true);
+  assert.equal(painted.error, "");
+  assert.deepEqual([...painted.results], []);
 });
 
 test("facility and activity failures keep claims that already loaded", () => {
