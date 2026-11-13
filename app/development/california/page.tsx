@@ -11,7 +11,6 @@ import {
   californiaDirectoryReady,
   californiaEligibleCount,
   californiaExcludedCount,
-  californiaProfileUrl,
   countStatuses,
   type CaliforniaLicenseStatus,
 } from "../../../lib/california-directory";
@@ -25,7 +24,6 @@ const GROUPS = [
 
 export default function CaliforniaDevelopmentDirectoryPage() {
   const publication = californiaDirectoryReady() ? "California is published." : "California is unpublished.";
-  const profile = californiaProfileUrl() == null ? " No facility profile link is recorded." : "";
   return (
     <main style={{ minHeight: "100vh", background: C.pale, color: C.navy, fontFamily: "Arial, sans-serif" }}>
       <header style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "16px 5%" }}>
@@ -44,7 +42,7 @@ export default function CaliforniaDevelopmentDirectoryPage() {
         </div>
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 60px", display: "grid", gap: 18 }}>
-        <p>{publication} This page does not list facilities.{profile}</p>
+        <p>{publication} This page does not list facilities or profile links.</p>
         {GROUPS.map(group => (
           <section key={group.label} style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 18 }}>
             <h2 style={{ marginTop: 0 }}>{group.label}</h2>
@@ -64,7 +62,7 @@ export default function CaliforniaDevelopmentDirectoryPage() {
             <li>Other license category: {CALIFORNIA_EXCLUDED_RECORDS.otherLicenseCategory.toLocaleString()}</li>
             <li>Shifted row: {CALIFORNIA_EXCLUDED_RECORDS.shiftedRow.toLocaleString()}</li>
           </ul>
-          <p>No coordinate, export date, or facility profile link is recorded. The facility-search application responded on November 13, 2026, and its detail route is still not a verified disclosure link.</p>
+          <p>No coordinate or export date is recorded. The blank category and the shifted row keep their original values. One checked residential-care facility number and one checked adult-residential facility number resolved on the official route, and their live status text was not the open-data status.</p>
         </section>
       </div>
     </main>

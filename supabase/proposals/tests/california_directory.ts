@@ -64,6 +64,8 @@ test("the development review does not list facilities or invent a profile link",
   assert.equal(page.includes("latitude"), false);
   assert.equal(page.includes("/washington/map"), false);
   assert.equal(page.includes("carefacilitysearch"), false);
+  assert.equal(page.includes("does not list facilities or profile links"), true);
+  assert.equal(page.includes("live status text was not the open-data status"), true);
   assert.equal(source.includes("fetch("), false);
   assert.equal(source.includes("2025-05-25"), false);
   assert.equal(readFileSync("app/page.tsx", "utf8").includes("/development/california"), false);

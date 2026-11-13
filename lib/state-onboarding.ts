@@ -100,8 +100,7 @@ const CALIFORNIA_BLOCKERS = [
   "arf-file-mixes-other-license-categories",
   "no-facility-type-is-accepted",
   "address-and-contact-fields-are-not-accepted",
-  "no-per-facility-disclosure-link-is-recorded",
-  "facility-search-detail-route-is-not-verified",
+  "live-search-status-does-not-confirm-the-open-data-status",
   "blank-residential-care-category-is-not-corrected",
   "shifted-adult-residential-row-is-not-corrected",
 ] as const;

@@ -57,7 +57,8 @@ test("Washington is the only public reference and Oregon stays on its developmen
 test("California remains unpublished inside the shared framework", () => {
   const california = onboardingProfile("California");
   assert.equal(california.publication, "unpublished");
-  assert.equal(california.disclosurePrefix, null);
+  assert.equal(california.disclosurePrefix, "https://www.ccld.dss.ca.gov/carefacilitysearch/?Rewrite=FacDetail/");
+  assert.equal(california.disclosureVerified, true);
   assert.equal(california.recordedExportDate, null);
   assert.equal(publicPublicationPermitted(california), false);
   assert.deepEqual(california.blockers, onboardingDecision("California").blockers);
@@ -145,7 +146,7 @@ test("a Michigan profile link is built only from the observed prefix and license
   assert.equal(michiganProfileUrl("ZZ000000000"), `${MICHIGAN_PROFILE_PREFIX}ZZ000000000`);
   assert.equal(michiganProfileUrl("as340420376"), null);
   assert.equal(michiganProfileUrl("ZZ00000000"), null);
-  assert.equal(onboardingProfiles().filter(profile => profile.disclosureVerified).map(profile => profile.state).sort().join(), "Michigan,Oregon,Washington");
+  assert.equal(onboardingProfiles().filter(profile => profile.disclosureVerified).map(profile => profile.state).sort().join(), "California,Michigan,Oregon,Washington");
 });
 
 test("the development review is not linked from the home page and does not publish rows", () => {
