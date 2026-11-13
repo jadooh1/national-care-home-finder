@@ -13,6 +13,7 @@ import {
   OREGON_EXPORT_HTTP_DATE,
   OREGON_EXPORT_OPEN_ROWS,
   OREGON_EXPORT_ROWS,
+  OREGON_EXPORT_REPLY_FOUND,
   OREGON_RECORDED_EXPORT_DATE,
   OREGON_UPDATE_NOTICE,
   adoptOregonExportDate,
@@ -50,6 +51,7 @@ test("the provider export has no authoritative date column", () => {
   assert.equal(adoptOregonExportDate(OREGON_UPDATE_NOTICE), null);
   assert.equal(adoptOregonExportDate("2026-11-13"), null);
   assert.equal(oregonExportDateReady(), false);
+  assert.equal(OREGON_EXPORT_REPLY_FOUND, false);
 });
 
 test("the later count is recorded separately from the development directory", () => {

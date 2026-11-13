@@ -24,7 +24,7 @@ The workbook has no facility URL. The public search is `https://tulip.hhs.texas.
 
 Source: `https://apps.hhs.texas.gov/providers/directories/Closures/alf_closures.pdf`
 
-The response was HTTP 200, content type PDF. `Last-Modified` was `Mon, 09 Nov 2026 15:31:49 GMT`. That file-server clock is not an export date. A text conversion did not produce one stable row count, so no closure count was adopted and no overlap with the 2,016 active facility ids was calculated.
+The response was HTTP 200, content type PDF. `Last-Modified` was `Mon, 09 Nov 2026 15:31:49 GMT`. That file-server clock is not an export date. Reconstructed text has 1,510 facility-id labels, 1,510 distinct six-digit facility ids, and service labels that also total 1,510: TYPE A 788, TYPE B 511, TYPE C 189, and TYPE E 22. Date-shaped tokens total 1,644, so no closure date was adopted from those tokens. Exact comparison of the facility ids found 0 ids in both the closures PDF and the 2,016-row active workbook. The closures file therefore does not mark an active row closed, and it does not supply the active rows' operating status.
 
 ## Publication requirements
 

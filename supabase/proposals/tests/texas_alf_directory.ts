@@ -19,9 +19,17 @@ import {
   TEXAS_TYPE_C,
   TEXAS_ZIP_FIVE,
   TEXAS_ZIP_NINE,
+  TEXAS_CLOSURE_ACTIVE_ID_OVERLAP,
+  TEXAS_CLOSURE_DATE_TOKENS,
+  TEXAS_CLOSURE_FACILITY_IDS,
+  TEXAS_CLOSURE_TYPE_A,
+  TEXAS_CLOSURE_TYPE_B,
+  TEXAS_CLOSURE_TYPE_C,
+  TEXAS_CLOSURE_TYPE_E,
   adoptTexasExportDate,
   texasDisclosureUrl,
   texasPublicationReadiness,
+  texasSourceDateRole,
 } from "../../../lib/texas-alf-directory.ts";
 
 test("the Texas active-license workbook stays unpublished", () => {
@@ -38,9 +46,15 @@ test("the Texas active-license workbook stays unpublished", () => {
   assert.equal(TEXAS_ACTIVE_AS_OF, "11/12/2026");
   assert.equal(TEXAS_FILE_LAST_MODIFIED, "Fri, 13 Nov 2026 14:07:19 GMT");
   assert.equal(readiness.authoritativeExportDate, null);
+  assert.equal(texasSourceDateRole("11/12/2026"), "source-publication-label");
+  assert.equal(texasSourceDateRole("2026-11-12"), "rewritten-iso-not-authoritative");
+  assert.equal(texasSourceDateRole(TEXAS_FILE_LAST_MODIFIED), "file-clock");
   assert.equal(adoptTexasExportDate("11/12/2026"), null);
   assert.equal(adoptTexasExportDate("2026-11-12"), null);
   assert.equal(adoptTexasExportDate(TEXAS_FILE_LAST_MODIFIED), null);
+  assert.equal(TEXAS_CLOSURE_TYPE_A + TEXAS_CLOSURE_TYPE_B + TEXAS_CLOSURE_TYPE_C + TEXAS_CLOSURE_TYPE_E, TEXAS_CLOSURE_FACILITY_IDS);
+  assert.equal(TEXAS_CLOSURE_ACTIVE_ID_OVERLAP, 0);
+  assert.notEqual(TEXAS_CLOSURE_DATE_TOKENS, TEXAS_CLOSURE_FACILITY_IDS);
   assert.equal(readiness.statusReady, false);
   assert.equal(readiness.disclosureReady, false);
   assert.equal(readiness.coordinateColumns, false);
