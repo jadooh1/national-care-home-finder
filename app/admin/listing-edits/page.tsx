@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
-import { authorizationDecision, createAdminActionGate, createListingRequestGate, currentListingInput, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, loadAdminListing, olderCursor, settleAdminAction, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
+import { authorizationDecision, createAdminActionGate, createListingRequestGate, currentListingInput, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, listingViewAfterRefresh, loadAdminListing, olderCursor, settleAdminAction, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
 
 captureAndStripAuthCallback();
 
@@ -66,7 +66,6 @@ export default function AdminListingEdits() {
   const [notice, setNotice] = useState("");
   const refresh = useCallback(async (input?: ReturnType<typeof currentListingInput>) => {
     const request = requests.current.start(input ?? listingInput());
-    reviewStatus.current = request.status;
     const outcome = await loadAdminListing(listingSource(), requests.current, request);
     if (!requests.current.isLatest(request.id) || outcome.status === "stale") return "stale";
     if (outcome.status === "error") { setError(outcome.error); setLoading(false); return "error"; }
@@ -78,6 +77,16 @@ export default function AdminListingEdits() {
     if (outcome.facilities !== null) setFacilities(outcome.facilities);
     return "applied";
   }, [listingInput, listingSource]);
+  async function showListing(next: ReturnType<typeof currentListingInput>) {
+    const previous = listingInput();
+    const result = await refresh(next);
+    if (result !== "applied") return;
+    const visible = listingViewAfterRefresh(previous, next, result);
+    reviewStatus.current = visible.status;
+    editCursor.current = visible.proposalCursor;
+    historyCursor.current = visible.historyCursor;
+    setStatus(visible.status);
+  }
   useEffect(() => {
     let active = true;
     const request = requests.current.start(listingInput());
@@ -135,7 +144,7 @@ export default function AdminListingEdits() {
     <Link href="/admin/claims" style={{ color: "#176b53" }}>← Administrator claim reviews</Link><h1>Listing proposal reviews</h1>
     <p>Review owner-provided descriptions, services, and amenities independently. Approving records a decision only. A separate publication action stores the approved text apart from official DSHS name, address, license, and capacity.</p>
     {loading && <p>Checking administrator access…</p>}{error && <p role="alert" style={{ color: "#9f2626" }}>{error}</p>}{notice && <p role="status" style={{ color: "#176b53" }}>{notice}</p>}
-    {adminId && !loading && <><section style={panel}><label htmlFor="status">Review status </label><select id="status" value={status} onChange={e => { const next = listingRequestAfterStatus(listingInput(), e.target.value); reviewStatus.current = next.status; editCursor.current = next.proposalCursor; setStatus(next.status); void refresh(next); }} style={{ padding: 10, margin: 8 }}><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All</option></select><button type="button" style={btn} onClick={() => void refresh()}>Refresh</button> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { const next = listingRequestAfterProposalCursor(listingInput(), null); editCursor.current = next.proposalCursor; void refresh(next); }}>First page</button>{edits.length === pageSize && <> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { const next = listingRequestAfterProposalCursor(listingInput(), olderCursor(edits[edits.length - 1])); editCursor.current = next.proposalCursor; void refresh(next); }}>Older records</button></>}{counts && <p>Pending {counts.pending} · Approved {counts.approved} · Rejected {counts.rejected}</p>}{matching !== null && <p>{matching} matching proposals (20 records per page)</p>}</section>
+    {adminId && !loading && <><section style={panel}><label htmlFor="status">Review status </label><select id="status" value={status} onChange={e => { void showListing(listingRequestAfterStatus(listingInput(), e.target.value)); }} style={{ padding: 10, margin: 8 }}><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All</option></select><button type="button" style={btn} onClick={() => void refresh()}>Refresh</button> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { void showListing(listingRequestAfterProposalCursor(listingInput(), null)); }}>First page</button>{edits.length === pageSize && <> <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { void showListing(listingRequestAfterProposalCursor(listingInput(), olderCursor(edits[edits.length - 1]))); }}>Older records</button></>}{counts && <p>Pending {counts.pending} · Approved {counts.approved} · Rejected {counts.rejected}</p>}{matching !== null && <p>{matching} matching proposals (20 records per page)</p>}</section>
       {edits.length === 0 && <section style={panel}>No matching proposals.</section>}
       {edits.map(edit => {
         const isCurrent = edit.current_publication;
@@ -149,7 +158,7 @@ export default function AdminListingEdits() {
         {withdrawId === edit.id && <div style={{ border: "2px solid #d4a152", borderRadius: 10, marginTop: 18, padding: 16, background: "#fffaf0" }}><strong>Withdraw this owner text?</strong><p>Withdrawal removes that text from the public profile, keeps the audit history, and does not change official DSHS name, address, license, or capacity.</p><button type="button" disabled={busy} style={{ ...btn, background: "#9f2626" }} onClick={() => void withdraw()}>{busy ? "Withdrawing…" : "Confirm withdrawal"}</button> <button type="button" disabled={busy} style={{ ...btn, background: "#536b7c" }} onClick={() => setWithdrawId(null)}>Cancel</button></div>}
         </article>;
       })}
-      <section style={panel}><h2>Publication history</h2><p>Each publication and withdrawal is kept here. Withdrawn text is no longer on the public profile. Official DSHS fields are not changed.</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { const next = listingRequestAfterHistoryCursor(listingInput(), null); historyCursor.current = next.historyCursor; void refresh(next); }}>First page</button>{history.length === pageSize && <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { const next = listingRequestAfterHistoryCursor(listingInput(), olderCursor(history[history.length - 1])); historyCursor.current = next.historyCursor; void refresh(next); }}>Older records</button>}</div><p>20 records per page</p>
+      <section style={panel}><h2>Publication history</h2><p>Each publication and withdrawal is kept here. Withdrawn text is no longer on the public profile. Official DSHS fields are not changed.</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { void showListing(listingRequestAfterHistoryCursor(listingInput(), null)); }}>First page</button>{history.length === pageSize && <button type="button" style={{ ...btn, background: "#536b7c" }} onClick={() => { void showListing(listingRequestAfterHistoryCursor(listingInput(), olderCursor(history[history.length - 1]))); }}>Older records</button>}</div><p>20 records per page</p>
         {history.length === 0 && <p>No publication history on this page.</p>}
         {history.map(event => <article key={event.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilities[event.facility_id]?.canonical_name ?? "Facility listing"}</strong> — {event.field_name}<p>{event.event_type === "withdrawn" ? "Withdrawn" : "Published"} · {new Date(event.created_at).toLocaleString()}</p><p>Administrator: <code style={{ overflowWrap: "anywhere" }}>{event.actor_user_id}</code></p><div style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere", background: "#f4f8fb", padding: 15, borderRadius: 8 }}>{event.published_value}</div>{event.previous_value && event.previous_value !== event.published_value && <p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>Previously: {event.previous_value}</p>}</article>)}
       </section>
