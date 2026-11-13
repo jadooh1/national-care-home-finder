@@ -127,6 +127,16 @@ test("a failed submission stays distinct from a successful submission whose refr
   assert.notEqual(copy.es.dashboard.errors.submit, copy.es.dashboard.notices.submittedRefresh);
   const dashboard = readFileSync(new URL("../../../app/owner/dashboard/page.tsx", import.meta.url), "utf8");
   assert.match(dashboard, /claimSubmitGate\(submittingRef\.current\)/);
+  const listing = readFileSync(new URL("../../../app/owner/listing-edits/page.tsx", import.meta.url), "utf8");
+  const gate = listing.indexOf("claimSubmitGate(submittingRef.current)");
+  const invalid = listing.indexOf('setError("invalid")');
+  const arm = listing.indexOf("submittingRef.current = true");
+  const rpc = listing.indexOf('supabase.rpc("submit_listing_edit"');
+  const clearDraft = listing.indexOf('setValue("")');
+  const release = listing.lastIndexOf("submittingRef.current = false");
+  assert.equal(gate >= 0 && gate < invalid && invalid < arm && arm < rpc && rpc < clearDraft && clearDraft < release, true);
+  assert.match(listing, /if \(response\.error\) setError\("submit"\);\s*else \{ setValue\(""\)/);
+  assert.match(listing, /finally \{\s*submittingRef\.current = false;\s*setBusy\(false\);/);
   assert.match(dashboard, /classifySubmission\(/);
   assert.match(dashboard, /rememberSubmittedClaim\(/);
   assert.match(dashboard, /duplicateClaimBlocks\(claims, selected\.id\)/);
