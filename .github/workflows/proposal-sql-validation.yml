@@ -93,3 +93,6 @@ jobs:
 
       - name: Validate the development identity preflight
         run: python3 supabase/proposals/tests/validate_development_identity.py
+
+      - name: Validate the nationwide roster proposal
+        run: python3 supabase/proposals/tests/validate_nationwide_roster.py

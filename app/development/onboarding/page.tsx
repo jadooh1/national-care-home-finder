@@ -23,6 +23,7 @@ import {
   onboardingProfiles,
   publicPublicationPermitted,
 } from "../../../lib/nationwide-onboarding";
+import { compatibilityAssessments, compatibilityClassCounts } from "../../../lib/nationwide-compatibility";
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 
@@ -111,6 +112,19 @@ export default function NationwideOnboardingPage() {
           <p>
             {IOWA_FEASIBILITY.state} has {IOWA_FEASIBILITY.certifiedPrograms.toLocaleString()} certified assisted-living programs, {IOWA_FEASIBILITY.certificationIdentifiers.toLocaleString()} certification identifiers, and {IOWA_FEASIBILITY.facilityAddresses.toLocaleString()} facility addresses. The identifier column is a certification number. {IOWA_FEASIBILITY.fiveDigitZips} ZIP values have five digits and {IOWA_FEASIBILITY.nineDigitZips} have nine. There is no status column, no disclosure link, and no date column. Publication feasible: no.
           </p>
+        </section>
+        <section style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 18 }}>
+          <h2 style={{ marginTop: 0 }}>Nationwide compatibility</h2>
+          <p>
+            The ranking above remains the record of the earlier review. The current assessment classifies all 50 states. Class A fits an existing directory contract. Class B needs a named structural adjustment. Class C has a major source or matching limitation. Class D does not yet have enough verified evidence. Missing coordinates do not make a directory incompatible. No additional state is implemented.
+          </p>
+          <ul>
+            {(["A", "B", "C", "D"] as const).map(letter => (
+              <li key={letter}>
+                Class {letter}: {compatibilityClassCounts()[letter]}. {compatibilityAssessments().filter(item => item.compatibility === letter).map(item => item.state).join(", ")}.
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
     </main>
