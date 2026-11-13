@@ -72,6 +72,9 @@ export const MICHIGAN_OFFICIAL_VALIDATION = {
   profilePathsReturned200: 8,
 } as const;
 
+export const MICHIGAN_RECORD_DESCRIPTION_URL =
+  "https://www.michigan.gov/lara/bureau-list/bchs/adult/online-lookups/adult-foster-care-record-description";
+
 export const MICHIGAN_ADDRESS_FIELD_KEY = {
   supplemental: "Facility Supplemental Address",
   street: "Street Address",
@@ -79,7 +82,18 @@ export const MICHIGAN_ADDRESS_FIELD_KEY = {
   licenseeSupplemental: "Licensee Supplemental Address",
 } as const;
 
+export const MICHIGAN_ADDRESS_COLUMN = {
+  supplemental: "E",
+  street: "F",
+  licensee: "Y",
+  licenseeSupplemental: "Z",
+} as const;
+
 export const MICHIGAN_ADDRESS_INTERPRETATION = "unresolved" as const;
+
+export function supplementalAddressRole(): null {
+  return null;
+}
 
 export const MICHIGAN_STREET_TEXT_BY_TYPE = {
   AF: 6,

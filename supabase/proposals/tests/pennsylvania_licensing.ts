@@ -4,9 +4,11 @@ import test from "node:test";
 import { onboardingProfile, publicPublicationPermitted } from "../../../lib/nationwide-onboarding.ts";
 import {
   PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT,
+  PENNSYLVANIA_DIRECTORY_SEARCH_RESULT,
   PENNSYLVANIA_OFFICIAL_VALIDATION,
   adoptPennsylvaniaLicensingDate,
   pennsylvaniaDirectoryReady,
+  pennsylvaniaDisclosureUrl,
   pennsylvaniaMapReady,
   retainedPennsylvaniaAddress,
   usablePennsylvaniaStreet,
@@ -70,6 +72,8 @@ test("Pennsylvania stays unpublished and the earlier states keep their contracts
   assert.equal(publicPublicationPermitted(pennsylvania), false);
   assert.equal(pennsylvania.coordinateColumns, false);
   assert.equal(pennsylvania.disclosurePrefix, null);
+  assert.equal(pennsylvaniaDisclosureUrl("example"), null);
+  assert.equal(PENNSYLVANIA_DIRECTORY_SEARCH_RESULT.endsWith("/HumanServicesProviderDirectorySearchResult"), true);
   assert.ok(pennsylvania.blockers.includes("georeferenced-coordinates-are-not-licensing-coordinates"));
   assert.ok(pennsylvania.blockers.includes("open-data-object-id-is-not-a-license-number"));
   assert.ok(pennsylvania.blockers.includes("no-per-row-licensing-status"));

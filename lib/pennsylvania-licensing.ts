@@ -5,6 +5,10 @@ export const PENNSYLVANIA_DATASET_URL =
   "https://data.pa.gov/Services-Near-You/Licensed-Personal-Care-Homes-Current-Statewide-Hum/pqf4-d4xn";
 export const PENNSYLVANIA_PROVIDER_DIRECTORY =
   "https://www.humanservices.dhs.pa.gov/human_service_provider_directory/";
+export const PENNSYLVANIA_DIRECTORY_SEARCH_RESULT =
+  "https://www.humanservices.dhs.pa.gov/HUMAN_SERVICE_PROVIDER_DIRECTORY/Home/HumanServicesProviderDirectorySearchResult";
+export const PENNSYLVANIA_SPATIAL_SEARCH =
+  "https://www.humanservices.dhs.pa.gov/LicensedFacilitiesSpatialSearch/licensedfacilitiesspatialsearch.html";
 export const PENNSYLVANIA_RECORDED_EXPORT_DATE = null;
 export const PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT = "2026-11-08T06:09:03Z";
 export const PENNSYLVANIA_TYPE = "PERSONAL CARE HOMES";
@@ -92,6 +96,11 @@ export function adoptPennsylvaniaLicensingDate(catalogTimestamp: string): null {
 
 export function pennsylvaniaDirectoryReady(): false {
   return false;
+}
+
+export function pennsylvaniaDisclosureUrl(sourceRecordId: string): null {
+  void sourceRecordId;
+  return null;
 }
 
 export function pennsylvaniaMapReady(): false {

@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
+  MICHIGAN_ADDRESS_COLUMN,
   MICHIGAN_ADDRESS_COUNTS,
   MICHIGAN_ADDRESS_INTERPRETATION,
   MICHIGAN_DESCRIBED_TYPES,
@@ -15,6 +16,7 @@ import {
   michiganFacilityProfileUrl,
   normalizedZip,
   retainedAddressFields,
+  supplementalAddressRole,
   usablePhysicalStreet,
   validateMichiganRoster,
 } from "../../../lib/michigan-licensing.ts";
@@ -120,6 +122,10 @@ test("Michigan stays unpublished and the existing states keep their contracts", 
   assert.equal(publicPublicationPermitted(michigan), false);
   assert.ok(michigan.blockers.includes("street-address-column-is-not-filled-from-the-supplemental-column"));
   assert.ok(michigan.blockers.includes("supplemental-address-is-not-defined-as-a-physical-or-mailing-address"));
+  assert.equal(supplementalAddressRole(), null);
+  assert.equal(MICHIGAN_ADDRESS_COLUMN.supplemental, "E");
+  assert.equal(MICHIGAN_ADDRESS_COLUMN.street, "F");
+  assert.equal(MICHIGAN_ADDRESS_COLUMN.licensee, "Y");
   assert.ok(michigan.blockers.includes("nine-digit-zips-are-not-corrected"));
   assert.equal(directoryContract("Michigan")?.publication, "unpublished");
   assert.equal(directoryContract("Michigan")?.directoryPath, null);
