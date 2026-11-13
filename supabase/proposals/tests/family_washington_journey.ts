@@ -18,7 +18,11 @@ import {
   washingtonMapPostalOrFilter,
   washingtonMapZipMatch,
   washingtonMarketPageBounds,
+  washingtonDirectorySearchPath,
+  washingtonLocationMatches,
+  washingtonSearchText,
   washingtonZipFromSearch,
+  washingtonZipSearchPath,
 } from "../../../lib/family-journey.ts";
 
 test("only a numeric license opens a facility profile", () => {
@@ -89,11 +93,36 @@ test("map and demographics navigation keeps a valid ZIP query", () => {
   assert.equal(demographics.includes("WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP"), true);
   assert.equal(demographics.includes("/washington/map?zip="), true);
   assert.equal(opportunity.includes("/washington/demographics?zip="), true);
+  assert.equal(map.includes("washingtonZipSearchPath"), true);
+  assert.equal(map.includes("history.replaceState"), true);
+  assert.equal(demographics.includes("washingtonZipSearchPath"), true);
+  assert.equal(demographics.includes("history.replaceState"), true);
+  const directory = readFileSync("app/washington/page.tsx", "utf8");
+  assert.equal(directory.includes("washingtonDirectorySearchPath"), true);
+  assert.equal(directory.includes("history.replaceState"), true);
+  assert.equal(directory.includes("t.loadingListings"), true);
+  assert.equal(directory.includes("t.noMatches"), true);
+  assert.equal(directory.includes("t.loadError"), true);
+  assert.equal(directory.includes('type="button"'), true);
   assert.equal(demographics.includes("washingtonDemographicsZipQuery"), true);
   assert.equal(demographics.includes('.eq("zip_code", selectedZip)'), true);
   assert.equal(opportunity.includes("collectWashingtonMarketPages"), true);
   assert.equal(demographics.includes(".range(0, 499)"), false);
   assert.equal(opportunity.includes(".range(0, 499)"), false);
+});
+
+test("directory and ZIP searches keep the visible query in the address", () => {
+  assert.equal(washingtonSearchText("  Yakima! "), "Yakima");
+  assert.equal(washingtonDirectorySearchPath({}), "/washington");
+  assert.equal(washingtonDirectorySearchPath({ q: "Seattle", city: "  ", county: null }), "/washington?q=Seattle");
+  assert.equal(washingtonDirectorySearchPath({ q: "Oak Harbor", city: "Oak Harbor", county: "Island" }), "/washington?q=Oak+Harbor&city=Oak+Harbor&county=Island");
+  assert.equal(washingtonLocationMatches("/washington?city=Yakima&county=Yakima", washingtonDirectorySearchPath({ city: "Yakima", county: "Yakima" })), true);
+  assert.equal(washingtonLocationMatches("/washington?q=Oak%20Harbor", washingtonDirectorySearchPath({ q: "Oak Harbor" })), true);
+  assert.equal(washingtonLocationMatches("/washington?q=Seattle", "/washington"), false);
+  assert.equal(washingtonZipSearchPath("/washington/map", "99208"), "/washington/map?zip=99208");
+  assert.equal(washingtonZipSearchPath("/washington/demographics", " 98038 "), "/washington/demographics?zip=98038");
+  assert.equal(washingtonZipSearchPath("/washington/map", "9920"), null);
+  assert.equal(washingtonZipSearchPath("/washington/map", "99208-1234"), null);
 });
 
 test("a demographics ZIP query accepts only five digits", () => {

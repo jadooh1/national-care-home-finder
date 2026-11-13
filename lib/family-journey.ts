@@ -42,6 +42,35 @@ export function washingtonZipFromSearch(value: string | null | undefined, fallba
   return FIVE_DIGIT_ZIP.test(candidate) ? candidate : fallback;
 }
 
+export function washingtonSearchText(value: string | null | undefined): string {
+  return (value ?? "").replace(/[^a-zA-Z0-9\s-]/g, "").trim().slice(0, 80);
+}
+
+export function washingtonDirectorySearchPath(input: { q?: string | null; city?: string | null; county?: string | null }): string {
+  const params = new URLSearchParams();
+  const q = washingtonSearchText(input.q);
+  const city = washingtonSearchText(input.city);
+  const county = washingtonSearchText(input.county);
+  if (q) params.set("q", q);
+  if (city) params.set("city", city);
+  if (county) params.set("county", county);
+  const query = params.toString();
+  return query ? `/washington?${query}` : "/washington";
+}
+
+export function washingtonZipSearchPath(page: "/washington/map" | "/washington/demographics", zip: string | null | undefined): string | null {
+  const candidate = zip?.trim() ?? "";
+  if (!FIVE_DIGIT_ZIP.test(candidate)) return null;
+  return `${page}?zip=${candidate}`;
+}
+
+export function washingtonLocationMatches(currentPathAndSearch: string, nextPath: string): boolean {
+  const base = "https://example.test";
+  const current = new URL(currentPathAndSearch, base);
+  const next = new URL(nextPath, base);
+  return current.pathname === next.pathname && current.searchParams.toString() === next.searchParams.toString();
+}
+
 export function washingtonMapZipMatch(storedPostalCode: string | null | undefined, searchZip: string): boolean {
   if (!FIVE_DIGIT_ZIP.test(searchZip)) return false;
   const stored = storedPostalCode?.trim() ?? "";
