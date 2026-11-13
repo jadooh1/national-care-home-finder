@@ -62,7 +62,7 @@ export default function CaliforniaDevelopmentDirectoryPage() {
             <li>Other license category: {CALIFORNIA_EXCLUDED_RECORDS.otherLicenseCategory.toLocaleString()}</li>
             <li>Shifted row: {CALIFORNIA_EXCLUDED_RECORDS.shiftedRow.toLocaleString()}</li>
           </ul>
-          <p>No coordinate or export date is recorded. The blank category and the shifted row keep their original values. One checked residential-care facility number and one checked adult-residential facility number resolved on the official route, and their live status text was not the open-data status. A historical licensed status is not a current placement. A later status sample timed out and stays inconclusive.</p>
+          <p>No coordinate or export date is recorded. The blank category and the shifted row keep their original values. One checked residential-care facility number and one checked adult-residential facility number resolved on the official route, and their live status text was not the open-data status. A historical licensed status is not a current placement. A later status sample timed out and stays inconclusive. The published accrual periodicity is other, and no authoritative export date is recorded.</p>
         </section>
       </div>
     </main>
