@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
-import { manageableOwnerContentView, publishedContentOutcome } from "../../../lib/premium-option-a";
+import { manageableOwnerContentView, ownerListingRefreshError, publishedContentOutcome } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 
 captureAndStripAuthCallback();
@@ -99,24 +99,28 @@ export default function OwnerListingEdits() {
     if (publicationHistory.error) { setError("history"); return; }
     const publicationRows = (publicationHistory.data ?? []) as PublicationEvent[];
     setPublications(publicationRows);
+    let publishedFailed = false;
     if (ids.length) {
       const content = await supabase.from(manageableOwnerContentView(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "")).select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
-      const rows = (content.data ?? []) as Published[];
-      const outcome = publishedContentOutcome(Boolean(content.error), rows.length);
+      const publishedRows = (content.data ?? []) as Published[];
+      const outcome = publishedContentOutcome(Boolean(content.error), publishedRows.length);
       if (outcome === "unavailable") {
         setPublished([]);
-        setError("published");
-        return;
-      }
-      setPublished(rows);
+        publishedFailed = true;
+      } else setPublished(publishedRows);
     } else setPublished([]);
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
+    let facilitiesFailed = false;
     if (detailIds.length) {
       const homes = await supabase.from("wa_dshs_listed_facilities").select("id,canonical_name,license_number").in("id", detailIds);
-      if (homes.error) { setError("facilities"); return; }
-      setFacilities((homes.data ?? []) as Facility[]);
-      setFacilityId(old => ids.includes(old) ? old : ids[0] ?? "");
+      if (homes.error) facilitiesFailed = true;
+      else {
+        setFacilities((homes.data ?? []) as Facility[]);
+        setFacilityId(old => ids.includes(old) ? old : ids[0] ?? "");
+      }
     } else { setFacilities([]); setFacilityId(""); }
+    const refreshError = ownerListingRefreshError({ publishedFailed, facilitiesFailed });
+    if (refreshError) { setError(refreshError); return; }
     setError("");
   }
   useEffect(() => {

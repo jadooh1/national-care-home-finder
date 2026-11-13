@@ -12,6 +12,7 @@ import {
   developmentCheckoutIntent,
   premiumPeriodOpen,
   manageableOwnerContentView,
+  ownerListingRefreshError,
   publishedContentOutcome,
   publicOwnerContentView,
 } from "../../../lib/premium-option-a.ts";
@@ -111,6 +112,14 @@ test("public owner text uses the premium view only on development", () => {
   assert.equal(publishedContentOutcome(false, 0), "empty");
   assert.equal(publishedContentOutcome(false, 1), "listed");
   assert.match(ownerEdits, /publishedContentOutcome\(Boolean\(content\.error\)/);
+  assert.equal(ownerListingRefreshError({ publishedFailed: true, facilitiesFailed: false }), "published");
+  assert.equal(ownerListingRefreshError({ publishedFailed: false, facilitiesFailed: true }), "facilities");
+  assert.equal(ownerListingRefreshError({ publishedFailed: true, facilitiesFailed: true }), "facilities");
+  assert.equal(ownerListingRefreshError({ publishedFailed: false, facilitiesFailed: false }), "");
+  const publishedCheck = ownerEdits.indexOf('outcome === "unavailable"');
+  const facilityQuery = ownerEdits.indexOf('.from("wa_dshs_listed_facilities")');
+  const refreshDecision = ownerEdits.indexOf("ownerListingRefreshError({");
+  assert.equal(publishedCheck < facilityQuery && facilityQuery < refreshDecision, true);
   assert.doesNotMatch(ownerEdits, /content\.error \? \[\]/);
   assert.match(ownerEdits, /published\.length === 0 && !error/);
   assert.match(ownerEdits, /role="status"/);
