@@ -7,7 +7,7 @@ import { VisitorFeedback } from "../../components/visitor-feedback";
 import { WashingtonPublicHeader } from "../../components/washington-public";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
-import { facilityProfilePath } from "../../lib/family-journey";
+import { facilityProfilePath, washingtonDirectorySearchPath, washingtonLocationMatches, washingtonSearchText } from "../../lib/family-journey";
 import { WASHINGTON_DSHS_LOCATOR } from "../../lib/state-directory";
 
 type Facility = {
@@ -25,9 +25,6 @@ const fieldStyle: React.CSSProperties = {
   background: "#fff", color: C.navy,
 };
 
-function cleanSearch(input: string) {
-  return input.replace(/[^a-zA-Z0-9\s-]/g, "").trim().slice(0, 80);
-}
 function displayName(name: string) { return name.replace(/^\s*!+\s*/, "").trim() || name; }
 
 export default function WashingtonPage() {
@@ -42,24 +39,30 @@ export default function WashingtonPage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [filtersReady, setFiltersReady] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const query = params.get("q");
-    const cityParam = params.get("city");
-    const countyParam = params.get("county");
-    if (query) setSearch(query);
-    if (cityParam) setCity(cityParam);
-    if (countyParam) setCounty(countyParam);
+    setSearch(washingtonSearchText(params.get("q")));
+    setCity(washingtonSearchText(params.get("city")));
+    setCounty(washingtonSearchText(params.get("county")));
+    setFiltersReady(true);
   }, []);
+
+  useEffect(() => {
+    if (!filtersReady) return;
+    const next = washingtonDirectorySearchPath({ q: search, city, county });
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (!washingtonLocationMatches(current, next)) window.history.replaceState(null, "", next);
+  }, [filtersReady, search, city, county]);
 
   useEffect(() => {
     let cancelled = false;
     const timer = setTimeout(async () => {
       setLoading(true); setError("");
-      const term = cleanSearch(search);
-      const cityTerm = cleanSearch(city);
-      const countyTerm = cleanSearch(county);
+      const term = washingtonSearchText(search);
+      const cityTerm = washingtonSearchText(city);
+      const countyTerm = washingtonSearchText(county);
       let query = supabase.from("wa_dshs_listed_facilities")
         .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status", { count: "exact" })
         .order("canonical_name", { ascending: true }).order("id", { ascending: true })
@@ -96,7 +99,7 @@ export default function WashingtonPage() {
           <p style={{ maxWidth: 780, lineHeight: 1.7, fontSize: 16, opacity: 0.95 }}>
             {t.lead}
           </p>
-          <section aria-label={t.searchLabel} style={{ background: "white", color: C.navy, marginTop: 26, padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 10px 28px rgba(0,0,0,.12)" }}>
+          <form aria-label={t.searchLabel} onSubmit={event => event.preventDefault()} style={{ background: "white", color: C.navy, marginTop: 26, padding: 22, borderRadius: 16, border: `1px solid ${C.border}`, boxShadow: "0 10px 28px rgba(0,0,0,.12)" }}>
             <h2 style={{ fontSize: 21, margin: "0 0 18px" }}>{t.findHeading}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 230px), 1fr))", gap: 15 }}>
               <div><label htmlFor="name-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>{t.nameLabel}</label>
@@ -107,10 +110,10 @@ export default function WashingtonPage() {
                 <input id="county-filter" type="search" value={county} placeholder={t.countyPlaceholder} style={fieldStyle} onChange={e => { setCounty(e.target.value); setPage(0); }} /></div>
             </div>
             <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
-              <button onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>{t.clearFilters}</button>
+              <button type="button" onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>{t.clearFilters}</button>
               <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.officialLocator}</a>
             </div>
-          </section>
+          </form>
         </div>
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 60px" }}>
@@ -233,9 +236,9 @@ export default function WashingtonPage() {
         </div>
         {!loading && !error && total > PAGE_SIZE && (
           <nav aria-label={t.pagesLabel} style={{ display: "flex", justifyContent: "center", gap: 18, alignItems: "center", flexWrap: "wrap", marginTop: 29 }}>
-            <button disabled={page === 0} onClick={() => setPage(p => Math.max(0, p - 1))} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.previous}</button>
+            <button type="button" disabled={page === 0} onClick={() => setPage(p => Math.max(0, p - 1))} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.previous}</button>
             <strong>{t.pageStatus(page + 1, Math.ceil(total / PAGE_SIZE))}</strong>
-            <button disabled={end >= total} onClick={() => setPage(p => p + 1)} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.next}</button>
+            <button type="button" disabled={end >= total} onClick={() => setPage(p => p + 1)} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.next}</button>
           </nav>
         )}
         <VisitorFeedback pagePath="/washington" />

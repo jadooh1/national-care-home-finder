@@ -5,7 +5,7 @@ import Link from "next/link";
 import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { supabase } from "../../../lib/supabase";
-import { WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP, WASHINGTON_MARKET_MAX_PAGES, WASHINGTON_MARKET_PAGE_SIZE, collectWashingtonMarketPages, washingtonDemographicsZipQuery, washingtonMarketPageBounds, washingtonZipFromSearch, type WashingtonMarketPage } from "../../../lib/family-journey";
+import { WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP, WASHINGTON_MARKET_MAX_PAGES, WASHINGTON_MARKET_PAGE_SIZE, collectWashingtonMarketPages, washingtonDemographicsZipQuery, washingtonLocationMatches, washingtonMarketPageBounds, washingtonZipFromSearch, washingtonZipSearchPath, type WashingtonMarketPage } from "../../../lib/family-journey";
 import { copy } from "../../../lib/copy/washington-detail";
 import type { Locale } from "../../../lib/locale";
 
@@ -59,6 +59,14 @@ export default function WashingtonDemographicsPage() {
     setZipInput(resolved);
     setZip(resolved);
   }, []);
+
+  useEffect(() => {
+    if (!zip) return;
+    const next = washingtonZipSearchPath("/washington/demographics", zip);
+    if (!next) return;
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (!washingtonLocationMatches(current, next)) window.history.replaceState(null, "", next);
+  }, [zip]);
 
   useEffect(() => {
     const selectedZip = washingtonDemographicsZipQuery(zip);
@@ -203,7 +211,7 @@ export default function WashingtonDemographicsPage() {
         </select>
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", textAlign: "left", minWidth: 540 }}><thead><tr>{[text.colZip,text.colResidents,text.colAfhs,text.colBeds,text.colExplore].map(h => <th key={h} style={{ padding: 10, borderBottom: `2px solid ${border}` }}>{h}</th>)}</tr></thead>
-            <tbody>{sorted.map(r => <tr key={r.zip_code}><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{r.zip_code}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{fmt(r.age_70_plus)}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{fmt(r.total_afhs)}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{fmt(r.known_licensed_beds)}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}><button onClick={() => { setZip(r.zip_code); setZipInput(r.zip_code); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ color: teal, background: "white", border: `1px solid ${teal}`, borderRadius: 6, padding: 8, cursor: "pointer" }}>{text.analyzeRow}</button></td></tr>)}</tbody>
+            <tbody>{sorted.map(r => <tr key={r.zip_code}><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{r.zip_code}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{fmt(r.age_70_plus)}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{fmt(r.total_afhs)}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}>{fmt(r.known_licensed_beds)}</td><td style={{ padding: 10, borderBottom: `1px solid ${border}` }}><button type="button" onClick={() => { setZip(r.zip_code); setZipInput(r.zip_code); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ color: teal, background: "white", border: `1px solid ${teal}`, borderRadius: 6, padding: 8, cursor: "pointer" }}>{text.analyzeRow}</button></td></tr>)}</tbody>
           </table>
         </div>
       </section>}

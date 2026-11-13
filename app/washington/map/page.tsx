@@ -8,7 +8,7 @@ import type * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
-import { DENSITY_BANDS, WASHINGTON_MAP_DEFAULT_ZIP, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary, washingtonMapPostalOrFilter, washingtonZipFromSearch } from "../../../lib/family-journey";
+import { DENSITY_BANDS, WASHINGTON_MAP_DEFAULT_ZIP, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary, washingtonLocationMatches, washingtonMapPostalOrFilter, washingtonZipFromSearch, washingtonZipSearchPath } from "../../../lib/family-journey";
 import { localizedInvalidZip, localizedMapSummary, type Locale } from "../../../lib/locale";
 
 type Home = {
@@ -101,6 +101,14 @@ export default function WashingtonMarketMapPage() {
     setZipInput(resolved);
     setZip(resolved);
   }, []);
+
+  useEffect(() => {
+    if (!zip) return;
+    const next = washingtonZipSearchPath("/washington/map", zip);
+    if (!next) return;
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (!washingtonLocationMatches(current, next)) window.history.replaceState(null, "", next);
+  }, [zip]);
 
   useEffect(() => {
     if (!zip) return;
@@ -241,8 +249,8 @@ export default function WashingtonMarketMapPage() {
           <div style={{ padding: "17px 18px", display: "flex", gap: 12, justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
             <h2 style={{ margin: 0, fontSize: 20 }}>{text.facilityLocations}</h2>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-              <button onClick={() => setMode("density")} aria-pressed={mode === "density"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "density" ? teal : "white", color: mode === "density" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.concentration}</button>
-              <button onClick={() => setMode("locations")} aria-pressed={mode === "locations"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "locations" ? teal : "white", color: mode === "locations" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.locationDots}</button>
+              <button type="button" onClick={() => setMode("density")} aria-pressed={mode === "density"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "density" ? teal : "white", color: mode === "density" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.concentration}</button>
+              <button type="button" onClick={() => setMode("locations")} aria-pressed={mode === "locations"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "locations" ? teal : "white", color: mode === "locations" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.locationDots}</button>
             </div>
           </div>
           <div ref={mapDivRef} style={{ height: "min(65vh, 590px)", minHeight: 390, width: "100%", zIndex: 0 }} aria-label={text.mapAria} />
