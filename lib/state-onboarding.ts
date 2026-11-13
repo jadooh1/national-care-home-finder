@@ -101,7 +101,7 @@ const CALIFORNIA_BLOCKERS = [
   "no-facility-type-is-accepted",
   "address-and-contact-fields-are-not-accepted",
   "no-per-facility-disclosure-link-is-recorded",
-  "facility-search-application-returned-503",
+  "facility-search-detail-route-is-not-verified",
   "blank-residential-care-category-is-not-corrected",
   "shifted-adult-residential-row-is-not-corrected",
 ] as const;

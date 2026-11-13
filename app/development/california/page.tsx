@@ -64,7 +64,7 @@ export default function CaliforniaDevelopmentDirectoryPage() {
             <li>Other license category: {CALIFORNIA_EXCLUDED_RECORDS.otherLicenseCategory.toLocaleString()}</li>
             <li>Shifted row: {CALIFORNIA_EXCLUDED_RECORDS.shiftedRow.toLocaleString()}</li>
           </ul>
-          <p>No coordinate, export date, or facility profile link is recorded. The facility-search application was not requested again.</p>
+          <p>No coordinate, export date, or facility profile link is recorded. The facility-search application responded on November 13, 2026, and its detail route is still not a verified disclosure link.</p>
         </section>
       </div>
     </main>
