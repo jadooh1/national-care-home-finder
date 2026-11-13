@@ -15,6 +15,14 @@ import {
   readClaimLicense,
   writeClaimLicense,
 } from "../../../lib/owner-claim";
+import {
+  claimSubmitGate,
+  classifySubmission,
+  createFacilitySearch,
+  facilitySearchTerm,
+  reduceFacilitySearch,
+  rememberSubmittedClaim,
+} from "../../../lib/owner-dashboard";
 import { captureAndStripAuthCallback, recoveryPending, markRecoveryPending } from "../../../lib/password-recovery";
 import { supabase } from "../../../lib/supabase";
 
@@ -25,7 +33,7 @@ type ClaimEvent = { id: string; claim_id: string; event_type: string; to_status:
 type Facility = { id: string; canonical_name: string; address_line1: string | null; city: string | null; county: string | null; license_number: string | null };
 type DashError = "" | "load" | "duplicate" | "notes" | "session" | "submit";
 type DashSearch = "" | "short" | "search" | "none";
-type DashNotice = "" | "submitted";
+type DashNotice = "" | "submitted" | "submittedRefresh";
 const field: React.CSSProperties = { width: "100%", boxSizing: "border-box", padding: 12, borderRadius: 8, border: "1px solid #cad9e2", fontSize: 16 };
 const card: React.CSSProperties = { background: "white", padding: 25, borderRadius: 14, border: "1px solid #dbe5eb", marginTop: 23 };
 const languageStyle = `
@@ -46,6 +54,9 @@ export default function OwnerDashboard() {
   const [facilities, setFacilities] = useState<Record<string, Facility>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<DashError>("");
+  const [claimsLoadError, setClaimsLoadError] = useState(false);
+  const [facilitiesLoadError, setFacilitiesLoadError] = useState(false);
+  const [activityLoadError, setActivityLoadError] = useState(false);
   const [search, setSearch] = useState("");
   const [results, setResults] = useState<Facility[]>([]);
   const [searching, setSearching] = useState(false);
@@ -55,6 +66,9 @@ export default function OwnerDashboard() {
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<DashNotice>("");
   const prefilled = useRef(false);
+  const searchModel = useRef(createFacilitySearch<Facility>());
+  const dashboardMounted = useRef(true);
+  const submittingRef = useRef(false);
 
   function codeLabel(value: string) {
     if (value === "pending" || value === "approved" || value === "rejected" || value === "submitted") return codes[value];
@@ -69,24 +83,42 @@ export default function OwnerDashboard() {
     const result = await supabase.from("owner_claims")
       .select("id,facility_id,verification_status,reviewed_at")
       .eq("claimant_user_id", userId).order("id", { ascending: false });
-    if (result.error) setError("load");
-    else {
-      const rows = (result.data ?? []) as Claim[];
-      setClaims(rows);
-      const ids = [...new Set(rows.map(claim => claim.facility_id))];
-      if (ids.length) {
-        const homes = await supabase.from("wa_dshs_listed_facilities")
-          .select("id,canonical_name,address_line1,city,county,license_number").in("id", ids);
-        if (homes.error) setFacilities({});
-        else setFacilities(Object.fromEntries(((homes.data ?? []) as Facility[]).map(home => [home.id, home])));
-      } else setFacilities({});
-      const activity = await supabase.from("owner_claim_events")
-        .select("id,claim_id,event_type,to_status,created_at")
-        .order("created_at", { ascending: false }).limit(20);
-      if (activity.error) setEvents([]);
-      else setEvents((activity.data ?? []) as ClaimEvent[]);
-      setError("");
+    if (!dashboardMounted.current) return { claimsError: Boolean(result.error), facilitiesError: false, activityError: false };
+    if (result.error) {
+      setClaimsLoadError(true);
+      return { claimsError: true, facilitiesError: false, activityError: false };
     }
+    const rows = (result.data ?? []) as Claim[];
+    setClaims(rows);
+    setClaimsLoadError(false);
+    const ids = [...new Set(rows.map(claim => claim.facility_id))];
+    let facilitiesError = false;
+    if (ids.length) {
+      const homes = await supabase.from("wa_dshs_listed_facilities")
+        .select("id,canonical_name,address_line1,city,county,license_number").in("id", ids);
+      if (!dashboardMounted.current) return { claimsError: false, facilitiesError: Boolean(homes.error), activityError: false };
+      if (homes.error) {
+        facilitiesError = true;
+        setFacilitiesLoadError(true);
+      } else {
+        setFacilities(Object.fromEntries(((homes.data ?? []) as Facility[]).map(home => [home.id, home])));
+        setFacilitiesLoadError(false);
+      }
+    } else if (dashboardMounted.current) {
+      setFacilities({});
+      setFacilitiesLoadError(false);
+    }
+    const activity = await supabase.from("owner_claim_events")
+      .select("id,claim_id,event_type,to_status,created_at")
+      .order("created_at", { ascending: false }).limit(20);
+    if (!dashboardMounted.current) return { claimsError: false, facilitiesError, activityError: Boolean(activity.error) };
+    if (activity.error) {
+      setActivityLoadError(true);
+      return { claimsError: false, facilitiesError, activityError: true };
+    }
+    setEvents((activity.data ?? []) as ClaimEvent[]);
+    setActivityLoadError(false);
+    return { claimsError: false, facilitiesError, activityError: false };
   }, []);
 
   useEffect(() => {
@@ -110,22 +142,43 @@ export default function OwnerDashboard() {
       if (event === "PASSWORD_RECOVERY" || recoveryPending()) { router.replace("/owner/reset-password"); return; }
       if (!session) { setUser(null); router.replace("/owner"); }
     });
-    return () => { active = false; subscription.unsubscribe(); };
+    return () => {
+      active = false;
+      dashboardMounted.current = false;
+      searchModel.current = reduceFacilitySearch(searchModel.current, { type: "unmount" });
+      subscription.unsubscribe();
+    };
   }, [router, loadClaims]);
 
-  const searchListedFacilities = useCallback(async (rawTerm: string) => {
-    setSearchError(""); setNotice(""); setSelected(null); setResults([]);
-    const term = rawTerm.trim().replace(/[^a-zA-Z0-9\s-]/g, "").slice(0, 70);
-    if (term.length < 3) { setSearchError("short"); return; }
-    setSearching(true);
+  function publishSearch(next: ReturnType<typeof createFacilitySearch<Facility>>, clearSelection: boolean) {
+    searchModel.current = next;
+    if (!next.mounted) return;
+    setSearch(next.query);
+    setResults([...next.results]);
+    setSearching(next.searching);
+    setSearchError(next.error);
+    if (clearSelection) { setNotice(""); setSelected(null); }
+  }
+
+  const searchListedFacilities = useCallback(async (liveInput: string) => {
+    const started = reduceFacilitySearch(searchModel.current, { type: "submit", liveInput });
+    publishSearch(started, true);
+    if (!started.mounted || !started.searching) return;
+    const term = facilitySearchTerm(started.query);
+    const ticket = started.ticket;
     const pattern = `"%${term}%"`;
     const { data, error: queryError } = await supabase.from("wa_dshs_listed_facilities")
       .select("id,canonical_name,address_line1,city,county,license_number")
       .or(`canonical_name.ilike.${pattern},license_number.ilike.${pattern},city.ilike.${pattern}`)
       .order("canonical_name", { ascending: true }).limit(15);
-    if (queryError) setSearchError("search");
-    else { setResults((data ?? []) as Facility[]); if (!data?.length) setSearchError("none"); }
-    setSearching(false);
+    const painted = reduceFacilitySearch(searchModel.current, {
+      type: "response",
+      ticket,
+      ok: !queryError,
+      results: (data ?? []) as Facility[],
+    });
+    if (painted === searchModel.current) return;
+    publishSearch(painted, false);
   }, []);
 
   useEffect(() => {
@@ -136,42 +189,65 @@ export default function OwnerDashboard() {
     const license = fromUrl ?? (storage ? readClaimLicense(storage) : null);
     if (!license) return;
     prefilled.current = true;
-    setSearch(license);
     void searchListedFacilities(license);
   }, [user, searchListedFacilities]);
 
+  function changeFacilityQuery(query: string) {
+    const next = reduceFacilitySearch(searchModel.current, { type: "edit", query });
+    if (next === searchModel.current) return;
+    publishSearch(next, false);
+  }
+
   function findFacility(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    void searchListedFacilities(search);
+    const live = new FormData(event.currentTarget).get("facility-search");
+    void searchListedFacilities(typeof live === "string" ? live : "");
   }
 
   async function submitClaim(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!selected || !user) return;
+    if (claimSubmitGate(submittingRef.current) === "ignore" || !selected || !user) return;
     setNotice(""); setError("");
     if (duplicateClaimBlocks(claims, selected.id)) {
       setError("duplicate"); return;
     }
     const textNotes = notes.trim();
     if (textNotes.length < 15) { setError("notes"); return; }
+    const facility = selected;
+    submittingRef.current = true;
     setSubmitting(true);
     const { data: authData, error: authError } = await supabase.auth.getUser();
     if (authError || !authData.user || authData.user.id !== user.id) {
-      setError("session"); setSubmitting(false); return;
+      if (dashboardMounted.current) setError("session");
+      submittingRef.current = false;
+      if (dashboardMounted.current) setSubmitting(false);
+      return;
     }
     const result = await supabase.rpc("submit_owner_claim", {
-      p_facility_id: selected.id,
+      p_facility_id: facility.id,
       p_evidence_notes: textNotes.slice(0, 1500),
     });
-    if (result.error) setError("submit");
-    else {
+    if (!dashboardMounted.current) {
+      submittingRef.current = false;
+      return;
+    }
+    const submitted = classifySubmission(!result.error, { claimsError: false, facilitiesError: false, activityError: false });
+    if (submitted === "failed") {
+      setError("submit");
+    } else {
+      setClaims(current => rememberSubmittedClaim(current, facility.id));
+      setFacilities(current => ({ ...current, [facility.id]: facility }));
       setNotice("submitted");
       setSelected(null); setNotes(""); setResults([]); setSearch("");
       const storage = browserClaimStorage();
       if (storage) writeClaimLicense(storage, null);
-      await loadClaims(authData.user.id);
+      const refresh = await loadClaims(authData.user.id);
+      if (dashboardMounted.current && classifySubmission(true, refresh) === "submitted-refresh-failed") {
+        setNotice("submittedRefresh");
+      }
     }
-    setSubmitting(false);
+    submittingRef.current = false;
+    if (dashboardMounted.current) setSubmitting(false);
   }
 
   async function signOut() { await supabase.auth.signOut(); router.replace("/owner"); }
@@ -208,7 +284,10 @@ export default function OwnerDashboard() {
         <section style={card}>
           <h2>{text.claimsTitle}</h2>
           <p>{text.claimsBody}</p>
-          {claims.length === 0 && <p>{text.noClaims}</p>}
+          {claimsLoadError && <p role="alert" style={{ color: "#a32222" }}>{text.errors.load} <button type="button" onClick={() => { if (user) void loadClaims(user.id); }} style={{ minHeight: 44, marginLeft: 8, padding: "8px 12px", borderRadius: 8, border: "1px solid #176b53", background: "white", color: "#176b53", cursor: "pointer" }}>{text.retry}</button></p>}
+          {facilitiesLoadError && <p role="alert" style={{ color: "#a32222" }}>{text.errors.facilities} <button type="button" onClick={() => { if (user) void loadClaims(user.id); }} style={{ minHeight: 44, marginLeft: 8, padding: "8px 12px", borderRadius: 8, border: "1px solid #176b53", background: "white", color: "#176b53", cursor: "pointer" }}>{text.retry}</button></p>}
+          {activityLoadError && <p role="alert" style={{ color: "#a32222" }}>{text.errors.activity} <button type="button" onClick={() => { if (user) void loadClaims(user.id); }} style={{ minHeight: 44, marginLeft: 8, padding: "8px 12px", borderRadius: 8, border: "1px solid #176b53", background: "white", color: "#176b53", cursor: "pointer" }}>{text.retry}</button></p>}
+          {!claimsLoadError && claims.length === 0 && <p>{text.noClaims}</p>}
           {claims.map(c => {
             const home = facilities[c.facility_id];
             return <div key={c.id} style={{ padding: "14px 0", borderTop: "1px solid #dbe5eb" }}>
@@ -235,8 +314,8 @@ export default function OwnerDashboard() {
           <form onSubmit={findFacility}>
             <label htmlFor="facility-search">{text.searchLabel}</label>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 9 }}>
-              <div style={{ flex: "1 1 230px" }}><input id="facility-search" style={field} value={search} onChange={e => setSearch(e.target.value)} maxLength={70} required /></div>
-              <button type="submit" disabled={searching} style={{ background: "#176b53", color: "white", padding: "11px 20px", border: 0, borderRadius: 9, cursor: "pointer" }}>{searching ? text.searching : text.find}</button>
+              <div style={{ flex: "1 1 230px" }}><input id="facility-search" name="facility-search" style={field} value={search} onChange={e => changeFacilityQuery(e.target.value)} maxLength={70} required /></div>
+              <button type="submit" style={{ background: "#176b53", color: "white", padding: "11px 20px", border: 0, borderRadius: 9, cursor: "pointer" }}>{searching ? text.searching : text.find}</button>
             </div>
           </form>
           {searchError && <p role="alert" style={{ color: "#9f2626" }}>{text.errors[searchError]}</p>}
