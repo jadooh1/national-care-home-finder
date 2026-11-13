@@ -32,7 +32,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Michigan | C | unpublished | 4480 | yes | no | yes | yes | no | high |
 | Minnesota | C | unpublished | — | not verified | not verified | not verified | yes | no | high |
 | Mississippi | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
-| Missouri | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| Missouri | C | unpublished | 1102 | yes | yes | no | no | no | high |
 | Montana | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Nebraska | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Nevada | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
@@ -57,15 +57,15 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Washington | A | public | 6278 | yes | yes | yes | yes | yes | high |
 | West Virginia | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Wisconsin | C | unpublished | — | not verified | not verified | not verified | not verified | no | high |
-| Wyoming | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| Wyoming | C | unpublished | — | yes | no | no | no | no | high |
 
-Counts: A 2, B 8, C 19, D 21.
+Counts: A 2, B 8, C 21, D 19.
 
 ## Verified source inventory
 
 Washington uses the DSHS adult family home listing, 6,278 rows, numeric license, address, status, beds, coordinates, disclosure link, and source date 2026-11-09. Oregon uses the ODHS provider export, 1,584 listed homes, source id, city, county, status, beds, and profile link. It has no public license number, street, ZIP, coordinates, or export date. California’s two files total 23,020 rows. Michigan’s file has 4,480 rows, a license, status, and a verified profile prefix, with most streets blank. Pennsylvania’s file has 989 rows and no license or status column.
 
-North Carolina’s workbooks have 1,086 unique licenses and site addresses. Iowa’s file has 335 certification numbers and addresses. Illinois’s open-data listing has 495 licensed establishments with addresses; its portal time 2024-02-16 is not an export date, and 169 state values are blank. Kentucky’s PDF and Oklahoma’s PDF expose license or facility id, address, and capacity. Indiana’s HTML directory, posted 11/5/2026, has 225 facilities and a unique license number on each. That posted date is not an ISO export date, and the page has no status or facility disclosure link. Delaware’s HTML listing exposes license number and address. No row count was adopted for Kentucky, Oklahoma, or Delaware.
+North Carolina’s workbooks have 1,086 unique licenses and site addresses. Iowa’s file has 335 certification numbers and addresses. Illinois’s open-data listing has 495 licensed establishments with addresses; its portal time 2024-02-16 is not an export date, and 169 state values are blank. Kentucky’s PDF and Oklahoma’s PDF expose license or facility id, address, and capacity. Indiana’s HTML directory, posted 11/5/2026, has 225 facilities and a unique license number on each. That posted date is not an ISO export date, and the page has no status or facility disclosure link. Missouri’s DHSS long-term care directory has 1,102 rows, a license number, an address column, separate mailing columns, and capacity. Its facility numbers and license numbers are not unique, it mixes residential, assisted-living, and nursing levels, and its catalog time is not an export date. Wyoming’s November 2026 workbook was opened and mixes facility classes; no facility count was adopted. Delaware’s HTML listing exposes license number and address. No row count was adopted for Kentucky, Oklahoma, Delaware, or Wyoming.
 
 The remaining C and D rows use only the source named in `lib/nationwide-compatibility.ts`. A dated file or search page without opened columns stays D. A search, mixed file, unreconciled pair of sources, or missing license or address stays C.
 
@@ -88,7 +88,7 @@ Already recorded distinctions:
 - Washington keeps a license, a physical address, licensing coordinates, a facility-specific disclosure link, and the official export date 2026-11-09.
 - Oregon keeps a source id, not a public license. Its directory has no physical address and no coordinates, and its profile link is facility-specific. There is no official export date.
 - California, Michigan, Illinois, Kentucky, Indiana, Delaware, and North Carolina have license identifiers. Oklahoma’s identifier is a facility id. Iowa’s identifier is a certification number. Pennsylvania’s object id is a source record id and is rejected as a regulatory identifier.
-- Illinois, Kentucky, Oklahoma, Indiana, and Delaware have an address column whose role was not established. That value stays an unverified address. North Carolina’s site address, Iowa’s facility address, California’s licensing address, Pennsylvania’s street, and Washington’s street stay physical. Michigan’s supplemental column is rejected as a physical or mailing address.
+- Illinois, Kentucky, Oklahoma, Indiana, and Delaware have an address column whose role was not established. That value stays an unverified address. Missouri’s address column is separate from its mailing columns and is still not labeled physical. North Carolina’s site address, Iowa’s facility address, California’s licensing address, Pennsylvania’s street, and Washington’s street stay physical. Michigan’s supplemental column is rejected as a physical or mailing address. Wyoming’s workbook puts the name and physical address in one column, so no separate physical address was adopted.
 - A portal time, catalog timestamp, workbook label, posted date, or path year is a retrieval timestamp or a source publication date. It is not an official export date and it does not verify freshness.
 - Washington, Oregon, and Michigan have verified facility-specific disclosure links. North Carolina’s star search and the other state search pages are generic search pages. An unverified URL pattern is not a disclosure link.
 - Original category and status stay beside any later normalized value. No normalized value is adopted in this proposal. Michigan’s undescribed category is not normalized.
@@ -120,6 +120,6 @@ Validation covers three groups. Data integrity covers the separations above. Pub
 
 ## Order and phases
 
-Keep Washington public and Oregon on its development contract. The next structural candidates, still unpublished, are Illinois, North Carolina, Kentucky, and Oklahoma, then Delaware once an HTML parser is specified, then California and Iowa once credential and status mapping is specified. Indiana’s 225-row directory stays unpublished until it has a per-row status, a facility disclosure link, and an ISO export date. Michigan, Pennsylvania, Wisconsin, and Minnesota stay behind their recorded blockers. Class D states need an official field check before any build.
+Keep Washington public and Oregon on its development contract. The next structural candidates, still unpublished, are Illinois, North Carolina, Kentucky, and Oklahoma, then Delaware once an HTML parser is specified, then California and Iowa once credential and status mapping is specified. Indiana’s 225-row directory stays unpublished until it has a per-row status, a facility disclosure link, and an ISO export date. Missouri is the strongest newly verified candidate and stays unpublished: it still needs a per-row status, a facility disclosure link, an ISO export date, and a rule for rows that share a facility number or license number. Wyoming’s mixed workbook is not that candidate. Michigan, Pennsylvania, Wisconsin, and Minnesota stay behind their recorded blockers. Class D states need an official field check before any build. The Kansas directory index returned HTTP 403, so its files remain unopened.
 
 Phase 1 is this assessment and the roster contract. Phase 2 is review of that contract. Phase 3 is one development-only state after a person approves the schema. No phase publishes a state, changes billing, or changes public analytics.
