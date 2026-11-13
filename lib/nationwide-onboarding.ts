@@ -292,6 +292,10 @@ export const NORTH_CAROLINA_FEASIBILITY = {
   listingsPageUpdated: "10/28/2026",
   workbookAsOf: "10/2026",
   recordedExportDate: null,
+  coordinateColumns: false,
+  facilityPageIdentifierIsLicense: false,
+  expiryBeforeObservation: 5,
+  publicationEligibleRows: 0,
 } as const;
 
 export const IOWA_FEASIBILITY = {
