@@ -48,10 +48,24 @@ export const CALIFORNIA_RECORDED_EXPORT_DATE = null;
 export const CALIFORNIA_PROFILE_URL = null;
 export const CALIFORNIA_COORDINATE_COLUMNS = false;
 
+export const CALIFORNIA_SOURCE_RECONCILIATION = {
+  observedOn: "2026-11-13",
+  datasetUrl: "https://data.chhs.ca.gov/dataset/ccl-facilities",
+  temporalCoverage: "Data as of 05252025",
+  rcfeResourceId: "744d1583-f9eb-45b6-b0f8-b9a9dab936a6",
+  arfResourceId: "9f5d1d00-6b24-4f44-a158-9cbe4b43f117",
+  rcfeRows: 12522,
+  arfRows: 10498,
+  rcfeResourceLastModified: "2025-05-27T23:43:15.194749",
+  arfResourceLastModified: "2025-05-27T23:42:09.892479",
+  packageMetadataModified: "2025-11-06T23:26:08.051889",
+} as const;
+
 export const CALIFORNIA_FACILITY_SEARCH_LAST_OBSERVED = {
   url: "https://www.ccld.dss.ca.gov/carefacilitysearch/",
-  status: 503,
-  rechecked: false,
+  status: 200,
+  observedOn: "2026-11-13",
+  rechecked: true,
 } as const;
 
 export function countStatuses(counts: Record<CaliforniaLicenseStatus, number>): number {
@@ -74,4 +88,13 @@ export function californiaDirectoryReady(): false {
 
 export function californiaProfileUrl(): null {
   return CALIFORNIA_PROFILE_URL;
+}
+
+export function californiaStatusLabel(originalStatus: string): string | null {
+  if (!(CALIFORNIA_STATUS_ORDER as readonly string[]).includes(originalStatus)) return null;
+  return CALIFORNIA_STATUS_LABELS[originalStatus as CaliforniaLicenseStatus];
+}
+
+export function californiaDisclosureUrl(_facilityNumber: string): null {
+  return null;
 }
