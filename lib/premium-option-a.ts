@@ -124,6 +124,12 @@ export function publishedContentOutcome(queryFailed: boolean, rowCount: number):
   return rowCount === 0 ? "empty" : "listed";
 }
 
+export function ownerListingRefreshError(input: { publishedFailed: boolean; facilitiesFailed: boolean }): "published" | "facilities" | "" {
+  if (input.facilitiesFailed) return "facilities";
+  if (input.publishedFailed) return "published";
+  return "";
+}
+
 export function developmentCheckoutIntent(supabaseUrl: string): DevelopmentCheckout {
   if (!developmentBillingAllowed(supabaseUrl)) {
     throw new Error("Development billing is closed for this project.");
