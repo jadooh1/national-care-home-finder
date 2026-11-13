@@ -1,12 +1,18 @@
 # Runs the review-only security proposal against disposable PostgreSQL 16
 # and 17 service containers. This job does not connect to Supabase, does
 # not use production credentials, and does not deploy. It does not run for main.
+# Pull requests into the stacked roster branches are included. Push events
+# stay limited to development.
 name: Proposal SQL validation
 
 on:
   pull_request:
     branches:
       - development
+      - feature/north-carolina-roster-ingestion
+      - feature/delaware-roster-ingestion
+      - feature/nationwide-ingestion-framework
+      - feature/ingestion-baseline-manifest
   push:
     branches:
       - development
@@ -75,6 +81,18 @@ jobs:
 
       - name: Validate the Option A premium ledger
         run: python3 supabase/proposals/tests/validate_premium_option_a.py
+
+      - name: Validate the North Carolina roster pilot
+        run: python3 supabase/proposals/tests/validate_north_carolina_roster.py
+
+      - name: Validate the Delaware roster pilot
+        run: python3 supabase/proposals/tests/validate_delaware_roster.py
+
+      - name: Validate the shared roster ingestion framework
+        run: python3 supabase/proposals/tests/validate_roster_framework.py
+
+      - name: Validate the development identity preflight
+        run: python3 supabase/proposals/tests/validate_development_identity.py
 
       - name: Validate the nationwide roster proposal
         run: python3 supabase/proposals/tests/validate_nationwide_roster.py

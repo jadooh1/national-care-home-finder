@@ -48,6 +48,16 @@ const en = {
     license: "License:",
     notListed: "Not listed",
     status: "Status:",
+    claimStatus: {
+      pending: "Pending administrative review",
+      approved: "Approved",
+      rejected: "Rejected",
+    },
+    claimStatusNote: {
+      pending: "An administrator still needs to review this claim. Owner-submitted information is not public yet.",
+      approved: "An administrator approved this claim. Listing proposals still require a separate review and do not change the DSHS record.",
+      rejected: "An administrator rejected this claim. You may submit a new claim for this facility.",
+    },
     reviewed: "Reviewed:",
     activity: "Activity:",
     claimTitle: "Claim your facility",
@@ -63,8 +73,11 @@ const en = {
     pendingNote: "The claim will remain pending until reviewed. Never submit sensitive identification documents in this text box.",
     submitting: "Submitting…",
     submitClaim: "Submit ownership claim",
+    retry: "Try again",
     errors: {
       load: "Unable to load ownership claims. Please try again later.",
+      facilities: "Facility details could not be loaded. Your claims are still listed. Try again.",
+      activity: "Claim activity could not be loaded. Your claims are still listed. Try again.",
       short: "Enter at least 3 letters or numbers.",
       search: "Unable to search facilities. Please retry.",
       none: "No matching listings. Try a facility name or license number.",
@@ -75,6 +88,7 @@ const en = {
     },
     notices: {
       submitted: "Your ownership claim was submitted for review. Submission does not verify ownership or grant editing access.",
+      submittedRefresh: "Your ownership claim was submitted for review. The dashboard could not refresh. Submission does not verify ownership or grant editing access. Use Try again to reload your claims.",
     },
   },
   edits: {
@@ -214,6 +228,16 @@ const es: typeof en = {
     license: "Licencia:",
     notListed: "No figura",
     status: "Estado:",
+    claimStatus: {
+      pending: "Pendiente de revisión administrativa",
+      approved: "Aprobado",
+      rejected: "Rechazado",
+    },
+    claimStatusNote: {
+      pending: "Un administrador todavía debe revisar este reclamo. La información enviada por el propietario aún no es pública.",
+      approved: "Un administrador aprobó este reclamo. Las propuestas de la ficha todavía requieren una revisión aparte y no cambian el registro de DSHS.",
+      rejected: "Un administrador rechazó este reclamo. Puede enviar un nuevo reclamo para este establecimiento.",
+    },
     reviewed: "Revisado:",
     activity: "Actividad:",
     claimTitle: "Reclame su centro",
@@ -229,8 +253,11 @@ const es: typeof en = {
     pendingNote: "El reclamo permanecerá pendiente hasta que se revise. Nunca envíe documentos de identificación sensibles en este cuadro de texto.",
     submitting: "Enviando…",
     submitClaim: "Enviar reclamo de propiedad",
+    retry: "Intentar de nuevo",
     errors: {
       load: "No se pueden cargar los reclamos de propiedad. Inténtelo más tarde.",
+      facilities: "No se pudieron cargar los datos del centro. Sus reclamos siguen en la lista. Inténtelo de nuevo.",
+      activity: "No se pudo cargar la actividad del reclamo. Sus reclamos siguen en la lista. Inténtelo de nuevo.",
       short: "Ingrese al menos 3 letras o números.",
       search: "No se pueden buscar centros. Inténtelo de nuevo.",
       none: "No hay fichas coincidentes. Pruebe con el nombre del centro o el número de licencia.",
@@ -241,6 +268,7 @@ const es: typeof en = {
     },
     notices: {
       submitted: "Su reclamo de propiedad se envió para revisión. El envío no verifica la propiedad ni otorga acceso para editar.",
+      submittedRefresh: "Su reclamo de propiedad se envió para revisión. El panel no se pudo actualizar. El envío no verifica la propiedad ni otorga acceso para editar. Use Intentar de nuevo para volver a cargar sus reclamos.",
     },
   },
   edits: {

@@ -1,11 +1,16 @@
-# Validates the development branch. contents: read.
+# Validates development and the stacked roster pull requests. contents: read.
 # No secrets, deploy, or database access. This does not run for main.
+# Push events stay limited to development.
 name: Pull request validation
 
 on:
   pull_request:
     branches:
       - development
+      - feature/north-carolina-roster-ingestion
+      - feature/delaware-roster-ingestion
+      - feature/nationwide-ingestion-framework
+      - feature/ingestion-baseline-manifest
   push:
     branches:
       - development
@@ -55,6 +60,12 @@ jobs:
 
       - name: Check the owner-claim review guard
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_claim_review_guard.ts
+
+      - name: Check the Washington owner claim entry
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_owner_claim_entry.ts
+
+      - name: Check owner dashboard reliability
+        run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
 
       - name: Check the Oregon adult foster home dry run
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_odhs_roster.ts
@@ -109,6 +120,9 @@ jobs:
 
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
+
+      - name: Check the North Carolina roster mapping
+        run: python -m unittest discover -s scripts/nationwide -p "test_*.py"
 
       - name: Build
         run: npm run build
