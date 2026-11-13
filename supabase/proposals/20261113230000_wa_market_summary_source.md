@@ -1,12 +1,12 @@
 # Washington market summary source
 
-Do not execute this design. It does not create `wa_city_market_summary` or `wa_county_market_summary`. No schema, grant, or row change was made. The statements below are the review contract and the checks a person can run before any later approval.
+Do not execute this file again. Development already has both views. This file records the definition that was applied. It does not reapply it.
 
-The original view definitions are still absent from the repository and from the development catalog. This file records the source that does exist, the calculation rules that follow from it, and the city grouping key that does not.
+The city grouping key used by that definition is exact `county` plus `lower(btrim(city))`. The displayed city is `min(btrim(city))`.
 
 ## Verified source
 
-Development project `ajjsyloyihcqdomywhik`, read-only. `public.wa_city_market_summary` and `public.wa_county_market_summary` are not relations. No relation outside `pg_catalog` and `information_schema` has a name containing county, boundary, ZCTA, or geometry. There is no county-boundary relation and no separate geographic-assignment table.
+Development project `ajjsyloyihcqdomywhik`. Before the views were created, no relation outside `pg_catalog` and `information_schema` had a name containing county, boundary, ZCTA, or geometry. There is no county-boundary relation and no separate geographic-assignment table. The summaries group the directory text. They do not join a boundary.
 
 `public.facilities` has `city`, `county`, `latitude`, `longitude`, `licensed_capacity`, `license_status`, `presence`, and `record_status`. It has row security enabled. It has no geometry column.
 
@@ -69,29 +69,51 @@ These rules apply only to a later definition that a person approves. They are th
 - Duplicate facility identifiers. The listed view is one row per `id`, and the matched active population has no duplicate normalized license. A later definition groups those rows directly. A validation query must fail the review if `count(*)` differs from `count(distinct id)`.
 - `presence = 'absent'`. The listed view already applies `presence IS DISTINCT FROM 'absent'`. The summary reads that view and does not read `public.facilities` directly. The 5 absent source-matched rows stay out.
 - Unknown or historical licensing status. The listed view does not mention `license_status`. The only observed values on the active source-matched rows are `OP` and blank, and the 17 blank rows are inside the 6,278. There is no historical status value in this population. The summary does not add a status filter and does not treat blank as historical.
-- Rows hidden by row security. Create the view `with (security_invoker = true)` so the caller is subject to the same policies as the directory. Both public `SELECT` policies on `facilities` mention presence, record status, and absent. `anon` currently sees all 6,278 listed rows, the same count as the table owner. Owner execution, which is how the live ZIP view is set, is not proposed. Grant `SELECT` only to `anon` and `authenticated`. Do not grant `INSERT`, `UPDATE`, `DELETE`, or `TRUNCATE`. Do not grant `service_role`.
+- Rows hidden by row security. Both views were created `with (security_invoker = true)`, so the caller is subject to the same policies as the directory. `anon` and `authenticated` have SELECT only. They have no INSERT, UPDATE, DELETE, or TRUNCATE. `postgres` and `service_role` keep the database default privileges on both views.
 
-The city page reads `county_name`, `city_name`, `total_afhs`, `homes_with_capacity`, and `known_licensed_beds`. The county page reads `county_name`, `total_afhs`, `cities_represented`, `homes_with_capacity`, and `known_licensed_beds`. A view that omitted `cities_represented` or chose a city spelling would not be this contract.
+The city page reads `county_name`, `city_name`, `total_afhs`, `homes_with_capacity`, and `known_licensed_beds`. The county page reads `county_name`, `total_afhs`, `cities_represented`, `homes_with_capacity`, and `known_licensed_beds`.
 
-## Review-only design
+## Implemented definition
 
-The county totals that do not depend on city spelling are:
+A read-only catalog check after the approved development implementation recorded these definitions. Counts on each aggregate were 181 city groups, 35 counties, 6,278 homes, and 36,521 licensed beds.
 
 ```sql
+create view public.wa_city_market_summary
+with (security_invoker = true) as
 select
   county as county_name,
-  count(*)::integer as total_afhs,
-  count(licensed_capacity)::integer as homes_with_capacity,
-  coalesce(sum(licensed_capacity), 0)::integer as known_licensed_beds
+  min(btrim(city)) as city_name,
+  count(*) as total_afhs,
+  count(licensed_capacity) as homes_with_capacity,
+  coalesce(sum(licensed_capacity), 0::bigint) as known_licensed_beds
 from public.wa_dshs_listed_facilities
-where nullif(btrim(county), '') is not null
-group by county
-order by county;
+where county is not null
+  and btrim(county) <> ''
+  and city is not null
+  and btrim(city) <> ''
+group by county, (lower(btrim(city)));
 ```
 
-That select is not a view. It has no `cities_represented` column because that column needs the city key. There is no city select here for the same reason.
+```sql
+create view public.wa_county_market_summary
+with (security_invoker = true) as
+select
+  county as county_name,
+  count(*) as total_afhs,
+  count(distinct lower(btrim(city))) filter (
+    where city is not null and btrim(city) <> ''
+  ) as cities_represented,
+  count(licensed_capacity) as homes_with_capacity,
+  coalesce(sum(licensed_capacity), 0::bigint) as known_licensed_beds
+from public.wa_dshs_listed_facilities
+where county is not null
+  and btrim(county) <> ''
+group by county;
+```
 
-Validation queries for a later review:
+The live `pg_get_viewdef` output uses the same expressions. It omits the `public.` schema qualifier and does not repeat `security_invoker` inside the view body. The view options are `security_invoker=true` on both relations.
+
+Validation queries kept for a later comparison:
 
 ```sql
 select count(*) as listed_rows, count(distinct id) as distinct_ids
@@ -123,8 +145,6 @@ from public.wa_dshs_listed_facilities;
 - The summary is not created in the same statement as a change to `wa_zip_market_income`, the directory views, or facility rows.
 - No boundary import, placeholder view, or invented city or county assignment is part of this design.
 
-## Approval required
+## Applied
 
-One approval is required before either view can be created: a person chooses the city grouping key and accepts these calculation rules, `security_invoker = true`, and `SELECT` for `anon` and `authenticated` only. That approval is for a new definition. It is not a restoration.
-
-No approval is requested to import county boundaries, to change facility rows, to alter the ZIP view, or to create a view that still lacks the city key.
+The city key in this definition was approved before it was created on development. Do not run the statements above again. No further schema approval is requested by this record.

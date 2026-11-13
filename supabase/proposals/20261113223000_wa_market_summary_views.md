@@ -1,6 +1,6 @@
 # Washington market summary views
 
-This proposal does not create the views. Their definitions cannot be recovered from the repository or from the live development catalog. No SQL was executed for this review.
+This proposal does not create the views. The definition that development now has is recorded in `supabase/proposals/20261113230000_wa_market_summary_source.md`. No SQL was executed for this review.
 
 ## Evidence
 
@@ -16,7 +16,7 @@ Commit `39fcd9a` added the city page and commit `c44ed8b` added the county page.
 
 ## Why no restore script is included
 
-A later read-only inspection is recorded in `supabase/proposals/20261113230000_wa_market_summary_source.md`. The listed directory view has county text on every row, and there is still no county-boundary relation for the geographic assignment named by the county page. City spelling is not a canonical key, and `cities_represented` depends on that key. This file still does not create the views. The calculation rules for null capacity, blank city or county, duplicate identifiers, `presence = 'absent'`, licensing status, and row security are proposed in that source note and were not applied.
+The applied development definition is recorded in `supabase/proposals/20261113230000_wa_market_summary_source.md`. The listed directory view has county text on every row, and there is still no county-boundary relation. The approved city key is exact county plus `lower(btrim(city))`, with `min(btrim(city))` as the displayed city. This file still does not create the views.
 
 ## Security requirements for a later definition
 
