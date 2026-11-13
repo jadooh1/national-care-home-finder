@@ -105,6 +105,15 @@ export function olderCursor(row: { id?: string; created_at?: string } | undefine
   return { before: row.created_at, beforeId: row.id };
 }
 
+export function listingViewAfterRefresh(previous: ListingRequestInput, requested: ListingRequestInput, result: "applied" | "stale" | "error"): ListingRequestInput {
+  const source = result === "applied" ? requested : previous;
+  return {
+    status: source.status,
+    proposalCursor: copyCursor(source.proposalCursor),
+    historyCursor: copyCursor(source.historyCursor),
+  };
+}
+
 export function proposalTotals(data: unknown): ProposalTotals | null {
   if (!Array.isArray(data) || data.length !== 3) return null;
   const totals: ProposalTotals = { pending: Number.NaN, approved: Number.NaN, rejected: Number.NaN };
