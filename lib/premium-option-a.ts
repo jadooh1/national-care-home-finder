@@ -119,6 +119,11 @@ export function manageableOwnerContentView(supabaseUrl: string): string {
     : PUBLISHED_OWNER_CONTENT_VIEW;
 }
 
+export function publishedContentOutcome(queryFailed: boolean, rowCount: number): "unavailable" | "empty" | "listed" {
+  if (queryFailed) return "unavailable";
+  return rowCount === 0 ? "empty" : "listed";
+}
+
 export function developmentCheckoutIntent(supabaseUrl: string): DevelopmentCheckout {
   if (!developmentBillingAllowed(supabaseUrl)) {
     throw new Error("Development billing is closed for this project.");

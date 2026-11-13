@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
-import { manageableOwnerContentView } from "../../../lib/premium-option-a";
+import { manageableOwnerContentView, publishedContentOutcome } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 
 captureAndStripAuthCallback();
@@ -101,7 +101,14 @@ export default function OwnerListingEdits() {
     setPublications(publicationRows);
     if (ids.length) {
       const content = await supabase.from(manageableOwnerContentView(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "")).select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
-      setPublished(content.error ? [] : (content.data ?? []) as Published[]);
+      const rows = (content.data ?? []) as Published[];
+      const outcome = publishedContentOutcome(Boolean(content.error), rows.length);
+      if (outcome === "unavailable") {
+        setPublished([]);
+        setError("published");
+        return;
+      }
+      setPublished(rows);
     } else setPublished([]);
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
     if (detailIds.length) {
@@ -141,16 +148,16 @@ export default function OwnerListingEdits() {
     <LanguageSelector />
     <Link href="/owner/dashboard" style={{ color: "#176b53" }}>{text.back}</Link><h1>{text.title}</h1>
     <p>{text.intro}</p>
-    {loading ? <p>{text.loading}</p> : <>
+    {loading ? <p role="status">{text.loading}</p> : <>
       {error && <p role="alert" style={{ color: "#9f2626" }}>{text.errors[error]}</p>}{notice && <p role="status" style={{ color: "#176b53" }}>{text.notices[notice]}</p>}
       <section style={panel}><h2>{text.newProposal}</h2>{approvedIds.length === 0 ? <p>{text.noApproved} <Link href="/owner/dashboard">{text.requestVerification}</Link></p> : <form onSubmit={submit}>
         <label htmlFor="facility">{text.facility}</label><select id="facility" style={field} value={facilityId} onChange={e => setFacilityId(e.target.value)}>{facilities.filter(f => approvedIds.includes(f.id)).map(f => <option key={f.id} value={f.id}>{f.canonical_name} {f.license_number ? "(" + f.license_number + ")" : ""}</option>)}</select>
         <label htmlFor="category" style={{ display: "block", marginTop: 15 }}>{text.informationType}</label><select id="category" style={field} value={fieldName} onChange={e => setFieldName(e.target.value)}><option value="description">{text.fieldOption.description}</option><option value="services">{text.fieldOption.services}</option><option value="amenities">{text.fieldOption.amenities}</option></select>
         <label htmlFor="proposal" style={{ display: "block", marginTop: 15 }}>{text.proposedLabel}</label><textarea id="proposal" required maxLength={2000} rows={6} style={field} value={value} onChange={e => setValue(e.target.value)} />
         <p style={{ fontSize: 13 }}>{text.privacy}</p>
-        <button disabled={busy} style={{ border: 0, borderRadius: 9, background: "#176b53", color: "white", padding: "12px 19px" }}>{busy ? text.submitting : text.submit}</button>
+        <button type="submit" disabled={busy} aria-busy={busy} style={{ border: 0, borderRadius: 9, background: "#176b53", color: "white", padding: "12px 19px", minHeight: 44 }}>{busy ? text.submitting : text.submit}</button>
       </form>}</section>
-      <section style={panel}><h2>{text.publishedTitle}</h2><p>{text.publishedBody}</p>{published.length === 0 && <p>{text.nonePublished}</p>}{published.map(item => <article key={`${item.facility_id}-${item.field_name}`} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
+      <section style={panel}><h2>{text.publishedTitle}</h2><p>{text.publishedBody}</p>{published.length === 0 && !error && <p>{text.nonePublished}</p>}{published.map(item => <article key={`${item.facility_id}-${item.field_name}`} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
       <section style={panel}><h2>{text.historyTitle}</h2><p>{text.historyBody}</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { historyCursor.current = null; void refresh(uid); }}>{text.firstPage}</button>{publications.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = publications[publications.length - 1]; historyCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>{text.older}</button>}</div><p>{text.pageSize}</p>{publications.length === 0 && <p>{text.noHistory}</p>}{publications.map(item => <article key={item.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p>{item.event_type === "withdrawn" ? text.withdrawn : text.published} · {formatStamp(item.created_at)}</p><p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
       <section style={panel}><h2>{text.proposalsTitle}</h2><p>{text.proposalsBody}</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { editCursor.current = null; void refresh(uid); }}>{text.firstPage}</button>{edits.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = edits[edits.length - 1]; editCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>{text.older}</button>}</div><p>{text.pageSize}</p>{edits.length === 0 && <p>{text.noProposals}</p>}{edits.map(e => <article key={e.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(e.facility_id)}</strong> — {fieldLabel(e.field_name)}<p>{text.status} <strong>{codeLabel(e.review_status)}</strong> · {formatStamp(e.created_at)}</p></article>)}</section>
       <section style={panel}><h2>{text.activityTitle}</h2><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { eventCursor.current = null; void refresh(uid); }}>{text.firstPage}</button>{events.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = events[events.length - 1]; eventCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>{text.older}</button>}</div><p>{text.pageSize}</p>{events.length === 0 && <p>{text.noActivity}</p>}{events.map(event => <article key={event.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><p>{text.activity} {codeLabel(event.event_type)}{event.from_status ? `, ${codeLabel(event.from_status)} → ${codeLabel(event.to_status)}` : `, ${codeLabel(event.to_status)}`} · {formatStamp(event.created_at)}</p></article>)}</section>

@@ -12,6 +12,7 @@ import {
   developmentCheckoutIntent,
   premiumPeriodOpen,
   manageableOwnerContentView,
+  publishedContentOutcome,
   publicOwnerContentView,
 } from "../../../lib/premium-option-a.ts";
 
@@ -106,6 +107,14 @@ test("public owner text uses the premium view only on development", () => {
     "wa_afh_published_owner_content",
   );
   assert.match(ownerEdits, /manageableOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
+  assert.equal(publishedContentOutcome(true, 0), "unavailable");
+  assert.equal(publishedContentOutcome(false, 0), "empty");
+  assert.equal(publishedContentOutcome(false, 1), "listed");
+  assert.match(ownerEdits, /publishedContentOutcome\(Boolean\(content\.error\)/);
+  assert.doesNotMatch(ownerEdits, /content\.error \? \[\]/);
+  assert.match(ownerEdits, /published\.length === 0 && !error/);
+  assert.match(ownerEdits, /role="status"/);
+  assert.match(ownerEdits, /type="submit"/);
   for (const sql of [ownerTextGrants, ownerTextMigration]) {
     assert.match(sql, /revoke all on table public\.wa_afh_published_owner_content from public, anon, authenticated/);
     assert.match(sql, /grant select on table public\.wa_afh_claimed_owner_content to authenticated/);
