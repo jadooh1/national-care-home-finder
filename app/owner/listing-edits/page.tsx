@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
+import { claimSubmitGate } from "../../../lib/owner-dashboard";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
 import { manageableOwnerContentView, ownerListingRefreshError, publishedContentOutcome } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
@@ -49,6 +50,7 @@ export default function OwnerListingEdits() {
   const [fieldName, setFieldName] = useState("description");
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
+  const submittingRef = useRef(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<EditError>("");
   const [notice, setNotice] = useState<EditNotice>("");
@@ -137,16 +139,23 @@ export default function OwnerListingEdits() {
     return () => { active = false; };
   }, [router]);
   async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault(); setError(""); setNotice("");
+    e.preventDefault();
+    if (claimSubmitGate(submittingRef.current) === "ignore") return;
+    setError(""); setNotice("");
     const proposed = value.trim();
     if (!approvedIds.includes(facilityId) || !["description", "services", "amenities"].includes(fieldName) || proposed.length < 1 || proposed.length > 2000) { setError("invalid"); return; }
+    submittingRef.current = true;
     setBusy(true);
-    const auth = await supabase.auth.getUser();
-    if (auth.error || auth.data.user?.id !== uid) { setError("session"); setBusy(false); return; }
-    const response = await supabase.rpc("submit_listing_edit", { p_facility_id: facilityId, p_field_name: fieldName, p_proposed_value: proposed });
-    if (response.error) setError("submit");
-    else { setValue(""); setNotice("submitted"); await refresh(uid); }
-    setBusy(false);
+    try {
+      const auth = await supabase.auth.getUser();
+      if (auth.error || auth.data.user?.id !== uid) { setError("session"); return; }
+      const response = await supabase.rpc("submit_listing_edit", { p_facility_id: facilityId, p_field_name: fieldName, p_proposed_value: proposed });
+      if (response.error) setError("submit");
+      else { setValue(""); setNotice("submitted"); await refresh(uid); }
+    } finally {
+      submittingRef.current = false;
+      setBusy(false);
+    }
   }
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", color: "#123c59", padding: "30px 5%", fontFamily: "Arial,sans-serif" }}><style>{languageStyle}</style><div style={{ maxWidth: 960, margin: "auto" }}>
     <LanguageSelector />
