@@ -21,6 +21,16 @@ test("a market query error stays distinct from an empty comparison", () => {
   assert.equal(directoryContract("Oregon")?.publication, "development");
 });
 
+test("the missing market views are not restored by a guessed definition", () => {
+  const assessment = readFileSync(new URL("../../../supabase/proposals/20261113223000_wa_market_summary_views.md", import.meta.url), "utf8");
+  assert.match(assessment, /`county_name`, `city_name`, `total_afhs`, `homes_with_capacity`, and `known_licensed_beds`/);
+  assert.match(assessment, /`county_name`, `total_afhs`, `cities_represented`, `homes_with_capacity`, and `known_licensed_beds`/);
+  assert.match(assessment, /This proposal does not create the views/);
+  assert.equal(/^\s*create\s+view\b/im.test(assessment), false);
+  assert.match(assessment, /security_invoker = true/);
+  assert.match(assessment, /presence = 'absent'/);
+});
+
 test("completed search and owner safeguards remain in place", () => {
   assert.match(directory, /params\.get\("q"\)/);
   assert.match(directory, /params\.get\("city"\)/);
