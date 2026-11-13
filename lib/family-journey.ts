@@ -53,3 +53,36 @@ export function washingtonMapPostalOrFilter(searchZip: string): string {
   if (!FIVE_DIGIT_ZIP.test(searchZip)) return "postal_code.eq.";
   return `postal_code.eq.${searchZip},postal_code.like.${searchZip}____`;
 }
+
+export const WASHINGTON_MARKET_PAGE_SIZE = 500;
+export const WASHINGTON_MARKET_MAX_PAGES = 4;
+
+export function washingtonDemographicsZipQuery(zip: string | null | undefined): string | null {
+  const candidate = zip?.trim() ?? "";
+  return FIVE_DIGIT_ZIP.test(candidate) ? candidate : null;
+}
+
+export function washingtonMarketPageBounds(page: number, pageSize = WASHINGTON_MARKET_PAGE_SIZE): [number, number] {
+  const from = page * pageSize;
+  return [from, from + pageSize - 1];
+}
+
+export type WashingtonMarketPage<T> = { ok: true; rows: T[] } | { ok: false };
+
+export function collectWashingtonMarketPages<T>(
+  pages: WashingtonMarketPage<T>[],
+  pageSize = WASHINGTON_MARKET_PAGE_SIZE,
+  maxPages = WASHINGTON_MARKET_MAX_PAGES,
+): { status: "complete"; rows: T[] } | { status: "unavailable" | "incomplete" } {
+  const rows: T[] = [];
+  if (pages.length === 0 || pages.length > maxPages) return { status: "unavailable" };
+  for (let page = 0; page < pages.length; page++) {
+    const current = pages[page];
+    if (!current.ok) return { status: "unavailable" };
+    if (current.rows.length > pageSize) return { status: "unavailable" };
+    rows.push(...current.rows);
+    if (current.rows.length < pageSize) return { status: "complete", rows };
+    if (page === maxPages - 1) return { status: "incomplete" };
+  }
+  return { status: "incomplete" };
+}

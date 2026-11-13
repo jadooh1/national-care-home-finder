@@ -5,7 +5,7 @@ import Link from "next/link";
 import { WashingtonPublicHeader } from "../../../components/washington-public";
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { supabase } from "../../../lib/supabase";
-import { WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP, washingtonZipFromSearch } from "../../../lib/family-journey";
+import { WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP, WASHINGTON_MARKET_MAX_PAGES, WASHINGTON_MARKET_PAGE_SIZE, collectWashingtonMarketPages, washingtonDemographicsZipQuery, washingtonMarketPageBounds, washingtonZipFromSearch, type WashingtonMarketPage } from "../../../lib/family-journey";
 import { copy } from "../../../lib/copy/washington-detail";
 import type { Locale } from "../../../lib/locale";
 
@@ -45,11 +45,14 @@ export default function WashingtonDemographicsPage() {
   const fmt = (n: number | null | undefined) => n == null ? text.notAvailable : locale === "es" ? n.toLocaleString("es") : n.toLocaleString();
   const amount = (n: number) => locale === "es" ? n.toLocaleString("es") : n.toLocaleString();
   const [rows, setRows] = useState<Market[]>([]);
+  const [current, setCurrent] = useState<Market | null>(null);
   const [zipInput, setZipInput] = useState("");
   const [zip, setZip] = useState<string | null>(null);
   const [sort, setSort] = useState<"senior" | "afh" | "beds">("senior");
   const [loading, setLoading] = useState(true);
+  const [listLoading, setListLoading] = useState(true);
   const [error, setError] = useState<"" | "invalid" | "unavailable">("");
+  const [listError, setListError] = useState<"" | "unavailable" | "incomplete">("");
 
   useEffect(() => {
     const resolved = washingtonZipFromSearch(new URLSearchParams(window.location.search).get("zip"), WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP);
@@ -58,23 +61,62 @@ export default function WashingtonDemographicsPage() {
   }, []);
 
   useEffect(() => {
+    const selectedZip = washingtonDemographicsZipQuery(zip);
+    if (!selectedZip) return;
     let active = true;
     async function load() {
+      setLoading(true);
+      setError("");
+      setCurrent(null);
       const { data, error: queryError } = await supabase
         .from("wa_zip_market_income")
         .select("zip_code,total_afhs,homes_with_capacity,known_licensed_beds,population_total,age_60_69,age_70_79,age_80_84,age_85_plus,age_70_plus,census_period,median_household_income,median_income_margin_error,total_households,households_100k_plus,households_100k_plus_pct,income_census_period")
-        .order("zip_code", { ascending: true })
-        .range(0, 499);
+        .eq("zip_code", selectedZip)
+        .maybeSingle();
       if (!active) return;
       if (queryError) setError("unavailable");
-      else setRows((data ?? []) as Market[]);
+      else setCurrent((data ?? null) as Market | null);
       setLoading(false);
     }
     void load();
     return () => { active = false; };
-  }, []);
+  }, [zip]);
 
-  const current = rows.find(r => r.zip_code === zip) ?? null;
+  useEffect(() => {
+    let active = true;
+    async function load() {
+      setListLoading(true);
+      setListError("");
+      setRows([]);
+      const pages: WashingtonMarketPage<Market>[] = [];
+      for (let page = 0; page < WASHINGTON_MARKET_MAX_PAGES; page++) {
+        const [from, to] = washingtonMarketPageBounds(page);
+        const { data, error: queryError } = await supabase
+          .from("wa_zip_market_income")
+          .select("zip_code,total_afhs,known_licensed_beds,age_70_plus")
+          .order("zip_code", { ascending: true })
+          .range(from, to);
+        if (!active) return;
+        if (queryError) {
+          pages.push({ ok: false });
+          break;
+        }
+        const batch = (data ?? []) as Market[];
+        pages.push({ ok: true, rows: batch });
+        if (batch.length < WASHINGTON_MARKET_PAGE_SIZE) break;
+      }
+      const collected = collectWashingtonMarketPages(pages);
+      if (!active) return;
+      if (collected.status === "complete") setRows(collected.rows);
+      else {
+        setRows([]);
+        setListError(collected.status);
+      }
+      setListLoading(false);
+    }
+    void load();
+    return () => { active = false; };
+  }, []);
   const maxPopulation = Math.max(1, ...groups.map(g => current?.[g.key] ?? 0));
   const sorted = useMemo(() => [...rows].sort((a, b) => {
     const av = sort === "senior" ? (a.age_70_plus ?? -1) : sort === "afh" ? a.total_afhs : a.known_licensed_beds;
@@ -108,6 +150,7 @@ export default function WashingtonDemographicsPage() {
       </form>
       {loading && <p role="status">{text.loading}</p>}
       {error && <p role="alert" style={{ color: "#a62a2a" }}>{error === "invalid" ? text.invalidZip : text.unavailable}</p>}
+      {listError && <p role="alert" style={{ color: "#a62a2a" }}>{listError === "incomplete" ? text.incomplete : text.unavailable}</p>}
       {!loading && zip && !error && !current && <p role="status">{text.noMatch(zip)}</p>}
       {!loading && current && <>
         <h2 style={{ marginTop: 28 }}>{text.overview(current.zip_code)}</h2>
@@ -152,7 +195,7 @@ export default function WashingtonDemographicsPage() {
           <p>{text.interpretingContext}</p>
         </section>
       </>}
-      {!loading && rows.length > 0 && <section style={{ ...card, marginTop: 24 }}>
+      {!listLoading && !listError && rows.length > 0 && <section style={{ ...card, marginTop: 24 }}>
         <h2 style={{ marginTop: 0 }}>{text.compareTitle}</h2>
         <label htmlFor="sort-by" style={{ fontWeight: 700, marginRight: 10 }}>{text.sortBy}</label>
         <select id="sort-by" value={sort} onChange={e => setSort(e.target.value as typeof sort)} style={{ padding: 10, border: `1px solid ${border}`, borderRadius: 8, marginBottom: 15 }}>

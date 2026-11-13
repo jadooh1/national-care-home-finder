@@ -126,6 +126,7 @@ type DemographicsCopy = {
   loading: string;
   invalidZip: string;
   unavailable: string;
+  incomplete: string;
   noMatch: (zip: string) => string;
   overview: (zip: string) => string;
   totalPopulation: string;
@@ -163,6 +164,7 @@ type OpportunityCopy = {
   intro: string;
   loading: string;
   unavailable: string;
+  incomplete: string;
   zipsCovered: string;
   recordedListings: string;
   recordedBeds: string;
@@ -388,6 +390,7 @@ export const copy: Record<Locale, {
       loading: "Loading Census and care home data…",
       invalidZip: "Enter a valid five-digit ZIP code.",
       unavailable: "Demographic data is unavailable. Check that the public ZIP market view is created and readable.",
+      incomplete: "The ZIP comparison list is incomplete, so it is hidden.",
       noMatch: (zip) => `No matched AFH and ACS data for ZIP ${zip}. Select a ZIP code in the comparison table below.`,
       overview: (zip) => `ZIP ${zip} overview`,
       totalPopulation: "Total population",
@@ -424,6 +427,7 @@ export const copy: Record<Locale, {
       intro: "Compare older-adult population estimates, household income, and recorded Adult Family Home supply. These indicators do not establish care demand, ability to pay, vacancies, profitability, or licensing status.",
       loading: "Loading ZIP-code market data…",
       unavailable: "The ZIP-market data could not be loaded. Please check Supabase view access.",
+      incomplete: "The ZIP-market list is incomplete, so statewide totals are hidden.",
       zipsCovered: "ZIP codes covered",
       recordedListings: "Recorded AFH listings",
       recordedBeds: "Recorded licensed beds",
@@ -645,6 +649,7 @@ export const copy: Record<Locale, {
       loading: "Cargando datos del Censo y de hogares de cuidado…",
       invalidZip: "Ingrese un código ZIP válido de cinco dígitos.",
       unavailable: "Los datos demográficos no están disponibles. Verifique que la vista pública de mercado por ZIP esté creada y se pueda leer.",
+      incomplete: "La lista de comparación por ZIP está incompleta, por lo que permanece oculta.",
       noMatch: (zip) => `No hay datos coincidentes de hogares AFH y de la ACS para el ZIP ${zip}. Seleccione un código ZIP en la tabla de comparación de abajo.`,
       overview: (zip) => `Resumen del ZIP ${zip}`,
       totalPopulation: "Población total",
@@ -681,6 +686,7 @@ export const copy: Record<Locale, {
       intro: "Compare las estimaciones de población adulta mayor, el ingreso de los hogares y la oferta registrada de hogares AFH. Estos indicadores no establecen la demanda de cuidado, la capacidad de pago, las vacantes, la rentabilidad ni el estado de la licencia.",
       loading: "Cargando datos de mercado por código ZIP…",
       unavailable: "No se pudieron cargar los datos de mercado por ZIP. Verifique el acceso a la vista de Supabase.",
+      incomplete: "La lista de mercado por ZIP está incompleta, por lo que los totales estatales permanecen ocultos.",
       zipsCovered: "Códigos ZIP incluidos",
       recordedListings: "Listados de hogares AFH registrados",
       recordedBeds: "Camas licenciadas registradas",
