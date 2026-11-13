@@ -112,6 +112,9 @@ jobs:
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 
+      - name: Check the North Carolina onboarding assessment
+        run: node --experimental-strip-types --test supabase/proposals/tests/north_carolina_onboarding.ts
+
       - name: Check the California CDSS source validation
         run: node --experimental-strip-types --test supabase/proposals/tests/california_cdss_roster.ts
 
