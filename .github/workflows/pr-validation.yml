@@ -133,6 +133,9 @@ jobs:
       - name: Check the Wyoming facility workbook comparison
         run: node --experimental-strip-types --test supabase/proposals/tests/wyoming_facility_directory.ts
 
+      - name: Check the Texas assisted-living directory
+        run: node --experimental-strip-types --test supabase/proposals/tests/texas_alf_directory.ts
+
       - name: Check the next-state publication readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/next_state_readiness.ts
 
