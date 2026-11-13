@@ -6,6 +6,7 @@ import { VisitorFeedback } from "../../../components/visitor-feedback";
 import { WashingtonPublicHeader, WelcomeScene } from "../../../components/washington-public";
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { useParams } from "next/navigation";
+import { browserClaimStorage, ownerClaimHref, writeClaimLicense } from "../../../lib/owner-claim";
 import { publicOwnerContentView } from "../../../lib/premium-option-a";
 import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../../lib/state-directory";
 import { supabase } from "../../../lib/supabase";
@@ -118,6 +119,34 @@ export default function WashingtonFacilityProfile() {
           {!loading && notFound && <section style={card}><h2>{text.notFoundTitle}</h2><p>{text.notFoundBody}</p><Link href="/washington" style={linkStyle}>{text.searchDirectory}</Link></section>}
         </div>
         {!loading && facility && (
+          <>
+          <section style={{ ...card, marginTop: 22 }} aria-labelledby="claim-heading">
+            <h2 id="claim-heading" style={{ margin: "0 0 8px", fontSize: 23 }}>{text.claimTitle}</h2>
+            <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.claimBody}</p>
+            <p style={{ lineHeight: 1.6 }}>{text.claimReview}</p>
+            <Link
+              href={ownerClaimHref(facility.license_number)}
+              onClick={() => {
+                const storage = browserClaimStorage();
+                if (storage) writeClaimLicense(storage, facility.license_number);
+              }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 44,
+                width: "min(100%, 320px)",
+                padding: "12px 18px",
+                background: C.teal,
+                color: "white",
+                borderRadius: 9,
+                fontWeight: 800,
+                textDecoration: "none",
+              }}
+            >
+              {text.claimAction}
+            </Link>
+          </section>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 310px), 1fr))", gap: 22, marginTop: 22, alignItems: "start" }}>
             <section style={card} aria-labelledby="details-heading">
               <h2 id="details-heading" style={{ margin: "0 0 16px", fontSize: 23 }}>{text.detailsTitle}</h2>
@@ -164,6 +193,7 @@ export default function WashingtonFacilityProfile() {
               </section>
             </div>
           </div>
+          </>
         )}
         {/^\d{1,20}$/.test(license) && <VisitorFeedback pagePath={`/washington/${license}`} />}
         <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>{text.footer}</footer>

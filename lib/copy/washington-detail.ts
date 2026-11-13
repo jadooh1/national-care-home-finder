@@ -236,6 +236,10 @@ type ProfileCopy = {
   capacityValue: (count: number) => string;
   googleMaps: string;
   dshsSource: string;
+  claimTitle: string;
+  claimBody: string;
+  claimAction: string;
+  claimReview: string;
   ownerTitle: string;
   ownerNote: string;
   published: {
@@ -494,6 +498,10 @@ export const copy: Record<Locale, {
       capacityValue: (count) => `${count} residents`,
       googleMaps: "View location in Google Maps ↗",
       dshsSource: "Name, address, license number, and capacity come from the Washington DSHS locator download.",
+      claimTitle: "Own or represent this home?",
+      claimBody: "Start an ownership claim for this licensed listing. Owner-submitted information stays separate from the official DSHS record and can appear publicly only after administrative review.",
+      claimAction: "Claim this facility",
+      claimReview: "Submitting a claim does not verify ownership or change the DSHS name, address, license number, or capacity.",
       ownerTitle: "Information published by the facility",
       ownerNote: "An administrator published this owner-provided text separately. It does not change the official DSHS licensing record.",
       published: {
@@ -749,6 +757,10 @@ export const copy: Record<Locale, {
       capacityValue: (count) => `${count} residentes`,
       googleMaps: "Ver la ubicación en Google Maps ↗",
       dshsSource: "El nombre, la dirección, el número de licencia y la capacidad provienen de la descarga del localizador de DSHS de Washington.",
+      claimTitle: "¿Es propietario o representante de este hogar?",
+      claimBody: "Inicie un reclamo de propiedad para este listado con licencia. La información enviada por el propietario permanece separada del registro oficial de DSHS y solo puede aparecer públicamente después de la revisión administrativa.",
+      claimAction: "Reclamar este establecimiento",
+      claimReview: "Enviar un reclamo no verifica la propiedad ni cambia el nombre, la dirección, el número de licencia ni la capacidad de DSHS.",
       ownerTitle: "Información publicada por el establecimiento",
       ownerNote: "Un administrador publicó por separado este texto proporcionado por el propietario. No modifica el registro oficial de licencias de DSHS.",
       published: {
