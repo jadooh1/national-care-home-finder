@@ -21,7 +21,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Hawaii | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Idaho | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Illinois | B | unpublished | 495 | yes | yes | no | no | no | high |
-| Indiana | B | unpublished | — | yes | yes | no | no | no | medium |
+| Indiana | B | unpublished | 225 | yes | yes | no | no | no | high |
 | Iowa | B | unpublished | 335 | no | yes | no | no | no | high |
 | Kansas | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Kentucky | B | unpublished | — | yes | yes | no | no | no | high |
@@ -65,7 +65,7 @@ Counts: A 2, B 8, C 19, D 21.
 
 Washington uses the DSHS adult family home listing, 6,278 rows, numeric license, address, status, beds, coordinates, disclosure link, and source date 2026-11-09. Oregon uses the ODHS provider export, 1,584 listed homes, source id, city, county, status, beds, and profile link. It has no public license number, street, ZIP, coordinates, or export date. California’s two files total 23,020 rows. Michigan’s file has 4,480 rows, a license, status, and a verified profile prefix, with most streets blank. Pennsylvania’s file has 989 rows and no license or status column.
 
-North Carolina’s workbooks have 1,086 unique licenses and site addresses. Iowa’s file has 335 certification numbers and addresses. Illinois’s open-data listing has 495 licensed establishments with addresses; its portal time 2024-02-16 is not an export date, and 169 state values are blank. Kentucky’s PDF and Oklahoma’s PDF expose license or facility id, address, and capacity. Indiana’s HTML directory, posted 11/5/2026, and Delaware’s HTML listing expose license number and address. No row count was adopted for Kentucky, Oklahoma, Indiana, or Delaware.
+North Carolina’s workbooks have 1,086 unique licenses and site addresses. Iowa’s file has 335 certification numbers and addresses. Illinois’s open-data listing has 495 licensed establishments with addresses; its portal time 2024-02-16 is not an export date, and 169 state values are blank. Kentucky’s PDF and Oklahoma’s PDF expose license or facility id, address, and capacity. Indiana’s HTML directory, posted 11/5/2026, has 225 facilities and a unique license number on each. That posted date is not an ISO export date, and the page has no status or facility disclosure link. Delaware’s HTML listing exposes license number and address. No row count was adopted for Kentucky, Oklahoma, or Delaware.
 
 The remaining C and D rows use only the source named in `lib/nationwide-compatibility.ts`. A dated file or search page without opened columns stays D. A search, mixed file, unreconciled pair of sources, or missing license or address stays C.
 
@@ -120,6 +120,6 @@ Validation covers three groups. Data integrity covers the separations above. Pub
 
 ## Order and phases
 
-Keep Washington public and Oregon on its development contract. The next structural candidates, still unpublished, are Illinois, North Carolina, Kentucky, and Oklahoma, then Indiana and Delaware once an HTML parser is specified, then California and Iowa once credential and status mapping is specified. Michigan, Pennsylvania, Wisconsin, and Minnesota stay behind their recorded blockers. Class D states need an official field check before any build.
+Keep Washington public and Oregon on its development contract. The next structural candidates, still unpublished, are Illinois, North Carolina, Kentucky, and Oklahoma, then Delaware once an HTML parser is specified, then California and Iowa once credential and status mapping is specified. Indiana’s 225-row directory stays unpublished until it has a per-row status, a facility disclosure link, and an ISO export date. Michigan, Pennsylvania, Wisconsin, and Minnesota stay behind their recorded blockers. Class D states need an official field check before any build.
 
 Phase 1 is this assessment and the roster contract. Phase 2 is review of that contract. Phase 3 is one development-only state after a person approves the schema. No phase publishes a state, changes billing, or changes public analytics.
