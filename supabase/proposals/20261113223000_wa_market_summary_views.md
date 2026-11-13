@@ -16,7 +16,7 @@ Commit `39fcd9a` added the city page and commit `c44ed8b` added the county page.
 
 ## Why no restore script is included
 
-A `GROUP BY` over `wa_dshs_listed_facilities` would choose a source the county page does not describe. It would also have to invent the treatment of null and blank city or county values, null capacity, and rows with `presence = 'absent'`. The repository has no county-boundary relation for the geographic assignment named by the county page. Creating either view from those guesses could publish counts the pages do not currently show.
+A later read-only inspection is recorded in `supabase/proposals/20261113230000_wa_market_summary_source.md`. The listed directory view has county text on every row, and there is still no county-boundary relation for the geographic assignment named by the county page. City spelling is not a canonical key, and `cities_represented` depends on that key. This file still does not create the views. The calculation rules for null capacity, blank city or county, duplicate identifiers, `presence = 'absent'`, licensing status, and row security are proposed in that source note and were not applied.
 
 ## Security requirements for a later definition
 

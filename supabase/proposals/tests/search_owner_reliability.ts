@@ -31,6 +31,21 @@ test("the missing market views are not restored by a guessed definition", () => 
   assert.match(assessment, /presence = 'absent'/);
 });
 
+test("the market summary contract names the listed view and leaves the city key unresolved", () => {
+  const source = readFileSync(new URL("../../../supabase/proposals/20261113230000_wa_market_summary_source.md", import.meta.url), "utf8");
+  assert.match(source, /Do not execute this design/);
+  assert.match(source, /public\.wa_dshs_listed_facilities/);
+  assert.match(source, /no county-boundary relation/);
+  assert.match(source, /City grouping key: not established/);
+  assert.match(source, /cities_represented/);
+  assert.match(source, /security_invoker = true/);
+  assert.match(source, /presence IS DISTINCT FROM 'absent'/);
+  assert.match(source, /count\(licensed_capacity\)/);
+  assert.match(source, /coalesce\(sum\(licensed_capacity\), 0\)/);
+  assert.equal(/^\s*create\s+view\b/im.test(source), false);
+  assert.doesNotMatch(source, /grant\s+select/i);
+});
+
 test("completed search and owner safeguards remain in place", () => {
   assert.match(directory, /params\.get\("q"\)/);
   assert.match(directory, /params\.get\("city"\)/);
