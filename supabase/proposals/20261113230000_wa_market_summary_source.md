@@ -51,7 +51,7 @@ Counts are for the listed view unless noted. No facility name, address, or licen
 | Active source-matched rows missing a point | 0 |
 | `anon` listed rows and map rows | 6,278 and 6,278 |
 
-County text is a reliable grouping key for the published directory. Every listed row has a non-blank county, the 35 values are a subset of the 39 Washington county names, and the map view stores the same text for the same ids. The county page's sentence about points and county boundaries describes a join that cannot be reconstructed. The points exist on the facility row. The boundary side does not exist. Grouping the stored county text summarizes the directory. It does not recompute a spatial assignment.
+County text is a reliable grouping key for the published directory. Every listed row has a non-blank county, the 35 values are a subset of the 39 Washington county names, and the map view stores the same text for the same ids. Grouping the stored county and city text summarizes the directory. It does not recompute a spatial assignment.
 
 City text is populated and is not a canonical key. Trimming changes 19 groups. Case-folding collapses 281 trimmed spellings to 175 keys, and 6,078 of the 6,278 rows sit in a county group that has more than one spelling. There is no preferred-spelling column and no city-boundary relation. The city page comment says to fetch 327 groups. None of 300, 281, or 175 is 327. Six city keys occur in more than one county, so a city summary that ignored county would merge places the city page keeps separate.
 

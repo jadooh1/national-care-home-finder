@@ -9,6 +9,7 @@ const demographics = readFileSync(new URL("../../../app/washington/demographics/
 const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
 const map = readFileSync(new URL("../../../app/washington/map/page.tsx", import.meta.url), "utf8");
 const dashboard = readFileSync(new URL("../../../app/owner/dashboard/page.tsx", import.meta.url), "utf8");
+const detailCopy = readFileSync(new URL("../../../lib/copy/washington-detail.ts", import.meta.url), "utf8");
 
 test("a market query error stays distinct from an empty comparison", () => {
   assert.match(cities, /\.from\("wa_city_market_summary"\)/);
@@ -48,6 +49,16 @@ test("the recorded market views match the approved grouping and capacity rules",
   assert.match(cities, /\.range\(0, 999\)/);
   assert.match(counties, /\.limit\(100\)/);
   assert.equal((source.match(/with \(security_invoker = true\)/g) ?? []).length, 3);
+});
+
+test("the county page attributes summaries to stored geographic text", () => {
+  assert.match(counties, /\{text\.source\}/);
+  assert.match(detailCopy, /County and city summaries are calculated from the stored geographic text in public\.wa_dshs_listed_facilities, not geographic boundary calculations\./);
+  assert.match(detailCopy, /Los resúmenes por condado y por ciudad se calculan a partir del texto geográfico almacenado en public\.wa_dshs_listed_facilities, no mediante cálculos de límites geográficos\./);
+  assert.doesNotMatch(detailCopy, /derived from geographic points/);
+  assert.doesNotMatch(detailCopy, /puntos geográficos/);
+  assert.match(counties, /\.from\("wa_county_market_summary"\)/);
+  assert.match(counties, /\.limit\(100\)/);
 });
 
 test("completed search and owner safeguards remain in place", () => {

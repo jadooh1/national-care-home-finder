@@ -376,7 +376,7 @@ export const copy: Record<Locale, {
       colBeds: "Recorded beds",
       colHomes: "Homes with capacity",
       colCities: "Cities",
-      source: "Source: Washington DSHS-matched facility listings; county assignments derived from geographic points and Washington county boundaries. Counts are not a real-time licensing verification. Recorded capacity does not measure occupancy or vacancies. A county missing from this comparison has no listings in the current matched directory; that is not proof that it has no operating care homes. Population and household income are not aggregated here because ZIP-code Census estimates can cross county boundaries.",
+      source: "Source: County and city summaries are calculated from the stored geographic text in public.wa_dshs_listed_facilities, not geographic boundary calculations. Counts are not a real-time licensing verification. Recorded capacity does not measure occupancy or vacancies. A county missing from this comparison has no listings in the current matched directory; that is not proof that it has no operating care homes. Population and household income are not aggregated here because ZIP-code Census estimates can cross county boundaries.",
       demographicsLink: "Explore ZIP demographics and household income →",
     },
     demographics: {
@@ -635,7 +635,7 @@ export const copy: Record<Locale, {
       colBeds: "Camas registradas",
       colHomes: "Hogares con capacidad",
       colCities: "Ciudades",
-      source: "Fuente: listados de establecimientos emparejados con DSHS de Washington; las asignaciones de condado se derivan de puntos geográficos y de los límites de los condados de Washington. Los conteos no son una verificación de licencias en tiempo real. La capacidad registrada no mide la ocupación ni las vacantes. Un condado que no aparece en esta comparación no tiene listados en el directorio emparejado actual; eso no prueba que no tenga hogares de cuidado en funcionamiento. Aquí no se agregan la población ni el ingreso de los hogares porque las estimaciones del Censo por código ZIP pueden cruzar los límites de los condados.",
+      source: "Fuente: Los resúmenes por condado y por ciudad se calculan a partir del texto geográfico almacenado en public.wa_dshs_listed_facilities, no mediante cálculos de límites geográficos. Los conteos no son una verificación de licencias en tiempo real. La capacidad registrada no mide la ocupación ni las vacantes. Un condado que no aparece en esta comparación no tiene listados en el directorio emparejado actual; eso no prueba que no tenga hogares de cuidado en funcionamiento. Aquí no se agregan la población ni el ingreso de los hogares porque las estimaciones del Censo por código ZIP pueden cruzar los límites de los condados.",
       demographicsLink: "Explorar la demografía por ZIP y los ingresos de los hogares →",
     },
     demographics: {
