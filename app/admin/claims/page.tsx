@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { createAdminActionGate, settleAdminAction } from "../../../lib/admin-listing-requests";
 import { developmentBillingAllowed } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
@@ -26,6 +27,7 @@ export default function AdminClaimsPage() {
   const [confirm, setConfirm] = useState<{ id: string; action: "approve" | "reject" } | null>(null);
   const [statusFilter, setStatusFilter] = useState("pending");
   const claimCursor = useRef<string | null>(null);
+  const actions = useRef(createAdminActionGate());
   const pageSize = 20;
 
   const refresh = useCallback(async () => {
@@ -33,7 +35,7 @@ export default function AdminClaimsPage() {
       p_limit: pageSize,
       p_before_id: claimCursor.current,
     });
-    if (e) { setError("Unable to load claims. Check your administrator access and try again."); return; }
+    if (e) { setError("Unable to load claims. Check your administrator access and try again."); return "error" as const; }
     const rows = (data ?? []) as Claim[];
     setClaims(rows);
     setError("");
@@ -47,6 +49,7 @@ export default function AdminClaimsPage() {
         setFacilities(mapped);
       }
     } else setFacilities({});
+    return "applied" as const;
   }, []);
 
   useEffect(() => {
@@ -68,23 +71,26 @@ export default function AdminClaimsPage() {
     return () => { active = false; };
   }, [router, refresh]);
 
+  function reportReview(update: { error: string; notice: string }) {
+    setError(update.error);
+    setNotice(update.notice);
+  }
+
   async function review() {
-    if (!confirm || !adminId || reviewing) return;
+    if (!confirm || !adminId) return;
     const claim = claims.find(c => c.id === confirm.id);
     if (!claim || claim.verification_status !== "pending" || claim.claimant_user_id === adminId) {
       setError("Only another person's pending claim can be reviewed."); setConfirm(null); return;
     }
-    setReviewing(confirm.id); setError(""); setNotice("");
-    const fn = confirm.action === "approve" ? "admin_approve_owner_claim" : "admin_reject_owner_claim";
-    const { data, error: e } = await supabase.rpc(fn, { p_claim_id: confirm.id });
-    if (e || data !== true) setError(e?.message ?? "The review was not completed.");
-    else {
-      setNotice(confirm.action === "approve"
-        ? "Claim approved. The owner can propose listing text. Approval does not publish it."
-        : "Claim rejected. The owner cannot propose listing text for this facility.");
-      await refresh();
-    }
-    setReviewing(null); setConfirm(null);
+    const action = confirm.action;
+    const claimId = confirm.id;
+    await settleAdminAction(actions.current, "review", async () => {
+      setReviewing(claimId); setError(""); setNotice("");
+      const fn = action === "approve" ? "admin_approve_owner_claim" : "admin_reject_owner_claim";
+      return supabase.rpc(fn, { p_claim_id: claimId });
+    }, () => refresh(), action === "approve"
+      ? "Claim approved. The owner can propose listing text. Approval does not publish it."
+      : "Claim rejected. The owner cannot propose listing text for this facility.", reportReview, () => setConfirm(null), () => setReviewing(null));
   }
 
   const visibleClaims = claims.filter(c => statusFilter === "all" || c.verification_status === statusFilter);
