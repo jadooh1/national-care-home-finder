@@ -70,6 +70,9 @@ jobs:
       - name: Check the Oregon adult foster home dry run
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_odhs_roster.ts
 
+      - name: Check the Oregon export date
+        run: node --experimental-strip-types --test supabase/proposals/tests/oregon_export_date.ts
+
       - name: Check the development Oregon directory
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_development_directory.ts
 

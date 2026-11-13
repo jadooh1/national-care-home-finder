@@ -90,6 +90,9 @@ const OREGON_BLOCKERS = [
   "gis-point-layer-is-not-the-accepted-export",
   "gis-active-count-is-not-reconciled-to-the-directory",
   "gis-service-edit-time-is-not-an-export-date",
+  "provider-export-has-no-date-column",
+  "download-filename-is-not-an-export-date",
+  "twenty-four-hour-update-notice-is-not-an-export-date",
   "street-location-is-not-an-accepted-public-field",
 ] as const;
 
