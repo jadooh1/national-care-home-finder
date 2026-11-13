@@ -23,6 +23,7 @@ import {
   onboardingProfiles,
   publicPublicationPermitted,
 } from "../../../lib/nationwide-onboarding";
+import { recommendedNextState } from "../../../lib/next-state-readiness";
 import { compatibilityAssessments, compatibilityClassCounts } from "../../../lib/nationwide-compatibility";
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
@@ -112,6 +113,10 @@ export default function NationwideOnboardingPage() {
           <p>
             {IOWA_FEASIBILITY.state} has {IOWA_FEASIBILITY.certifiedPrograms.toLocaleString()} certified assisted-living programs, {IOWA_FEASIBILITY.certificationIdentifiers.toLocaleString()} certification identifiers, and {IOWA_FEASIBILITY.facilityAddresses.toLocaleString()} facility addresses. The identifier column is a certification number. {IOWA_FEASIBILITY.fiveDigitZips} ZIP values have five digits and {IOWA_FEASIBILITY.nineDigitZips} have nine. There is no status column, no disclosure link, and no date column. Publication feasible: no.
           </p>
+        </section>
+        <section style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 18 }}>
+          <h2 style={{ marginTop: 0 }}>Publication readiness</h2>
+          <p>{recommendedNextState()} is the recommended next list-only directory. The recommendation does not publish it. Coordinates are not required for that list. An authoritative export date is still required, and Oregon remains on its development directory.</p>
         </section>
         <section style={{ background: "#fff", border: `1px solid ${C.border}`, borderRadius: 12, padding: 18 }}>
           <h2 style={{ marginTop: 0 }}>Nationwide compatibility</h2>
