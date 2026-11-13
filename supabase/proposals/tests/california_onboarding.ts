@@ -3,6 +3,8 @@ import test from "node:test";
 import {
   CALIFORNIA_ARF_ELIGIBLE_BY_STATUS,
   CALIFORNIA_EXCLUDED_RECORDS,
+  CALIFORNIA_DETAIL_VERIFICATION,
+  CALIFORNIA_FACILITY_DETAIL_PREFIX,
   CALIFORNIA_RAW_FILE_DATES,
   CALIFORNIA_RECORDED_EXPORT_DATE,
   CALIFORNIA_RCFE_ELIGIBLE_BY_STATUS,
@@ -137,6 +139,15 @@ test("publication safeguards reject an invented export date and disclosure link"
   assert.equal(adoptExportDate(CALIFORNIA_RAW_FILE_DATES.rcfe, [CALIFORNIA_RAW_FILE_DATES.rcfe]), null);
   assert.equal(adoptExportDate(CALIFORNIA_SOURCE_RECONCILIATION.packageMetadataModified, [CALIFORNIA_RAW_FILE_DATES.arf]), null);
   assert.equal(californiaDisclosureUrl("FIXTURE-100"), null);
+  assert.equal(californiaDisclosureUrl("0"), null);
+  assert.equal(californiaDisclosureUrl("1234567"), null);
+  assert.equal(californiaDisclosureUrl("1234567890"), null);
+  assert.equal(californiaDisclosureUrl("12345678"), `${CALIFORNIA_FACILITY_DETAIL_PREFIX}12345678`);
+  assert.equal(californiaDisclosureUrl("123456789"), `${CALIFORNIA_FACILITY_DETAIL_PREFIX}123456789`);
+  assert.equal(CALIFORNIA_DETAIL_VERIFICATION.identifierMatched, true);
+  assert.equal(CALIFORNIA_DETAIL_VERIFICATION.categoryMatched, true);
+  assert.equal(CALIFORNIA_DETAIL_VERIFICATION.openDataStatusConfirmed, false);
+  assert.equal(CALIFORNIA_DETAIL_VERIFICATION.invalidZeroReturnsFacility, false);
   assert.equal(californiaDirectoryReady(), false);
   assert.equal(directoryContract("California")?.publication, "unpublished");
   assert.equal(directoryHref("California", DEVELOPMENT_URL), null);

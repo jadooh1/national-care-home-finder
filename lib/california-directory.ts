@@ -47,6 +47,22 @@ export const CALIFORNIA_RAW_FILE_DATES = {
 export const CALIFORNIA_RECORDED_EXPORT_DATE = null;
 export const CALIFORNIA_PROFILE_URL = null;
 export const CALIFORNIA_COORDINATE_COLUMNS = false;
+export const CALIFORNIA_FACILITY_DETAIL_PREFIX =
+  "https://www.ccld.dss.ca.gov/carefacilitysearch/?Rewrite=FacDetail/";
+const CALIFORNIA_OFFICIAL_FACILITY_NUMBER = /^(?:[1-9][0-9]{7}|[1-9][0-9]{8})$/;
+
+export const CALIFORNIA_DETAIL_VERIFICATION = {
+  observedOn: "2026-11-13",
+  route: "/FacDetail/{facNumber}",
+  api: "https://www.ccld.dss.ca.gov/transparencyapi/api/FacilityDetail/",
+  rcfeExamples: 1,
+  arfExamples: 1,
+  identifierMatched: true,
+  categoryMatched: true,
+  openDataStatusConfirmed: false,
+  invalidZeroReturnsFacility: false,
+  ccrcLiveCheckCompleted: false,
+} as const;
 
 export const CALIFORNIA_SOURCE_RECONCILIATION = {
   observedOn: "2026-11-13",
@@ -95,6 +111,7 @@ export function californiaStatusLabel(originalStatus: string): string | null {
   return CALIFORNIA_STATUS_LABELS[originalStatus as CaliforniaLicenseStatus];
 }
 
-export function californiaDisclosureUrl(_facilityNumber: string): null {
-  return null;
+export function californiaDisclosureUrl(facilityNumber: string): string | null {
+  if (!CALIFORNIA_OFFICIAL_FACILITY_NUMBER.test(facilityNumber)) return null;
+  return `${CALIFORNIA_FACILITY_DETAIL_PREFIX}${facilityNumber}`;
 }
