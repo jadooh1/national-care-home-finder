@@ -73,6 +73,9 @@ jobs:
       - name: Check the Oregon export date
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_export_date.ts
 
+      - name: Check the Oregon roster reconciliation
+        run: node --experimental-strip-types --test supabase/proposals/tests/oregon_roster_reconciliation.ts
+
       - name: Check the development Oregon directory
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_development_directory.ts
 
