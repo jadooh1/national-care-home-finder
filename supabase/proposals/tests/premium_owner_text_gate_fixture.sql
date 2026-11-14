@@ -31,3 +31,5 @@ select facility_id, field_name, published_value, published_at
 from public.published_owner_listings;
 
 grant select on table public.wa_afh_published_owner_content to anon, authenticated;
+
+alter default privileges in schema public grant all on tables to anon, authenticated;

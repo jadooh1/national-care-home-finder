@@ -46,6 +46,47 @@ begin
     raise exception 'FAIL a closed entitlement still revealed owner text';
   end if;
 
+  update public.premium_subscriptions as subscription
+  set status = 'trialing',
+      current_period_end = pg_catalog.now() + interval '1 day'
+  where subscription.facility_id = target_facility;
+  select count(*) into seen
+  from public.wa_afh_premium_owner_content as content
+  where content.facility_id = target_facility;
+  if seen <> 1 then
+    raise exception 'FAIL an open trial did not reveal owner text';
+  end if;
+
+  update public.premium_subscriptions as subscription
+  set current_period_end = pg_catalog.now() - interval '1 minute'
+  where subscription.facility_id = target_facility;
+  select count(*) into seen
+  from public.wa_afh_premium_owner_content as content
+  where content.facility_id = target_facility;
+  if seen <> 0 then
+    raise exception 'FAIL an expired entitlement still revealed owner text';
+  end if;
+
+  begin
+    set local role anon;
+    insert into public.premium_subscriptions (facility_id, status, current_period_end)
+    values (target_facility, 'active', pg_catalog.now() + interval '1 day');
+    raise exception 'FAIL anonymous subscription insert was allowed';
+  exception
+    when insufficient_privilege then
+      null;
+  end;
+
+  begin
+    set local role authenticated;
+    insert into public.wa_afh_premium_owner_content (facility_id, field_name, published_value, published_at)
+    values (target_facility, 'description', 'synthetic owner text', pg_catalog.now());
+    raise exception 'FAIL authenticated write through the premium view was allowed';
+  exception
+    when insufficient_privilege or feature_not_supported or object_not_in_prerequisite_state then
+      null;
+  end;
+
   delete from public.premium_subscriptions as subscription
   where subscription.facility_id = target_facility;
   delete from public.published_owner_listings as content

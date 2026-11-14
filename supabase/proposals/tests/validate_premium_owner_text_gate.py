@@ -24,9 +24,18 @@ def refuse_remote():
         raise RuntimeError("Refusing to run outside a local disposable database")
 
 
-def psql(database, sql):
+def psql(database, sql, on_error_stop=True):
     completed = subprocess.run(
-        ["psql", "-d", database, "-X", "-v", "ON_ERROR_STOP=1", "-f", "-"],
+        [
+            "psql",
+            "-d",
+            database,
+            "-X",
+            "-v",
+            "ON_ERROR_STOP=1" if on_error_stop else "ON_ERROR_STOP=0",
+            "-f",
+            "-",
+        ],
         input=sql,
         text=True,
         capture_output=True,
@@ -35,26 +44,93 @@ def psql(database, sql):
     return completed.returncode, completed.stdout + completed.stderr
 
 
+def require(database, sql):
+    code, output = psql(database, sql)
+    if code != 0:
+        raise RuntimeError(output)
+
+
 def main():
     refuse_remote()
     for path in (FIXTURE, PROPOSAL, CHECKS, ROLLBACK):
         if not path.is_file():
             raise RuntimeError(f"missing {path}")
-    code, output = psql("postgres", f"drop database if exists {DATABASE}; create database {DATABASE};")
-    if code != 0:
+    proposal = PREAMBLE + PROPOSAL.read_text(encoding="utf-8")
+    rollback = PREAMBLE + ROLLBACK.read_text(encoding="utf-8")
+    require("postgres", f"drop database if exists {DATABASE}; create database {DATABASE};")
+    require(DATABASE, FIXTURE.read_text(encoding="utf-8"))
+    require(DATABASE, proposal)
+    require(DATABASE, CHECKS.read_text(encoding="utf-8"))
+    occupied = """
+    insert into public.premium_subscriptions (facility_id, status, current_period_end)
+    values ('00000000-0000-4000-8000-0000000000e2', 'active', now() + interval '1 day');
+    """
+    require(DATABASE, occupied)
+    code, output = psql(DATABASE, rollback, on_error_stop=False)
+    if "refuses existing entitlement rows" not in output:
+        raise RuntimeError(output or f"rollback exit {code}")
+    require(
+        DATABASE,
+        """
+        delete from public.premium_subscriptions
+        where facility_id = '00000000-0000-4000-8000-0000000000e2';
+        """,
+    )
+    require(DATABASE, rollback)
+    require(
+        DATABASE,
+        """
+        do $closed$
+        begin
+          if has_table_privilege('anon', 'public.wa_afh_published_owner_content', 'SELECT') then
+            raise exception 'rollback reopened the ungated view';
+          end if;
+          if to_regclass('public.published_owner_listings') is null then
+            raise exception 'rollback removed publication records';
+          end if;
+        end;
+        $closed$;
+        """,
+    )
+    require("postgres", f"drop database if exists {DATABASE};")
+
+    development = f"{DATABASE}_development"
+    require("postgres", f"drop database if exists {development}; create database {development};")
+    require(development, FIXTURE.read_text(encoding="utf-8"))
+    require(
+        development,
+        """
+        create function public.development_record_premium_subscription(
+          p_facility_id uuid,
+          p_owner_user_id uuid,
+          p_status text,
+          p_period_end timestamptz,
+          p_cancel_at_period_end boolean,
+          p_provider_reference text
+        ) returns uuid language sql as $$ select null::uuid $$;
+        create view public.wa_afh_claimed_owner_content as
+        select facility_id from public.published_owner_listings;
+        """,
+    )
+    code, output = psql(development, proposal, on_error_stop=False)
+    if "refuses the development database" not in output:
         raise RuntimeError(output)
-    for path, prefix in (
-        (FIXTURE, ""),
-        (PROPOSAL, PREAMBLE),
-        (CHECKS, ""),
-        (ROLLBACK, PREAMBLE),
-    ):
-        code, output = psql(DATABASE, prefix + path.read_text(encoding="utf-8"))
-        if code != 0:
-            raise RuntimeError(output)
-    code, output = psql("postgres", f"drop database if exists {DATABASE};")
-    if code != 0:
-        raise RuntimeError(output)
+    require(
+        development,
+        """
+        do $unchanged$
+        begin
+          if to_regclass('public.premium_subscriptions') is not null then
+            raise exception 'development refusal created a subscription table';
+          end if;
+          if not has_table_privilege('anon', 'public.wa_afh_published_owner_content', 'SELECT') then
+            raise exception 'development refusal changed the ungated grant';
+          end if;
+        end;
+        $unchanged$;
+        """,
+    )
+    require("postgres", f"drop database if exists {development};")
     print("premium owner-text gate checks passed")
 
 

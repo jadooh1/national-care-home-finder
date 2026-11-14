@@ -4,14 +4,21 @@
 --   nchf.premium_gate_authorization = authorize-premium-owner-text-gate
 --   nchf.premium_gate_target = yiehgstweswxjakbcdzc
 -- Those settings do not prove which database is connected.
--- This does not insert, update, or delete publication rows or audit events.
+-- The proposal also refuses the development function and claimed-owner view.
+-- It does not insert, update, or delete publication rows or audit events.
 -- It does not grant a browser role any way to write a subscription.
+
+begin;
 
 do $proposal$
 begin
   if current_setting('nchf.premium_gate_authorization', true) is distinct from 'authorize-premium-owner-text-gate'
      or current_setting('nchf.premium_gate_target', true) is distinct from 'yiehgstweswxjakbcdzc' then
     raise exception 'premium owner-text gate target is not the reviewed production project';
+  end if;
+  if to_regprocedure('public.development_record_premium_subscription(uuid, uuid, text, timestamptz, boolean, text)') is not null
+     or to_regclass('public.wa_afh_claimed_owner_content') is not null then
+    raise exception 'premium owner-text gate refuses the development database';
   end if;
   if to_regclass('public.published_owner_listings') is null
      or to_regclass('public.wa_afh_published_owner_content') is null
@@ -83,29 +90,54 @@ where public.nchf_phase5g_facility_is_listed(content.facility_id)
     where subscription.facility_id = content.facility_id
       and subscription.status in ('active', 'trialing')
       and subscription.current_period_end > pg_catalog.now()
-  );
+  )
+offset 0;
 
 revoke all on table public.premium_subscriptions from public, anon, authenticated;
 revoke all on table public.premium_subscription_events from public, anon, authenticated;
 revoke all on function public.nchf_premium_subscription_event_guard() from public, anon, authenticated;
-revoke all on table public.wa_afh_premium_owner_content from public;
+revoke all on table public.wa_afh_premium_owner_content from public, anon, authenticated;
 revoke all on table public.wa_afh_published_owner_content from public, anon, authenticated;
+
+do $service_role$
+begin
+  if exists (select 1 from pg_catalog.pg_roles where rolname = 'service_role') then
+    revoke all on table public.premium_subscriptions from service_role;
+    revoke all on table public.premium_subscription_events from service_role;
+    revoke all on function public.nchf_premium_subscription_event_guard() from service_role;
+    revoke all on table public.wa_afh_premium_owner_content from service_role;
+    revoke all on table public.wa_afh_published_owner_content from service_role;
+  end if;
+end;
+$service_role$;
 
 grant select on table public.wa_afh_premium_owner_content to anon, authenticated;
 
 do $permissions$
+declare
+  role_name text;
+  privilege text;
 begin
-  if has_table_privilege('anon', 'public.wa_afh_published_owner_content', 'SELECT')
-     or has_table_privilege('authenticated', 'public.wa_afh_published_owner_content', 'SELECT')
-     or has_table_privilege('anon', 'public.premium_subscriptions', 'SELECT')
-     or has_table_privilege('authenticated', 'public.premium_subscriptions', 'INSERT')
-     or has_table_privilege('authenticated', 'public.premium_subscriptions', 'UPDATE')
-     or has_table_privilege('anon', 'public.premium_subscription_events', 'INSERT') then
-    raise exception 'premium owner-text gate left a public permission in place';
-  end if;
-  if not has_table_privilege('anon', 'public.wa_afh_premium_owner_content', 'SELECT')
-     or not has_table_privilege('authenticated', 'public.wa_afh_premium_owner_content', 'SELECT') then
-    raise exception 'premium owner-text gate did not grant the gated view';
-  end if;
+  foreach role_name in array array['anon', 'authenticated'] loop
+    if has_table_privilege(role_name, 'public.wa_afh_published_owner_content', 'SELECT') then
+      raise exception 'premium owner-text gate left the ungated view readable';
+    end if;
+    foreach privilege in array array['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE'] loop
+      if has_table_privilege(role_name, 'public.premium_subscriptions', privilege)
+         or has_table_privilege(role_name, 'public.premium_subscription_events', privilege) then
+        raise exception 'premium owner-text gate left a subscription privilege in place';
+      end if;
+    end loop;
+    foreach privilege in array array['INSERT', 'UPDATE', 'DELETE'] loop
+      if has_table_privilege(role_name, 'public.wa_afh_premium_owner_content', privilege) then
+        raise exception 'premium owner-text gate left a write privilege on the gated view';
+      end if;
+    end loop;
+    if not has_table_privilege(role_name, 'public.wa_afh_premium_owner_content', 'SELECT') then
+      raise exception 'premium owner-text gate did not grant the gated view';
+    end if;
+  end loop;
 end;
 $permissions$;
+
+commit;

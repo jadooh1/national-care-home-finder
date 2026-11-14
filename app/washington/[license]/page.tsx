@@ -74,13 +74,20 @@ export default function WashingtonFacilityProfile() {
       else {
         const home = data as Facility;
         setFacility(home);
-        const content = await supabase
-          .from(PREMIUM_OWNER_CONTENT_VIEW)
-          .select("field_name,published_value,published_at")
-          .eq("facility_id", home.id);
+        let ownerText: PublishedContent[] = [];
+        try {
+          const content = await supabase
+            .from(PREMIUM_OWNER_CONTENT_VIEW)
+            .select("field_name,published_value,published_at")
+            .eq("facility_id", home.id);
+          if (!content.error) {
+            ownerText = ((content.data ?? []) as PublishedContent[]).filter(row => isPublishedField(row.field_name));
+          }
+        } catch {
+          ownerText = [];
+        }
         if (cancelled) return;
-        if (content.error) setPublished([]);
-        else setPublished(((content.data ?? []) as PublishedContent[]).filter(row => isPublishedField(row.field_name)));
+        setPublished(ownerText);
       }
       setLoading(false);
     }
