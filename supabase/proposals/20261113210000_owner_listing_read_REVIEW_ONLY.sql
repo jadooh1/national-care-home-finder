@@ -3,6 +3,9 @@
 -- This proposal adds that view for a later production review. It does not restore
 -- select on wa_afh_published_owner_content, and it does not change billing,
 -- subscriptions, claims, proposals, publications, or administrator review functions.
+-- One transaction: a failed preflight or permission check leaves every grant unchanged.
+
+begin;
 
 do $preflight$
 begin
@@ -56,19 +59,12 @@ where exists (
         where listed.id = facility.id
       )
   )
-  and (
-    exists (
-      select 1
-      from public.owner_claims as claim
-      where claim.facility_id = content.facility_id
-        and claim.claimant_user_id = auth.uid()
-        and claim.verification_status = 'approved'
-    )
-    or exists (
-      select 1
-      from public.app_admins as admin_row
-      where admin_row.user_id = auth.uid()
-    )
+  and exists (
+    select 1
+    from public.owner_claims as claim
+    where claim.facility_id = content.facility_id
+      and claim.claimant_user_id = auth.uid()
+      and claim.verification_status = 'approved'
   )
 offset 0;
 
@@ -110,3 +106,5 @@ begin
   end loop;
 end;
 $permissions$;
+
+commit;

@@ -124,6 +124,13 @@ test("public owner text uses the premium view only on development", () => {
   assert.doesNotMatch(adminEdits, /wa_afh_published_owner_content/);
   assert.match(adminEdits, /Self-review is prohibited/);
   assert.match(adminEdits, /admin_review_listing_edit/);
+  assert.match(ownerListingProposal, /^begin;\r?$/m);
+  assert.match(ownerListingProposal, /\r?\ncommit;\s*$/);
+  assert.equal(ownerListingProposal.match(/^begin;/gm)?.length, 1);
+  assert.equal(ownerListingProposal.match(/^commit;/gm)?.length, 1);
+  assert.match(ownerListingProposal, /claimant_user_id = auth\.uid\(\)/);
+  assert.doesNotMatch(ownerListingProposal, /from public\.app_admins/);
+  assert.doesNotMatch(ownerListingProposal, /revoke all on function public\.admin_/i);
   assert.match(ownerListingProposal, /REVIEW ONLY/);
   assert.match(ownerListingProposal, /wa_afh_claimed_owner_content/);
   assert.match(ownerListingProposal, /grant select on table public\.wa_afh_claimed_owner_content to authenticated/);

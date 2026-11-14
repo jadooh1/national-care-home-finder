@@ -126,30 +126,59 @@ def main():
 
     require("postgres", "drop database if exists owner_listing_review; create database owner_listing_review;")
     require("owner_listing_review", REVIEW_FIXTURE.read_text(encoding="utf-8"))
-    code, output = psql("owner_listing_review", REVIEW_PROPOSAL.read_text(encoding="utf-8"))
-    if code == 0 or "requires review authorization" not in output:
-        raise RuntimeError(output or f"unauthorized proposal exit {code}")
+    unchanged = """
+    do $unchanged$
+    begin
+      if to_regclass('public.wa_afh_claimed_owner_content') is not null then
+        raise exception 'failed preflight left the claimed view';
+      end if;
+      if not has_table_privilege('anon', 'public.wa_afh_published_owner_content', 'SELECT')
+         or not has_table_privilege('service_role', 'public.wa_afh_published_owner_content', 'SELECT')
+         or not has_table_privilege('service_role', 'public.published_owner_listings', 'SELECT')
+         or not has_function_privilege('authenticated', 'public.admin_list_published_owner_listings()', 'EXECUTE') then
+        raise exception 'failed preflight changed an existing privilege';
+      end if;
+    end;
+    $unchanged$;
+    """
+    failures = (
+        (REVIEW_PROPOSAL.read_text(encoding="utf-8"), "requires review authorization"),
+        (
+            REVIEW_PREAMBLE.replace("yiehgstweswxjakbcdzc", "ajjsyloyihcqdomywhik")
+            + REVIEW_PROPOSAL.read_text(encoding="utf-8"),
+            "refuses this database target",
+        ),
+    )
+    for sql, expected in failures:
+        code, output = psql("owner_listing_review", sql, on_error_stop=False)
+        if expected not in output:
+            raise RuntimeError(output or f"failed preflight exit {code}")
+        require("owner_listing_review", unchanged)
     require(
         "owner_listing_review",
-        """
-        do $closed$
-        begin
-          if to_regclass('public.wa_afh_claimed_owner_content') is not null then
-            raise exception 'unauthorized proposal created the claimed view';
-          end if;
-        end;
-        $closed$;
-        """,
+        "create function public.nchf_phase5g_facility_is_listed(p_facility_id uuid) returns boolean language sql as $$ select false $$;",
     )
+    code, output = psql(
+        "owner_listing_review",
+        REVIEW_PREAMBLE + REVIEW_PROPOSAL.read_text(encoding="utf-8"),
+        on_error_stop=False,
+    )
+    if "refuses the development listing function" not in output:
+        raise RuntimeError(output or f"development refusal exit {code}")
+    require("owner_listing_review", unchanged)
+    require("owner_listing_review", "drop function public.nchf_phase5g_facility_is_listed(uuid);")
     require("owner_listing_review", REVIEW_PREAMBLE + REVIEW_PROPOSAL.read_text(encoding="utf-8"))
     require("owner_listing_review", REVIEW_CHECKS.read_text(encoding="utf-8"))
     for denied in (
         "set role anon; select count(*) from public.wa_afh_claimed_owner_content;",
         "set role authenticated; select count(*) from public.wa_afh_published_owner_content;",
+        "set role service_role; select count(*) from public.wa_afh_claimed_owner_content;",
+        "set role authenticated; insert into public.wa_afh_claimed_owner_content (facility_id, field_name, published_value, published_at) values ('00000000-0000-4000-8000-000000000101', 'description', 'browser write', now());",
+        "set role anon; delete from public.wa_afh_claimed_owner_content;",
     ):
         code, output = psql("owner_listing_review", denied, on_error_stop=False)
-        if "permission denied" not in output:
-            raise RuntimeError(output or f"expected permission denied, exit {code}")
+        if "permission denied" not in output and "cannot insert into view" not in output and "cannot delete from view" not in output:
+            raise RuntimeError(output or f"expected a denied browser operation, exit {code}")
     require("postgres", "drop database if exists owner_listing_review;")
 
 
