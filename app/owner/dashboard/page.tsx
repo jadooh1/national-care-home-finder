@@ -23,6 +23,7 @@ import {
   reduceFacilitySearch,
   rememberSubmittedClaim,
 } from "../../../lib/owner-dashboard";
+import { OWNER_FACILITY_COLUMNS, readManagedOwnerFacilities, searchOwnerFacilities } from "../../../lib/owner-facility-read";
 import { captureAndStripAuthCallback, recoveryPending, markRecoveryPending } from "../../../lib/password-recovery";
 import { supabase } from "../../../lib/supabase";
 
@@ -94,14 +95,24 @@ export default function OwnerDashboard() {
     const ids = [...new Set(rows.map(claim => claim.facility_id))];
     let facilitiesError = false;
     if (ids.length) {
-      const homes = await supabase.from("wa_dshs_listed_facilities")
-        .select("id,canonical_name,address_line1,city,county,license_number").in("id", ids);
-      if (!dashboardMounted.current) return { claimsError: false, facilitiesError: Boolean(homes.error), activityError: false };
-      if (homes.error) {
+      const homes = await readManagedOwnerFacilities(supabase, {
+        requestedIds: ids,
+        authorizedIds: ids,
+        columns: OWNER_FACILITY_COLUMNS,
+      });
+      if (!dashboardMounted.current) return { claimsError: false, facilitiesError: homes.failed, activityError: false };
+      if (homes.failed) {
         facilitiesError = true;
         setFacilitiesLoadError(true);
       } else {
-        setFacilities(Object.fromEntries(((homes.data ?? []) as Facility[]).map(home => [home.id, home])));
+        setFacilities(Object.fromEntries(homes.facilities.map(home => [home.id, {
+          id: home.id,
+          canonical_name: home.canonical_name,
+          address_line1: home.address_line1 ?? null,
+          city: home.city ?? null,
+          county: home.county ?? null,
+          license_number: home.license_number,
+        }])));
         setFacilitiesLoadError(false);
       }
     } else if (dashboardMounted.current) {
@@ -166,11 +177,10 @@ export default function OwnerDashboard() {
     if (!started.mounted || !started.searching) return;
     const term = facilitySearchTerm(started.query);
     const ticket = started.ticket;
-    const pattern = `"%${term}%"`;
-    const { data, error: queryError } = await supabase.from("wa_dshs_listed_facilities")
-      .select("id,canonical_name,address_line1,city,county,license_number")
-      .or(`canonical_name.ilike.${pattern},license_number.ilike.${pattern},city.ilike.${pattern}`)
-      .order("canonical_name", { ascending: true }).limit(15);
+    const { data, error: queryError } = await searchOwnerFacilities(supabase, {
+      columns: OWNER_FACILITY_COLUMNS,
+      term,
+    });
     const painted = reduceFacilitySearch(searchModel.current, {
       type: "response",
       ticket,

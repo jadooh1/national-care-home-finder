@@ -67,6 +67,9 @@ jobs:
       - name: Check owner dashboard reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
 
+      - name: Check the owner facility read
+        run: node --experimental-strip-types --test supabase/proposals/tests/owner_facility_read.ts
+
       - name: Check search and owner reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/search_owner_reliability.ts
 
