@@ -114,9 +114,8 @@ export function publicOwnerContentView(supabaseUrl: string): string {
 }
 
 export function manageableOwnerContentView(supabaseUrl: string): string {
-  return developmentBillingAllowed(supabaseUrl)
-    ? CLAIMED_OWNER_CONTENT_VIEW
-    : PUBLISHED_OWNER_CONTENT_VIEW;
+  void supabaseUrl;
+  return CLAIMED_OWNER_CONTENT_VIEW;
 }
 
 export function publishedContentOutcome(queryFailed: boolean, rowCount: number): "unavailable" | "empty" | "listed" {

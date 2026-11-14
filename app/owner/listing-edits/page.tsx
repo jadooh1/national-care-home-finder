@@ -103,13 +103,18 @@ export default function OwnerListingEdits() {
     setPublications(publicationRows);
     let publishedFailed = false;
     if (ids.length) {
-      const content = await supabase.from(manageableOwnerContentView(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "")).select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
-      const publishedRows = (content.data ?? []) as Published[];
-      const outcome = publishedContentOutcome(Boolean(content.error), publishedRows.length);
-      if (outcome === "unavailable") {
+      try {
+        const content = await supabase.from(manageableOwnerContentView(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "")).select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
+        const publishedRows = (content.data ?? []) as Published[];
+        const outcome = publishedContentOutcome(Boolean(content.error), publishedRows.length);
+        if (outcome === "unavailable") {
+          setPublished([]);
+          publishedFailed = true;
+        } else setPublished(publishedRows);
+      } catch {
         setPublished([]);
         publishedFailed = true;
-      } else setPublished(publishedRows);
+      }
     } else setPublished([]);
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
     let facilitiesFailed = false;

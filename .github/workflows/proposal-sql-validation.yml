@@ -96,3 +96,6 @@ jobs:
 
       - name: Validate the nationwide roster proposal
         run: python3 supabase/proposals/tests/validate_nationwide_roster.py
+
+      - name: Validate the owner listing read path
+        run: python3 supabase/proposals/tests/validate_owner_listing_read.py
