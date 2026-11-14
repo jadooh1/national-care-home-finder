@@ -5,8 +5,12 @@ import {
   INTERRUPTED_ADMIN_RELOAD,
   UNCERTAIN_ADMIN_ACTION,
   createAdminActionGate,
+  publicationRetryGuard,
+  rememberCompletedWrite,
   safeAdminActionError,
   settleAdminAction,
+  withdrawalKey,
+  writeAccepted,
   type AdminActionReport,
 } from "../../../lib/admin-listing-requests.ts";
 
@@ -157,4 +161,38 @@ test("an ownership-claim decision ignores a second click and keeps a failed resu
   assert.match(claims, /return "error"/);
   assert.match(claims, /return "applied"/);
   assert.doesNotMatch(claims, /e\?\.message/);
+});
+
+test("a completed publication or withdrawal is not sent again before the list reloads", () => {
+  assert.equal(publicationRetryGuard(new Set(), "edit-1"), "allow");
+  assert.equal(writeAccepted({ data: true, error: null }), true);
+  assert.equal(writeAccepted({ data: false, error: null }), false);
+  assert.equal(writeAccepted({ data: null, error: { message: "duplicate publication owner@example.com" } }), false);
+  const failed = rememberCompletedWrite(new Set(), "edit-1", false);
+  assert.equal(failed.has("edit-1"), false);
+  assert.equal(publicationRetryGuard(failed, "edit-1"), "allow");
+  const published = rememberCompletedWrite(new Set(["edit-0"]), "edit-1", true);
+  assert.equal(publicationRetryGuard(published, "edit-1"), "refresh");
+  assert.equal(publicationRetryGuard(published, "edit-0"), "refresh");
+  assert.equal(publicationRetryGuard(rememberCompletedWrite(published, "edit-2", false), "edit-2"), "allow");
+  const description = withdrawalKey("facility-1", "description");
+  const services = withdrawalKey("facility-1", "services");
+  const withdrawn = rememberCompletedWrite(new Set(), description, true);
+  assert.equal(publicationRetryGuard(withdrawn, description), "refresh");
+  assert.equal(publicationRetryGuard(withdrawn, services), "allow");
+  const page = readFileSync(new URL("../../../app/admin/listing-edits/page.tsx", import.meta.url), "utf8");
+  const publishGuard = page.indexOf("publicationRetryGuard(completedPublications.current, publishId)");
+  const publishRpc = page.indexOf('supabase.rpc("admin_publish_listing_edit"');
+  const withdrawGuard = page.indexOf("publicationRetryGuard(completedWithdrawals.current, withdrawalKey(facilityId, fieldName))");
+  const withdrawRpc = page.indexOf('supabase.rpc("admin_withdraw_published_owner_listing"');
+  const staleReturn = page.indexOf('return "stale"');
+  const errorReturn = page.indexOf('return "error"');
+  const clearWrites = page.indexOf("completedPublications.current.clear()");
+  const applied = page.indexOf('return "applied"');
+  assert.equal(publishGuard >= 0 && publishGuard < publishRpc, true);
+  assert.equal(withdrawGuard >= 0 && withdrawGuard < withdrawRpc, true);
+  assert.equal(staleReturn < clearWrites && errorReturn < clearWrites && clearWrites < applied, true);
+  assert.match(page, /rememberCompletedWrite\(completedPublications\.current, editId, writeAccepted\(response\)\)/);
+  assert.match(page, /rememberCompletedWrite\(completedWithdrawals\.current, withdrawalKey\(facilityId, fieldName\), writeAccepted\(response\)\)/);
+  assert.match(page, /completedWithdrawals\.current\.clear\(\)/);
 });

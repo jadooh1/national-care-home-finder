@@ -237,6 +237,25 @@ export type AdminActionReport = { error: string; notice: string };
 export const UNCERTAIN_ADMIN_ACTION = "The connection failed before the result was confirmed. It was not retried. Use Refresh to check the latest saved state.";
 export const INTERRUPTED_ADMIN_RELOAD = "The action was recorded, but the latest list did not load. It was not retried. Use Refresh to check the latest saved state.";
 
+export function writeAccepted(result: AdminWriteResult): boolean {
+  return !result.error && result.data === true;
+}
+
+export function rememberCompletedWrite(completed: ReadonlySet<string>, id: string, accepted: boolean): Set<string> {
+  if (!accepted) return new Set(completed);
+  const next = new Set(completed);
+  next.add(id);
+  return next;
+}
+
+export function publicationRetryGuard(completed: ReadonlySet<string>, id: string): "refresh" | "allow" {
+  return completed.has(id) ? "refresh" : "allow";
+}
+
+export function withdrawalKey(facilityId: string, fieldName: string): string {
+  return `${facilityId}\n${fieldName}`;
+}
+
 const KNOWN_ACTION_ERRORS: Record<string, string> = {
   "administrator required": "Administrator access is required.",
   "self-review is not allowed": "You cannot review, publish, or withdraw your own submission.",
