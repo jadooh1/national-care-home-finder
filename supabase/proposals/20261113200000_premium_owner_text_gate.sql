@@ -4,6 +4,8 @@
 --   nchf.premium_gate_authorization = authorize-premium-owner-text-gate
 --   nchf.premium_gate_target = yiehgstweswxjakbcdzc
 -- Those settings do not prove which database is connected.
+-- The premium view copies the verified production listing predicate.
+-- It does not add a listing function.
 -- The proposal also refuses the development function and claimed-owner view.
 -- It does not insert, update, or delete publication rows or audit events.
 -- It does not grant a browser role any way to write a subscription.
@@ -22,7 +24,8 @@ begin
   end if;
   if to_regclass('public.published_owner_listings') is null
      or to_regclass('public.wa_afh_published_owner_content') is null
-     or to_regprocedure('public.nchf_phase5g_facility_is_listed(uuid)') is null then
+     or to_regclass('public.facilities') is null
+     or to_regclass('public.wa_dshs_listed_facilities') is null then
     raise exception 'premium owner-text gate requires the existing publication view';
   end if;
   if to_regclass('public.wa_afh_premium_owner_content') is not null
@@ -83,7 +86,26 @@ select content.facility_id,
        content.published_value,
        content.published_at
 from public.published_owner_listings as content
-where public.nchf_phase5g_facility_is_listed(content.facility_id)
+where exists (
+    select 1
+    from public.facilities as facility
+    where facility.id = content.facility_id
+      and facility.id is distinct from '00000000-0000-4000-8000-000000000002'::uuid
+      and facility.canonical_name is distinct from 'DEVELOPMENT TEST HOME - NOT REAL'::text
+      and facility.source_name = 'wa_dshs_afh'::text
+      and facility.license_category = 'afh'::text
+      and facility.facility_type = 'AF'::text
+      and facility.state_code = 'WA'::text
+      and facility.record_status = 'source_matched'::text
+      and facility.normalized_license_number = btrim(facility.license_number)
+      and facility.license_number ~ '^[0-9]{1,20}$'::text
+      and facility.presence is distinct from 'absent'::text
+      and exists (
+        select 1
+        from public.wa_dshs_listed_facilities as listed
+        where listed.id = facility.id
+      )
+  )
   and exists (
     select 1
     from public.premium_subscriptions as subscription

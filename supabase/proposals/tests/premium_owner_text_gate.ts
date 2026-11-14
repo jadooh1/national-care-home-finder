@@ -35,6 +35,10 @@ test("the proposal closes the ungated view and does not write publication histor
   assert.match(proposal, /status in \('active', 'trialing'\)/);
   assert.match(proposal, /current_period_end > pg_catalog\.now\(\)/);
   assert.match(proposal, /premium subscription audit rows cannot be changed/);
+  assert.match(proposal, /wa_dshs_listed_facilities/);
+  assert.match(proposal, /facility_type = 'AF'/);
+  assert.match(proposal, /presence is distinct from 'absent'/);
+  assert.doesNotMatch(proposal, /nchf_phase5g/);
   assert.doesNotMatch(proposal, /grant\s+(insert|update|delete)/i);
   assert.doesNotMatch(proposal, /stripe|sk_live|sk_test|whsec_/i);
   assert.doesNotMatch(proposal, /insert\s+into\s+public\.published_owner_listings/i);
