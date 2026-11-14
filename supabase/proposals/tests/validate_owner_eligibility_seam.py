@@ -19,7 +19,9 @@ GRANTS = ROOT / "migrations" / "20261109140000_development_owner_text_grants.sql
 BASELINE = ROOT / "proposals" / "tests" / "owner_eligibility_baseline.sql"
 PROPOSAL = ROOT / "proposals" / "20261113223000_owner_facility_eligibility_REVIEW_ONLY.sql"
 CHECKS = ROOT / "proposals" / "tests" / "owner_eligibility_checks.sql"
+REFUSAL_CHECKS = ROOT / "proposals" / "tests" / "owner_eligibility_refusal_checks.sql"
 ROLLBACK = ROOT / "proposals" / "20261113223000_owner_facility_eligibility_ROLLBACK.sql"
+ROLLBACK_REFUSAL_CHECKS = ROOT / "proposals" / "tests" / "owner_eligibility_rollback_refusal_checks.sql"
 ROLLBACK_CHECKS = ROOT / "proposals" / "tests" / "owner_eligibility_rollback_checks.sql"
 DATABASE = "owner_eligibility_seam"
 DEVELOPMENT = (
@@ -69,6 +71,24 @@ def run(database, sql):
     return output
 
 
+def session_settings(billing, project=None):
+    sql = f"select set_config('nchf.billing_environment', '{billing}', false);\n"
+    if project is None:
+        sql += "reset nchf.supabase_project_ref;\n"
+    else:
+        sql += f"select set_config('nchf.supabase_project_ref', '{project}', false);\n"
+    return sql
+
+
+def expect_refusal(database, statement, expected, unchanged):
+    code, output = psql(database, statement, on_error_stop=False)
+    if expected not in output:
+        raise RuntimeError(output)
+    if code not in {0, 3}:
+        raise RuntimeError(output)
+    run(database, unchanged)
+
+
 def main():
     proposal_text = PROPOSAL.read_text(encoding="utf-8")
     if "grant select" in proposal_text.lower() or "facility_type = 'AF'" in proposal_text:
@@ -85,25 +105,38 @@ def main():
             run(DATABASE, path.read_text(encoding="utf-8"))
         run(DATABASE, DEVELOPMENT + GRANTS.read_text(encoding="utf-8"))
         run(DATABASE, BASELINE.read_text(encoding="utf-8"))
-        refused, refused_output = psql(
-            DATABASE,
-            "begin;\nselect set_config('nchf.billing_environment', 'production', true);\n"
-            + proposal_text.replace("begin;", "", 1),
-            on_error_stop=False,
+        refusal_checks = REFUSAL_CHECKS.read_text(encoding="utf-8")
+        forward_refusals = (
+            ("production", "ajjsyloyihcqdomywhik", "owner eligibility seam requires nchf.billing_environment=development"),
+            ("development", None, "owner eligibility seam requires the development project"),
+            ("development", "not-the-development-project", "owner eligibility seam requires the development project"),
+            ("development", "yiehgstweswxjakbcdzc", "owner eligibility seam requires the development project"),
         )
-        if "owner eligibility seam requires nchf.billing_environment=development" not in refused_output:
-            print(refused_output, file=sys.stderr)
-            return 1
-        seam_absent = run(
-            DATABASE,
-            "select to_regprocedure('public.nchf_owner_facility_eligible(uuid)') is null;",
-        )
-        if "t" not in seam_absent:
-            print(seam_absent, file=sys.stderr)
-            return 1
+        for billing, project, expected in forward_refusals:
+            expect_refusal(
+                DATABASE,
+                session_settings(billing, project) + proposal_text,
+                expected,
+                refusal_checks,
+            )
         run(DATABASE, DEVELOPMENT + proposal_text)
         run(DATABASE, CHECKS.read_text(encoding="utf-8"))
-        run(DATABASE, DEVELOPMENT + ROLLBACK.read_text(encoding="utf-8"))
+        rollback_text = ROLLBACK.read_text(encoding="utf-8")
+        rollback_refusal_checks = ROLLBACK_REFUSAL_CHECKS.read_text(encoding="utf-8")
+        rollback_refusals = (
+            ("production", "ajjsyloyihcqdomywhik", "owner eligibility rollback requires nchf.billing_environment=development"),
+            ("development", None, "owner eligibility rollback requires the development project"),
+            ("development", "not-the-development-project", "owner eligibility rollback requires the development project"),
+            ("development", "yiehgstweswxjakbcdzc", "owner eligibility rollback requires the development project"),
+        )
+        for billing, project, expected in rollback_refusals:
+            expect_refusal(
+                DATABASE,
+                session_settings(billing, project) + rollback_text,
+                expected,
+                rollback_refusal_checks,
+            )
+        run(DATABASE, DEVELOPMENT + rollback_text)
         run(DATABASE, ROLLBACK_CHECKS.read_text(encoding="utf-8"))
         print("PASS | owner eligibility seam | Washington results and privileges stayed unchanged", flush=True)
         return 0

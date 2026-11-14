@@ -9,8 +9,8 @@ begin
   if current_setting('nchf.billing_environment', true) is distinct from 'development' then
     raise exception 'owner eligibility rollback requires nchf.billing_environment=development';
   end if;
-  if current_setting('nchf.supabase_project_ref', true) = 'yiehgstweswxjakbcdzc' then
-    raise exception 'refusing the production project';
+  if current_setting('nchf.supabase_project_ref', true) is distinct from 'ajjsyloyihcqdomywhik' then
+    raise exception 'owner eligibility rollback requires the development project';
   end if;
   if to_regprocedure('public.nchf_owner_facility_eligible(uuid)') is null
      or pg_get_functiondef('public.nchf_phase5g_facility_is_listed(uuid)'::regprocedure)

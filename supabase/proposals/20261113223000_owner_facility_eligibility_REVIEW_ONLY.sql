@@ -13,8 +13,8 @@ begin
   if current_setting('nchf.billing_environment', true) is distinct from 'development' then
     raise exception 'owner eligibility seam requires nchf.billing_environment=development';
   end if;
-  if current_setting('nchf.supabase_project_ref', true) = 'yiehgstweswxjakbcdzc' then
-    raise exception 'refusing the production project';
+  if current_setting('nchf.supabase_project_ref', true) is distinct from 'ajjsyloyihcqdomywhik' then
+    raise exception 'owner eligibility seam requires the development project';
   end if;
   if to_regprocedure('public.nchf_phase5g_facility_is_listed(uuid)') is null
      or to_regprocedure('public.submit_owner_claim(uuid, text)') is null
