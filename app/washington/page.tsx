@@ -7,7 +7,7 @@ import { VisitorFeedback } from "../../components/visitor-feedback";
 import { WashingtonPublicHeader } from "../../components/washington-public";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
-import { facilityProfilePath, washingtonCountySearchText, washingtonDirectorySearchPath, washingtonLocationMatches, washingtonSearchText } from "../../lib/family-journey";
+import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonSearchText } from "../../lib/family-journey";
 import { WASHINGTON_DSHS_LOCATOR } from "../../lib/state-directory";
 
 type Facility = {
@@ -46,15 +46,16 @@ export default function WashingtonPage() {
     setSearch(washingtonSearchText(params.get("q")));
     setCity(washingtonSearchText(params.get("city")));
     setCounty(washingtonCountySearchText(params.get("county")));
+    setPage(washingtonDirectoryPage(params.get("page")));
     setFiltersReady(true);
   }, []);
 
   useEffect(() => {
     if (!filtersReady) return;
-    const next = washingtonDirectorySearchPath({ q: search, city, county });
+    const next = washingtonDirectorySearchPath({ q: search, city, county, page });
     const current = `${window.location.pathname}${window.location.search}`;
     if (!washingtonLocationMatches(current, next)) window.history.replaceState(null, "", next);
-  }, [filtersReady, search, city, county]);
+  }, [filtersReady, search, city, county, page]);
 
   useEffect(() => {
     let cancelled = false;
@@ -87,6 +88,7 @@ export default function WashingtonPage() {
 
   const start = total ? page * PAGE_SIZE + 1 : 0;
   const end = Math.min((page + 1) * PAGE_SIZE, total);
+  const directoryPath = washingtonDirectorySearchPath({ q: search, city, county, page });
   function resetFilters() { setSearch(""); setCity(""); setCounty(""); setPage(0); }
 
   return (
@@ -226,7 +228,7 @@ export default function WashingtonPage() {
                   {facility.record_status === "verified" ? t.verified : t.unverified}
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 13, alignItems: "center" }}>
-                  {facilityProfilePath(facility.license_number) && <Link href={facilityProfilePath(facility.license_number) as string} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>{t.viewDetails}</Link>}
+                  {facilityProfilePath(facility.license_number) && <Link href={washingtonFacilityLink(facilityProfilePath(facility.license_number) as string, directoryPath)} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>{t.viewDetails}</Link>}
                   {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.viewMap}</a>}
                   <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.checkDshs}</a>
                 </div>
