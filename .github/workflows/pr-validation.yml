@@ -166,6 +166,9 @@ jobs:
       - name: Check the California authoritative source
         run: node --experimental-strip-types --test supabase/proposals/tests/california_authoritative_source.ts
 
+      - name: Check the California publication acceptance rules
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_publication_acceptance.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
