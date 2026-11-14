@@ -23,7 +23,7 @@ import {
   reduceFacilitySearch,
   rememberSubmittedClaim,
 } from "../../../lib/owner-dashboard";
-import { OWNER_FACILITY_COLUMNS, readManagedOwnerFacilities, searchOwnerFacilities } from "../../../lib/owner-facility-read";
+import { OWNER_FACILITY_COLUMNS, readManagedOwnerFacilities, searchOwnerFacilities, type OwnerFacilityClient } from "../../../lib/owner-facility-read";
 import { captureAndStripAuthCallback, recoveryPending, markRecoveryPending } from "../../../lib/password-recovery";
 import { supabase } from "../../../lib/supabase";
 
@@ -95,7 +95,7 @@ export default function OwnerDashboard() {
     const ids = [...new Set(rows.map(claim => claim.facility_id))];
     let facilitiesError = false;
     if (ids.length) {
-      const homes = await readManagedOwnerFacilities(supabase, {
+      const homes = await readManagedOwnerFacilities(supabase as unknown as OwnerFacilityClient, {
         requestedIds: ids,
         authorizedIds: ids,
         columns: OWNER_FACILITY_COLUMNS,
@@ -177,7 +177,7 @@ export default function OwnerDashboard() {
     if (!started.mounted || !started.searching) return;
     const term = facilitySearchTerm(started.query);
     const ticket = started.ticket;
-    const { data, error: queryError } = await searchOwnerFacilities(supabase, {
+    const { data, error: queryError } = await searchOwnerFacilities(supabase as unknown as OwnerFacilityClient, {
       columns: OWNER_FACILITY_COLUMNS,
       term,
     });

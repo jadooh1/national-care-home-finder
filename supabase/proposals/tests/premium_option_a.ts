@@ -148,9 +148,14 @@ test("public owner text uses the premium view only on development", () => {
   assert.equal(ownerListingRefreshError({ publishedFailed: true, facilitiesFailed: true }), "facilities");
   assert.equal(ownerListingRefreshError({ publishedFailed: false, facilitiesFailed: false }), "");
   const publishedCheck = ownerEdits.indexOf('outcome === "unavailable"');
-  const facilityQuery = ownerEdits.indexOf('.from("wa_dshs_listed_facilities")');
+  const facilityRead = readFileSync("lib/owner-facility-read.ts", "utf8");
+  const facilityQuery = ownerEdits.indexOf("readManagedOwnerFacilities(supabase as unknown as OwnerFacilityClient");
   const refreshDecision = ownerEdits.indexOf("ownerListingRefreshError({");
   assert.equal(publishedCheck < facilityQuery && facilityQuery < refreshDecision, true);
+  assert.match(facilityRead, /OWNER_FACILITY_SOURCE = "wa_dshs_listed_facilities"/);
+  assert.match(facilityRead, /from\(OWNER_FACILITY_SOURCE\)/);
+  assert.match(ownerEdits, /\[\.\.\.ids, \.\.\.rows\.map\(row => row\.facility_id\), \.\.\.publicationRows\.map\(row => row\.facility_id\)\]/);
+  assert.match(ownerEdits, /!approvedIds\.includes\(facilityId\)/);
   assert.doesNotMatch(ownerEdits, /content\.error \? \[\]/);
   assert.match(ownerEdits, /published\.length === 0 && !error/);
   assert.match(ownerEdits, /role="status"/);

@@ -116,10 +116,10 @@ test("owner search stays on the Washington listing and the owner pages keep thei
   const listing = readFileSync(new URL("../../../app/owner/listing-edits/page.tsx", import.meta.url), "utf8");
   const home = readFileSync(new URL("../../../lib/copy/home.ts", import.meta.url), "utf8");
   const page = readFileSync(new URL("../../../app/page.tsx", import.meta.url), "utf8");
-  assert.match(dashboard, /readManagedOwnerFacilities\(supabase/);
-  assert.match(dashboard, /searchOwnerFacilities\(supabase/);
+  assert.match(dashboard, /readManagedOwnerFacilities\(supabase as unknown as OwnerFacilityClient/);
+  assert.match(dashboard, /searchOwnerFacilities\(supabase as unknown as OwnerFacilityClient/);
   assert.match(dashboard, /href="\/washington"/);
-  assert.match(listing, /readManagedOwnerFacilities\(supabase/);
+  assert.match(listing, /readManagedOwnerFacilities\(supabase as unknown as OwnerFacilityClient/);
   assert.match(listing, /manageableOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
   assert.match(listing, /published\.length === 0 && !error/);
   assert.doesNotMatch(dashboard, /oregon|california|wa_afh_published_owner_content/i);

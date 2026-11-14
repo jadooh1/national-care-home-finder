@@ -6,7 +6,7 @@ import { LanguageSelector, useLanguage, usePageTitle } from "../../../components
 import { copy } from "../../../lib/copy/account";
 import { claimSubmitGate } from "../../../lib/owner-dashboard";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
-import { OWNER_LISTING_FACILITY_COLUMNS, readManagedOwnerFacilities } from "../../../lib/owner-facility-read";
+import { OWNER_LISTING_FACILITY_COLUMNS, readManagedOwnerFacilities, type OwnerFacilityClient } from "../../../lib/owner-facility-read";
 import { manageableOwnerContentView, ownerListingRefreshError, publishedContentOutcome } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 
@@ -120,7 +120,7 @@ export default function OwnerListingEdits() {
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
     let facilitiesFailed = false;
     if (detailIds.length) {
-      const homes = await readManagedOwnerFacilities(supabase, {
+      const homes = await readManagedOwnerFacilities(supabase as unknown as OwnerFacilityClient, {
         requestedIds: detailIds,
         authorizedIds: detailIds,
         columns: OWNER_LISTING_FACILITY_COLUMNS,
