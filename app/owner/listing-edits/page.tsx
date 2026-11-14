@@ -6,6 +6,7 @@ import { LanguageSelector, useLanguage, usePageTitle } from "../../../components
 import { copy } from "../../../lib/copy/account";
 import { claimSubmitGate } from "../../../lib/owner-dashboard";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
+import { OWNER_LISTING_FACILITY_COLUMNS, readManagedOwnerFacilities, type OwnerFacilityClient } from "../../../lib/owner-facility-read";
 import { manageableOwnerContentView, ownerListingRefreshError, publishedContentOutcome } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 
@@ -119,10 +120,18 @@ export default function OwnerListingEdits() {
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
     let facilitiesFailed = false;
     if (detailIds.length) {
-      const homes = await supabase.from("wa_dshs_listed_facilities").select("id,canonical_name,license_number").in("id", detailIds);
-      if (homes.error) facilitiesFailed = true;
+      const homes = await readManagedOwnerFacilities(supabase as unknown as OwnerFacilityClient, {
+        requestedIds: detailIds,
+        authorizedIds: detailIds,
+        columns: OWNER_LISTING_FACILITY_COLUMNS,
+      });
+      if (homes.failed) facilitiesFailed = true;
       else {
-        setFacilities((homes.data ?? []) as Facility[]);
+        setFacilities(homes.facilities.map(home => ({
+          id: home.id,
+          canonical_name: home.canonical_name,
+          license_number: home.license_number,
+        })));
         setFacilityId(old => ids.includes(old) ? old : ids[0] ?? "");
       }
     } else { setFacilities([]); setFacilityId(""); }
