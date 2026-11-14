@@ -255,8 +255,11 @@ type ProfileCopy = {
   verifyTail: string;
   dshsLocator: string;
   disclosure: string;
-  questionsTitle: string;
-  questions: readonly [string, string, string, string];
+  visitTitle: string;
+  visitNote: string;
+  contactAbsent: string;
+  contactAction: string;
+  visitQuestions: readonly [string, string, string, string, string, string];
   footer: string;
 };
 
@@ -521,12 +524,17 @@ export const copy: Record<Locale, {
       verifyTail: " independently establish its current license standing or quality of care.",
       dshsLocator: "Check the official Washington DSHS locator ↗",
       disclosure: "View Official Disclosure of Services (DSHS)",
-      questionsTitle: "Questions to ask the home",
-      questions: [
-        "Are you currently accepting residents?",
-        "What are your monthly rates and additional fees?",
-        "Which care needs can your staff support?",
-        "May I schedule a tour and review inspection history?",
+      visitTitle: "Prepare for a visit",
+      visitNote: "These are questions to ask the home. They are not verified facts about this facility.",
+      contactAbsent: "This directory does not include a telephone number, email address, or website. The DSHS locator download provides the name, address, license number, and licensed capacity.",
+      contactAction: "Open the official DSHS record for this license ↗",
+      visitQuestions: [
+        "Are there current vacancies, and when could a resident move in?",
+        "What is the monthly rate, and which charges are extra?",
+        "Which care needs can the staff support, and who is on duty?",
+        "How are medications managed, and what happens in an emergency?",
+        "How do visits and tours work, including times and who may attend?",
+        "Where can I review the current license and inspection record?",
       ],
       footer: "Independent informational directory based on a DSHS locator download from November 9, 2026. Official name, address, license number, and capacity are not edited by facility owners. Owner-provided description, services, and amenities appear only after a separate administrator publication. Withdrawn owner text is removed from the public profile. Contact details, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations.",
     },
@@ -784,12 +792,17 @@ export const copy: Record<Locale, {
       verifyTail: " establece de forma independiente su situación actual de licencia ni la calidad del cuidado.",
       dshsLocator: "Consultar el localizador oficial de DSHS de Washington ↗",
       disclosure: "Ver la divulgación oficial de servicios (DSHS)",
-      questionsTitle: "Preguntas para el hogar",
-      questions: [
-        "¿Aceptan residentes en este momento?",
-        "¿Cuáles son las tarifas mensuales y los cargos adicionales?",
-        "¿Qué necesidades de cuidado puede atender el personal?",
-        "¿Puedo programar una visita y revisar el historial de inspecciones?",
+      visitTitle: "Prepárese para una visita",
+      visitNote: "Estas son preguntas para hacerle al hogar. No son datos verificados de este establecimiento.",
+      contactAbsent: "Este directorio no incluye un teléfono, un correo electrónico ni un sitio web. La descarga del localizador de DSHS incluye el nombre, la dirección, el número de licencia y la capacidad licenciada.",
+      contactAction: "Abrir el registro oficial de DSHS de esta licencia ↗",
+      visitQuestions: [
+        "¿Hay vacantes actuales y cuándo podría mudarse un residente?",
+        "¿Cuál es la tarifa mensual y qué cargos son adicionales?",
+        "¿Qué necesidades de cuidado puede atender el personal y quién está de turno?",
+        "¿Cómo se administran los medicamentos y qué ocurre en una emergencia?",
+        "¿Cómo funcionan las visitas y los recorridos, incluidos los horarios y quién puede asistir?",
+        "¿Dónde puedo revisar la licencia vigente y el registro de inspecciones?",
       ],
       footer: "Directorio informativo independiente basado en una descarga del localizador de DSHS del 9 de noviembre de 2026. El nombre oficial, la dirección, el número de licencia y la capacidad no los editan los propietarios del establecimiento. La descripción, los servicios y las comodidades proporcionados por el propietario aparecen solo después de una publicación separada del administrador. El texto del propietario que se retira se elimina del perfil público. Los datos de contacto, los precios, las vacantes y la vigencia actual de la licencia no se han verificado de forma independiente. Los listados no son recomendaciones.",
     },

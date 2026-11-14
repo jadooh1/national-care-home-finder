@@ -166,11 +166,18 @@ export default function WashingtonFacilityProfile() {
                   </p>
                 )}
               </section>
-              <section style={card} aria-labelledby="questions-heading">
-                <h2 id="questions-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>{text.questionsTitle}</h2>
-                <ul style={{ lineHeight: 1.85, color: C.muted, paddingLeft: 22, marginBottom: 0 }}>
-                  {text.questions.map(question => <li key={question}>{question}</li>)}
-                </ul>
+              <section style={card} aria-labelledby="visit-heading">
+                <h2 id="visit-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>{text.visitTitle}</h2>
+                <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.visitNote}</p>
+                <p style={{ lineHeight: 1.7 }}>{text.contactAbsent}</p>
+                {facility.license_number && washingtonDisclosureUrl(facility.license_number) && (
+                  <p style={{ marginTop: 0 }}>
+                    <a href={washingtonDisclosureUrl(facility.license_number) ?? undefined} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, display: "inline-flex", alignItems: "center", minHeight: 44 }}>{text.contactAction}</a>
+                  </p>
+                )}
+                <ol style={{ lineHeight: 1.7, paddingLeft: 22, marginBottom: 0 }}>
+                  {text.visitQuestions.map(question => <li key={question} style={{ marginTop: 8 }}>{question}</li>)}
+                </ol>
               </section>
             </div>
           </div>
