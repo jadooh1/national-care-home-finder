@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
+import { manageableOwnerContentView, ownerListingRefreshError, publishedContentOutcome } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 
 captureAndStripAuthCallback();
@@ -98,9 +99,20 @@ export default function OwnerListingEdits() {
     if (publicationHistory.error) { setError("history"); return; }
     const publicationRows = (publicationHistory.data ?? []) as PublicationEvent[];
     setPublications(publicationRows);
+    let publishedFailed = false;
     if (ids.length) {
-      const content = await supabase.from("wa_afh_published_owner_content").select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
-      setPublished(content.error ? [] : (content.data ?? []) as Published[]);
+      try {
+        const content = await supabase.from(manageableOwnerContentView(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "")).select("facility_id,field_name,published_value,published_at").in("facility_id", ids);
+        const publishedRows = (content.data ?? []) as Published[];
+        const outcome = publishedContentOutcome(Boolean(content.error), publishedRows.length);
+        if (outcome === "unavailable") {
+          setPublished([]);
+          publishedFailed = true;
+        } else setPublished(publishedRows);
+      } catch {
+        setPublished([]);
+        publishedFailed = true;
+      }
     } else setPublished([]);
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
     if (detailIds.length) {
@@ -109,6 +121,8 @@ export default function OwnerListingEdits() {
       setFacilities((homes.data ?? []) as Facility[]);
       setFacilityId(old => ids.includes(old) ? old : ids[0] ?? "");
     } else { setFacilities([]); setFacilityId(""); }
+    const refreshError = ownerListingRefreshError({ publishedFailed, facilitiesFailed: false });
+    if (refreshError) { setError(refreshError); return; }
     setError("");
   }
   useEffect(() => {
@@ -149,7 +163,7 @@ export default function OwnerListingEdits() {
         <p style={{ fontSize: 13 }}>{text.privacy}</p>
         <button disabled={busy} style={{ border: 0, borderRadius: 9, background: "#176b53", color: "white", padding: "12px 19px" }}>{busy ? text.submitting : text.submit}</button>
       </form>}</section>
-      <section style={panel}><h2>{text.publishedTitle}</h2><p>{text.publishedBody}</p>{published.length === 0 && <p>{text.nonePublished}</p>}{published.map(item => <article key={`${item.facility_id}-${item.field_name}`} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
+      <section style={panel}><h2>{text.publishedTitle}</h2><p>{text.publishedBody}</p>{published.length === 0 && !error && <p>{text.nonePublished}</p>}{published.map(item => <article key={`${item.facility_id}-${item.field_name}`} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
       <section style={panel}><h2>{text.historyTitle}</h2><p>{text.historyBody}</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { historyCursor.current = null; void refresh(uid); }}>{text.firstPage}</button>{publications.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = publications[publications.length - 1]; historyCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>{text.older}</button>}</div><p>{text.pageSize}</p>{publications.length === 0 && <p>{text.noHistory}</p>}{publications.map(item => <article key={item.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p>{item.event_type === "withdrawn" ? text.withdrawn : text.published} · {formatStamp(item.created_at)}</p><p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
       <section style={panel}><h2>{text.proposalsTitle}</h2><p>{text.proposalsBody}</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { editCursor.current = null; void refresh(uid); }}>{text.firstPage}</button>{edits.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = edits[edits.length - 1]; editCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>{text.older}</button>}</div><p>{text.pageSize}</p>{edits.length === 0 && <p>{text.noProposals}</p>}{edits.map(e => <article key={e.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(e.facility_id)}</strong> — {fieldLabel(e.field_name)}<p>{text.status} <strong>{codeLabel(e.review_status)}</strong> · {formatStamp(e.created_at)}</p></article>)}</section>
       <section style={panel}><h2>{text.activityTitle}</h2><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { eventCursor.current = null; void refresh(uid); }}>{text.firstPage}</button>{events.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = events[events.length - 1]; eventCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>{text.older}</button>}</div><p>{text.pageSize}</p>{events.length === 0 && <p>{text.noActivity}</p>}{events.map(event => <article key={event.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><p>{text.activity} {codeLabel(event.event_type)}{event.from_status ? `, ${codeLabel(event.from_status)} → ${codeLabel(event.to_status)}` : `, ${codeLabel(event.to_status)}`} · {formatStamp(event.created_at)}</p></article>)}</section>
