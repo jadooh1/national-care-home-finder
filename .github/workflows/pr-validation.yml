@@ -70,6 +70,9 @@ jobs:
       - name: Check the owner facility read
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_facility_read.ts
 
+      - name: Check the facility data contract
+        run: node --experimental-strip-types --test supabase/proposals/tests/facility_data_contract.ts
+
       - name: Check search and owner reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/search_owner_reliability.ts
 
