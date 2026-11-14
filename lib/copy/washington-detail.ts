@@ -126,6 +126,7 @@ type DemographicsCopy = {
   loading: string;
   invalidZip: string;
   unavailable: string;
+  incomplete: string;
   noMatch: (zip: string) => string;
   overview: (zip: string) => string;
   totalPopulation: string;
@@ -163,6 +164,7 @@ type OpportunityCopy = {
   intro: string;
   loading: string;
   unavailable: string;
+  incomplete: string;
   zipsCovered: string;
   recordedListings: string;
   recordedBeds: string;
@@ -370,7 +372,7 @@ export const copy: Record<Locale, {
       colBeds: "Recorded beds",
       colHomes: "Homes with capacity",
       colCities: "Cities",
-      source: "Source: Washington DSHS-matched facility listings; county assignments derived from geographic points and Washington county boundaries. Counts are not a real-time licensing verification. Recorded capacity does not measure occupancy or vacancies. A county missing from this comparison has no listings in the current matched directory; that is not proof that it has no operating care homes. Population and household income are not aggregated here because ZIP-code Census estimates can cross county boundaries.",
+      source: "Source: County and city summaries are calculated from the stored geographic text in public.wa_dshs_listed_facilities, not geographic boundary calculations. Counts are not a real-time licensing verification. Recorded capacity does not measure occupancy or vacancies. A county missing from this comparison has no listings in the current matched directory; that is not proof that it has no operating care homes. Population and household income are not aggregated here because ZIP-code Census estimates can cross county boundaries.",
       demographicsLink: "Explore ZIP demographics and household income →",
     },
     demographics: {
@@ -384,6 +386,7 @@ export const copy: Record<Locale, {
       loading: "Loading Census and care home data…",
       invalidZip: "Enter a valid five-digit ZIP code.",
       unavailable: "Demographic data is unavailable. Check that the public ZIP market view is created and readable.",
+      incomplete: "The ZIP comparison list is incomplete, so it is hidden.",
       noMatch: (zip) => `No matched AFH and ACS data for ZIP ${zip}. Select a ZIP code in the comparison table below.`,
       overview: (zip) => `ZIP ${zip} overview`,
       totalPopulation: "Total population",
@@ -420,6 +423,7 @@ export const copy: Record<Locale, {
       intro: "Compare older-adult population estimates, household income, and recorded Adult Family Home supply. These indicators do not establish care demand, ability to pay, vacancies, profitability, or licensing status.",
       loading: "Loading ZIP-code market data…",
       unavailable: "The ZIP-market data could not be loaded. Please check Supabase view access.",
+      incomplete: "The ZIP-market list is incomplete, so statewide totals are hidden.",
       zipsCovered: "ZIP codes covered",
       recordedListings: "Recorded AFH listings",
       recordedBeds: "Recorded licensed beds",
@@ -623,7 +627,7 @@ export const copy: Record<Locale, {
       colBeds: "Camas registradas",
       colHomes: "Hogares con capacidad",
       colCities: "Ciudades",
-      source: "Fuente: listados de establecimientos emparejados con DSHS de Washington; las asignaciones de condado se derivan de puntos geográficos y de los límites de los condados de Washington. Los conteos no son una verificación de licencias en tiempo real. La capacidad registrada no mide la ocupación ni las vacantes. Un condado que no aparece en esta comparación no tiene listados en el directorio emparejado actual; eso no prueba que no tenga hogares de cuidado en funcionamiento. Aquí no se agregan la población ni el ingreso de los hogares porque las estimaciones del Censo por código ZIP pueden cruzar los límites de los condados.",
+      source: "Fuente: Los resúmenes por condado y por ciudad se calculan a partir del texto geográfico almacenado en public.wa_dshs_listed_facilities, no mediante cálculos de límites geográficos. Los conteos no son una verificación de licencias en tiempo real. La capacidad registrada no mide la ocupación ni las vacantes. Un condado que no aparece en esta comparación no tiene listados en el directorio emparejado actual; eso no prueba que no tenga hogares de cuidado en funcionamiento. Aquí no se agregan la población ni el ingreso de los hogares porque las estimaciones del Censo por código ZIP pueden cruzar los límites de los condados.",
       demographicsLink: "Explorar la demografía por ZIP y los ingresos de los hogares →",
     },
     demographics: {
@@ -637,6 +641,7 @@ export const copy: Record<Locale, {
       loading: "Cargando datos del Censo y de hogares de cuidado…",
       invalidZip: "Ingrese un código ZIP válido de cinco dígitos.",
       unavailable: "Los datos demográficos no están disponibles. Verifique que la vista pública de mercado por ZIP esté creada y se pueda leer.",
+      incomplete: "La lista de comparación por ZIP está incompleta, por lo que permanece oculta.",
       noMatch: (zip) => `No hay datos coincidentes de hogares AFH y de la ACS para el ZIP ${zip}. Seleccione un código ZIP en la tabla de comparación de abajo.`,
       overview: (zip) => `Resumen del ZIP ${zip}`,
       totalPopulation: "Población total",
@@ -673,6 +678,7 @@ export const copy: Record<Locale, {
       intro: "Compare las estimaciones de población adulta mayor, el ingreso de los hogares y la oferta registrada de hogares AFH. Estos indicadores no establecen la demanda de cuidado, la capacidad de pago, las vacantes, la rentabilidad ni el estado de la licencia.",
       loading: "Cargando datos de mercado por código ZIP…",
       unavailable: "No se pudieron cargar los datos de mercado por ZIP. Verifique el acceso a la vista de Supabase.",
+      incomplete: "La lista de mercado por ZIP está incompleta, por lo que los totales estatales permanecen ocultos.",
       zipsCovered: "Códigos ZIP incluidos",
       recordedListings: "Listados de hogares AFH registrados",
       recordedBeds: "Camas licenciadas registradas",

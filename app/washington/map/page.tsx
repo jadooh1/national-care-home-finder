@@ -8,7 +8,7 @@ import type * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
-import { DENSITY_BANDS, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary } from "../../../lib/family-journey";
+import { DENSITY_BANDS, WASHINGTON_MAP_DEFAULT_ZIP, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary, washingtonLocationMatches, washingtonMapPostalOrFilter, washingtonZipFromSearch, washingtonZipSearchPath } from "../../../lib/family-journey";
 import { localizedInvalidZip, localizedMapSummary, type Locale } from "../../../lib/locale";
 
 type Home = {
@@ -83,8 +83,8 @@ export default function WashingtonMarketMapPage() {
   usePageTitle(text.title);
   const localeRef = useRef<Locale>(locale);
   localeRef.current = locale;
-  const [zipInput, setZipInput] = useState("98056");
-  const [zip, setZip] = useState("98056");
+  const [zipInput, setZipInput] = useState("");
+  const [zip, setZip] = useState<string | null>(null);
   const [homes, setHomes] = useState<Home[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<"" | "unavailable" | "tooMany">("");
@@ -97,6 +97,22 @@ export default function WashingtonMarketMapPage() {
   const leafletRef = useRef<typeof Leaflet | null>(null);
 
   useEffect(() => {
+    const resolved = washingtonZipFromSearch(new URLSearchParams(window.location.search).get("zip"), WASHINGTON_MAP_DEFAULT_ZIP);
+    setZipInput(resolved);
+    setZip(resolved);
+  }, []);
+
+  useEffect(() => {
+    if (!zip) return;
+    const next = washingtonZipSearchPath("/washington/map", zip);
+    if (!next) return;
+    const current = `${window.location.pathname}${window.location.search}`;
+    if (!washingtonLocationMatches(current, next)) window.history.replaceState(null, "", next);
+  }, [zip]);
+
+  useEffect(() => {
+    if (!zip) return;
+    const selectedZip = zip;
     let cancelled = false;
     async function load() {
       setLoading(true);
@@ -107,7 +123,7 @@ export default function WashingtonMarketMapPage() {
         const { data, error: queryError } = await supabase
           .from("wa_afh_map_facilities")
           .select(FIELD_LIST)
-          .eq("postal_code", zip)
+          .or(washingtonMapPostalOrFilter(selectedZip))
           .order("license_number", { ascending: true })
           .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
         if (cancelled) return;
@@ -196,9 +212,11 @@ export default function WashingtonMarketMapPage() {
 
   const statBox: React.CSSProperties = { flex: "1 1 180px", background: "#fff", border: `1px solid ${border}`, borderRadius: 12, padding: 18 };
   const formatCount = (value: number) => locale === "es" ? value.toLocaleString("es") : value.toLocaleString();
-  const summary = locale === "en"
-    ? mapResultSummary({ zip, loading, error, count: homes.length })
-    : localizedMapSummary(locale, { zip, loading, error, count: homes.length });
+  const summary = zip
+    ? (locale === "en"
+      ? mapResultSummary({ zip, loading, error, count: homes.length })
+      : localizedMapSummary(locale, { zip, loading, error, count: homes.length }))
+    : "";
   return (
     <main style={{ minHeight: "100vh", background: "#f4f8fb", color: navy, fontFamily: "Arial, sans-serif" }}>
       <WashingtonPublicHeader current="map" />
@@ -219,7 +237,7 @@ export default function WashingtonMarketMapPage() {
         </form>
         <div aria-live="polite" style={{ margin: "18px 0" }}>
           <strong>{summary}</strong>
-          {zipInvalid && <p role="alert" style={{ color: "#a62a2a" }}>{locale === "en" ? invalidZipMessage(zip) : localizedInvalidZip(locale, zip)}</p>}
+          {zipInvalid && <p role="alert" style={{ color: "#a62a2a" }}>{locale === "en" ? invalidZipMessage(zip ?? WASHINGTON_MAP_DEFAULT_ZIP) : localizedInvalidZip(locale, zip ?? WASHINGTON_MAP_DEFAULT_ZIP)}</p>}
           {error && <p role="alert" style={{ color: "#a62a2a" }}>{error === "tooMany" ? text.tooMany : text.unavailable}</p>}
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 13, marginBottom: 20 }}>
@@ -231,8 +249,8 @@ export default function WashingtonMarketMapPage() {
           <div style={{ padding: "17px 18px", display: "flex", gap: 12, justifyContent: "space-between", alignItems: "center", flexWrap: "wrap" }}>
             <h2 style={{ margin: 0, fontSize: 20 }}>{text.facilityLocations}</h2>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-              <button onClick={() => setMode("density")} aria-pressed={mode === "density"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "density" ? teal : "white", color: mode === "density" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.concentration}</button>
-              <button onClick={() => setMode("locations")} aria-pressed={mode === "locations"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "locations" ? teal : "white", color: mode === "locations" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.locationDots}</button>
+              <button type="button" onClick={() => setMode("density")} aria-pressed={mode === "density"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "density" ? teal : "white", color: mode === "density" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.concentration}</button>
+              <button type="button" onClick={() => setMode("locations")} aria-pressed={mode === "locations"} style={{ borderRadius: 7, padding: "10px 12px", background: mode === "locations" ? teal : "white", color: mode === "locations" ? "white" : teal, border: `1px solid ${teal}`, fontWeight: 700, cursor: "pointer" }}>{text.locationDots}</button>
             </div>
           </div>
           <div ref={mapDivRef} style={{ height: "min(65vh, 590px)", minHeight: 390, width: "100%", zIndex: 0 }} aria-label={text.mapAria} />
@@ -242,7 +260,7 @@ export default function WashingtonMarketMapPage() {
           </div>
         </section>
         {!loading && !error && homes.length === 0 && <p style={{ marginTop: 18 }}>{text.noneFound}</p>}
-        {!loading && !error && homes.length > 0 && <section aria-label={text.listAria} style={{ marginTop: 22 }}>
+        {!loading && !error && zip && homes.length > 0 && <section aria-label={text.listAria} style={{ marginTop: 22 }}>
           <h2 style={{ fontSize: 22 }}>{text.facilitiesInZip(zip)}</h2>
           <ul style={{ lineHeight: 1.7, paddingLeft: 20 }}>
             {homes.map(home => {
