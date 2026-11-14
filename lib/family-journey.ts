@@ -46,11 +46,16 @@ export function washingtonSearchText(value: string | null | undefined): string {
   return (value ?? "").replace(/[^a-zA-Z0-9\s-]/g, "").trim().slice(0, 80);
 }
 
+export function washingtonCountySearchText(value: string | null | undefined): string {
+  const text = washingtonSearchText(value);
+  return text.replace(/^condado de\s+/i, "").replace(/\s+county$/i, "").trim();
+}
+
 export function washingtonDirectorySearchPath(input: { q?: string | null; city?: string | null; county?: string | null }): string {
   const params = new URLSearchParams();
   const q = washingtonSearchText(input.q);
   const city = washingtonSearchText(input.city);
-  const county = washingtonSearchText(input.county);
+  const county = washingtonCountySearchText(input.county);
   if (q) params.set("q", q);
   if (city) params.set("city", city);
   if (county) params.set("county", county);

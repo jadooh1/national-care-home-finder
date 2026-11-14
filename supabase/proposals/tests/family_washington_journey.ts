@@ -18,6 +18,7 @@ import {
   washingtonMapPostalOrFilter,
   washingtonMapZipMatch,
   washingtonMarketPageBounds,
+  washingtonCountySearchText,
   washingtonDirectorySearchPath,
   washingtonLocationMatches,
   washingtonSearchText,
@@ -99,6 +100,7 @@ test("map and demographics navigation keeps a valid ZIP query", () => {
   assert.equal(demographics.includes("history.replaceState"), true);
   const directory = readFileSync("app/washington/page.tsx", "utf8");
   assert.equal(directory.includes("washingtonDirectorySearchPath"), true);
+  assert.equal(directory.includes("washingtonCountySearchText"), true);
   assert.equal(directory.includes("history.replaceState"), true);
   assert.equal(directory.includes("t.loadingListings"), true);
   assert.equal(directory.includes("t.noMatches"), true);
@@ -116,6 +118,12 @@ test("directory and ZIP searches keep the visible query in the address", () => {
   assert.equal(washingtonDirectorySearchPath({}), "/washington");
   assert.equal(washingtonDirectorySearchPath({ q: "Seattle", city: "  ", county: null }), "/washington?q=Seattle");
   assert.equal(washingtonDirectorySearchPath({ q: "Oak Harbor", city: "Oak Harbor", county: "Island" }), "/washington?q=Oak+Harbor&city=Oak+Harbor&county=Island");
+  assert.equal(washingtonCountySearchText("Pierce County"), "Pierce");
+  assert.equal(washingtonCountySearchText("  king county "), "king");
+  assert.equal(washingtonCountySearchText("Condado de Pierce"), "Pierce");
+  assert.equal(washingtonCountySearchText("Island"), "Island");
+  assert.equal(washingtonDirectorySearchPath({ county: "Pierce County" }), "/washington?county=Pierce");
+  assert.equal(washingtonDirectorySearchPath({ county: "Condado de Pierce" }), "/washington?county=Pierce");
   assert.equal(washingtonLocationMatches("/washington?city=Yakima&county=Yakima", washingtonDirectorySearchPath({ city: "Yakima", county: "Yakima" })), true);
   assert.equal(washingtonLocationMatches("/washington?q=Oak%20Harbor", washingtonDirectorySearchPath({ q: "Oak Harbor" })), true);
   assert.equal(washingtonLocationMatches("/washington?q=Seattle", "/washington"), false);

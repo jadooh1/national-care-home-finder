@@ -7,7 +7,7 @@ import { VisitorFeedback } from "../../components/visitor-feedback";
 import { WashingtonPublicHeader } from "../../components/washington-public";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
-import { facilityProfilePath, washingtonDirectorySearchPath, washingtonLocationMatches, washingtonSearchText } from "../../lib/family-journey";
+import { facilityProfilePath, washingtonCountySearchText, washingtonDirectorySearchPath, washingtonLocationMatches, washingtonSearchText } from "../../lib/family-journey";
 import { WASHINGTON_DSHS_LOCATOR } from "../../lib/state-directory";
 
 type Facility = {
@@ -45,7 +45,7 @@ export default function WashingtonPage() {
     const params = new URLSearchParams(window.location.search);
     setSearch(washingtonSearchText(params.get("q")));
     setCity(washingtonSearchText(params.get("city")));
-    setCounty(washingtonSearchText(params.get("county")));
+    setCounty(washingtonCountySearchText(params.get("county")));
     setFiltersReady(true);
   }, []);
 
@@ -62,7 +62,7 @@ export default function WashingtonPage() {
       setLoading(true); setError("");
       const term = washingtonSearchText(search);
       const cityTerm = washingtonSearchText(city);
-      const countyTerm = washingtonSearchText(county);
+      const countyTerm = washingtonCountySearchText(county);
       let query = supabase.from("wa_dshs_listed_facilities")
         .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status", { count: "exact" })
         .order("canonical_name", { ascending: true }).order("id", { ascending: true })
