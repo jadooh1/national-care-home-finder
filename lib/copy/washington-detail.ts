@@ -231,6 +231,8 @@ type ProfileCopy = {
   county: string;
   licenseNumber: string;
   recordedCapacity: string;
+  recordStatus: string;
+  recordStatusValue: (status: string) => string;
   notAvailable: string;
   countyValue: (name: string) => string;
   capacityValue: (count: number) => string;
@@ -493,6 +495,10 @@ export const copy: Record<Locale, {
       county: "County",
       licenseNumber: "License number",
       recordedCapacity: "Recorded licensed capacity",
+      recordStatus: "Record status",
+      recordStatusValue: (status) => status === "verified"
+        ? "Independently verified listing"
+        : "DSHS license-number match — not independently verified",
       notAvailable: "Not available",
       countyValue: (name) => `${name} County`,
       capacityValue: (count) => `${count} residents`,
@@ -752,6 +758,10 @@ export const copy: Record<Locale, {
       county: "Condado",
       licenseNumber: "Número de licencia",
       recordedCapacity: "Capacidad licenciada registrada",
+      recordStatus: "Estado del registro",
+      recordStatusValue: (status) => status === "verified"
+        ? "Listado verificado de forma independiente"
+        : "Coincidencia del número de licencia de DSHS — no verificado de forma independiente",
       notAvailable: "No disponible",
       countyValue: (name) => `Condado de ${name}`,
       capacityValue: (count) => `${count} residentes`,

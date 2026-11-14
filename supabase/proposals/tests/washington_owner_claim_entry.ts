@@ -30,6 +30,12 @@ test("a facility listing opens the existing owner claim path for that license", 
   const profile = readFileSync(new URL("../../../app/washington/[license]/page.tsx", import.meta.url), "utf8");
   assert.match(profile, /ownerClaimHref\(facility\.license_number\)/);
   assert.match(profile, /text\.claimReview/);
+  assert.ok(profile.indexOf('id="details-heading"') < profile.indexOf('id="claim-heading"'));
+  assert.match(profile, /text\.recordStatusValue\(facility\.record_status\)/);
+  assert.equal(washingtonCopy.en.profile.recordStatusValue("verified"), "Independently verified listing");
+  assert.equal(washingtonCopy.en.profile.recordStatusValue("source_matched"), "DSHS license-number match — not independently verified");
+  assert.equal(washingtonCopy.es.profile.recordStatusValue("verified"), "Listado verificado de forma independiente");
+  assert.equal(washingtonCopy.es.profile.recordStatusValue("source_matched"), "Coincidencia del número de licencia de DSHS — no verificado de forma independiente");
   assert.equal(washingtonCopy.en.profile.claimAction, "Claim this facility");
   assert.equal(washingtonCopy.es.profile.claimAction, "Reclamar este establecimiento");
   assert.match(washingtonCopy.en.profile.claimBody, /administrative review/);

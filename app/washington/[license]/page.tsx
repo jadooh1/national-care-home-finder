@@ -120,33 +120,6 @@ export default function WashingtonFacilityProfile() {
         </div>
         {!loading && facility && (
           <>
-          <section style={{ ...card, marginTop: 22 }} aria-labelledby="claim-heading">
-            <h2 id="claim-heading" style={{ margin: "0 0 8px", fontSize: 23 }}>{text.claimTitle}</h2>
-            <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.claimBody}</p>
-            <p style={{ lineHeight: 1.6 }}>{text.claimReview}</p>
-            <Link
-              href={ownerClaimHref(facility.license_number)}
-              onClick={() => {
-                const storage = browserClaimStorage();
-                if (storage) writeClaimLicense(storage, facility.license_number);
-              }}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: 44,
-                width: "min(100%, 320px)",
-                padding: "12px 18px",
-                background: C.teal,
-                color: "white",
-                borderRadius: 9,
-                fontWeight: 800,
-                textDecoration: "none",
-              }}
-            >
-              {text.claimAction}
-            </Link>
-          </section>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 310px), 1fr))", gap: 22, marginTop: 22, alignItems: "start" }}>
             <section style={card} aria-labelledby="details-heading">
               <h2 id="details-heading" style={{ margin: "0 0 16px", fontSize: 23 }}>{text.detailsTitle}</h2>
@@ -156,6 +129,7 @@ export default function WashingtonFacilityProfile() {
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.county}</dt><dd style={{ margin: "0 0 7px" }}>{facility.county ? text.countyValue(facility.county) : text.notAvailable}</dd>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.licenseNumber}</dt><dd style={{ margin: "0 0 7px" }}>{facility.license_number ?? text.notAvailable}</dd>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.recordedCapacity}</dt><dd style={{ margin: "0 0 7px" }}>{facility.licensed_capacity === null ? text.notAvailable : text.capacityValue(facility.licensed_capacity)}</dd>
+                <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.recordStatus}</dt><dd style={{ margin: "0 0 7px" }}>{text.recordStatusValue(facility.record_status)}</dd>
               </dl>
               {address && <p style={{ marginTop: 20 }}><a href={mapUrl} target="_blank" rel="noopener noreferrer" style={linkStyle}>{text.googleMaps}</a></p>}
               <p style={{ color: C.muted, lineHeight: 1.6 }}>{text.dshsSource}</p>
@@ -193,6 +167,33 @@ export default function WashingtonFacilityProfile() {
               </section>
             </div>
           </div>
+          <section style={{ ...card, marginTop: 22 }} aria-labelledby="claim-heading">
+            <h2 id="claim-heading" style={{ margin: "0 0 8px", fontSize: 23 }}>{text.claimTitle}</h2>
+            <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.claimBody}</p>
+            <p style={{ lineHeight: 1.6 }}>{text.claimReview}</p>
+            <Link
+              href={ownerClaimHref(facility.license_number)}
+              onClick={() => {
+                const storage = browserClaimStorage();
+                if (storage) writeClaimLicense(storage, facility.license_number);
+              }}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 44,
+                width: "min(100%, 320px)",
+                padding: "12px 18px",
+                background: C.teal,
+                color: "white",
+                borderRadius: 9,
+                fontWeight: 800,
+                textDecoration: "none",
+              }}
+            >
+              {text.claimAction}
+            </Link>
+          </section>
           </>
         )}
         {/^\d{1,20}$/.test(license) && <VisitorFeedback pagePath={`/washington/${license}`} />}
