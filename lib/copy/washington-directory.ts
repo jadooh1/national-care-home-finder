@@ -47,6 +47,23 @@ type WashingtonDirectoryCopy = {
   pageStatus: (page: number, pages: number) => string;
   next: string;
   footer: string;
+  compareLabel: string;
+  compareHeading: string;
+  compareLead: string;
+  compareEmpty: string;
+  compareCount: (count: number) => string;
+  addToCompare: string;
+  removeFromCompare: string;
+  compareFull: string;
+  clearShortlist: string;
+  licensedCapacity: string;
+  vacancies: string;
+  vacanciesNotShown: string;
+  compareLocation: string;
+  compareLicense: string;
+  compareStatus: string;
+  compareDetails: string;
+  compareDisclosure: string;
 };
 
 export const copy: Record<Locale, WashingtonDirectoryCopy> = {
@@ -105,6 +122,25 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
     },
     next: "Next →",
     footer: "Independent informational directory using a DSHS locator list downloaded November 9, 2026. Information may be outdated; confirm current licensing and services directly with Washington DSHS. Listings are not recommendations.",
+    compareLabel: "Selected facility comparison",
+    compareHeading: "Compare selected homes",
+    compareLead: "Choose up to three homes from these results. Licensed capacity is the recorded DSHS bed count. Available vacancies are not shown.",
+    compareEmpty: "No homes selected yet. Add up to three from the results below.",
+    compareCount(count) {
+      return `${count} of 3 selected`;
+    },
+    addToCompare: "Add to comparison",
+    removeFromCompare: "Remove from comparison",
+    compareFull: "Comparison is full",
+    clearShortlist: "Clear comparison",
+    licensedCapacity: "Licensed capacity",
+    vacancies: "Available vacancies",
+    vacanciesNotShown: "Not shown",
+    compareLocation: "Location",
+    compareLicense: "License number",
+    compareStatus: "Official record status",
+    compareDetails: "Facility details",
+    compareDisclosure: "DSHS facility record ↗",
   },
   es: {
     pageTitle: "Hogares AFH de Washington",
@@ -162,5 +198,24 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
     },
     next: "Siguiente →",
     footer: "Directorio informativo independiente que usa una lista del localizador de DSHS descargada el 9 de noviembre de 2026. La información puede estar desactualizada; confirme las licencias y los servicios actuales directamente con el DSHS de Washington. Los listados no son recomendaciones.",
+    compareLabel: "Comparación de establecimientos seleccionados",
+    compareHeading: "Compare los hogares seleccionados",
+    compareLead: "Elija hasta tres hogares de estos resultados. La capacidad licenciada es el número de camas registrado por DSHS. Las vacantes disponibles no se muestran.",
+    compareEmpty: "Todavía no hay hogares seleccionados. Agregue hasta tres de los resultados de abajo.",
+    compareCount(count) {
+      return `${count} de 3 seleccionados`;
+    },
+    addToCompare: "Agregar a la comparación",
+    removeFromCompare: "Quitar de la comparación",
+    compareFull: "La comparación está llena",
+    clearShortlist: "Borrar comparación",
+    licensedCapacity: "Capacidad licenciada",
+    vacancies: "Vacantes disponibles",
+    vacanciesNotShown: "No se muestran",
+    compareLocation: "Ubicación",
+    compareLicense: "Número de licencia",
+    compareStatus: "Estado oficial del registro",
+    compareDetails: "Detalles del establecimiento",
+    compareDisclosure: "Registro del establecimiento en DSHS ↗",
   },
 };

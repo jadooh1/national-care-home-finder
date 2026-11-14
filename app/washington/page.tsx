@@ -8,7 +8,8 @@ import { WashingtonPublicHeader } from "../../components/washington-public";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
 import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonSearchText } from "../../lib/family-journey";
-import { WASHINGTON_DSHS_LOCATOR } from "../../lib/state-directory";
+import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../lib/state-directory";
+import { addWashingtonShortlist, readWashingtonShortlist, removeWashingtonShortlist, washingtonShortlistItem, writeWashingtonShortlist, type WashingtonShortlistItem } from "../../lib/washington-shortlist";
 
 type Facility = {
   id: string; canonical_name: string; address_line1: string | null;
@@ -40,6 +41,7 @@ export default function WashingtonPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filtersReady, setFiltersReady] = useState(false);
+  const [shortlist, setShortlist] = useState<WashingtonShortlistItem[]>([]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -48,6 +50,7 @@ export default function WashingtonPage() {
     setCounty(washingtonCountySearchText(params.get("county")));
     setPage(washingtonDirectoryPage(params.get("page")));
     setFiltersReady(true);
+    try { setShortlist(readWashingtonShortlist(window.sessionStorage)); } catch { setShortlist([]); }
   }, []);
 
   useEffect(() => {
@@ -90,6 +93,10 @@ export default function WashingtonPage() {
   const end = Math.min((page + 1) * PAGE_SIZE, total);
   const directoryPath = washingtonDirectorySearchPath({ q: search, city, county, page });
   function resetFilters() { setSearch(""); setCity(""); setCounty(""); setPage(0); }
+  function persistShortlist(next: WashingtonShortlistItem[]) {
+    setShortlist(next);
+    try { writeWashingtonShortlist(window.sessionStorage, next); } catch { /* The comparison stays on this page when storage is unavailable. */ }
+  }
 
   return (
     <main style={{ minHeight: "100vh", background: C.pale, color: C.navy, fontFamily: "Arial, sans-serif" }}>
@@ -207,6 +214,47 @@ export default function WashingtonPage() {
 
 </section>
 
+        <section aria-label={t.compareLabel} aria-labelledby="compare-heading" style={{ margin: "8px 0 22px", padding: 18, border: `1px solid ${C.border}`, borderRadius: 14, background: "#fff", minWidth: 0 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <h2 id="compare-heading" style={{ margin: 0, fontSize: 22 }}>{t.compareHeading}</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+              <p aria-live="polite" style={{ margin: 0, color: C.muted, fontWeight: 700 }}>{t.compareCount(shortlist.length)}</p>
+              {shortlist.length > 0 && <button type="button" onClick={() => persistShortlist([])} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.clearShortlist}</button>}
+            </div>
+          </div>
+          <p style={{ margin: "10px 0 0", lineHeight: 1.6, color: C.muted }}>{t.compareLead}</p>
+          {shortlist.length === 0 ? <p style={{ margin: "12px 0 0" }}>{t.compareEmpty}</p> : (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: 14, marginTop: 14, minWidth: 0 }}>
+              {shortlist.map(item => {
+                const location = [item.addressLine, item.city, item.stateCode, item.postalCode].filter(Boolean).join(", ");
+                const profile = facilityProfilePath(item.license);
+                const disclosure = washingtonDisclosureUrl(item.license);
+                return (
+                  <article key={item.license} style={{ border: `1px solid ${C.border}`, borderTop: `4px solid ${C.teal}`, borderRadius: 12, padding: 16, minWidth: 0, overflowWrap: "anywhere" }}>
+                    <h3 style={{ margin: "0 0 12px", fontSize: 18, lineHeight: 1.3 }}>{displayName(item.name)}</h3>
+                    <dl style={{ margin: 0 }}>
+                      <dt style={{ fontWeight: 700 }}>{t.compareLocation}</dt>
+                      <dd style={{ margin: "0 0 8px" }}>{location || t.notAvailable}{item.county ? ` · ${t.county(item.county)}` : ""}</dd>
+                      <dt style={{ fontWeight: 700 }}>{t.compareLicense}</dt>
+                      <dd style={{ margin: "0 0 8px" }}>{item.license}</dd>
+                      <dt style={{ fontWeight: 700 }}>{t.licensedCapacity}</dt>
+                      <dd style={{ margin: "0 0 8px" }}>{item.licensedCapacity === null ? t.notAvailable : item.licensedCapacity}</dd>
+                      <dt style={{ fontWeight: 700 }}>{t.vacancies}</dt>
+                      <dd style={{ margin: "0 0 8px" }}>{t.vacanciesNotShown}</dd>
+                      <dt style={{ fontWeight: 700 }}>{t.compareStatus}</dt>
+                      <dd style={{ margin: 0 }}>{item.recordStatus === "verified" ? t.verified : t.unverified}</dd>
+                    </dl>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 14 }}>
+                      {profile && <Link href={washingtonFacilityLink(profile, directoryPath)} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "8px 12px", textDecoration: "none", fontWeight: 700 }}>{t.compareDetails}</Link>}
+                      {disclosure && <a href={disclosure} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.compareDisclosure}</a>}
+                      <button type="button" onClick={() => persistShortlist(removeWashingtonShortlist(shortlist, item.license))} style={{ background: "white", color: C.navy, border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.removeFromCompare}</button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </section>
         <div aria-live="polite" style={{ margin: "23px 0 15px", color: C.muted, fontWeight: 600 }}>
           {loading ? t.loadingListings : error ? t.unableToDisplay : total === 0 ? t.noMatches : t.showing(start, end, total)}
         </div>
@@ -216,6 +264,18 @@ export default function WashingtonPage() {
           {!error && facilities.map(facility => {
             const address = [facility.address_line1, facility.city, facility.state_code, facility.postal_code].filter(Boolean).join(", ");
             const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+            const candidate = washingtonShortlistItem({
+              license: facility.license_number,
+              name: displayName(facility.canonical_name),
+              addressLine: facility.address_line1,
+              city: facility.city,
+              county: facility.county,
+              stateCode: facility.state_code,
+              postalCode: facility.postal_code,
+              licensedCapacity: facility.licensed_capacity,
+              recordStatus: facility.record_status,
+            });
+            const selected = candidate ? shortlist.some(item => item.license === candidate.license) : false;
             return (
               <article key={facility.id} style={{ border: `1px solid ${C.border}`, borderTop: `4px solid ${C.navy}`, borderRadius: 14, background: "#fff", padding: 22, boxShadow: "0 3px 12px rgba(18,60,89,.035)", minWidth: 0, overflowWrap: "anywhere" }}>
                 <p style={{ margin: "0 0 8px", color: C.teal, fontSize: 12, fontWeight: 800, letterSpacing: 0.4 }}>{t.homeLabel}</p>
@@ -228,6 +288,7 @@ export default function WashingtonPage() {
                   {facility.record_status === "verified" ? t.verified : t.unverified}
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 13, alignItems: "center" }}>
+                  {candidate && <button type="button" aria-pressed={selected} aria-label={`${selected ? t.removeFromCompare : t.addToCompare}: ${displayName(facility.canonical_name)}`} disabled={!selected && shortlist.length >= 3} onClick={() => persistShortlist(selected ? removeWashingtonShortlist(shortlist, candidate.license) : addWashingtonShortlist(shortlist, candidate).items)} style={{ background: selected ? C.navy : "white", color: selected ? "white" : C.teal, border: `1px solid ${selected ? C.navy : C.teal}`, borderRadius: 8, padding: "10px 13px", fontWeight: 700, cursor: !selected && shortlist.length >= 3 ? "not-allowed" : "pointer" }}>{selected ? t.removeFromCompare : shortlist.length >= 3 ? t.compareFull : t.addToCompare}</button>}
                   {facilityProfilePath(facility.license_number) && <Link href={washingtonFacilityLink(facilityProfilePath(facility.license_number) as string, directoryPath)} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>{t.viewDetails}</Link>}
                   {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.viewMap}</a>}
                   <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.checkDshs}</a>
