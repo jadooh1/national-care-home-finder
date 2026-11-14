@@ -36,6 +36,11 @@ const ownerTextMigration = readFileSync(
   "supabase/migrations/20261109140000_development_owner_text_grants.sql",
   "utf8",
 );
+const ownerListingProposal = readFileSync(
+  "supabase/proposals/20261113210000_owner_listing_read_REVIEW_ONLY.sql",
+  "utf8",
+);
+const adminEdits = readFileSync("app/admin/listing-edits/page.tsx", "utf8");
 const now = new Date("2026-11-09T12:00:00Z");
 const later = new Date("2026-12-09T12:00:00Z");
 const earlier = new Date("2026-11-08T12:00:00Z");
@@ -99,16 +104,35 @@ test("public owner text uses the premium view only on development", () => {
   assert.equal(publicOwnerContentView("https://www.nationalcarehomefinder.com"), "wa_afh_published_owner_content");
   assert.match(profile, /publicOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
   assert.doesNotMatch(profile, /\.from\("wa_afh_published_owner_content"\)/);
-  assert.equal(
-    manageableOwnerContentView(`https://${DEVELOPMENT_SUPABASE_HOST}`),
-    "wa_afh_claimed_owner_content",
-  );
-  assert.equal(
-    manageableOwnerContentView(`https://${PRODUCTION_SUPABASE_HOST}`),
-    "wa_afh_published_owner_content",
-  );
+  for (const supabaseUrl of [
+    `https://${DEVELOPMENT_SUPABASE_HOST}`,
+    `https://${PRODUCTION_SUPABASE_HOST}`,
+    "https://www.nationalcarehomefinder.com",
+    "not a url",
+    "",
+  ]) {
+    assert.equal(manageableOwnerContentView(supabaseUrl), "wa_afh_claimed_owner_content");
+  }
   assert.match(ownerEdits, /manageableOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
+  assert.doesNotMatch(ownerEdits, /wa_afh_published_owner_content/);
+  assert.match(ownerEdits, /verification_status", "approved"/);
+  assert.match(ownerEdits, /\.in\("facility_id", ids\)/);
+  assert.match(ownerEdits, /auth\.error \|\| !auth\.data\.user/);
+  assert.match(ownerEdits, /router\.replace\("\/owner"\)/);
+  assert.match(ownerEdits, /catch \{[\s\S]*publishedFailed = true/);
+  assert.doesNotMatch(profile, /wa_afh_claimed_owner_content/);
+  assert.doesNotMatch(adminEdits, /wa_afh_published_owner_content/);
+  assert.match(adminEdits, /Self-review is prohibited/);
+  assert.match(adminEdits, /admin_review_listing_edit/);
+  assert.match(ownerListingProposal, /REVIEW ONLY/);
+  assert.match(ownerListingProposal, /wa_afh_claimed_owner_content/);
+  assert.match(ownerListingProposal, /grant select on table public\.wa_afh_claimed_owner_content to authenticated/);
+  assert.doesNotMatch(ownerListingProposal, /grant\s+select\s+on\s+table\s+public\.wa_afh_published_owner_content/i);
+  assert.match(ownerListingProposal, /refuses the development listing function/);
+  assert.doesNotMatch(ownerListingProposal, /where public\.nchf_phase5g_facility_is_listed/);
+  assert.match(ownerListingProposal, /facility_type = 'AF'/);
   assert.equal(publishedContentOutcome(true, 0), "unavailable");
+  assert.equal(publishedContentOutcome(true, 2), "unavailable");
   assert.equal(publishedContentOutcome(false, 0), "empty");
   assert.equal(publishedContentOutcome(false, 1), "listed");
   assert.match(ownerEdits, /publishedContentOutcome\(Boolean\(content\.error\)/);
