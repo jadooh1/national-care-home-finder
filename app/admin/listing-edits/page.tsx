@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
-import { authorizationDecision, createAdminActionGate, createListingRequestGate, currentListingInput, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, listingViewAfterRefresh, loadAdminListing, olderCursor, settleAdminAction, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
+import { authorizationDecision, createAdminActionGate, createListingRequestGate, currentListingInput, INTERRUPTED_ADMIN_RELOAD, listingRequestAfterHistoryCursor, listingRequestAfterProposalCursor, listingRequestAfterStatus, listingViewAfterRefresh, loadAdminListing, olderCursor, publicationRetryGuard, rememberCompletedWrite, settleAdminAction, withdrawalKey, writeAccepted, type AdminListingSource, type ProposalTotals } from "../../../lib/admin-listing-requests";
 
 captureAndStripAuthCallback();
 
@@ -27,6 +27,8 @@ export default function AdminListingEdits() {
   const reviewStatus = useRef("pending");
   const requests = useRef(createListingRequestGate());
   const actions = useRef(createAdminActionGate());
+  const completedPublications = useRef(new Set<string>());
+  const completedWithdrawals = useRef(new Set<string>());
   const listingSource = useCallback((): AdminListingSource => ({
     async listEdits(request) {
       return supabase.rpc("admin_list_listing_edits", {
@@ -75,6 +77,8 @@ export default function AdminListingEdits() {
     setError("");
     setLoading(false);
     if (outcome.facilities !== null) setFacilities(outcome.facilities);
+    completedPublications.current.clear();
+    completedWithdrawals.current.clear();
     return "applied";
   }, [listingInput, listingSource]);
   async function showListing(next: ReturnType<typeof currentListingInput>) {
@@ -120,12 +124,17 @@ export default function AdminListingEdits() {
   }
   async function publish() {
     if (!publishId || !adminId) return;
+    if (publicationRetryGuard(completedPublications.current, publishId) === "refresh") {
+      setError(INTERRUPTED_ADMIN_RELOAD); setNotice(""); setPublishId(null); return;
+    }
     const item = edits.find(e => e.id === publishId);
     if (!item || item.review_status !== "approved" || !item.submitted_by_user_id || item.submitted_by_user_id === adminId || item.current_publication) { setError("Cannot publish this proposal."); setPublishId(null); return; }
     const editId = publishId;
     await settleAdminAction(actions.current, "publish", async () => {
       setBusy(true); setError(""); setNotice("");
-      return supabase.rpc("admin_publish_listing_edit", { p_edit_id: editId });
+      const response = await supabase.rpc("admin_publish_listing_edit", { p_edit_id: editId });
+      completedPublications.current = rememberCompletedWrite(completedPublications.current, editId, writeAccepted(response));
+      return response;
     }, () => refresh(), "Owner text was published separately. Official DSHS name, address, license, and capacity were not changed.", reportAction, () => setPublishId(null), () => setBusy(false));
   }
   async function withdraw() {
@@ -134,9 +143,14 @@ export default function AdminListingEdits() {
     if (!item || !item.current_publication || item.submitted_by_user_id === adminId) { setError("Cannot withdraw this owner text."); setWithdrawId(null); return; }
     const facilityId = item.facility_id;
     const fieldName = item.field_name;
+    if (publicationRetryGuard(completedWithdrawals.current, withdrawalKey(facilityId, fieldName)) === "refresh") {
+      setError(INTERRUPTED_ADMIN_RELOAD); setNotice(""); setWithdrawId(null); return;
+    }
     await settleAdminAction(actions.current, "withdraw", async () => {
       setBusy(true); setError(""); setNotice("");
-      return supabase.rpc("admin_withdraw_published_owner_listing", { p_facility_id: facilityId, p_field_name: fieldName });
+      const response = await supabase.rpc("admin_withdraw_published_owner_listing", { p_facility_id: facilityId, p_field_name: fieldName });
+      completedWithdrawals.current = rememberCompletedWrite(completedWithdrawals.current, withdrawalKey(facilityId, fieldName), writeAccepted(response));
+      return response;
     }, () => refresh(), "Owner text was removed from the public profile. The audit history remains. Official DSHS name, address, license, and capacity were not changed.", reportAction, () => setWithdrawId(null), () => setBusy(false));
   }
   const matching = counts ? matchingProposals(counts, status) : null;
