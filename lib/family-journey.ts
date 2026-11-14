@@ -51,16 +51,48 @@ export function washingtonCountySearchText(value: string | null | undefined): st
   return text.replace(/^condado de\s+/i, "").replace(/\s+county$/i, "").trim();
 }
 
-export function washingtonDirectorySearchPath(input: { q?: string | null; city?: string | null; county?: string | null }): string {
+export function washingtonDirectoryPage(value: string | null | undefined): number {
+  const page = (value ?? "").trim();
+  if (!/^[1-9]\d{0,2}$/.test(page)) return 0;
+  const parsed = Number(page);
+  return parsed >= 2 && parsed <= 500 ? parsed - 1 : 0;
+}
+
+export function washingtonDirectorySearchPath(input: { q?: string | null; city?: string | null; county?: string | null; page?: number | null }): string {
   const params = new URLSearchParams();
   const q = washingtonSearchText(input.q);
   const city = washingtonSearchText(input.city);
   const county = washingtonCountySearchText(input.county);
+  const page = input.page ?? 0;
   if (q) params.set("q", q);
   if (city) params.set("city", city);
   if (county) params.set("county", county);
+  if (Number.isInteger(page) && page >= 1 && page <= 499) params.set("page", String(page + 1));
   const query = params.toString();
   return query ? `/washington?${query}` : "/washington";
+}
+
+export function washingtonDirectoryReturnPath(value: string | null | undefined): string | null {
+  if (!value || value.includes("\\") || value.includes("://") || value.startsWith("//")) return null;
+  let url: URL;
+  try {
+    url = new URL(value, "https://example.test");
+  } catch {
+    return null;
+  }
+  if (url.origin !== "https://example.test" || url.pathname !== "/washington") return null;
+  return washingtonDirectorySearchPath({
+    q: url.searchParams.get("q"),
+    city: url.searchParams.get("city"),
+    county: url.searchParams.get("county"),
+    page: washingtonDirectoryPage(url.searchParams.get("page")),
+  });
+}
+
+export function washingtonFacilityLink(profilePath: string, directoryPath: string): string {
+  const safe = washingtonDirectoryReturnPath(directoryPath);
+  if (!profilePath.startsWith("/washington/") || !safe || safe === "/washington") return profilePath;
+  return `${profilePath}?from=${encodeURIComponent(safe)}`;
 }
 
 export function washingtonZipSearchPath(page: "/washington/map" | "/washington/demographics", zip: string | null | undefined): string | null {

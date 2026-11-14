@@ -11,6 +11,7 @@ import { publicOwnerContentView } from "../../../lib/premium-option-a";
 import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../../lib/state-directory";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
+import { washingtonDirectoryReturnPath } from "../../../lib/family-journey";
 import type { Locale } from "../../../lib/locale";
 
 type Facility = {
@@ -49,6 +50,12 @@ export default function WashingtonFacilityProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<"" | "unavailable">("");
   const [notFound, setNotFound] = useState(false);
+  const [directoryPath, setDirectoryPath] = useState("/washington");
+
+  useEffect(() => {
+    const from = new URLSearchParams(window.location.search).get("from");
+    setDirectoryPath(washingtonDirectoryReturnPath(from) ?? "/washington");
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -112,11 +119,11 @@ export default function WashingtonFacilityProfile() {
         </div>
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 64px" }}>
-        <Link href="/washington" style={linkStyle}>{text.back}</Link>
+        <Link href={directoryPath} style={linkStyle}>{text.back}</Link>
         <div aria-live="polite" style={{ marginTop: 21 }}>
           {loading && <section style={card}><p>{text.loadingInfo}</p></section>}
           {!loading && error && <section style={card}><p role="alert" style={{ color: "#a62a2a" }}>{text.unavailable}</p><button onClick={() => window.location.reload()} style={{ padding: "10px 14px", cursor: "pointer" }}>{text.retry}</button></section>}
-          {!loading && notFound && <section style={card}><h2>{text.notFoundTitle}</h2><p>{text.notFoundBody}</p><Link href="/washington" style={linkStyle}>{text.searchDirectory}</Link></section>}
+          {!loading && notFound && <section style={card}><h2>{text.notFoundTitle}</h2><p>{text.notFoundBody}</p><Link href={directoryPath} style={linkStyle}>{text.searchDirectory}</Link></section>}
         </div>
         {!loading && facility && (
           <>
