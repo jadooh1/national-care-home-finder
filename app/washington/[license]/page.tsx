@@ -6,6 +6,7 @@ import { WashingtonPublicHeader, WelcomeScene } from "../../../components/washin
 import { useLanguage, usePageTitle } from "../../../components/language";
 import { useParams } from "next/navigation";
 import { supabase } from "../../../lib/supabase";
+import { PREMIUM_OWNER_CONTENT_VIEW } from "../../../lib/premium-owner-content";
 import { copy } from "../../../lib/copy/washington-detail";
 import type { Locale } from "../../../lib/locale";
 
@@ -74,12 +75,12 @@ export default function WashingtonFacilityProfile() {
         const home = data as Facility;
         setFacility(home);
         const content = await supabase
-          .from("wa_afh_published_owner_content")
+          .from(PREMIUM_OWNER_CONTENT_VIEW)
           .select("field_name,published_value,published_at")
           .eq("facility_id", home.id);
-        if (!cancelled && !content.error) {
-          setPublished(((content.data ?? []) as PublishedContent[]).filter(row => isPublishedField(row.field_name)));
-        }
+        if (cancelled) return;
+        if (content.error) setPublished([]);
+        else setPublished(((content.data ?? []) as PublishedContent[]).filter(row => isPublishedField(row.field_name)));
       }
       setLoading(false);
     }
