@@ -356,7 +356,7 @@ window.scrollToVisitChecklist = ${browserFunction(scrollToVisitChecklist)};
     }
     rmSync(directory, { recursive: true, force: true });
     try {
-      rmSync(userData, { recursive: true, force: true });
+      rmSync(userData, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== "EBUSY") throw error;
     }
