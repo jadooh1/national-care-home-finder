@@ -73,6 +73,28 @@ test("exact official labels can match while closure reasons stay intact", () => 
   assert.equal(differentProbation.confirmedClosure, false);
 });
 
+test("closure words embedded in another status do not confirm closure", () => {
+  for (const liveStatus of ["Not Closed", "Reopened after Closed", "Unclosed", "Pending Closed Review"]) {
+    const result = reconcileCaliforniaStatus({
+      openDataStatus: "CLOSED",
+      httpStatus: 200,
+      liveStatus,
+      identifierMatched: true,
+    });
+    assert.equal(result.classification, "conflict");
+    assert.equal(result.confirmedClosure, false);
+    assert.equal(result.currentlyActive, false);
+  }
+  const closed = reconcileCaliforniaStatus({
+    openDataStatus: "CLOSED",
+    httpStatus: 200,
+    liveStatus: "Closed",
+    identifierMatched: true,
+  });
+  assert.equal(closed.classification, "match");
+  assert.equal(closed.confirmedClosure, true);
+});
+
 test("an empty live status and a failed response are unavailable, not closed", () => {
   const empty = reconcileCaliforniaStatus({
     openDataStatus: "CLOSED",
