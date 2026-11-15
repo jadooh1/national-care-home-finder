@@ -132,11 +132,20 @@ test("print media keeps a long comparison address without blank directory pages"
     assert.ok(printed.height < 900, `printed height ${printed.height} still includes the directory`);
     socket.close();
   } finally {
-    if (process.platform === "win32" && child.pid) spawn("taskkill", ["/pid", String(child.pid), "/t", "/f"], { stdio: "ignore", windowsHide: true }).unref();
-    else child.kill();
-    rmSync(directory, { recursive: true, force: true });
-    try { rmSync(userData, { recursive: true, force: true }); } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "EBUSY") throw error;
+    if (process.platform === "win32" && child.pid) {
+      spawn("taskkill", ["/pid", String(child.pid), "/t", "/f"], { stdio: "ignore", windowsHide: true }).unref();
+    } else {
+      child.kill();
+    }
+    try {
+      rmSync(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch (error) {
+      if (!["EBUSY", "ENOTEMPTY", "EPERM"].includes((error as NodeJS.ErrnoException).code ?? "")) throw error;
+    }
+    try {
+      rmSync(userData, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch (error) {
+      if (!["EBUSY", "ENOTEMPTY", "EPERM"].includes((error as NodeJS.ErrnoException).code ?? "")) throw error;
     }
   }
 });
