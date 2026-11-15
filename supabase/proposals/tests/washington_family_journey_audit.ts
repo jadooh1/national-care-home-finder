@@ -78,7 +78,7 @@ function findBrowser(): string | null {
   return candidates.find(candidate => existsSync(candidate)) ?? null;
 }
 
-test("print media keeps a long comparison address without blank directory pages", { timeout: 30000 }, async (t) => {
+test("print media keeps a long comparison address without blank directory pages", { timeout: 45000 }, async (t) => {
   const browser = findBrowser();
   if (!browser) {
     t.skip("No local Chrome or Edge binary is available.");
@@ -101,11 +101,10 @@ test("print media keeps a long comparison address without blank directory pages"
 </main>`);
   const userData = mkdtempSync(join(tmpdir(), "nchf-print-browser-"));
   const port = 9400 + (process.pid % 500);
-  const child = spawn(browser, ["--headless=new", "--disable-gpu", "--no-first-run", "--no-sandbox", "--disable-dev-shm-usage", "--remote-allow-origins=*", `--remote-debugging-port=${port}`, `--user-data-dir=${userData}`, "about:blank"], { stdio: "ignore", windowsHide: true });
+  const child = spawn(browser, ["--headless=new", "--disable-gpu", "--no-first-run", "--no-sandbox", "--disable-dev-shm-usage", "--remote-allow-origins=*", `--remote-debugging-port=${port}`, `--user-data-dir=${userData}`, "about:blank"], { stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
   child.unref();
   try {
-    const version = await waitForJson(`http://127.0.0.1:${port}/json/version`);
-    const socket = new WebSocket(version.webSocketDebuggerUrl);
+    const socket = new WebSocket(await waitForBrowserSocket(child));
     await new Promise<void>((resolve, reject) => {
       socket.addEventListener("open", () => resolve(), { once: true });
       socket.addEventListener("error", () => reject(new Error("browser socket failed")), { once: true });
@@ -150,16 +149,29 @@ test("print media keeps a long comparison address without blank directory pages"
   }
 });
 
-function waitForJson(url: string): Promise<{ webSocketDebuggerUrl: string }> {
+function waitForBrowserSocket(child: ReturnType<typeof spawn>): Promise<string> {
   return new Promise((resolve, reject) => {
-    const started = Date.now();
-    const attempt = () => {
-      fetch(url).then(async response => resolve(await response.json() as { webSocketDebuggerUrl: string })).catch(error => {
-        if (Date.now() - started > 10000) reject(error);
-        else setTimeout(attempt, 100);
-      });
+    let output = "";
+    let settled = false;
+    const finish = (action: () => void) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      action();
     };
-    attempt();
+    const timer = setTimeout(() => {
+      finish(() => reject(new Error(`browser debugging socket did not open\n${output.slice(-800)}`)));
+    }, 20000);
+    const onData = (chunk: Buffer | string) => {
+      output += String(chunk);
+      const match = output.match(/DevTools listening on (ws:\/\/\S+)/);
+      if (match) finish(() => resolve(match[1]));
+    };
+    child.stdout?.on("data", onData);
+    child.stderr?.on("data", onData);
+    child.once("exit", code => {
+      finish(() => reject(new Error(`browser exited ${code} before its debugging socket opened\n${output.slice(-800)}`)));
+    });
   });
 }
 
