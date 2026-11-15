@@ -133,6 +133,20 @@ test("malformed rows, excluded categories, duplicate licenses, and missing value
   assert.equal(report.records[4]?.findings.includes("zip-not-five-digits"), false);
 });
 
+test("duplicate licenses with surrounding whitespace are flagged without changing source identifiers", () => {
+  const report = validateCaliforniaSourceRows([
+    sourceRow({ facility_number: "12345678" }),
+    sourceRow({ facility_number: " 12345678 " }),
+    sourceRow({ facility_number: "87654321" }),
+  ]);
+  assert.deepEqual(report.duplicateLicenseIds, ["12345678"]);
+  assert.equal(report.records[0]?.findings.includes("duplicate-license"), true);
+  assert.equal(report.records[1]?.findings.includes("duplicate-license"), true);
+  assert.equal(report.records[1]?.originalLicenseId, " 12345678 ");
+  assert.equal(report.records[2]?.findings.includes("duplicate-license"), false);
+  assert.equal(report.records.every(record => record.publication === "unpublished"), true);
+});
+
 test("recorded status conflicts stay conflicts and do not become active rows", () => {
   const notes = CALIFORNIA_RECORDED_STATUS_CONFLICTS.map(conflict => {
     const reconciled = reconcileCaliforniaStatus({
