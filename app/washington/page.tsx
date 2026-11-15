@@ -8,7 +8,7 @@ import { WashingtonPublicHeader } from "../../components/washington-public";
 import { WashingtonPrintComparison } from "../../components/washington-print-comparison";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
-import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonResultsPage, washingtonSearchText, washingtonVisitChecklistLink } from "../../lib/family-journey";
+import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectoryRangeUnsatisfied, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonResultsPage, washingtonSearchText, washingtonVisitChecklistLink } from "../../lib/family-journey";
 import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../lib/state-directory";
 import { addWashingtonShortlist, readWashingtonShortlist, removeWashingtonShortlist, washingtonShortlistItem, writeWashingtonShortlist, type WashingtonShortlistItem } from "../../lib/washington-shortlist";
 
@@ -68,20 +68,33 @@ export default function WashingtonPage() {
       const term = washingtonSearchText(search);
       const cityTerm = washingtonSearchText(city);
       const countyTerm = washingtonCountySearchText(county);
-      let query = supabase.from("wa_dshs_listed_facilities")
-        .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status", { count: "exact" })
-        .order("canonical_name", { ascending: true }).order("id", { ascending: true })
-        .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
-      if (term) query = query.or([
-        `canonical_name.ilike.%${term}%`, `city.ilike.%${term}%`,
-        `county.ilike.%${term}%`, `postal_code.ilike.%${term}%`,
-        `license_number.ilike.%${term}%`,
-      ].join(","));
-      if (cityTerm) query = query.ilike("city", `%${cityTerm}%`);
-      if (countyTerm) query = query.ilike("county", `%${countyTerm}%`);
-      const { data, count, error: queryError } = await query;
+      const listedFacilities = () => {
+        let query = supabase.from("wa_dshs_listed_facilities")
+          .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status", { count: "exact" })
+          .order("canonical_name", { ascending: true }).order("id", { ascending: true });
+        if (term) query = query.or([
+          `canonical_name.ilike.%${term}%`, `city.ilike.%${term}%`,
+          `county.ilike.%${term}%`, `postal_code.ilike.%${term}%`,
+          `license_number.ilike.%${term}%`,
+        ].join(","));
+        if (cityTerm) query = query.ilike("city", `%${cityTerm}%`);
+        if (countyTerm) query = query.ilike("county", `%${countyTerm}%`);
+        return query;
+      };
+      const { data, count, error: queryError } = await listedFacilities().range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
       if (cancelled) return;
       if (queryError) {
+        if (page > 0 && washingtonDirectoryRangeUnsatisfied(queryError)) {
+          const { count: counted, error: countError } = await listedFacilities().range(0, 0);
+          if (cancelled) return;
+          if (!countError) {
+            const recovered = washingtonResultsPage(page, counted ?? 0, PAGE_SIZE);
+            if (recovered !== page) {
+              setPage(recovered);
+              return;
+            }
+          }
+        }
         setFacilities([]); setTotal(0);
         setError("Unable to load listings. Please try again later.");
         setLoading(false);

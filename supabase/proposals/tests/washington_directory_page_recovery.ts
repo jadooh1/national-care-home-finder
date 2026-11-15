@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
+  washingtonDirectoryRangeUnsatisfied,
   washingtonDirectoryReturnPath,
   washingtonDirectorySearchPath,
   washingtonFacilityLink,
@@ -29,10 +30,26 @@ test("a page past the last result page keeps the filters and moves to the last r
   assert.match(recovery, /if \(nextPage !== page\) \{\s*setPage\(nextPage\);\s*return;\s*\}/);
 });
 
+test("a page the directory rejects as out of range keeps the filters and moves to the last real page", () => {
+  assert.equal(washingtonDirectoryRangeUnsatisfied({ code: "PGRST103", message: "Requested range not satisfiable" }), true);
+  assert.equal(washingtonDirectoryRangeUnsatisfied({ message: "Requested range not satisfiable" }), true);
+  assert.equal(washingtonDirectoryRangeUnsatisfied({ code: "PGRST301", message: "No suitable key was found" }), false);
+  assert.equal(washingtonDirectoryRangeUnsatisfied(null), false);
+  assert.equal(washingtonResultsPage(10, 198, 20), 9);
+  assert.equal(
+    washingtonDirectorySearchPath({ city: "Puyallup", county: "Pierce", page: washingtonResultsPage(10, 198, 20) }),
+    "/washington?city=Puyallup&county=Pierce&page=10",
+  );
+  const rejected = directory.slice(directory.indexOf("washingtonDirectoryRangeUnsatisfied(queryError)"), directory.indexOf("setError(\"Unable to load listings"));
+  assert.match(rejected, /listedFacilities\(\)\.range\(0, 0\)/);
+  assert.match(rejected, /washingtonResultsPage\(page, counted \?\? 0, PAGE_SIZE\)/);
+  assert.match(rejected, /if \(recovered !== page\) \{\s*setPage\(recovered\);\s*return;\s*\}/);
+});
+
 test("a loading failure stays separate from a search with no matches", () => {
   const failure = directory.slice(directory.indexOf("if (queryError)"), directory.indexOf("const nextTotal"));
   assert.match(failure, /setError\("Unable to load listings\. Please try again later\."\)/);
-  assert.doesNotMatch(failure, /washingtonResultsPage/);
+  assert.match(failure, /if \(page > 0 && washingtonDirectoryRangeUnsatisfied\(queryError\)\)/);
   const status = directory.slice(directory.indexOf("aria-live"), directory.indexOf("t.tryAnother"));
   assert.match(status, /error \? t\.unableToDisplay : total === 0 \? t\.noMatches/);
   assert.match(copy, /unableToDisplay: "Unable to display listings"/);
