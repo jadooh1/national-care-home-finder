@@ -46,9 +46,9 @@ test("return links cannot escape Washington directory or retain query syntax", (
 
 test("filter edits reset pagination and in-flight directory requests cannot overwrite newer results", () => {
   for (const setter of ["setSearch", "setCity", "setCounty"]) {
-    assert.match(directory, new RegExp(setter + String.raw`\\(e\\.target\\.value\\); setPage\\(0\\)`));
+    assert.ok(directory.includes(`${setter}(e.target.value); setPage(0)`));
   }
-  assert.match(directory, /function resetFilters\(\) \{ setSearch\(" "\);/ .source ? /function resetFilters\(\)/ : /function resetFilters\(\)/);
+  assert.match(directory, /function resetFilters\(\)/);
   assert.match(directory, /let cancelled = false/);
   assert.match(directory, /if \(cancelled\) return/);
   assert.match(directory, /return \(\) => \{ cancelled = true; clearTimeout\(timer\); \}/);
