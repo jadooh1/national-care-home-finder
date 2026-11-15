@@ -65,6 +65,11 @@ export function washingtonResultsPage(page: number, total: number, pageSize = 20
   return Math.min(requested, Math.ceil(total / size) - 1);
 }
 
+export function washingtonDirectoryRangeUnsatisfied(error: { code?: string | null; message?: string | null } | null | undefined): boolean {
+  if (!error) return false;
+  return error.code === "PGRST103" || /range not satisfiable/i.test(error.message ?? "");
+}
+
 export function washingtonDirectorySearchPath(input: { q?: string | null; city?: string | null; county?: string | null; page?: number | null }): string {
   const params = new URLSearchParams();
   const q = washingtonSearchText(input.q);
