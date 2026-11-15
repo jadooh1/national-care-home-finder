@@ -58,6 +58,13 @@ export function washingtonDirectoryPage(value: string | null | undefined): numbe
   return parsed >= 2 && parsed <= 500 ? parsed - 1 : 0;
 }
 
+export function washingtonResultsPage(page: number, total: number, pageSize = 20): number {
+  const requested = Number.isInteger(page) && page > 0 ? page : 0;
+  const size = Number.isInteger(pageSize) && pageSize > 0 ? pageSize : 20;
+  if (!Number.isInteger(total) || total <= 0) return 0;
+  return Math.min(requested, Math.ceil(total / size) - 1);
+}
+
 export function washingtonDirectorySearchPath(input: { q?: string | null; city?: string | null; county?: string | null; page?: number | null }): string {
   const params = new URLSearchParams();
   const q = washingtonSearchText(input.q);
