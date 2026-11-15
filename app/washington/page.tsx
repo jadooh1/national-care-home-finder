@@ -116,7 +116,7 @@ export default function WashingtonPage() {
   const start = total ? page * PAGE_SIZE + 1 : 0;
   const end = Math.min((page + 1) * PAGE_SIZE, total);
   const directoryPath = washingtonDirectorySearchPath({ q: search, city, county, page });
-  function resetFilters() { setSearch(""); setCity(""); setCounty(""); setPage(0); }
+  function resetFilters() { setLoading(true); setSearch(""); setCity(""); setCounty(""); setPage(0); }
   function persistShortlist(next: WashingtonShortlistItem[]) {
     setShortlist(next);
     try { writeWashingtonShortlist(window.sessionStorage, next); } catch { /* The comparison stays on this page when storage is unavailable. */ }
@@ -136,11 +136,11 @@ export default function WashingtonPage() {
             <h2 style={{ fontSize: 21, margin: "0 0 18px" }}>{t.findHeading}</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 230px), 1fr))", gap: 15 }}>
               <div><label htmlFor="name-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>{t.nameLabel}</label>
-                <input id="name-filter" type="search" value={search} placeholder={t.namePlaceholder} style={fieldStyle} onChange={e => { setSearch(e.target.value); setPage(0); }} /></div>
+                <input id="name-filter" type="search" value={search} placeholder={t.namePlaceholder} style={fieldStyle} onChange={e => { setLoading(true); setSearch(e.target.value); setPage(0); }} /></div>
               <div><label htmlFor="city-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>{t.cityLabel}</label>
-                <input id="city-filter" type="search" value={city} placeholder={t.cityPlaceholder} style={fieldStyle} onChange={e => { setCity(e.target.value); setPage(0); }} /></div>
+                <input id="city-filter" type="search" value={city} placeholder={t.cityPlaceholder} style={fieldStyle} onChange={e => { setLoading(true); setCity(e.target.value); setPage(0); }} /></div>
               <div><label htmlFor="county-filter" style={{ display: "block", fontWeight: 700, marginBottom: 7 }}>{t.countyLabel}</label>
-                <input id="county-filter" type="search" value={county} placeholder={t.countyPlaceholder} style={fieldStyle} onChange={e => { setCounty(e.target.value); setPage(0); }} /></div>
+                <input id="county-filter" type="search" value={county} placeholder={t.countyPlaceholder} style={fieldStyle} onChange={e => { setLoading(true); setCounty(e.target.value); setPage(0); }} /></div>
             </div>
             <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", justifyContent: "space-between", gap: 12, marginTop: 18 }}>
               <button type="button" onClick={resetFilters} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "10px 15px", fontWeight: 700, cursor: "pointer" }}>{t.clearFilters}</button>
@@ -288,7 +288,7 @@ export default function WashingtonPage() {
         {error && <p className="nchf-print-omit" role="alert" style={{ color: "#a62a2a" }}>{t.loadError}</p>}
         {!loading && !error && total === 0 && <p className="nchf-print-omit">{t.tryAnother}</p>}
         <div className="nchf-print-omit" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 17, minWidth: 0 }}>
-          {!error && facilities.map(facility => {
+          {!loading && !error && facilities.map(facility => {
             const address = [facility.address_line1, facility.city, facility.state_code, facility.postal_code].filter(Boolean).join(", ");
             const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
             const candidate = washingtonShortlistItem({
@@ -326,9 +326,9 @@ export default function WashingtonPage() {
         </div>
         {!loading && !error && total > PAGE_SIZE && (
           <nav className="nchf-print-omit" aria-label={t.pagesLabel} style={{ display: "flex", justifyContent: "center", gap: 18, alignItems: "center", flexWrap: "wrap", marginTop: 29 }}>
-            <button type="button" disabled={page === 0} onClick={() => setPage(p => Math.max(0, p - 1))} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.previous}</button>
+            <button type="button" disabled={page === 0} onClick={() => { setLoading(true); setPage(p => Math.max(0, p - 1)); }} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.previous}</button>
             <strong>{t.pageStatus(page + 1, Math.ceil(total / PAGE_SIZE))}</strong>
-            <button type="button" disabled={end >= total} onClick={() => setPage(p => p + 1)} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.next}</button>
+            <button type="button" disabled={end >= total} onClick={() => { setLoading(true); setPage(p => p + 1); }} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.next}</button>
           </nav>
         )}
         <div className="nchf-print-omit"><VisitorFeedback pagePath="/washington" /></div>
