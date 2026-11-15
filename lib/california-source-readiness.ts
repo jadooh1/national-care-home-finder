@@ -61,6 +61,7 @@ export type CaliforniaRowFinding =
   | "missing-address"
   | "missing-status"
   | "missing-state"
+  | "zip-not-five-digits"
   | "blank-category"
   | "other-license-category"
   | "shifted-row"
@@ -110,6 +111,7 @@ const FINDING_ORDER = [
   "missing-address",
   "missing-status",
   "missing-state",
+  "zip-not-five-digits",
   "blank-category",
   "shifted-row",
   "other-license-category",
@@ -173,6 +175,7 @@ function normalizeCaliforniaRow(
   if ((row.facility_address ?? "").trim() === "") findings.push("missing-address");
   if (status.trim() === "") findings.push("missing-status");
   if (state.trim() === "") findings.push("missing-state");
+  if (zipIsNotFiveDigits(row.facility_zip)) findings.push("zip-not-five-digits");
   if (category.trim() === "") findings.push("blank-category");
   if (isShiftedRow(category, state, status)) findings.push("shifted-row");
   else if (category.trim() !== "" && !acceptedCategories(row.file).includes(category)) findings.push("other-license-category");
@@ -201,6 +204,11 @@ function normalizeCaliforniaRow(
     ownerClaimEligible: false,
     findings: FINDING_ORDER.filter(finding => findings.includes(finding)),
   };
+}
+
+function zipIsNotFiveDigits(zip: string | null | undefined): boolean {
+  const text = (zip ?? "").trim();
+  return text !== "" && !/^\d{5}$/.test(text);
 }
 
 function isShiftedRow(category: string, state: string, status: string): boolean {

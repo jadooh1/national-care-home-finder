@@ -78,6 +78,7 @@ test("malformed rows, excluded categories, duplicate licenses, and missing value
       facility_address: "",
       facility_state: "92354",
       facility_status: "9/2/1997",
+      facility_zip: "12",
       file_date: "05252025",
     }),
     sourceRow({
@@ -104,6 +105,7 @@ test("malformed rows, excluded categories, duplicate licenses, and missing value
       facility_status: "",
       facility_state: "",
       facility_address: "   ",
+      facility_zip: "",
     }),
   ]);
 
@@ -111,6 +113,7 @@ test("malformed rows, excluded categories, duplicate licenses, and missing value
   assert.equal(report.records[0]?.originalFileDate, "05252025");
   assert.equal(report.records[0]?.exportDate, null);
   assert.equal(report.records[0]?.findings.includes("shifted-row"), true);
+  assert.equal(report.records[0]?.findings.includes("zip-not-five-digits"), true);
   assert.equal(report.records[0]?.findings.includes("blank-category"), true);
   assert.equal(report.records[0]?.findings.includes("missing-license"), true);
   assert.equal(report.records[0]?.findings.includes("missing-name"), true);
@@ -122,10 +125,12 @@ test("malformed rows, excluded categories, duplicate licenses, and missing value
   assert.equal(report.records[2]?.originalLicenseId, "100");
   assert.equal(report.records[3]?.findings.includes("blank-category"), true);
   assert.equal(report.records[3]?.findings.includes("shifted-row"), false);
+  assert.equal(report.records[3]?.findings.includes("zip-not-five-digits"), false);
   assert.equal(report.records[4]?.findings.includes("missing-status"), true);
   assert.equal(report.records[4]?.findings.includes("missing-state"), true);
   assert.equal(report.records[4]?.findings.includes("missing-address"), true);
   assert.equal(report.records[4]?.acceptedAddress, null);
+  assert.equal(report.records[4]?.findings.includes("zip-not-five-digits"), false);
 });
 
 test("recorded status conflicts stay conflicts and do not become active rows", () => {
