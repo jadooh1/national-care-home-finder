@@ -82,6 +82,7 @@ export default function WashingtonFacilityProfile() {
         .from("wa_dshs_listed_facilities")
         .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status")
         .eq("license_number", license)
+        .neq("id", "00000000-0000-4000-8000-0000000000e2")
         .limit(1)
         .maybeSingle();
       if (cancelled) return;
