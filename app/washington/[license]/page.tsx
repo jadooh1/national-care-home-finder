@@ -41,14 +41,10 @@ const printStyles = `
 .print-only { display: none; }
 @media print {
   @page { margin: 0.6in; }
-  html, body { background: #fff !important; height: auto !important; }
-  body * { display: none !important; }
-  #visit-sheet, #visit-sheet * { display: block !important; visibility: visible !important; }
-  #visit-sheet { position: static !important; width: auto !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; background: #fff !important; color: #000 !important; overflow: visible !important; }
-  #visit-sheet ol { padding-left: 1.2em !important; }
-  #visit-sheet li { display: list-item !important; }
-  #visit-sheet .no-print, #visit-sheet .no-print * { display: none !important; }
-  #visit-sheet .print-only, #visit-sheet .print-only * { display: block !important; }
+  html, body, main { background: #fff !important; height: auto !important; }
+  main { min-height: 0 !important; }
+  .print-omit { display: none !important; }
+  #visit-sheet { position: static !important; width: auto !important; max-width: 100% !important; margin: 0 !important; break-inside: avoid; border: 0 !important; box-shadow: none !important; background: #fff !important; color: #000 !important; }
   #visit-sheet a { color: #000 !important; }
 }
 `;
@@ -123,8 +119,8 @@ export default function WashingtonFacilityProfile() {
 
   return (
     <main style={{ minHeight: "100vh", background: C.pale, color: C.navy, fontFamily: "Arial, sans-serif" }}>
-      <WashingtonPublicHeader current="profile" />
-      <section style={{ background: `linear-gradient(125deg, ${C.navy}, ${C.teal})`, padding: "45px 5%", color: "white" }}>
+      <div className="print-omit"><WashingtonPublicHeader current="profile" /></div>
+      <section className="print-omit" style={{ background: `linear-gradient(125deg, ${C.navy}, ${C.teal})`, padding: "45px 5%", color: "white" }}>
         <div style={{ maxWidth: 1100, margin: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20, flexWrap: "wrap" }}>
           <div style={{ flex: "1 1 280px", minWidth: 0 }}>
             <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2 }}>{text.eyebrow}</p>
@@ -139,8 +135,8 @@ export default function WashingtonFacilityProfile() {
         </div>
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 64px" }}>
-        <Link href={directoryPath} style={linkStyle}>{text.back}</Link>
-        <div aria-live="polite" style={{ marginTop: 21 }}>
+        <Link className="print-omit" href={directoryPath} style={linkStyle}>{text.back}</Link>
+        <div className="print-omit" aria-live="polite" style={{ marginTop: 21 }}>
           {loading && <section style={card}><p>{text.loadingInfo}</p></section>}
           {!loading && error && <section style={card}><p role="alert" style={{ color: "#a62a2a" }}>{text.unavailable}</p><button onClick={() => window.location.reload()} style={{ padding: "10px 14px", cursor: "pointer" }}>{text.retry}</button></section>}
           {!loading && notFound && <section style={card}><h2>{text.notFoundTitle}</h2><p>{text.notFoundBody}</p><Link href={directoryPath} style={linkStyle}>{text.searchDirectory}</Link></section>}
@@ -148,7 +144,7 @@ export default function WashingtonFacilityProfile() {
         {!loading && facility && (
           <>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 310px), 1fr))", gap: 22, marginTop: 22, alignItems: "start" }}>
-            <section style={card} aria-labelledby="details-heading">
+            <section className="print-omit" style={card} aria-labelledby="details-heading">
               <h2 id="details-heading" style={{ margin: "0 0 16px", fontSize: 23 }}>{text.detailsTitle}</h2>
               <dl style={{ margin: 0, lineHeight: 1.7 }}>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.facilityName}</dt><dd style={{ margin: "0 0 7px" }}>{displayName(facility.canonical_name)}</dd>
@@ -162,7 +158,7 @@ export default function WashingtonFacilityProfile() {
               <p style={{ color: C.muted, lineHeight: 1.6 }}>{text.dshsSource}</p>
             </section>
             {published.length > 0 && (
-              <section style={card} aria-labelledby="owner-content-heading">
+              <section className="print-omit" style={card} aria-labelledby="owner-content-heading">
                 <h2 id="owner-content-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>{text.ownerTitle}</h2>
                 <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.ownerNote}</p>
                 {published.map(item => (
@@ -174,7 +170,7 @@ export default function WashingtonFacilityProfile() {
               </section>
             )}
             <div style={{ display: "grid", gap: 22 }}>
-              <section style={card} aria-labelledby="verify-heading">
+              <section className="print-omit" style={card} aria-labelledby="verify-heading">
                 <h2 id="verify-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>{text.verifyTitle}</h2>
                 <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.verifyLead}<strong>{text.verifyNot}</strong>{text.verifyTail}</p>
                 <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={linkStyle}>{text.dshsLocator}</a>
@@ -211,7 +207,7 @@ export default function WashingtonFacilityProfile() {
               </section>
             </div>
           </div>
-          <section style={{ ...card, marginTop: 22 }} aria-labelledby="claim-heading">
+          <section className="print-omit" style={{ ...card, marginTop: 22 }} aria-labelledby="claim-heading">
             <h2 id="claim-heading" style={{ margin: "0 0 8px", fontSize: 23 }}>{text.claimTitle}</h2>
             <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.claimBody}</p>
             <p style={{ lineHeight: 1.6 }}>{text.claimReview}</p>
@@ -240,8 +236,8 @@ export default function WashingtonFacilityProfile() {
           </section>
           </>
         )}
-        {/^\d{1,20}$/.test(license) && <VisitorFeedback pagePath={`/washington/${license}`} />}
-        <footer style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>{text.footer}</footer>
+        {/^\d{1,20}$/.test(license) && <div className="print-omit"><VisitorFeedback pagePath={`/washington/${license}`} /></div>}
+        <footer className="print-omit" style={{ borderTop: `1px solid ${C.border}`, marginTop: 42, paddingTop: 19, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>{text.footer}</footer>
       </div>
     </main>
   );

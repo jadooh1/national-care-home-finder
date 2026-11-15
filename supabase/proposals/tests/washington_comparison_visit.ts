@@ -31,7 +31,9 @@ test("a comparison opens the same visit checklist and keeps the search", () => {
   assert.match(profile, /id="visit-sheet"/);
   assert.match(profile, /location\.hash !== "#visit-heading"/);
   assert.match(profile, /scrollIntoView/);
-  assert.match(profile, /body \* \{ display: none !important; \}/);
+  assert.doesNotMatch(profile, /body \* \{ display: none/);
+  assert.match(profile, /\.print-omit \{ display: none !important; \}/);
+  assert.match(profile, /id="visit-sheet"(?![^>]*print-omit)/);
   assert.match(profile, /position: static !important/);
   assert.match(profile, /text\.printReminder/);
   assert.match(profile, /text\.licenseNumber/);
