@@ -1,0 +1,186 @@
+import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import test from "node:test";
+import { pathToFileURL } from "node:url";
+import { createContext, runInContext } from "node:vm";
+import type { WashingtonShortlistItem } from "../../../lib/washington-shortlist.ts";
+
+const component = readFileSync(new URL("../../../components/washington-print-comparison.tsx", import.meta.url), "utf8");
+const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
+
+function comparisonAddress(item: WashingtonShortlistItem, t: { missing: string }): string {
+  const start = component.indexOf("export function comparisonAddress");
+  const end = component.indexOf("export function WashingtonPrintComparison");
+  const source = component.slice(start, end).replace(
+    "export function comparisonAddress(item: WashingtonShortlistItem, t: { missing: string }): string",
+    "function comparisonAddress(item, t)",
+  );
+  const sandbox: { comparisonAddress?: typeof comparisonAddress } = {};
+  runInContext(`${source}; this.comparisonAddress = comparisonAddress;`, createContext(sandbox));
+  if (!sandbox.comparisonAddress) throw new Error("comparison address helper was not readable");
+  return sandbox.comparisonAddress(item, t);
+}
+
+function sample(overrides: Partial<WashingtonShortlistItem> = {}): WashingtonShortlistItem {
+  return {
+    license: "100001",
+    name: "Example Home",
+    addressLine: null,
+    city: null,
+    county: null,
+    stateCode: null,
+    postalCode: null,
+    licensedCapacity: null,
+    recordStatus: "unverified",
+    ...overrides,
+  };
+}
+
+test("a printed comparison address keeps long text and says when the address is missing", () => {
+  const longStreet = `${"North ".repeat(40)}Avenue`;
+  assert.ok(longStreet.length > 200);
+  const printed = comparisonAddress(sample({
+    addressLine: longStreet,
+    city: "Seattle",
+    stateCode: "WA",
+    postalCode: "98101",
+  }), { missing: "Not available" });
+  assert.equal(printed, `${longStreet}, Seattle, WA, 98101`);
+  assert.equal(printed.includes(longStreet), true);
+  assert.equal(comparisonAddress(sample(), { missing: "Not available" }), "Not available");
+  assert.equal(comparisonAddress(sample({ city: "Seattle", stateCode: "WA" }), { missing: "No disponible" }), "Seattle, WA");
+});
+
+test("comparison printing removes the surrounding directory from the page flow", () => {
+  assert.match(component, /\.nchf-print-omit, \.nchf-print-trigger \{ display: none !important; \}/);
+  assert.match(component, /position: static !important/);
+  assert.match(component, /min-height: 0 !important/);
+  assert.match(component, /minHeight: 44/);
+  assert.match(directory, /className="nchf-print-omit"/);
+  assert.match(directory, /<WashingtonPrintComparison items=\{shortlist\} locale=\{locale\}/);
+  assert.match(directory, /minHeight: 44/);
+  assert.doesNotMatch(component, /writeWashingtonShortlist|persistShortlist/);
+});
+
+function findBrowser(): string | null {
+  const candidates = [
+    process.env.NCH_BROWSER,
+    "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+    "C:\\Program Files\\Microsoft\\Edge\\Application\\msedge.exe",
+    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    "/usr/bin/google-chrome",
+    "/usr/bin/chromium",
+    "/usr/bin/chromium-browser",
+  ].filter((value): value is string => Boolean(value));
+  return candidates.find(candidate => existsSync(candidate)) ?? null;
+}
+
+test("print media keeps a long comparison address without blank directory pages", { timeout: 30000 }, async (t) => {
+  const browser = findBrowser();
+  if (!browser) {
+    t.skip("No local Chrome or Edge binary is available.");
+    return;
+  }
+  const cssStart = component.indexOf(".nchf-print-sheet { display: none; }");
+  const cssEnd = component.indexOf("`}</style>");
+  const css = component.slice(cssStart, cssEnd);
+  const directory = mkdtempSync(join(tmpdir(), "nchf-print-audit-"));
+  const htmlPath = join(directory, "comparison.html");
+  const longStreet = `${"North ".repeat(30)}Avenue`;
+  writeFileSync(htmlPath, `<!doctype html><meta charset="utf-8"><style>${css}</style>
+<main>
+  <section class="nchf-print-omit" style="height:2200px">Directory results</section>
+  <section class="nchf-print-sheet">
+    <h1>Washington adult family home comparison</h1>
+    <table><tbody><tr><th scope="row">Example Home</th><td id="address">${longStreet}, Seattle, WA, 98101</td><td>100001</td><td>Not available</td><td>DSHS license-number match — not independently verified</td></tr></tbody></table>
+    <p>Recorded licensed capacity is not vacancy availability.</p>
+  </section>
+</main>`);
+  const userData = mkdtempSync(join(tmpdir(), "nchf-print-browser-"));
+  const port = 9400 + (process.pid % 500);
+  const child = spawn(browser, ["--headless=new", "--disable-gpu", "--no-first-run", "--remote-allow-origins=*", `--remote-debugging-port=${port}`, `--user-data-dir=${userData}`, "about:blank"], { stdio: "ignore", windowsHide: true });
+  child.unref();
+  try {
+    const version = await waitForJson(`http://127.0.0.1:${port}/json/version`);
+    const socket = new WebSocket(version.webSocketDebuggerUrl);
+    await new Promise<void>((resolve, reject) => {
+      socket.addEventListener("open", () => resolve(), { once: true });
+      socket.addEventListener("error", () => reject(new Error("browser socket failed")), { once: true });
+    });
+    const target = await cdp(socket, "Target.createTarget", { url: pathToFileURL(htmlPath).href });
+    const attached = await cdp(socket, "Target.attachToTarget", { targetId: target.targetId, flatten: true });
+    const sessionId = String(attached.sessionId);
+    await cdp(socket, "Runtime.enable", {}, sessionId);
+    const screenHeight = await evaluate(socket, sessionId, "document.documentElement.scrollHeight");
+    await cdp(socket, "Emulation.setEmulatedMedia", { media: "print" }, sessionId);
+    const printed = await evaluate(socket, sessionId, `(() => {
+      const address = document.getElementById("address");
+      const sheet = document.querySelector(".nchf-print-sheet");
+      let shown = true;
+      let node = address;
+      while (node) { if (getComputedStyle(node).display === "none") shown = false; node = node.parentElement; }
+      return { shown, address: address.textContent, height: document.documentElement.scrollHeight, sheetDisplay: getComputedStyle(sheet).display, omitDisplay: getComputedStyle(document.querySelector(".nchf-print-omit")).display };
+    })()`);
+    assert.equal(printed.shown, true);
+    assert.equal(printed.address, `${longStreet}, Seattle, WA, 98101`);
+    assert.equal(printed.sheetDisplay, "block");
+    assert.equal(printed.omitDisplay, "none");
+    assert.ok(screenHeight > 2200);
+    assert.ok(printed.height < 900, `printed height ${printed.height} still includes the directory`);
+    socket.close();
+  } finally {
+    if (process.platform === "win32" && child.pid) {
+      spawn("taskkill", ["/pid", String(child.pid), "/t", "/f"], { stdio: "ignore", windowsHide: true }).unref();
+    } else {
+      child.kill();
+    }
+    try {
+      rmSync(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch (error) {
+      if (!["EBUSY", "ENOTEMPTY", "EPERM"].includes((error as NodeJS.ErrnoException).code ?? "")) throw error;
+    }
+    try {
+      rmSync(userData, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch (error) {
+      if (!["EBUSY", "ENOTEMPTY", "EPERM"].includes((error as NodeJS.ErrnoException).code ?? "")) throw error;
+    }
+  }
+});
+
+function waitForJson(url: string): Promise<{ webSocketDebuggerUrl: string }> {
+  return new Promise((resolve, reject) => {
+    const started = Date.now();
+    const attempt = () => {
+      fetch(url).then(async response => resolve(await response.json() as { webSocketDebuggerUrl: string })).catch(error => {
+        if (Date.now() - started > 10000) reject(error);
+        else setTimeout(attempt, 100);
+      });
+    };
+    attempt();
+  });
+}
+
+function cdp(socket: WebSocket, method: string, params: Record<string, unknown>, sessionId?: string): Promise<Record<string, unknown>> {
+  const id = Math.floor(Math.random() * 1_000_000_000);
+  return new Promise((resolve, reject) => {
+    const onMessage = (event: MessageEvent) => {
+      const message = JSON.parse(String(event.data)) as { id?: number; result?: Record<string, unknown>; error?: { message: string } };
+      if (message.id !== id) return;
+      socket.removeEventListener("message", onMessage);
+      if (message.error) reject(new Error(message.error.message));
+      else resolve(message.result ?? {});
+    };
+    socket.addEventListener("message", onMessage);
+    socket.send(JSON.stringify({ id, method, params, sessionId }));
+  });
+}
+
+async function evaluate(socket: WebSocket, sessionId: string, expression: string): Promise<any> {
+  const result = await cdp(socket, "Runtime.evaluate", { expression, returnByValue: true, awaitPromise: true }, sessionId);
+  const details = result.exceptionDetails as { text?: string } | undefined;
+  if (details) throw new Error(details.text ?? "browser evaluation failed");
+  return (result.result as { value?: unknown }).value;
+}

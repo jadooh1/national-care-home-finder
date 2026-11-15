@@ -25,13 +25,17 @@ const labels = {
   },
 };
 
+export function comparisonAddress(item: WashingtonShortlistItem, t: { missing: string }): string {
+  return [item.addressLine, item.city, item.stateCode, item.postalCode].filter(Boolean).join(", ") || t.missing;
+}
+
 export function WashingtonPrintComparison({ items, locale }: Props) {
   if (!items.length) return null;
   const t = labels[locale];
   return (
     <>
       <button type="button" className="nchf-print-trigger" onClick={() => window.print()}
-        style={{ background: "#176b53", color: "white", border: 0, borderRadius: 8, padding: "10px 14px", fontWeight: 700, cursor: "pointer" }}>
+        style={{ background: "#176b53", color: "white", border: 0, borderRadius: 8, padding: "10px 14px", minHeight: 44, fontWeight: 700, cursor: "pointer" }}>
         {t.button}
       </button>
       <section className="nchf-print-sheet" aria-label={t.title}>
@@ -42,7 +46,7 @@ export function WashingtonPrintComparison({ items, locale }: Props) {
           <tbody>{items.map(item => (
             <tr key={item.license}>
               <th scope="row">{item.name}</th>
-              <td>{[item.addressLine, item.city, item.stateCode, item.postalCode].filter(Boolean).join(", ") || t.missing}</td>
+              <td>{comparisonAddress(item, t)}</td>
               <td>{item.license}</td>
               <td>{item.licensedCapacity ?? t.missing}</td>
               <td>{item.recordStatus === "verified" ? t.verified : t.unverified}</td>
@@ -57,7 +61,9 @@ export function WashingtonPrintComparison({ items, locale }: Props) {
         @media print {
           body * { visibility: hidden !important; }
           .nchf-print-sheet, .nchf-print-sheet * { visibility: visible !important; }
-          .nchf-print-sheet { display: block !important; position: absolute; top: 0; left: 0; width: 100%; padding: 0; color: #111; font: 11pt Arial, sans-serif; }
+          .nchf-print-omit, .nchf-print-trigger { display: none !important; }
+          main { min-height: 0 !important; height: auto !important; }
+          .nchf-print-sheet { display: block !important; position: static !important; width: auto !important; max-width: 100% !important; margin: 0 !important; padding: 0; color: #111; font: 11pt Arial, sans-serif; }
           .nchf-print-sheet h1 { font-size: 18pt; }
           .nchf-print-sheet table { width: 100%; border-collapse: collapse; table-layout: fixed; }
           .nchf-print-sheet th, .nchf-print-sheet td { border: 1px solid #555; padding: 8px; overflow-wrap: anywhere; text-align: left; vertical-align: top; }

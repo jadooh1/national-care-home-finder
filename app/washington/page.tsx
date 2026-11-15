@@ -101,8 +101,8 @@ export default function WashingtonPage() {
 
   return (
     <main style={{ minHeight: "100vh", background: C.pale, color: C.navy, fontFamily: "Arial, sans-serif" }}>
-      <WashingtonPublicHeader current="directory" />
-      <section style={{ background: `linear-gradient(125deg, ${C.navy}, ${C.teal})`, color: "white", padding: "48px 5%" }}>
+      <div className="nchf-print-omit"><WashingtonPublicHeader current="directory" /></div>
+      <section className="nchf-print-omit" style={{ background: `linear-gradient(125deg, ${C.navy}, ${C.teal})`, color: "white", padding: "48px 5%" }}>
         <div style={{ maxWidth: 1100, margin: "auto" }}>
           <p style={{ fontSize: 12, letterSpacing: 2, fontWeight: 700 }}>{t.eyebrow}</p>
           <h1 style={{ fontSize: "clamp(30px, 5vw, 46px)", lineHeight: 1.14, margin: "12px 0" }}>{t.heading}</h1>
@@ -129,6 +129,7 @@ export default function WashingtonPage() {
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 60px" }}>
         
 <section
+  className="nchf-print-omit"
   aria-label={t.toolsLabel}
   style={{
     display: "grid",
@@ -217,16 +218,16 @@ export default function WashingtonPage() {
 
         <section aria-label={t.compareLabel} aria-labelledby="compare-heading" style={{ margin: "8px 0 22px", padding: 18, border: `1px solid ${C.border}`, borderRadius: 14, background: "#fff", minWidth: 0 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
-            <h2 id="compare-heading" style={{ margin: 0, fontSize: 22 }}>{t.compareHeading}</h2>
-            <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <h2 id="compare-heading" className="nchf-print-omit" style={{ margin: 0, fontSize: 22 }}>{t.compareHeading}</h2>
+            <div className="nchf-print-omit" style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <p aria-live="polite" style={{ margin: 0, color: C.muted, fontWeight: 700 }}>{t.compareCount(shortlist.length)}</p>
-              <WashingtonPrintComparison items={shortlist} locale={locale} />
-              {shortlist.length > 0 && <button type="button" onClick={() => persistShortlist([])} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.clearShortlist}</button>}
+              {shortlist.length > 0 && <button type="button" onClick={() => persistShortlist([])} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, minHeight: 44, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.clearShortlist}</button>}
             </div>
           </div>
-          <p style={{ margin: "10px 0 0", lineHeight: 1.6, color: C.muted }}>{t.compareLead}</p>
+          <WashingtonPrintComparison items={shortlist} locale={locale} />
+          <p className="nchf-print-omit" style={{ margin: "10px 0 0", lineHeight: 1.6, color: C.muted }}>{t.compareLead}</p>
           {shortlist.length === 0 ? <p style={{ margin: "12px 0 0" }}>{t.compareEmpty}</p> : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: 14, marginTop: 14, minWidth: 0 }}>
+            <div className="nchf-print-omit" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 240px), 1fr))", gap: 14, marginTop: 14, minWidth: 0 }}>
               {shortlist.map(item => {
                 const location = [item.addressLine, item.city, item.stateCode, item.postalCode].filter(Boolean).join(", ");
                 const profile = facilityProfilePath(item.license);
@@ -247,10 +248,10 @@ export default function WashingtonPage() {
                       <dd style={{ margin: 0 }}>{item.recordStatus === "verified" ? t.verified : t.unverified}</dd>
                     </dl>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 14 }}>
-                      {profile && <Link href={washingtonFacilityLink(profile, directoryPath)} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "8px 12px", textDecoration: "none", fontWeight: 700 }}>{t.compareDetails}</Link>}
+                      {profile && <Link href={washingtonFacilityLink(profile, directoryPath)} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, color: "white", background: C.teal, borderRadius: 8, padding: "8px 12px", textDecoration: "none", fontWeight: 700 }}>{t.compareDetails}</Link>}
                       {profile && <Link href={washingtonVisitChecklistLink(profile, directoryPath)} scroll={false} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, color: C.teal, fontWeight: 700 }}>{t.prepareVisit}</Link>}
                       {disclosure && <a href={disclosure} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.compareDisclosure}</a>}
-                      <button type="button" onClick={() => persistShortlist(removeWashingtonShortlist(shortlist, item.license))} style={{ background: "white", color: C.navy, border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.removeFromCompare}</button>
+                      <button type="button" onClick={() => persistShortlist(removeWashingtonShortlist(shortlist, item.license))} style={{ background: "white", color: C.navy, border: `1px solid ${C.border}`, borderRadius: 8, minHeight: 44, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.removeFromCompare}</button>
                     </div>
                   </article>
                 );
@@ -258,12 +259,12 @@ export default function WashingtonPage() {
             </div>
           )}
         </section>
-        <div aria-live="polite" style={{ margin: "23px 0 15px", color: C.muted, fontWeight: 600 }}>
+        <div className="nchf-print-omit" aria-live="polite" style={{ margin: "23px 0 15px", color: C.muted, fontWeight: 600 }}>
           {loading ? t.loadingListings : error ? t.unableToDisplay : total === 0 ? t.noMatches : t.showing(start, end, total)}
         </div>
-        {error && <p role="alert" style={{ color: "#a62a2a" }}>{t.loadError}</p>}
-        {!loading && !error && total === 0 && <p>{t.tryAnother}</p>}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 17, minWidth: 0 }}>
+        {error && <p className="nchf-print-omit" role="alert" style={{ color: "#a62a2a" }}>{t.loadError}</p>}
+        {!loading && !error && total === 0 && <p className="nchf-print-omit">{t.tryAnother}</p>}
+        <div className="nchf-print-omit" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))", gap: 17, minWidth: 0 }}>
           {!error && facilities.map(facility => {
             const address = [facility.address_line1, facility.city, facility.state_code, facility.postal_code].filter(Boolean).join(", ");
             const mapLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
@@ -291,8 +292,8 @@ export default function WashingtonPage() {
                   {facility.record_status === "verified" ? t.verified : t.unverified}
                 </p>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 13, alignItems: "center" }}>
-                  {candidate && <button type="button" aria-pressed={selected} aria-label={`${selected ? t.removeFromCompare : t.addToCompare}: ${displayName(facility.canonical_name)}`} disabled={!selected && shortlist.length >= 3} onClick={() => persistShortlist(selected ? removeWashingtonShortlist(shortlist, candidate.license) : addWashingtonShortlist(shortlist, candidate).items)} style={{ background: selected ? C.navy : "white", color: selected ? "white" : C.teal, border: `1px solid ${selected ? C.navy : C.teal}`, borderRadius: 8, padding: "10px 13px", fontWeight: 700, cursor: !selected && shortlist.length >= 3 ? "not-allowed" : "pointer" }}>{selected ? t.removeFromCompare : shortlist.length >= 3 ? t.compareFull : t.addToCompare}</button>}
-                  {facilityProfilePath(facility.license_number) && <Link href={washingtonFacilityLink(facilityProfilePath(facility.license_number) as string, directoryPath)} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>{t.viewDetails}</Link>}
+                  {candidate && <button type="button" aria-pressed={selected} aria-label={`${selected ? t.removeFromCompare : t.addToCompare}: ${displayName(facility.canonical_name)}`} disabled={!selected && shortlist.length >= 3} onClick={() => persistShortlist(selected ? removeWashingtonShortlist(shortlist, candidate.license) : addWashingtonShortlist(shortlist, candidate).items)} style={{ background: selected ? C.navy : "white", color: selected ? "white" : C.teal, border: `1px solid ${selected ? C.navy : C.teal}`, borderRadius: 8, minHeight: 44, padding: "10px 13px", fontWeight: 700, cursor: !selected && shortlist.length >= 3 ? "not-allowed" : "pointer" }}>{selected ? t.removeFromCompare : shortlist.length >= 3 ? t.compareFull : t.addToCompare}</button>}
+                  {facilityProfilePath(facility.license_number) && <Link href={washingtonFacilityLink(facilityProfilePath(facility.license_number) as string, directoryPath)} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>{t.viewDetails}</Link>}
                   {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.viewMap}</a>}
                   <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.checkDshs}</a>
                 </div>
@@ -301,14 +302,14 @@ export default function WashingtonPage() {
           })}
         </div>
         {!loading && !error && total > PAGE_SIZE && (
-          <nav aria-label={t.pagesLabel} style={{ display: "flex", justifyContent: "center", gap: 18, alignItems: "center", flexWrap: "wrap", marginTop: 29 }}>
+          <nav className="nchf-print-omit" aria-label={t.pagesLabel} style={{ display: "flex", justifyContent: "center", gap: 18, alignItems: "center", flexWrap: "wrap", marginTop: 29 }}>
             <button type="button" disabled={page === 0} onClick={() => setPage(p => Math.max(0, p - 1))} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.previous}</button>
             <strong>{t.pageStatus(page + 1, Math.ceil(total / PAGE_SIZE))}</strong>
             <button type="button" disabled={end >= total} onClick={() => setPage(p => p + 1)} style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", cursor: "pointer" }}>{t.next}</button>
           </nav>
         )}
-        <VisitorFeedback pagePath="/washington" />
-        <footer style={{ marginTop: 45, paddingTop: 20, borderTop: `1px solid ${C.border}`, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>
+        <div className="nchf-print-omit"><VisitorFeedback pagePath="/washington" /></div>
+        <footer className="nchf-print-omit" style={{ marginTop: 45, paddingTop: 20, borderTop: `1px solid ${C.border}`, color: C.muted, fontSize: 13, lineHeight: 1.7 }}>
           {t.footer}
         </footer>
       </div>
