@@ -354,11 +354,15 @@ window.scrollToVisitChecklist = ${browserFunction(scrollToVisitChecklist)};
     } else {
       child.kill();
     }
-    rmSync(directory, { recursive: true, force: true });
     try {
-      rmSync(userData, { recursive: true, force: true });
+      rmSync(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "EBUSY") throw error;
+      if (!["EBUSY", "ENOTEMPTY", "EPERM"].includes((error as NodeJS.ErrnoException).code ?? "")) throw error;
+    }
+    try {
+      rmSync(userData, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch (error) {
+      if (!["EBUSY", "ENOTEMPTY", "EPERM"].includes((error as NodeJS.ErrnoException).code ?? "")) throw error;
     }
   }
 });
