@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useLanguage, usePageTitle } from "../../components/language";
 import { VisitorFeedback } from "../../components/visitor-feedback";
 import { WashingtonPublicHeader } from "../../components/washington-public";
+import { WashingtonPrintComparison } from "../../components/washington-print-comparison";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
 import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonSearchText, washingtonVisitChecklistLink } from "../../lib/family-journey";
@@ -219,6 +220,7 @@ export default function WashingtonPage() {
             <h2 id="compare-heading" style={{ margin: 0, fontSize: 22 }}>{t.compareHeading}</h2>
             <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
               <p aria-live="polite" style={{ margin: 0, color: C.muted, fontWeight: 700 }}>{t.compareCount(shortlist.length)}</p>
+              <WashingtonPrintComparison items={shortlist} locale={locale} />
               {shortlist.length > 0 && <button type="button" onClick={() => persistShortlist([])} style={{ background: "white", color: C.teal, border: `1px solid ${C.teal}`, borderRadius: 9, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.clearShortlist}</button>}
             </div>
           </div>
