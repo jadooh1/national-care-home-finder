@@ -71,6 +71,8 @@ export default function WashingtonPage() {
       const listedFacilities = () => {
         let query = supabase.from("wa_dshs_listed_facilities")
           .select("id,canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status", { count: "exact" })
+          // Keep the reserved development E2E fixture available for owner tests, but never list it to families.
+          .neq("id", "00000000-0000-4000-8000-0000000000e2")
           .order("canonical_name", { ascending: true }).order("id", { ascending: true });
         if (term) query = query.or([
           `canonical_name.ilike.%${term}%`, `city.ilike.%${term}%`,
