@@ -8,7 +8,7 @@ import { WashingtonPublicHeader } from "../../components/washington-public";
 import { WashingtonPrintComparison } from "../../components/washington-print-comparison";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
-import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonSearchText, washingtonVisitChecklistLink } from "../../lib/family-journey";
+import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonResultsPage, washingtonSearchText, washingtonVisitChecklistLink } from "../../lib/family-journey";
 import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../lib/state-directory";
 import { addWashingtonShortlist, readWashingtonShortlist, removeWashingtonShortlist, washingtonShortlistItem, writeWashingtonShortlist, type WashingtonShortlistItem } from "../../lib/washington-shortlist";
 
@@ -84,7 +84,17 @@ export default function WashingtonPage() {
       if (queryError) {
         setFacilities([]); setTotal(0);
         setError("Unable to load listings. Please try again later.");
-      } else { setFacilities((data ?? []) as Facility[]); setTotal(count ?? 0); }
+        setLoading(false);
+        return;
+      }
+      const nextTotal = count ?? 0;
+      const nextPage = washingtonResultsPage(page, nextTotal, PAGE_SIZE);
+      if (nextPage !== page) {
+        setPage(nextPage);
+        return;
+      }
+      setFacilities((data ?? []) as Facility[]);
+      setTotal(nextTotal);
       setLoading(false);
     }, 350);
     return () => { cancelled = true; clearTimeout(timer); };
