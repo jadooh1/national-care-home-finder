@@ -95,6 +95,12 @@ export function washingtonFacilityLink(profilePath: string, directoryPath: strin
   return `${profilePath}?from=${encodeURIComponent(safe)}`;
 }
 
+export function washingtonVisitChecklistLink(profilePath: string, directoryPath: string): string {
+  const destination = washingtonFacilityLink(profilePath, directoryPath);
+  if (!destination.startsWith("/washington/")) return destination;
+  return `${destination}#visit-heading`;
+}
+
 export function washingtonZipSearchPath(page: "/washington/map" | "/washington/demographics", zip: string | null | undefined): string | null {
   const candidate = zip?.trim() ?? "";
   if (!FIVE_DIGIT_ZIP.test(candidate)) return null;

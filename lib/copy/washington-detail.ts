@@ -259,6 +259,8 @@ type ProfileCopy = {
   visitNote: string;
   contactAbsent: string;
   contactAction: string;
+  printChecklist: string;
+  printReminder: string;
   visitQuestions: readonly [string, string, string, string, string, string];
   footer: string;
 };
@@ -528,6 +530,8 @@ export const copy: Record<Locale, {
       visitNote: "These are questions to ask the home. They are not verified facts about this facility.",
       contactAbsent: "This directory does not include a telephone number, email address, or website. The DSHS locator download provides the name, address, license number, and licensed capacity.",
       contactAction: "Open the official DSHS record for this license ↗",
+      printChecklist: "Print checklist",
+      printReminder: "Confirm current vacancies, rates, staffing, medication support, visits, and licensing with the home and with Washington DSHS. These questions are not verified facts about this facility.",
       visitQuestions: [
         "Are there current vacancies, and when could a resident move in?",
         "What is the monthly rate, and which charges are extra?",
@@ -796,6 +800,8 @@ export const copy: Record<Locale, {
       visitNote: "Estas son preguntas para hacerle al hogar. No son datos verificados de este establecimiento.",
       contactAbsent: "Este directorio no incluye un teléfono, un correo electrónico ni un sitio web. La descarga del localizador de DSHS incluye el nombre, la dirección, el número de licencia y la capacidad licenciada.",
       contactAction: "Abrir el registro oficial de DSHS de esta licencia ↗",
+      printChecklist: "Imprimir la lista",
+      printReminder: "Confirme las vacantes, las tarifas, el personal, el apoyo con medicamentos, las visitas y la licencia actuales con el hogar y con el DSHS de Washington. Estas preguntas no son datos verificados de este establecimiento.",
       visitQuestions: [
         "¿Hay vacantes actuales y cuándo podría mudarse un residente?",
         "¿Cuál es la tarifa mensual y qué cargos son adicionales?",
