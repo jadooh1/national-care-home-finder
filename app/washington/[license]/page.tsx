@@ -40,11 +40,15 @@ const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDec
 const printStyles = `
 .print-only { display: none; }
 @media print {
-  body * { visibility: hidden; }
-  #visit-sheet, #visit-sheet * { visibility: visible; }
-  #visit-sheet { position: absolute; left: 0; top: 0; width: 100%; background: #fff !important; color: #000 !important; box-shadow: none !important; border: 0 !important; }
-  #visit-sheet .no-print, #visit-sheet .no-print * { display: none !important; visibility: hidden !important; }
-  #visit-sheet .print-only { display: block !important; }
+  @page { margin: 0.6in; }
+  html, body { background: #fff !important; height: auto !important; }
+  body * { display: none !important; }
+  #visit-sheet, #visit-sheet * { display: block !important; visibility: visible !important; }
+  #visit-sheet { position: static !important; width: auto !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; background: #fff !important; color: #000 !important; overflow: visible !important; }
+  #visit-sheet ol { padding-left: 1.2em !important; }
+  #visit-sheet li { display: list-item !important; }
+  #visit-sheet .no-print, #visit-sheet .no-print * { display: none !important; }
+  #visit-sheet .print-only, #visit-sheet .print-only * { display: block !important; }
   #visit-sheet a { color: #000 !important; }
 }
 `;
@@ -67,6 +71,11 @@ export default function WashingtonFacilityProfile() {
     const from = new URLSearchParams(window.location.search).get("from");
     setDirectoryPath(washingtonDirectoryReturnPath(from) ?? "/washington");
   }, []);
+
+  useEffect(() => {
+    if (!facility || window.location.hash !== "#visit-heading") return;
+    document.getElementById("visit-heading")?.scrollIntoView({ block: "start" });
+  }, [facility]);
 
   useEffect(() => {
     let cancelled = false;
