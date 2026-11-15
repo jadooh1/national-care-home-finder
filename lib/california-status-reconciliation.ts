@@ -39,11 +39,15 @@ function responseUnavailable(httpStatus: number | null): boolean {
   return httpStatus == null || httpStatus === 0 || httpStatus === 403 || httpStatus >= 500;
 }
 
+function isOfficialClosureStatus(liveStatus: string): boolean {
+  return /^Closed(?:$|[, ]|\s*-)/.test(liveStatus);
+}
+
 function statusesAgree(openDataStatus: string, liveStatus: string): boolean {
   if (openDataStatus === "LICENSED") return liveStatus === CALIFORNIA_LIVE_LICENSED;
   if (openDataStatus === "PENDING") return liveStatus === CALIFORNIA_LIVE_PENDING;
   if (openDataStatus === "ON PROBATION") return liveStatus === CALIFORNIA_LIVE_PROBATION;
-  if (openDataStatus === "CLOSED") return liveStatus.includes("Closed");
+  if (openDataStatus === "CLOSED") return isOfficialClosureStatus(liveStatus);
   return false;
 }
 
@@ -66,7 +70,7 @@ export function reconcileCaliforniaStatus(
   if (liveStatus == null) {
     return { ...base, classification: "inconclusive" };
   }
-  const confirmedClosure = liveStatus.includes("Closed");
+  const confirmedClosure = isOfficialClosureStatus(liveStatus);
   return {
     ...base,
     classification: statusesAgree(observation.openDataStatus, liveStatus) ? "match" : "conflict",
