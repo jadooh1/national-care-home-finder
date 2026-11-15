@@ -101,7 +101,7 @@ test("print media keeps a long comparison address without blank directory pages"
 </main>`);
   const userData = mkdtempSync(join(tmpdir(), "nchf-print-browser-"));
   const port = 9400 + (process.pid % 500);
-  const child = spawn(browser, ["--headless=new", "--disable-gpu", "--no-first-run", "--remote-allow-origins=*", `--remote-debugging-port=${port}`, `--user-data-dir=${userData}`, "about:blank"], { stdio: "ignore", windowsHide: true });
+  const child = spawn(browser, ["--headless=new", "--disable-gpu", "--no-first-run", "--no-sandbox", "--disable-dev-shm-usage", "--remote-allow-origins=*", `--remote-debugging-port=${port}`, `--user-data-dir=${userData}`, "about:blank"], { stdio: "ignore", windowsHide: true });
   child.unref();
   try {
     const version = await waitForJson(`http://127.0.0.1:${port}/json/version`);

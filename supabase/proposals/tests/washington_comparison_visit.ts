@@ -249,6 +249,8 @@ window.scrollToVisitChecklist = ${browserFunction(scrollToVisitChecklist)};
     "--headless=new",
     "--disable-gpu",
     "--no-first-run",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
     "--remote-allow-origins=*",
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${userData}`,
