@@ -37,6 +37,17 @@ function isPublishedField(field: string): field is PublishedField {
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const card: React.CSSProperties = { background: "white", border: `1px solid ${C.border}`, borderRadius: 16, padding: 24, boxShadow: "0 5px 16px rgba(18,60,89,.045)" };
 const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 };
+const printStyles = `
+.print-only { display: none; }
+@media print {
+  body * { visibility: hidden; }
+  #visit-sheet, #visit-sheet * { visibility: visible; }
+  #visit-sheet { position: absolute; left: 0; top: 0; width: 100%; background: #fff !important; color: #000 !important; box-shadow: none !important; border: 0 !important; }
+  #visit-sheet .no-print, #visit-sheet .no-print * { display: none !important; visibility: hidden !important; }
+  #visit-sheet .print-only { display: block !important; }
+  #visit-sheet a { color: #000 !important; }
+}
+`;
 
 function displayName(name: string) { return name.replace(/^\s*!+\s*/, "").trim() || name; }
 
@@ -166,18 +177,28 @@ export default function WashingtonFacilityProfile() {
                   </p>
                 )}
               </section>
-              <section style={card} aria-labelledby="visit-heading">
-                <h2 id="visit-heading" style={{ margin: "0 0 10px", fontSize: 23 }}>{text.visitTitle}</h2>
-                <p style={{ color: C.muted, lineHeight: 1.7, marginTop: 0 }}>{text.visitNote}</p>
-                <p style={{ lineHeight: 1.7 }}>{text.contactAbsent}</p>
+              <section id="visit-sheet" style={card} aria-labelledby="visit-heading">
+                <style>{printStyles}</style>
+                <div className="print-only">
+                  <h1 style={{ fontSize: 24, lineHeight: 1.3, margin: "0 0 12px" }}>{displayName(facility.canonical_name)}</h1>
+                  <p style={{ margin: "0 0 8px" }}><strong>{text.address}:</strong> {address || text.notAvailable}</p>
+                  <p style={{ margin: "0 0 16px" }}><strong>{text.licenseNumber}:</strong> {facility.license_number ?? text.notAvailable}</p>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+                  <h2 id="visit-heading" style={{ margin: 0, fontSize: 23, scrollMarginTop: 24 }}>{text.visitTitle}</h2>
+                  <button type="button" className="no-print" onClick={() => window.print()} style={{ background: "white", color: C.navy, border: `1px solid ${C.border}`, borderRadius: 8, padding: "10px 12px", minHeight: 44, fontWeight: 700, cursor: "pointer" }}>{text.printChecklist}</button>
+                </div>
+                <p style={{ color: C.muted, lineHeight: 1.7 }}>{text.visitNote}</p>
+                <p className="no-print" style={{ lineHeight: 1.7 }}>{text.contactAbsent}</p>
                 {facility.license_number && washingtonDisclosureUrl(facility.license_number) && (
-                  <p style={{ marginTop: 0 }}>
+                  <p className="no-print" style={{ marginTop: 0 }}>
                     <a href={washingtonDisclosureUrl(facility.license_number) ?? undefined} target="_blank" rel="noopener noreferrer" style={{ ...linkStyle, display: "inline-flex", alignItems: "center", minHeight: 44 }}>{text.contactAction}</a>
                   </p>
                 )}
                 <ol style={{ lineHeight: 1.7, paddingLeft: 22, marginBottom: 0 }}>
                   {text.visitQuestions.map(question => <li key={question} style={{ marginTop: 8 }}>{question}</li>)}
                 </ol>
+                <p className="print-only" style={{ marginTop: 16, lineHeight: 1.6 }}>{text.printReminder}</p>
               </section>
             </div>
           </div>

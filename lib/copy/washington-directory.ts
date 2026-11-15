@@ -63,6 +63,7 @@ type WashingtonDirectoryCopy = {
   compareLicense: string;
   compareStatus: string;
   compareDetails: string;
+  prepareVisit: string;
   compareDisclosure: string;
 };
 
@@ -140,6 +141,7 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
     compareLicense: "License number",
     compareStatus: "Official record status",
     compareDetails: "Facility details",
+    prepareVisit: "Prepare for a visit",
     compareDisclosure: "DSHS facility record ↗",
   },
   es: {
@@ -216,6 +218,7 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
     compareLicense: "Número de licencia",
     compareStatus: "Estado oficial del registro",
     compareDetails: "Detalles del establecimiento",
+    prepareVisit: "Prepárese para una visita",
     compareDisclosure: "Registro del establecimiento en DSHS ↗",
   },
 };
