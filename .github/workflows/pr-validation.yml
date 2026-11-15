@@ -58,6 +58,9 @@ jobs:
       - name: Check the Washington family journey
         run: node --experimental-strip-types --test supabase/proposals/tests/family_washington_journey.ts
 
+      - name: Check Washington directory search reliability
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_directory_search_reliability.ts
+
       - name: Check the Washington facility shortlist
         run: node --experimental-strip-types --test supabase/proposals/tests/washington_facility_shortlist.ts
 
