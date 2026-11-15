@@ -33,3 +33,33 @@ test("shortlist stays limited to three sanitized homes", () => {
   }
   assert.equal(items.length, 3);
 });
+
+test("print labels handle missing fields without claiming vacancy or current licensing", () => {
+  const item = washingtonShortlistItem({
+    license: "123456",
+    name: "Example Home",
+    addressLine: null,
+    city: null,
+    postalCode: null,
+    licensedCapacity: null,
+    recordStatus: "unverified",
+  });
+  assert.ok(item);
+  assert.equal(item.licensedCapacity, null);
+  assert.equal(item.recordStatus, "unverified");
+  assert.match(component, /item\.licensedCapacity \?\? t\.missing/);
+  assert.match(component, /\.join\(", "\) \|\| t\.missing/);
+  assert.match(component, /item\.recordStatus === "verified" \? t\.verified : t\.unverified/);
+  assert.match(component, /capacity is not vacancy availability/);
+  assert.match(component, /capacidad registrada no indica vacantes disponibles/);
+});
+
+test("print view keeps the shortlist and navigation outside the printable sheet", () => {
+  assert.match(component, /<button type="button" className="nchf-print-trigger"/);
+  assert.match(component, /<section className="nchf-print-sheet"/);
+  assert.match(component, /\.nchf-print-sheet \{ display: none; \}/);
+  assert.match(component, /body \* \{ visibility: hidden !important; \}/);
+  assert.match(component, /\.nchf-print-sheet, \.nchf-print-sheet \* \{ visibility: visible !important; \}/);
+  assert.match(component, /@page \{ size: landscape; margin: 12mm; \}/);
+  assert.doesNotMatch(component, /writeWashingtonShortlist|persistShortlist|removeWashingtonShortlist/);
+});
