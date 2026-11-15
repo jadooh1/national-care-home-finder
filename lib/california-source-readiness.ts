@@ -183,7 +183,7 @@ function normalizeCaliforniaRow(
   if (status.trim() !== "" && !CALIFORNIA_ACCEPTED_STATUS_TEXT.includes(status as typeof CALIFORNIA_ACCEPTED_STATUS_TEXT[number]) && !findings.includes("shifted-row")) {
     findings.push("unrecognized-status");
   }
-  if (license.trim() !== "" && duplicateLicenseIds.includes(license)) findings.push("duplicate-license");
+  if (license.trim() !== "" && duplicateLicenseIds.includes(license.trim())) findings.push("duplicate-license");
   return {
     originalLicenseId: license,
     originalStatus: status,
@@ -227,7 +227,8 @@ function duplicateLicenses(rows: readonly CaliforniaSourceRow[]): string[] {
   for (const row of rows) {
     const license = row.facility_number ?? "";
     if (license.trim() === "") continue;
-    counts.set(license, (counts.get(license) ?? 0) + 1);
+    const normalizedLicense = license.trim();
+    counts.set(normalizedLicense, (counts.get(normalizedLicense) ?? 0) + 1);
   }
   return [...counts.entries()].filter(([, count]) => count > 1).map(([license]) => license).sort();
 }
