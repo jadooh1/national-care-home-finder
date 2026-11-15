@@ -48,7 +48,7 @@ test("print labels handle missing fields without claiming vacancy or current lic
   assert.equal(item.licensedCapacity, null);
   assert.equal(item.recordStatus, "unverified");
   assert.match(component, /item\.licensedCapacity \?\? t\.missing/);
-  assert.match(component, /\.join\(", "\) \|\| t\.missing/);
+  assert.match(component, /comparisonAddress\(item, t\)/);
   assert.match(component, /item\.recordStatus === "verified" \? t\.verified : t\.unverified/);
   assert.match(component, /capacity is not vacancy availability/);
   assert.match(component, /capacidad registrada no indica vacantes disponibles/);
