@@ -246,7 +246,7 @@ export default function WashingtonPage() {
                     </dl>
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 12, alignItems: "center", marginTop: 14 }}>
                       {profile && <Link href={washingtonFacilityLink(profile, directoryPath)} style={{ color: "white", background: C.teal, borderRadius: 8, padding: "8px 12px", textDecoration: "none", fontWeight: 700 }}>{t.compareDetails}</Link>}
-                      {profile && <Link href={washingtonVisitChecklistLink(profile, directoryPath)} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, color: C.teal, fontWeight: 700 }}>{t.prepareVisit}</Link>}
+                      {profile && <Link href={washingtonVisitChecklistLink(profile, directoryPath)} scroll={false} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, color: C.teal, fontWeight: 700 }}>{t.prepareVisit}</Link>}
                       {disclosure && <a href={disclosure} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.compareDisclosure}</a>}
                       <button type="button" onClick={() => persistShortlist(removeWashingtonShortlist(shortlist, item.license))} style={{ background: "white", color: C.navy, border: `1px solid ${C.border}`, borderRadius: 8, padding: "8px 12px", fontWeight: 700, cursor: "pointer" }}>{t.removeFromCompare}</button>
                     </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import { VisitorFeedback } from "../../../components/visitor-feedback";
 import { WashingtonPublicHeader, WelcomeScene } from "../../../components/washington-public";
@@ -12,6 +12,7 @@ import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../../lib/s
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
 import { washingtonDirectoryReturnPath } from "../../../lib/family-journey";
+import { scrollToVisitChecklist, visitChecklistPrintCss } from "../../../lib/washington-visit-checklist";
 import type { Locale } from "../../../lib/locale";
 
 type Facility = {
@@ -37,18 +38,6 @@ function isPublishedField(field: string): field is PublishedField {
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const card: React.CSSProperties = { background: "white", border: `1px solid ${C.border}`, borderRadius: 16, padding: 24, boxShadow: "0 5px 16px rgba(18,60,89,.045)" };
 const linkStyle: React.CSSProperties = { color: C.teal, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 };
-const printStyles = `
-.print-only { display: none; }
-@media print {
-  @page { margin: 0.6in; }
-  html, body, main { background: #fff !important; height: auto !important; }
-  main { min-height: 0 !important; }
-  .print-omit { display: none !important; }
-  #visit-sheet { position: static !important; width: auto !important; max-width: 100% !important; margin: 0 !important; break-inside: avoid; border: 0 !important; box-shadow: none !important; background: #fff !important; color: #000 !important; }
-  #visit-sheet a { color: #000 !important; }
-}
-`;
-
 function displayName(name: string) { return name.replace(/^\s*!+\s*/, "").trim() || name; }
 
 export default function WashingtonFacilityProfile() {
@@ -68,10 +57,13 @@ export default function WashingtonFacilityProfile() {
     setDirectoryPath(washingtonDirectoryReturnPath(from) ?? "/washington");
   }, []);
 
-  useEffect(() => {
-    if (!facility || window.location.hash !== "#visit-heading") return;
-    document.getElementById("visit-heading")?.scrollIntoView({ block: "start" });
-  }, [facility]);
+  useLayoutEffect(() => {
+    scrollToVisitChecklist(
+      { loading, hasFacility: facility !== null, hash: window.location.hash },
+      document,
+      () => window.scrollTo(0, 0),
+    );
+  }, [facility, loading]);
 
   useEffect(() => {
     let cancelled = false;
@@ -183,7 +175,7 @@ export default function WashingtonFacilityProfile() {
                 )}
               </section>
               <section id="visit-sheet" style={card} aria-labelledby="visit-heading">
-                <style>{printStyles}</style>
+                <style>{visitChecklistPrintCss}</style>
                 <div className="print-only">
                   <h1 style={{ fontSize: 24, lineHeight: 1.3, margin: "0 0 12px" }}>{displayName(facility.canonical_name)}</h1>
                   <p style={{ margin: "0 0 8px" }}><strong>{text.address}:</strong> {address || text.notAvailable}</p>
