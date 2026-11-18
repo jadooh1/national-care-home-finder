@@ -29,7 +29,7 @@ export default function Home() {
     <main
       style={{
         minHeight: "100vh",
-        background: "#f7f9fc",
+        background: "#f8fbff",
         color: "#17324d",
         fontFamily: "Arial, sans-serif",
       }}
@@ -43,7 +43,7 @@ export default function Home() {
           padding: "72px 7%",
         }}
       >
-        <div className="wa-hero-split" style={{ maxWidth: 1100, margin: "auto" }}>
+        <div className="wa-hero-split" style={{ maxWidth: 1250, margin: "auto" }}>
           <div>
             <p style={{ fontWeight: 700, letterSpacing: 2 }}>
               {t.eyebrow}
@@ -55,10 +55,10 @@ export default function Home() {
                 margin: "22px 0",
               }}
             >
-              {t.heading}
+              {locale === "es" ? "Opciones de cuidado confiables en todo Estados Unidos" : "Trusted Care Home Options Across America"}
             </h1>
             <p style={{ fontSize: 19, lineHeight: 1.7 }}>
-              {t.lead}
+              {locale === "es" ? "Encuentre opciones de cuidado para sus seres queridos con información oficial y verificable." : "Find the right assisted living or adult family home for your loved one — with clear, official information to help you choose confidently."}
             </p>
             <form
               action="/washington"
@@ -123,7 +123,7 @@ export default function Home() {
               {t.exploreCare}
             </a>
           </div>
-          <WelcomeScene />
+          <div style={{ background: "#e3eefb", borderRadius: 24, padding: 18, boxShadow: "0 14px 36px rgba(9,50,100,.12)" }}><WelcomeScene /></div>
         </div>
       </section>
 
@@ -175,7 +175,7 @@ export default function Home() {
       >
         <div style={{ maxWidth: 1150, margin: "auto" }}>
           <h2 style={{ fontSize: 32 }}>
-            {t.statesHeading}
+            {locale === "es" ? "Explore por estado" : "Explore by State"}
           </h2>
           <p style={{ color: "#526776", lineHeight: 1.7 }}>
             {t.statesLead}
@@ -257,7 +257,7 @@ export default function Home() {
 
       <footer
         style={{
-          background: "#123c59",
+          background: "#0a3266",
           color: "white",
           textAlign: "center",
           padding: "30px 7%",
