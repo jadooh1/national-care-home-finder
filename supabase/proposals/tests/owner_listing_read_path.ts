@@ -3,8 +3,11 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   CLAIMED_OWNER_CONTENT_VIEW,
+  DEVELOPMENT_SUPABASE_HOST,
+  PRODUCTION_SUPABASE_HOST,
   manageableOwnerContentView,
   ownerListingRefreshError,
+  publicOwnerContentView,
   publishedContentOutcome,
 } from "../../../lib/premium-option-a.ts";
 import { PREMIUM_OWNER_CONTENT_VIEW } from "../../../lib/premium-owner-content.ts";
@@ -19,13 +22,14 @@ test("signed-in owners read only the claimed view", () => {
   assert.equal(CLAIMED_OWNER_CONTENT_VIEW, "wa_afh_claimed_owner_content");
   assert.equal(PREMIUM_OWNER_CONTENT_VIEW, "wa_afh_premium_owner_content");
   for (const supabaseUrl of [
-    "https://yiehgstweswxjakbcdzc.supabase.co",
-    "https://ajjsyloyihcqdomywhik.supabase.co",
+    `https://${PRODUCTION_SUPABASE_HOST}`,
+    `https://${DEVELOPMENT_SUPABASE_HOST}`,
     "https://www.nationalcarehomefinder.com",
     "not a url",
     "",
   ]) {
     assert.equal(manageableOwnerContentView(supabaseUrl), "wa_afh_claimed_owner_content");
+    assert.equal(publicOwnerContentView(supabaseUrl), "wa_afh_premium_owner_content");
   }
   assert.match(ownerEdits, /manageableOwnerContentView\(process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
   assert.match(ownerEdits, /verification_status", "approved"/);
@@ -33,8 +37,9 @@ test("signed-in owners read only the claimed view", () => {
   assert.match(ownerEdits, /auth\.error \|\| !auth\.data\.user/);
   assert.match(ownerEdits, /router\.replace\("\/owner"\)/);
   assert.doesNotMatch(ownerEdits, /wa_afh_published_owner_content/);
-  assert.doesNotMatch(helper, /wa_afh_published_owner_content/);
-  assert.doesNotMatch(helper, /developmentBillingAllowed|stripe|sk_live|sk_test/i);
+  assert.match(helper, /PUBLISHED_OWNER_CONTENT_VIEW = "wa_afh_published_owner_content"/);
+  assert.match(helper, /return PREMIUM_OWNER_CONTENT_VIEW/);
+  assert.doesNotMatch(helper, /stripe|sk_live|sk_test|whsec_/i);
 });
 
 test("a failed owner-text read stays distinct from an empty listing", () => {
