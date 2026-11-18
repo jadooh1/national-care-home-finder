@@ -18,7 +18,11 @@ import {
   washingtonMapPostalOrFilter,
   washingtonMapZipMatch,
   washingtonMarketPageBounds,
+  washingtonCountySearchText,
+  washingtonDirectoryPage,
+  washingtonDirectoryReturnPath,
   washingtonDirectorySearchPath,
+  washingtonFacilityLink,
   washingtonLocationMatches,
   washingtonSearchText,
   washingtonZipFromSearch,
@@ -99,6 +103,9 @@ test("map and demographics navigation keeps a valid ZIP query", () => {
   assert.equal(demographics.includes("history.replaceState"), true);
   const directory = readFileSync("app/washington/page.tsx", "utf8");
   assert.equal(directory.includes("washingtonDirectorySearchPath"), true);
+  assert.equal(directory.includes("washingtonDirectoryPage"), true);
+  assert.equal(directory.includes("washingtonFacilityLink"), true);
+  assert.equal(directory.includes("washingtonCountySearchText"), true);
   assert.equal(directory.includes("history.replaceState"), true);
   assert.equal(directory.includes("t.loadingListings"), true);
   assert.equal(directory.includes("t.noMatches"), true);
@@ -116,6 +123,27 @@ test("directory and ZIP searches keep the visible query in the address", () => {
   assert.equal(washingtonDirectorySearchPath({}), "/washington");
   assert.equal(washingtonDirectorySearchPath({ q: "Seattle", city: "  ", county: null }), "/washington?q=Seattle");
   assert.equal(washingtonDirectorySearchPath({ q: "Oak Harbor", city: "Oak Harbor", county: "Island" }), "/washington?q=Oak+Harbor&city=Oak+Harbor&county=Island");
+  assert.equal(washingtonCountySearchText("Pierce County"), "Pierce");
+  assert.equal(washingtonCountySearchText("  king county "), "king");
+  assert.equal(washingtonCountySearchText("Condado de Pierce"), "Pierce");
+  assert.equal(washingtonCountySearchText("Island"), "Island");
+  assert.equal(washingtonDirectorySearchPath({ county: "Pierce County" }), "/washington?county=Pierce");
+  assert.equal(washingtonDirectorySearchPath({ county: "Condado de Pierce" }), "/washington?county=Pierce");
+  assert.equal(washingtonDirectoryPage("2"), 1);
+  assert.equal(washingtonDirectoryPage("1"), 0);
+  assert.equal(washingtonDirectoryPage("0"), 0);
+  assert.equal(washingtonDirectorySearchPath({ city: "Seattle", page: 0 }), "/washington?city=Seattle");
+  assert.equal(washingtonDirectorySearchPath({ city: "Seattle", page: 1 }), "/washington?city=Seattle&page=2");
+  assert.equal(washingtonDirectoryReturnPath("/washington?city=Seattle&page=2"), "/washington?city=Seattle&page=2");
+  assert.equal(washingtonDirectoryReturnPath("/washington?city=Seattle&page=2&next=/owner"), "/washington?city=Seattle&page=2");
+  assert.equal(washingtonDirectoryReturnPath("https://evil.example/washington?city=Seattle"), null);
+  assert.equal(washingtonDirectoryReturnPath("//evil.example/washington"), null);
+  assert.equal(washingtonDirectoryReturnPath("/washington/100001"), null);
+  assert.equal(washingtonFacilityLink("/washington/100001", "/washington?city=Seattle&page=2"), "/washington/100001?from=%2Fwashington%3Fcity%3DSeattle%26page%3D2");
+  assert.equal(washingtonDirectoryReturnPath(decodeURIComponent("%2Fwashington%3Fcity%3DSeattle%26page%3D2")), "/washington?city=Seattle&page=2");
+  const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+  assert.equal(profile.includes("washingtonDirectoryReturnPath"), true);
+  assert.equal(profile.includes('href="/washington"'), false);
   assert.equal(washingtonLocationMatches("/washington?city=Yakima&county=Yakima", washingtonDirectorySearchPath({ city: "Yakima", county: "Yakima" })), true);
   assert.equal(washingtonLocationMatches("/washington?q=Oak%20Harbor", washingtonDirectorySearchPath({ q: "Oak Harbor" })), true);
   assert.equal(washingtonLocationMatches("/washington?q=Seattle", "/washington"), false);

@@ -105,6 +105,15 @@ export function olderCursor(row: { id?: string; created_at?: string } | undefine
   return { before: row.created_at, beforeId: row.id };
 }
 
+export function listingViewAfterRefresh(previous: ListingRequestInput, requested: ListingRequestInput, result: "applied" | "stale" | "error"): ListingRequestInput {
+  const source = result === "applied" ? requested : previous;
+  return {
+    status: source.status,
+    proposalCursor: copyCursor(source.proposalCursor),
+    historyCursor: copyCursor(source.historyCursor),
+  };
+}
+
 export function proposalTotals(data: unknown): ProposalTotals | null {
   if (!Array.isArray(data) || data.length !== 3) return null;
   const totals: ProposalTotals = { pending: Number.NaN, approved: Number.NaN, rejected: Number.NaN };
@@ -227,6 +236,25 @@ export type AdminActionReport = { error: string; notice: string };
 
 export const UNCERTAIN_ADMIN_ACTION = "The connection failed before the result was confirmed. It was not retried. Use Refresh to check the latest saved state.";
 export const INTERRUPTED_ADMIN_RELOAD = "The action was recorded, but the latest list did not load. It was not retried. Use Refresh to check the latest saved state.";
+
+export function writeAccepted(result: AdminWriteResult): boolean {
+  return !result.error && result.data === true;
+}
+
+export function rememberCompletedWrite(completed: ReadonlySet<string>, id: string, accepted: boolean): Set<string> {
+  if (!accepted) return new Set(completed);
+  const next = new Set(completed);
+  next.add(id);
+  return next;
+}
+
+export function publicationRetryGuard(completed: ReadonlySet<string>, id: string): "refresh" | "allow" {
+  return completed.has(id) ? "refresh" : "allow";
+}
+
+export function withdrawalKey(facilityId: string, fieldName: string): string {
+  return `${facilityId}\n${fieldName}`;
+}
 
 const KNOWN_ACTION_ERRORS: Record<string, string> = {
   "administrator required": "Administrator access is required.",

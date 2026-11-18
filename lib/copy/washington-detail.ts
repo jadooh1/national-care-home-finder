@@ -231,11 +231,17 @@ type ProfileCopy = {
   county: string;
   licenseNumber: string;
   recordedCapacity: string;
+  recordStatus: string;
+  recordStatusValue: (status: string) => string;
   notAvailable: string;
   countyValue: (name: string) => string;
   capacityValue: (count: number) => string;
   googleMaps: string;
   dshsSource: string;
+  claimTitle: string;
+  claimBody: string;
+  claimAction: string;
+  claimReview: string;
   ownerTitle: string;
   ownerNote: string;
   published: {
@@ -249,8 +255,13 @@ type ProfileCopy = {
   verifyTail: string;
   dshsLocator: string;
   disclosure: string;
-  questionsTitle: string;
-  questions: readonly [string, string, string, string];
+  visitTitle: string;
+  visitNote: string;
+  contactAbsent: string;
+  contactAction: string;
+  printChecklist: string;
+  printReminder: string;
+  visitQuestions: readonly [string, string, string, string, string, string];
   footer: string;
 };
 
@@ -489,11 +500,19 @@ export const copy: Record<Locale, {
       county: "County",
       licenseNumber: "License number",
       recordedCapacity: "Recorded licensed capacity",
+      recordStatus: "Record status",
+      recordStatusValue: (status) => status === "verified"
+        ? "Independently verified listing"
+        : "DSHS license-number match — not independently verified",
       notAvailable: "Not available",
       countyValue: (name) => `${name} County`,
       capacityValue: (count) => `${count} residents`,
       googleMaps: "View location in Google Maps ↗",
       dshsSource: "Name, address, license number, and capacity come from the Washington DSHS locator download.",
+      claimTitle: "Own or represent this home?",
+      claimBody: "Start an ownership claim for this licensed listing. Owner-submitted information stays separate from the official DSHS record and can appear publicly only after administrative review.",
+      claimAction: "Claim this facility",
+      claimReview: "Submitting a claim does not verify ownership or change the DSHS name, address, license number, or capacity.",
       ownerTitle: "Information published by the facility",
       ownerNote: "An administrator published this owner-provided text separately. It does not change the official DSHS licensing record.",
       published: {
@@ -507,12 +526,19 @@ export const copy: Record<Locale, {
       verifyTail: " independently establish its current license standing or quality of care.",
       dshsLocator: "Check the official Washington DSHS locator ↗",
       disclosure: "View Official Disclosure of Services (DSHS)",
-      questionsTitle: "Questions to ask the home",
-      questions: [
-        "Are you currently accepting residents?",
-        "What are your monthly rates and additional fees?",
-        "Which care needs can your staff support?",
-        "May I schedule a tour and review inspection history?",
+      visitTitle: "Prepare for a visit",
+      visitNote: "These are questions to ask the home. They are not verified facts about this facility.",
+      contactAbsent: "This directory does not include a telephone number, email address, or website. The DSHS locator download provides the name, address, license number, and licensed capacity.",
+      contactAction: "Open the official DSHS record for this license ↗",
+      printChecklist: "Print checklist",
+      printReminder: "Confirm current vacancies, rates, staffing, medication support, visits, and licensing with the home and with Washington DSHS. These questions are not verified facts about this facility.",
+      visitQuestions: [
+        "Are there current vacancies, and when could a resident move in?",
+        "What is the monthly rate, and which charges are extra?",
+        "Which care needs can the staff support, and who is on duty?",
+        "How are medications managed, and what happens in an emergency?",
+        "How do visits and tours work, including times and who may attend?",
+        "Where can I review the current license and inspection record?",
       ],
       footer: "Independent informational directory based on a DSHS locator download from November 9, 2026. Official name, address, license number, and capacity are not edited by facility owners. Owner-provided description, services, and amenities appear only after a separate administrator publication. Withdrawn owner text is removed from the public profile. Contact details, prices, vacancies, and current license standing have not been independently verified. Listings are not recommendations.",
     },
@@ -744,11 +770,19 @@ export const copy: Record<Locale, {
       county: "Condado",
       licenseNumber: "Número de licencia",
       recordedCapacity: "Capacidad licenciada registrada",
+      recordStatus: "Estado del registro",
+      recordStatusValue: (status) => status === "verified"
+        ? "Listado verificado de forma independiente"
+        : "Coincidencia del número de licencia de DSHS — no verificado de forma independiente",
       notAvailable: "No disponible",
       countyValue: (name) => `Condado de ${name}`,
       capacityValue: (count) => `${count} residentes`,
       googleMaps: "Ver la ubicación en Google Maps ↗",
       dshsSource: "El nombre, la dirección, el número de licencia y la capacidad provienen de la descarga del localizador de DSHS de Washington.",
+      claimTitle: "¿Es propietario o representante de este hogar?",
+      claimBody: "Inicie un reclamo de propiedad para este listado con licencia. La información enviada por el propietario permanece separada del registro oficial de DSHS y solo puede aparecer públicamente después de la revisión administrativa.",
+      claimAction: "Reclamar este establecimiento",
+      claimReview: "Enviar un reclamo no verifica la propiedad ni cambia el nombre, la dirección, el número de licencia ni la capacidad de DSHS.",
       ownerTitle: "Información publicada por el establecimiento",
       ownerNote: "Un administrador publicó por separado este texto proporcionado por el propietario. No modifica el registro oficial de licencias de DSHS.",
       published: {
@@ -762,12 +796,19 @@ export const copy: Record<Locale, {
       verifyTail: " establece de forma independiente su situación actual de licencia ni la calidad del cuidado.",
       dshsLocator: "Consultar el localizador oficial de DSHS de Washington ↗",
       disclosure: "Ver la divulgación oficial de servicios (DSHS)",
-      questionsTitle: "Preguntas para el hogar",
-      questions: [
-        "¿Aceptan residentes en este momento?",
-        "¿Cuáles son las tarifas mensuales y los cargos adicionales?",
-        "¿Qué necesidades de cuidado puede atender el personal?",
-        "¿Puedo programar una visita y revisar el historial de inspecciones?",
+      visitTitle: "Prepárese para una visita",
+      visitNote: "Estas son preguntas para hacerle al hogar. No son datos verificados de este establecimiento.",
+      contactAbsent: "Este directorio no incluye un teléfono, un correo electrónico ni un sitio web. La descarga del localizador de DSHS incluye el nombre, la dirección, el número de licencia y la capacidad licenciada.",
+      contactAction: "Abrir el registro oficial de DSHS de esta licencia ↗",
+      printChecklist: "Imprimir la lista",
+      printReminder: "Confirme las vacantes, las tarifas, el personal, el apoyo con medicamentos, las visitas y la licencia actuales con el hogar y con el DSHS de Washington. Estas preguntas no son datos verificados de este establecimiento.",
+      visitQuestions: [
+        "¿Hay vacantes actuales y cuándo podría mudarse un residente?",
+        "¿Cuál es la tarifa mensual y qué cargos son adicionales?",
+        "¿Qué necesidades de cuidado puede atender el personal y quién está de turno?",
+        "¿Cómo se administran los medicamentos y qué ocurre en una emergencia?",
+        "¿Cómo funcionan las visitas y los recorridos, incluidos los horarios y quién puede asistir?",
+        "¿Dónde puedo revisar la licencia vigente y el registro de inspecciones?",
       ],
       footer: "Directorio informativo independiente basado en una descarga del localizador de DSHS del 9 de noviembre de 2026. El nombre oficial, la dirección, el número de licencia y la capacidad no los editan los propietarios del establecimiento. La descripción, los servicios y las comodidades proporcionados por el propietario aparecen solo después de una publicación separada del administrador. El texto del propietario que se retira se elimina del perfil público. Los datos de contacto, los precios, las vacantes y la vigencia actual de la licencia no se han verificado de forma independiente. Los listados no son recomendaciones.",
     },

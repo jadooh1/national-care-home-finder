@@ -1,11 +1,20 @@
-# Validates a pull request with the repository's existing build script.
-# Pull-request events only. contents: read. No secrets, deploy, or database access.
+# Validates pull requests into main (cutover) and development (WA work).
+# contents: read. No secrets, deploy, or database access.
+# Push events stay limited to development.
 name: Pull request validation
 
 on:
   pull_request:
     branches:
       - main
+      - development
+      - feature/north-carolina-roster-ingestion
+      - feature/delaware-roster-ingestion
+      - feature/nationwide-ingestion-framework
+      - feature/ingestion-baseline-manifest
+  push:
+    branches:
+      - development
 
 permissions:
   contents: read
@@ -50,6 +59,27 @@ jobs:
       - name: Check the Washington family journey
         run: node --experimental-strip-types --test supabase/proposals/tests/family_washington_journey.ts
 
+      - name: Check Washington directory search reliability
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_directory_search_reliability.ts
+
+      - name: Check Washington directory page recovery
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_directory_page_recovery.ts
+
+      - name: Check the Washington facility shortlist
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_facility_shortlist.ts
+
+      - name: Check the Washington visit checklist
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_family_visit.ts
+
+      - name: Check the comparison visit link
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_comparison_visit.ts
+
+      - name: Check the printable Washington comparison
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_print_comparison.ts
+
+      - name: Check the Washington family journey audit
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_family_journey_audit.ts
+
       - name: Check the owner-claim review guard
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_claim_review_guard.ts
 
@@ -59,8 +89,29 @@ jobs:
       - name: Check the signed-in owner listing read
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_listing_read_path.ts
 
+      - name: Check the Washington owner claim entry
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_owner_claim_entry.ts
+
+      - name: Check owner dashboard reliability
+        run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
+
+      - name: Check the owner facility read
+        run: node --experimental-strip-types --test supabase/proposals/tests/owner_facility_read.ts
+
+      - name: Check the facility data contract
+        run: node --experimental-strip-types --test supabase/proposals/tests/facility_data_contract.ts
+
+      - name: Check search and owner reliability
+        run: node --experimental-strip-types --test supabase/proposals/tests/search_owner_reliability.ts
+
       - name: Check the Oregon adult foster home dry run
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_odhs_roster.ts
+
+      - name: Check the Oregon export date
+        run: node --experimental-strip-types --test supabase/proposals/tests/oregon_export_date.ts
+
+      - name: Check the Oregon roster reconciliation
+        run: node --experimental-strip-types --test supabase/proposals/tests/oregon_roster_reconciliation.ts
 
       - name: Check the development Oregon directory
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_development_directory.ts
@@ -74,8 +125,89 @@ jobs:
       - name: Check the language selector
         run: node --experimental-strip-types --test supabase/proposals/tests/bilingual_language.ts
 
+      - name: Check the Option A premium ledger
+        run: node --experimental-strip-types --test supabase/proposals/tests/premium_option_a.ts
+
+      - name: Check visitor feedback and analytics preparation
+        run: node --experimental-strip-types --test supabase/proposals/tests/visitor_feedback_and_analytics.ts
+
+      - name: Check the state directory preparation
+        run: node --experimental-strip-types --test supabase/proposals/tests/state_directory_preparation.ts
+
+      - name: Check the state refresh gate
+        run: node --experimental-strip-types --test supabase/proposals/tests/state_refresh.ts
+
+      - name: Check the state onboarding gate
+        run: node --experimental-strip-types --test supabase/proposals/tests/state_onboarding.ts
+
+      - name: Check the nationwide state onboarding framework
+        run: node --experimental-strip-types --test supabase/proposals/tests/nationwide_onboarding.ts
+
+      - name: Check the nationwide compatibility audit
+        run: node --experimental-strip-types --test supabase/proposals/tests/nationwide_compatibility.ts
+
+      - name: Check the nationwide roster proposal
+        run: node --experimental-strip-types --test supabase/proposals/tests/nationwide_roster.ts
+
+      - name: Check the Michigan licensing validation
+        run: node --experimental-strip-types --test supabase/proposals/tests/michigan_licensing.ts
+
+      - name: Check the Pennsylvania licensing validation
+        run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
+
+      - name: Check the Pennsylvania onboarding readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_onboarding_readiness.ts
+
+      - name: Check the North Carolina onboarding assessment
+        run: node --experimental-strip-types --test supabase/proposals/tests/north_carolina_onboarding.ts
+
+      - name: Check the Indiana directory count
+        run: node --experimental-strip-types --test supabase/proposals/tests/indiana_directory.ts
+
+      - name: Check the Missouri publication candidate
+        run: node --experimental-strip-types --test supabase/proposals/tests/missouri_ltc_directory.ts
+
+      - name: Check the Wyoming facility workbook comparison
+        run: node --experimental-strip-types --test supabase/proposals/tests/wyoming_facility_directory.ts
+
+      - name: Check the Texas assisted-living directory
+        run: node --experimental-strip-types --test supabase/proposals/tests/texas_alf_directory.ts
+
+      - name: Check the next-state publication readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/next_state_readiness.ts
+
+      - name: Check the California CDSS source validation
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_cdss_roster.ts
+
+      - name: Check the California directory architecture
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_directory.ts
+
+      - name: Check the California onboarding safeguards
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_onboarding.ts
+
+      - name: Check the California status reconciliation
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_status_reconciliation.ts
+
+      - name: Check the California publication readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_publication_readiness.ts
+
+      - name: Check the California source readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_source_readiness.ts
+
+      - name: Check the California authoritative source
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_authoritative_source.ts
+
+      - name: Check the California publication acceptance rules
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_publication_acceptance.ts
+
+      - name: Check the California evidence resolution
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_evidence_resolution.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
+
+      - name: Check the North Carolina roster mapping
+        run: python -m unittest discover -s scripts/nationwide -p "test_*.py"
 
       - name: Build
         run: npm run build

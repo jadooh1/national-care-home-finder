@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   authorizationDecision,
@@ -7,6 +8,7 @@ import {
   listingRequestAfterHistoryCursor,
   listingRequestAfterProposalCursor,
   listingRequestAfterStatus,
+  listingViewAfterRefresh,
   loadAdminListing,
   olderCursor,
   type AdminListingSource,
@@ -128,6 +130,37 @@ test("proposal and publication pages keep independent cursors when an older page
   assert.equal((latest.history[0] as { id: string }).id, "history-history-1");
   assert.equal(source.seen[1].proposalCursor?.beforeId, "proposal-1");
   assert.equal(source.seen[1].historyCursor?.beforeId, "history-1");
+});
+
+test("a failed or superseded proposal view keeps the page still on screen", () => {
+  const previous = currentListingInput("pending", { before: "2026-05-01T00:00:00Z", beforeId: "proposal-1" }, { before: "2026-03-01T00:00:00Z", beforeId: "history-1" });
+  const approved = listingRequestAfterStatus(previous, "approved");
+  const failed = listingViewAfterRefresh(previous, approved, "error");
+  assert.equal(failed.status, "pending");
+  assert.equal(failed.proposalCursor?.beforeId, "proposal-1");
+  assert.equal(failed.historyCursor?.beforeId, "history-1");
+  const superseded = listingViewAfterRefresh(previous, approved, "stale");
+  assert.equal(superseded.status, "pending");
+  assert.equal(superseded.proposalCursor?.beforeId, "proposal-1");
+  const applied = listingViewAfterRefresh(previous, approved, "applied");
+  assert.equal(applied.status, "approved");
+  assert.equal(applied.proposalCursor, null);
+  assert.equal(applied.historyCursor?.beforeId, "history-1");
+  const olderHistory = listingRequestAfterHistoryCursor(previous, olderCursor({ id: "history-2", created_at: "2026-02-01T00:00:00Z" }));
+  const historyFailed = listingViewAfterRefresh(previous, olderHistory, "error");
+  assert.equal(historyFailed.proposalCursor?.beforeId, "proposal-1");
+  assert.equal(historyFailed.historyCursor?.beforeId, "history-1");
+  const historyApplied = listingViewAfterRefresh(previous, olderHistory, "applied");
+  assert.equal(historyApplied.proposalCursor?.beforeId, "proposal-1");
+  assert.deepEqual(historyApplied.historyCursor, { before: "2026-02-01T00:00:00Z", beforeId: "history-2" });
+  historyApplied.historyCursor!.beforeId = "changed";
+  assert.equal(olderHistory.historyCursor?.beforeId, "history-2");
+  const page = readFileSync(new URL("../../../app/admin/listing-edits/page.tsx", import.meta.url), "utf8");
+  assert.match(page, /if \(result !== "applied"\) return;/);
+  assert.match(page, /listingViewAfterRefresh\(previous, next, result\)/);
+  assert.doesNotMatch(page, /reviewStatus\.current = request\.status/);
+  assert.doesNotMatch(page, /editCursor\.current = next/);
+  assert.doesNotMatch(page, /historyCursor\.current = next/);
 });
 
 test("a copied cursor stays stable if the caller later changes the original", () => {

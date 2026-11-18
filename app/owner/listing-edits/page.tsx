@@ -4,7 +4,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
 import { copy } from "../../../lib/copy/account";
+import { claimSubmitGate } from "../../../lib/owner-dashboard";
 import { captureAndStripAuthCallback, recoveryPending } from "../../../lib/password-recovery";
+import { OWNER_LISTING_FACILITY_COLUMNS, readManagedOwnerFacilities, type OwnerFacilityClient } from "../../../lib/owner-facility-read";
 import { manageableOwnerContentView, ownerListingRefreshError, publishedContentOutcome } from "../../../lib/premium-option-a";
 import { supabase } from "../../../lib/supabase";
 
@@ -49,6 +51,7 @@ export default function OwnerListingEdits() {
   const [fieldName, setFieldName] = useState("description");
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
+  const submittingRef = useRef(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<EditError>("");
   const [notice, setNotice] = useState<EditNotice>("");
@@ -115,13 +118,24 @@ export default function OwnerListingEdits() {
       }
     } else setPublished([]);
     const detailIds = [...new Set([...ids, ...rows.map(row => row.facility_id), ...publicationRows.map(row => row.facility_id)])];
+    let facilitiesFailed = false;
     if (detailIds.length) {
-      const homes = await supabase.from("wa_dshs_listed_facilities").select("id,canonical_name,license_number").in("id", detailIds);
-      if (homes.error) { setError("facilities"); return; }
-      setFacilities((homes.data ?? []) as Facility[]);
-      setFacilityId(old => ids.includes(old) ? old : ids[0] ?? "");
+      const homes = await readManagedOwnerFacilities(supabase as unknown as OwnerFacilityClient, {
+        requestedIds: detailIds,
+        authorizedIds: detailIds,
+        columns: OWNER_LISTING_FACILITY_COLUMNS,
+      });
+      if (homes.failed) facilitiesFailed = true;
+      else {
+        setFacilities(homes.facilities.map(home => ({
+          id: home.id,
+          canonical_name: home.canonical_name,
+          license_number: home.license_number,
+        })));
+        setFacilityId(old => ids.includes(old) ? old : ids[0] ?? "");
+      }
     } else { setFacilities([]); setFacilityId(""); }
-    const refreshError = ownerListingRefreshError({ publishedFailed, facilitiesFailed: false });
+    const refreshError = ownerListingRefreshError({ publishedFailed, facilitiesFailed });
     if (refreshError) { setError(refreshError); return; }
     setError("");
   }
@@ -139,29 +153,36 @@ export default function OwnerListingEdits() {
     return () => { active = false; };
   }, [router]);
   async function submit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault(); setError(""); setNotice("");
+    e.preventDefault();
+    if (claimSubmitGate(submittingRef.current) === "ignore") return;
+    setError(""); setNotice("");
     const proposed = value.trim();
     if (!approvedIds.includes(facilityId) || !["description", "services", "amenities"].includes(fieldName) || proposed.length < 1 || proposed.length > 2000) { setError("invalid"); return; }
+    submittingRef.current = true;
     setBusy(true);
-    const auth = await supabase.auth.getUser();
-    if (auth.error || auth.data.user?.id !== uid) { setError("session"); setBusy(false); return; }
-    const response = await supabase.rpc("submit_listing_edit", { p_facility_id: facilityId, p_field_name: fieldName, p_proposed_value: proposed });
-    if (response.error) setError("submit");
-    else { setValue(""); setNotice("submitted"); await refresh(uid); }
-    setBusy(false);
+    try {
+      const auth = await supabase.auth.getUser();
+      if (auth.error || auth.data.user?.id !== uid) { setError("session"); return; }
+      const response = await supabase.rpc("submit_listing_edit", { p_facility_id: facilityId, p_field_name: fieldName, p_proposed_value: proposed });
+      if (response.error) setError("submit");
+      else { setValue(""); setNotice("submitted"); await refresh(uid); }
+    } finally {
+      submittingRef.current = false;
+      setBusy(false);
+    }
   }
   return <main style={{ minHeight: "100vh", background: "#f4f8fb", color: "#123c59", padding: "30px 5%", fontFamily: "Arial,sans-serif" }}><style>{languageStyle}</style><div style={{ maxWidth: 960, margin: "auto" }}>
     <LanguageSelector />
     <Link href="/owner/dashboard" style={{ color: "#176b53" }}>{text.back}</Link><h1>{text.title}</h1>
     <p>{text.intro}</p>
-    {loading ? <p>{text.loading}</p> : <>
+    {loading ? <p role="status">{text.loading}</p> : <>
       {error && <p role="alert" style={{ color: "#9f2626" }}>{text.errors[error]}</p>}{notice && <p role="status" style={{ color: "#176b53" }}>{text.notices[notice]}</p>}
       <section style={panel}><h2>{text.newProposal}</h2>{approvedIds.length === 0 ? <p>{text.noApproved} <Link href="/owner/dashboard">{text.requestVerification}</Link></p> : <form onSubmit={submit}>
         <label htmlFor="facility">{text.facility}</label><select id="facility" style={field} value={facilityId} onChange={e => setFacilityId(e.target.value)}>{facilities.filter(f => approvedIds.includes(f.id)).map(f => <option key={f.id} value={f.id}>{f.canonical_name} {f.license_number ? "(" + f.license_number + ")" : ""}</option>)}</select>
         <label htmlFor="category" style={{ display: "block", marginTop: 15 }}>{text.informationType}</label><select id="category" style={field} value={fieldName} onChange={e => setFieldName(e.target.value)}><option value="description">{text.fieldOption.description}</option><option value="services">{text.fieldOption.services}</option><option value="amenities">{text.fieldOption.amenities}</option></select>
         <label htmlFor="proposal" style={{ display: "block", marginTop: 15 }}>{text.proposedLabel}</label><textarea id="proposal" required maxLength={2000} rows={6} style={field} value={value} onChange={e => setValue(e.target.value)} />
         <p style={{ fontSize: 13 }}>{text.privacy}</p>
-        <button disabled={busy} style={{ border: 0, borderRadius: 9, background: "#176b53", color: "white", padding: "12px 19px" }}>{busy ? text.submitting : text.submit}</button>
+        <button type="submit" disabled={busy} aria-busy={busy} style={{ border: 0, borderRadius: 9, background: "#176b53", color: "white", padding: "12px 19px", minHeight: 44 }}>{busy ? text.submitting : text.submit}</button>
       </form>}</section>
       <section style={panel}><h2>{text.publishedTitle}</h2><p>{text.publishedBody}</p>{published.length === 0 && !error && <p>{text.nonePublished}</p>}{published.map(item => <article key={`${item.facility_id}-${item.field_name}`} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
       <section style={panel}><h2>{text.historyTitle}</h2><p>{text.historyBody}</p><div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}><button type="button" style={quietButton} onClick={() => { historyCursor.current = null; void refresh(uid); }}>{text.firstPage}</button>{publications.length === pageSize && <button type="button" style={quietButton} onClick={() => { const last = publications[publications.length - 1]; historyCursor.current = { before: last.created_at, beforeId: last.id }; void refresh(uid); }}>{text.older}</button>}</div><p>{text.pageSize}</p>{publications.length === 0 && <p>{text.noHistory}</p>}{publications.map(item => <article key={item.id} style={{ padding: 13, borderTop: "1px solid #dbe5eb" }}><strong>{facilityName(item.facility_id)}</strong> — {fieldLabel(item.field_name)}<p>{item.event_type === "withdrawn" ? text.withdrawn : text.published} · {formatStamp(item.created_at)}</p><p style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}>{item.published_value}</p></article>)}</section>
