@@ -15,6 +15,7 @@ import {
   type OregonPublicProfileLoad,
   type OregonPublicProfileQuery,
 } from "../../../lib/oregon-public-directory";
+import { OREGON_ODHS_PROVIDER_SEARCH } from "../../../lib/state-directory";
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const languageStyle = `
@@ -91,6 +92,7 @@ function ProfileState({ result }: { result: OregonPublicProfileLoad }) {
       <p style={{ lineHeight: 1.7 }}>{locale === "es" ? t.locationNote : OREGON_LOCATION_NOTE}</p>
       <p style={{ lineHeight: 1.7 }}>{locale === "es" ? t.freshnessNote : OREGON_FRESHNESS_NOTE}</p>
       <p style={{ marginTop: 16 }}><a href={row.official_profile_url}>{t.officialProfile}</a></p>
+      <p><a href={OREGON_ODHS_PROVIDER_SEARCH}>{t.officialSource}</a></p>
     </article>
   );
 }

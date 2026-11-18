@@ -8,21 +8,7 @@ import { copy } from "../lib/copy/home";
 import { HOMEPAGE_DIRECTORY_NOTE, stateFilterStatus } from "../lib/family-journey";
 import { localizedStateStatus } from "../lib/locale";
 import { homepageDirectoryNote, oregonPublicDirectoryAvailable } from "../lib/oregon-public-directory";
-
-const states = [
-  "Alabama", "Alaska", "Arizona", "Arkansas", "California",
-  "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
-  "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
-  "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
-  "Massachusetts", "Michigan", "Minnesota", "Mississippi",
-  "Missouri", "Montana", "Nebraska", "Nevada",
-  "New Hampshire", "New Jersey", "New Mexico", "New York",
-  "North Carolina", "North Dakota", "Ohio", "Oklahoma",
-  "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
-  "South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
-  "Virginia", "Washington", "West Virginia", "Wisconsin",
-  "Wyoming",
-];
+import { STATE_NAMES, directoryHref } from "../lib/state-directory";
 
 export default function Home() {
   const { locale } = useLanguage();
@@ -33,7 +19,7 @@ export default function Home() {
 
   const filteredStates = useMemo(
     () =>
-      states.filter((state) =>
+      STATE_NAMES.filter((state) =>
         state.toLowerCase().includes(search.trim().toLowerCase())
       ),
     [search]
@@ -220,7 +206,9 @@ export default function Home() {
               gap: 13,
             }}
           >
-            {filteredStates.map((state) => (
+            {filteredStates.map((state) => {
+              const href = directoryHref(state, process.env.NEXT_PUBLIC_SUPABASE_URL ?? "");
+              return (
               <div
                 key={state}
                 style={{
@@ -231,35 +219,24 @@ export default function Home() {
                   fontWeight: 600,
                 }}
               >
-                {state === "Washington" ? (
-  <Link
-    href="/washington"
-    style={{
-      color: "#176b53",
-      textDecoration: "underline",
-      textUnderlineOffset: 3,
-      display: "block",
-    }}
-  >
-    {state}
-  </Link>
-) : state === "Oregon" && oregonAvailable ? (
-  <Link
-    href="/oregon"
-    style={{
-      color: "#176b53",
-      textDecoration: "underline",
-      textUnderlineOffset: 3,
-      display: "block",
-    }}
-  >
-    {state}
-  </Link>
-) : (
-  state
-)}
+                {href ? (
+                  <Link
+                    href={href}
+                    style={{
+                      color: "#176b53",
+                      textDecoration: "underline",
+                      textUnderlineOffset: 3,
+                      display: "block",
+                    }}
+                  >
+                    {state}
+                  </Link>
+                ) : (
+                  state
+                )}
               </div>
-            ))}
+              );
+            })}
           </div>
 
           <p aria-live="polite">{locale === "es" ? localizedStateStatus(locale, filteredStates.length) : stateFilterStatus(filteredStates.length)}</p>

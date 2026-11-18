@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../components/language";
 import { copy, localizedAuthServerMessage } from "../../lib/copy/account";
+import { browserClaimStorage, claimLicenseQuery, ownerClaimHref, readClaimLicense, writeClaimLicense } from "../../lib/owner-claim";
 import { localizedPasswordProblem } from "../../lib/locale";
 import { captureAndStripAuthCallback, clearRecoveryPending, recoveryPending, recoveryRedirectUrl } from "../../lib/password-recovery";
 import { supabase } from "../../lib/supabase";
@@ -37,9 +38,13 @@ export default function OwnerPage() {
 
   useEffect(() => {
     let active = true;
+    const storage = browserClaimStorage();
+    const license = claimLicenseQuery(new URLSearchParams(window.location.search).get("license"));
+    if (storage && license) writeClaimLicense(storage, license);
+    const destination = ownerClaimHref(license ?? (storage ? readClaimLicense(storage) : null));
     supabase.auth.getUser().then(({ data }) => {
       if (!active || !data.user) return;
-      router.replace(recoveryPending() ? "/owner/reset-password" : "/owner/dashboard");
+      router.replace(recoveryPending() ? "/owner/reset-password" : destination);
     });
     return () => { active = false; };
   }, [router]);
@@ -69,14 +74,16 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
         if (authError) throw authError;
         if (data.session) {
           clearRecoveryPending();
-          router.replace("/owner/dashboard");
+          const storage = browserClaimStorage();
+          router.replace(ownerClaimHref(storage ? readClaimLicense(storage) : null));
         }
         else setNoticeId("confirmEmail");
       } else if (mode === "login") {
         const { error: authError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (authError) throw authError;
         clearRecoveryPending();
-        router.replace("/owner/dashboard");
+        const storage = browserClaimStorage();
+        router.replace(ownerClaimHref(storage ? readClaimLicense(storage) : null));
       } else {
         const redirectTo = recoveryRedirectUrl();
         if (!redirectTo) throw new Error(copy.en.owner.errors.resetUnavailable);

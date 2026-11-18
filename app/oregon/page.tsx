@@ -15,6 +15,7 @@ import {
   type OregonPublicDirectoryLoad,
   type OregonPublicQuery,
 } from "../../lib/oregon-public-directory";
+import { OREGON_ODHS_PROVIDER_SEARCH } from "../../lib/state-directory";
 
 const C = { navy: "#123c59", teal: "#176b53", pale: "#f4f8fb", muted: "#536b7c", border: "#dbe5eb" };
 const fieldStyle: React.CSSProperties = {
@@ -80,6 +81,7 @@ export default function OregonPublicDirectoryPage() {
       </section>
       <div style={{ maxWidth: 1100, margin: "auto", padding: "28px 5% 60px" }}>
         <p style={{ lineHeight: 1.7, color: C.muted }}>{locale === "es" ? t.bedsNote : OREGON_BEDS_NOTE} {locale === "es" ? t.zeroBedNote : OREGON_ZERO_BED_NOTE} {locale === "es" ? t.locationNote : OREGON_LOCATION_NOTE}</p>
+        <p><a href={OREGON_ODHS_PROVIDER_SEARCH}>{t.officialSource}</a></p>
         {available && (
           <form onSubmit={event => event.preventDefault()} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, margin: "20px 0" }}>
             <input aria-label={t.facilityName} placeholder={t.facilityName} value={name} onChange={event => { setName(event.target.value); setPage(0); setLoading(true); }} style={fieldStyle} />

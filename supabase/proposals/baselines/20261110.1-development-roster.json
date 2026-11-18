@@ -1,0 +1,47 @@
+{
+  "baseline_version": "2026-11-10.1",
+  "roster": {
+    "total": 1125,
+    "public_count": 0,
+    "batches": [
+      {
+        "state_name": "North Carolina",
+        "ingestion_batch_id": "north-carolina-dhhs-roster-pilot-20261110",
+        "issuing_authority": "North Carolina Department of Health and Human Services, Division of Health Service Regulation",
+        "source_url": "https://info.ncdhhs.gov/dhsr/acls/star/search.asp",
+        "identifier_type": "license",
+        "publication": "unpublished",
+        "count": 1086
+      },
+      {
+        "state_name": "Delaware",
+        "ingestion_batch_id": "delaware-dhcq-assisted-living-pilot-20261110",
+        "issuing_authority": "Delaware Department of Health and Social Services, Division of Health Care Quality",
+        "source_url": "https://dhss.delaware.gov/dhcq/dhcq/licensed-assisted-living-facilities/",
+        "identifier_type": "license",
+        "publication": "unpublished",
+        "count": 39
+      }
+    ]
+  },
+  "protected_directories": [
+    {
+      "relation": "public.wa_dshs_listed_facilities",
+      "state_name": "Washington",
+      "role": "directory",
+      "count": 6278
+    },
+    {
+      "relation": "public.wa_afh_map_facilities",
+      "state_name": "Washington",
+      "role": "map",
+      "count": 6278
+    },
+    {
+      "relation": "public.or_odhs_listed_afh",
+      "state_name": "Oregon",
+      "role": "directory",
+      "count": 1584
+    }
+  ]
+}
