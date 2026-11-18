@@ -38,8 +38,8 @@ export default function Home() {
 
       <section
         style={{
-          background: "linear-gradient(135deg, #123c59, #176b53)",
-          color: "white",
+          background: "linear-gradient(115deg, #e9f4ff, #ffffff)",
+          color: "#102e55",
           padding: "72px 7%",
         }}
       >
@@ -102,7 +102,7 @@ export default function Home() {
               </div>
               <button
                 type="submit"
-                style={{ gridColumn: "1 / -1", background: "#176b53", color: "#ffffff", border: 0, borderRadius: 10, padding: "15px 18px", fontWeight: 800, fontSize: 17, cursor: "pointer" }}
+                style={{ gridColumn: "1 / -1", background: "#075ab7", color: "#ffffff", border: 0, borderRadius: 10, padding: "15px 18px", fontWeight: 800, fontSize: 17, cursor: "pointer" }}
               >
                 {t.searchButton}
               </button>
@@ -223,7 +223,7 @@ export default function Home() {
                   <Link
                     href={href}
                     style={{
-                      color: "#176b53",
+                      color: "#075ab7",
                       textDecoration: "underline",
                       textUnderlineOffset: 3,
                       display: "block",
