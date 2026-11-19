@@ -1,0 +1,140 @@
+{
+  "observedOn": "2026-11-19",
+  "download": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rcfeSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arfSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "filenameIsoCandidate": "2026-11-15",
+    "authoritativeIsoExportDate": null,
+    "capacityColumnPresent": true,
+    "capacityPreservedByParser": true,
+    "coordinatesPresentInDownload": false,
+    "httpLastModifiedPresent": false
+  },
+  "historical": {
+    "rcfeRows": 12522,
+    "arfRows": 10498,
+    "chhsRawFileDate": "05252025"
+  },
+  "gis": {
+    "rows": 37887,
+    "pages": 38,
+    "complete": true
+  },
+  "accounting": {
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "invariantHolds": true,
+    "phase6FiveRecordGapResolved": true,
+    "exceptionDocumentedExcludeIds": [
+      "198601400",
+      "306006749",
+      "306006799",
+      "374604731",
+      "95354"
+    ],
+    "publicationCandidatesIfGateOpened": 15451
+  },
+  "capacity": {
+    "rcfe": {
+      "missing": 17,
+      "invalid": 0,
+      "zero": 0,
+      "negative": 0,
+      "valid": 13320
+    },
+    "arf": {
+      "missing": 4,
+      "invalid": 0,
+      "zero": 0,
+      "negative": 0,
+      "valid": 11036
+    },
+    "totals": {
+      "missing": 21,
+      "invalid": 0,
+      "zero": 0,
+      "negative": 0,
+      "valid": 24356
+    },
+    "crossSource": {
+      "exactHistoricalCompared": 21045,
+      "inconsistentWithHistorical": 205,
+      "historicalMissingForExactId": 3311,
+      "exactGisCompared": 15283,
+      "inconsistentWithGis": 358,
+      "gisMissingForExactId": 7585,
+      "leadingZeroGisCollapsedCompared": 1488,
+      "inconsistentWithGisLeadingZeroCollapsed": 31,
+      "officialValuesOverwritten": 0
+    }
+  },
+  "coordinates": {
+    "allCandidates": {
+      "candidateCount": 15451,
+      "activeCandidateCount": 15413,
+      "restrictedCandidateCount": 38,
+      "exactMatchWithValidCoords": 14059,
+      "leadingZeroCollapsedUniqueWithValidCoords": 1365,
+      "ambiguousRejected": 0,
+      "unmatched": 27,
+      "invalidDownloadIds": 0,
+      "gisCoordsMissingOrInvalid": 0,
+      "exactValidCoverageRate": 0.9099087437706297,
+      "usableOfficialCoordsRate": 0.9982525402886545,
+      "fabricatedCoordinates": 0,
+      "unverifiedGeocodingUsed": 0
+    },
+    "active": {
+      "candidateCount": 15413,
+      "activeCandidateCount": 15413,
+      "restrictedCandidateCount": 0,
+      "exactMatchWithValidCoords": 14024,
+      "leadingZeroCollapsedUniqueWithValidCoords": 1362,
+      "ambiguousRejected": 0,
+      "unmatched": 27,
+      "invalidDownloadIds": 0,
+      "gisCoordsMissingOrInvalid": 0,
+      "exactValidCoverageRate": 0.9098812690585869,
+      "usableOfficialCoordsRate": 0.998248232011938,
+      "fabricatedCoordinates": 0,
+      "unverifiedGeocodingUsed": 0
+    },
+    "restricted": {
+      "candidateCount": 38,
+      "activeCandidateCount": 0,
+      "restrictedCandidateCount": 38,
+      "exactMatchWithValidCoords": 35,
+      "leadingZeroCollapsedUniqueWithValidCoords": 3,
+      "ambiguousRejected": 0,
+      "unmatched": 0,
+      "invalidDownloadIds": 0,
+      "gisCoordsMissingOrInvalid": 0,
+      "exactValidCoverageRate": 0.9210526315789473,
+      "usableOfficialCoordsRate": 1,
+      "fabricatedCoordinates": 0,
+      "unverifiedGeocodingUsed": 0
+    }
+  },
+  "freshness": {
+    "satisfied": false,
+    "authoritativeIsoExportDate": null,
+    "acceptedChannels": 0,
+    "rejectedChannels": 7,
+    "absentChannels": 7,
+    "gate": "blocked"
+  },
+  "gate": {
+    "publication": "unpublished",
+    "ownerClaimEligible": false,
+    "freshnessSatisfied": false,
+    "allowsPublication": false,
+    "gate": "blocked"
+  }
+}

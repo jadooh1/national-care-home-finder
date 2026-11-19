@@ -30,6 +30,9 @@ export const CALIFORNIA_TRANSPARENCY_DOWNLOAD_CORE_FIELDS = [
   "Last Visit Date",
 ] as const;
 
+/** Official DownloadStateData capacity column (present in live CSVs; may be empty). */
+export const CALIFORNIA_TRANSPARENCY_DOWNLOAD_CAPACITY_FIELD = "Facility Capacity";
+
 export const CALIFORNIA_TRANSPARENCY_DOWNLOAD_STATUSES = [
   "LICENSED",
   "CLOSED",
@@ -61,7 +64,10 @@ export const CALIFORNIA_TRANSPARENCY_DOWNLOAD_PROVENANCE = {
     "Corrupt or shifted rows can appear (observed Facility Number 95354 matching the ZIP).",
     "Closed-facility retention appears bounded (~five years on the Transparency Site); older historical CLOSED rows may be absent.",
     "GIS integer FAC_NBR still truncates leading zeros; download strings keep them.",
+    "Facility Capacity is present on live DownloadStateData CSVs and is preserved by the read-only parser; empty/invalid cells remain common on CLOSED/PENDING rows and must be quantified separately.",
+    "DownloadStateData has no latitude/longitude columns; official coordinates require an exact ArcGIS licensing-ID match.",
   ],
+  capacityField: CALIFORNIA_TRANSPARENCY_DOWNLOAD_CAPACITY_FIELD,
 } as const;
 
 export const CALIFORNIA_TRANSPARENCY_DOWNLOAD_PUBLICATION_GATE = {
@@ -91,6 +97,8 @@ export type CaliforniaTransparencyDownloadRow = {
   licenseFirstDate: string;
   closedDate: string;
   lastVisitDate: string;
+  /** Official Facility Capacity cell as downloaded (string; may be blank). Never invented. */
+  facilityCapacity: string;
 };
 
 export type CaliforniaTransparencyDownloadFilenameDate = {
@@ -255,6 +263,9 @@ export function parseCaliforniaTransparencyDownloadCsv(
   if (lines.length === 0) return [];
   const headers = parseCsvLine(lines[0] ?? "");
   const index = Object.fromEntries(headers.map((header, i) => [header, i]));
+  const capacityHeaderIndex = headers.findIndex(
+    header => /^facility capacity$/i.test(header),
+  );
   const rows: CaliforniaTransparencyDownloadRow[] = [];
   for (const line of lines.slice(1)) {
     const cells = parseCsvLine(line);
@@ -272,6 +283,9 @@ export function parseCaliforniaTransparencyDownloadCsv(
       licenseFirstDate: get("License First Date"),
       closedDate: get("Closed Date"),
       lastVisitDate: get("Last Visit Date"),
+      // Preserve the official capacity cell when the column exists; blank when absent.
+      facilityCapacity:
+        capacityHeaderIndex >= 0 ? text(cells[capacityHeaderIndex]) : "",
     });
   }
   return rows;

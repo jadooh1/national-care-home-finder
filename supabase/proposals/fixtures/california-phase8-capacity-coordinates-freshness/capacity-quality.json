@@ -1,0 +1,71 @@
+{
+  "observedOn": "2026-11-19",
+  "rcfe": {
+    "file": "RCFE",
+    "rowCount": 13337,
+    "quality": {
+      "missing": 17,
+      "invalid": 0,
+      "zero": 0,
+      "negative": 0,
+      "valid": 13320
+    },
+    "qualitySumEqualsRowCount": true,
+    "crossSource": {
+      "exactHistoricalCompared": 11292,
+      "inconsistentWithHistorical": 98,
+      "historicalMissingForExactId": 2028,
+      "exactGisCompared": 7866,
+      "inconsistentWithGis": 150,
+      "gisMissingForExactId": 4681,
+      "leadingZeroGisCollapsedCompared": 773,
+      "inconsistentWithGisLeadingZeroCollapsed": 17,
+      "officialValuesOverwritten": 0
+    }
+  },
+  "arf": {
+    "file": "ARF",
+    "rowCount": 11040,
+    "quality": {
+      "missing": 4,
+      "invalid": 0,
+      "zero": 0,
+      "negative": 0,
+      "valid": 11036
+    },
+    "qualitySumEqualsRowCount": true,
+    "crossSource": {
+      "exactHistoricalCompared": 9753,
+      "inconsistentWithHistorical": 107,
+      "historicalMissingForExactId": 1283,
+      "exactGisCompared": 7417,
+      "inconsistentWithGis": 208,
+      "gisMissingForExactId": 2904,
+      "leadingZeroGisCollapsedCompared": 715,
+      "inconsistentWithGisLeadingZeroCollapsed": 14,
+      "officialValuesOverwritten": 0
+    }
+  },
+  "totals": {
+    "rowCount": 24377,
+    "quality": {
+      "missing": 21,
+      "invalid": 0,
+      "zero": 0,
+      "negative": 0,
+      "valid": 24356
+    },
+    "qualitySumEqualsRowCount": true,
+    "crossSource": {
+      "exactHistoricalCompared": 21045,
+      "inconsistentWithHistorical": 205,
+      "historicalMissingForExactId": 3311,
+      "exactGisCompared": 15283,
+      "inconsistentWithGis": 358,
+      "gisMissingForExactId": 7585,
+      "leadingZeroGisCollapsedCompared": 1488,
+      "inconsistentWithGisLeadingZeroCollapsed": 31,
+      "officialValuesOverwritten": 0
+    }
+  }
+}
