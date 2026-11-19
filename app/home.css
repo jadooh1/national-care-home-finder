@@ -1,0 +1,56 @@
+.home { --navy:#092443; --blue:#075ab7; color:var(--navy); font:16px/1.45 Arial,sans-serif; background:white; }
+.home * {box-sizing:border-box}
+.home a {color:inherit;text-decoration:none}
+.home a:hover,.home summary:hover {text-decoration:underline}
+.home :focus-visible {outline:3px solid #075ab7;outline-offset:3px}
+.home button,.home summary {cursor:pointer;font:inherit}
+.home-header,.home-header nav,.home-actions,.home .wa-lang,.home-brand,.benefits,.state-heading,.home footer {display:flex;align-items:center}
+.home-header {position:relative;z-index:2;justify-content:space-between;gap:18px;padding:16px 3%;border-bottom:1px solid #dde5ec}
+.home-brand {gap:9px;font-size:clamp(17px,1.5vw,26px);font-weight:800;line-height:1}
+.home-brand img {width:clamp(48px,5vw,80px);height:auto}
+.home-brand small {display:block;font-size:.56em;font-weight:500;font-style:italic;margin-top:5px}
+.home-header nav,.home-actions {gap:clamp(9px,1.4vw,24px);font-weight:600}
+.home-header nav {font-size:clamp(14px,1.1vw,18px)}
+.home-header [aria-current] {color:var(--blue);border-bottom:3px solid;padding:9px 0}
+.home-header details {position:relative}
+.home-header details div {position:absolute;min-width:145px;background:white;box-shadow:0 6px 18px #09244324;padding:8px;border-radius:9px;z-index:2}
+.home-header details a {display:block;padding:7px}
+.home .wa-lang button,.home .sign {padding:8px;border:1px solid #becfe0;background:white;color:var(--blue);font-weight:bold}
+.home .wa-lang button[aria-pressed=true] {background:#e8f3fd}
+.home .sign {border:1px solid;border-radius:14px;padding:8px 16px}
+.home-hero {position:relative;isolation:isolate;overflow:hidden;padding:clamp(34px,4vw,66px) 4% 22px;background:linear-gradient(110deg,#f6f1e7,#fbfcfd 58%,#e7f1fc)}
+.portrait {position:absolute;z-index:-1;inset:0 0 0 42%;background:center 25% /cover no-repeat url('/home/caregiver.webp');mask-image:linear-gradient(to right,transparent,#000 18%)}
+.hero-intro {max-width:53%;margin-bottom:22px}
+.home h1 {max-width:720px;font-size:clamp(34px,4vw,68px);line-height:1.04;letter-spacing:-.035em;margin:0}
+.hero-intro p {max-width:580px;font-size:clamp(16px,1.5vw,23px);line-height:1.35;margin:16px 0}
+.home-form {display:grid;grid-template-columns:auto 1fr 1.35fr auto;gap:12px;align-items:end;width:min(100%,1100px);padding:14px 18px;background:white;border-radius:13px;box-shadow:0 4px 19px #152d4a29}
+.home-form label,.home-form span {font-size:14px;font-weight:bold}
+.home-form strong,.home-form input {display:block;width:100%;margin-top:4px;font:inherit;color:var(--navy);border:1px solid #ccdae5;border-radius:6px;background:white;padding:9px}
+.home-form strong {background:#eef6fb}
+.home-form button,.home aside a {border:0;background:var(--blue);color:white;padding:12px 18px;border-radius:8px;font-weight:bold}
+.benefits {flex-wrap:wrap;gap:10px 24px;margin-top:14px;width:fit-content;padding:4px 14px;background:#ffffffed;border-radius:8px}
+.benefits span {display:flex;gap:8px;align-items:center;font-size:14px;font-weight:600}
+.benefits b {color:var(--blue);font-size:24px}
+.home-explore {display:grid;grid-template-columns:minmax(0,3.6fr) minmax(210px,1fr);gap:26px;padding:28px 4%}
+.state-heading {justify-content:space-between;gap:10px}
+.state-heading button {border:0;background:none;color:var(--blue);font-weight:bold}
+.home h2,.home h3,.home-explore p {margin:0}
+.home-explore p {margin-bottom:14px}
+.state-grid {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.state-grid article {border:1px solid #dce4eb;border-radius:13px;overflow:hidden;box-shadow:0 2px 7px #12365912}
+.state-grid img {width:100%;height:auto;display:block}
+.state-grid article div {padding:10px}
+.state-grid h3 {font-size:clamp(15px,1.3vw,21px);margin-bottom:7px;overflow-wrap:anywhere}
+.state-grid a {display:inline-block;border-radius:24px;color:#08478a;background:#d7edff;padding:5px 12px;font-weight:bold}
+.state-grid small {color:#526374}
+.state-filter {font:inherit;padding:10px;margin-bottom:14px;width:min(100%,420px)}
+.home aside {border-radius:17px;background:linear-gradient(145deg,#d8efff,#f5fbff);padding:22px}
+.home aside h2 {font-size:clamp(18px,1.6vw,24px);line-height:1.18}
+.home aside ul {padding:0;list-style:none}
+.home aside li {margin:6px 0}
+.home aside li::before {content:"✓";margin-right:8px;color:#007a54;font-weight:bold}
+.home aside a {display:block;text-align:center;background:#00794f;border-radius:24px}
+.home footer {justify-content:space-between;gap:20px;background:linear-gradient(160deg,#123f72,#082349);color:white;padding:25px 4%}
+.coverage {margin:0;padding:12px 4%;font-size:13px;color:#435569}
+@media(max-width:1040px){.home-header{flex-wrap:wrap}.home-header nav{order:3;width:100%;flex-wrap:wrap}.home-form{width:90%}.home-explore{grid-template-columns:1fr}.home aside{max-width:none}.state-grid{grid-template-columns:repeat(auto-fit,minmax(min(145px,100%),1fr))}}
+@media(max-width:680px){.home-header{gap:12px}.home-actions{gap:5px}.home .wa-lang button,.home .sign{font-size:13px;padding:8px 6px}.home-header details div{left:0}.home-hero{padding:0 5% 18px}.portrait{position:relative;inset:auto;height:auto;aspect-ratio:805/284;margin:0 -5.6% 18px;mask-image:none}.hero-intro{max-width:100%}.home-form{width:100%;grid-template-columns:1fr}.home-form button{min-height:44px}.home-explore{padding:22px 5%;gap:15px}.state-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.home footer{align-items:flex-start;flex-direction:column;gap:7px}.benefits{padding:0;background:none}.state-heading{align-items:flex-start}}
