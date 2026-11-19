@@ -1,0 +1,28 @@
+{
+  "observedOn": "2026-11-19",
+  "authoritativeIsoExportDate": null,
+  "satisfied": false,
+  "gate": "blocked",
+  "recommendationPolicy": "require-official-iso-export-channel",
+  "keepGateBlocked": true,
+  "channelIds": [
+    "download-content-disposition-filename-mmddyyyy",
+    "download-http-last-modified",
+    "download-http-date",
+    "download-http-etag",
+    "download-csv-file-date-column",
+    "download-client-retrieval-timestamp",
+    "facilitydetail-nested-export-timestamp",
+    "transparency-openapi-swagger",
+    "transparency-download-page-html",
+    "ccld-pin-24-01-transparency-site",
+    "cdss-ccld-data-page",
+    "cdss-facility-search-welcome",
+    "chhs-file-date-text",
+    "chhs-package-metadata-dcat",
+    "gis-data-last-edit",
+    "publish-data-ca-catalog-update",
+    "official-iso-export-timestamp-channel"
+  ],
+  "acceptedAuthoritativeIsoChannels": 0
+}
