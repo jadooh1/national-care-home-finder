@@ -1,0 +1,97 @@
+{
+  "observedOn": "2026-11-19",
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "freshness": {
+    "satisfied": false,
+    "authoritativeIsoExportDate": null,
+    "ageDays": null,
+    "reason": "No authoritative ISO export date verified on DownloadStateData; publication gate stays blocked."
+  },
+  "totals": {
+    "rowCount": 24377,
+    "activeCandidates": 15413,
+    "restrictedCandidates": 38,
+    "publicationCandidatesIfGateOpened": 15451,
+    "excluded": 8921,
+    "exceptions": 5,
+    "invalidIdentifiers": 1,
+    "duplicateLicenseIds": 0,
+    "missingAddresses": 38,
+    "capacityMissingFromDownload": 24377,
+    "coordinatesMissingFromDownload": 24377
+  },
+  "blockers": [
+    {
+      "id": "no-authoritative-iso-export-date",
+      "severity": "blocking",
+      "summary": "No verified CDSS DownloadStateData ISO export/freshness timestamp; filename MMDDYYYY and CHHS file_date text remain non-authoritative. Gate stays blocked."
+    },
+    {
+      "id": "capacity-and-coordinates-absent-from-download",
+      "severity": "blocking",
+      "summary": "DownloadStateData has no capacity or coordinate columns; publication-ready roster fields remain incomplete from this source alone."
+    },
+    {
+      "id": "closed-application-withdrawn-mapping-gap",
+      "severity": "blocking",
+      "summary": "Download CLOSED includes FacilityDetail Application Withdrawn; Closed* subtype mapping is still required for withdrawn vs closed."
+    },
+    {
+      "id": "roster-wide-current-status-unverified",
+      "severity": "blocking",
+      "summary": "FacilityDetail verification remains sample-bounded; roster-wide current status is not verified."
+    },
+    {
+      "id": "invalid-and-exceptional-identifiers",
+      "severity": "blocking",
+      "summary": "Invalid identifiers (e.g. 95354) and documented exceptional IDs must remain excluded or specially handled."
+    },
+    {
+      "id": "sample-insufficient-for-publication",
+      "severity": "blocking",
+      "summary": "Bounded FacilityDetail samples and Phase 6 gate evaluation cannot approve California publication."
+    }
+  ],
+  "rcfeCandidates": {
+    "active": 8625,
+    "restricted": 25
+  },
+  "arfCandidates": {
+    "active": 6788,
+    "restricted": 13
+  },
+  "exceptionalIds": [
+    {
+      "facilityNumber": "366401835",
+      "classification": "historical-data-defect",
+      "gateImpact": "document-only-eligible-if-rules-pass"
+    },
+    {
+      "facilityNumber": "374604731",
+      "classification": "possible-relicense",
+      "gateImpact": "exclude-out-of-scope"
+    },
+    {
+      "facilityNumber": "198601400",
+      "classification": "unusual-transition",
+      "gateImpact": "exclude-ineligible-status"
+    },
+    {
+      "facilityNumber": "306006749",
+      "classification": "application-withdrawn-mapping-gap",
+      "gateImpact": "exclude-withdrawn-mapping-gap"
+    },
+    {
+      "facilityNumber": "306006799",
+      "classification": "application-withdrawn-mapping-gap",
+      "gateImpact": "exclude-withdrawn-mapping-gap"
+    },
+    {
+      "facilityNumber": "95354",
+      "classification": "invalid-identifier",
+      "gateImpact": "exclude-invalid-id"
+    }
+  ]
+}

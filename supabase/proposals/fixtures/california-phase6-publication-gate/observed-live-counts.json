@@ -1,0 +1,178 @@
+{
+  "observedOn": "2026-11-19",
+  "download": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rcfeFilename": "ResidentialElderCareFacility11152026.csv",
+    "arfFilename": "AdultResidentialFacilities11152026.csv",
+    "rcfeSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arfSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "filenameIsoCandidate": "2026-11-15",
+    "authoritativeIsoExportDate": null,
+    "freshness": {
+      "httpLastModifiedPresent": false,
+      "csvBodyFileDateColumnPresent": false,
+      "facilityDetailExportTimestampPresent": false,
+      "chhsRawFileDateText": "05252025"
+    }
+  },
+  "gate": {
+    "publication": "unpublished",
+    "ownerClaimEligible": false,
+    "freshnessSatisfied": false,
+    "allowsPublication": false
+  },
+  "totals": {
+    "rowCount": 24377,
+    "activeCandidates": 15413,
+    "restrictedCandidates": 38,
+    "publicationCandidatesIfGateOpened": 15451,
+    "excluded": 8921,
+    "exceptions": 5,
+    "invalidIdentifiers": 1,
+    "duplicateLicenseIds": 0,
+    "missingAddresses": 38,
+    "capacityMissingFromDownload": 24377,
+    "coordinatesMissingFromDownload": 24377
+  },
+  "rcfe": {
+    "rowCount": 13337,
+    "activeCandidates": 8625,
+    "restrictedCandidates": 25,
+    "excluded": 4687,
+    "exceptions": 0,
+    "byStatus": {
+      "LICENSED": 8626,
+      "PENDING": 922,
+      "CLOSED": 3764,
+      "ON PROBATION": 25
+    },
+    "byType": {
+      "RCFE-CONTINUING CARE RETIREMENT COMMUNITY": 135,
+      "RESIDENTIAL CARE ELDERLY": 13190,
+      "(blank)": 12
+    },
+    "exclusionReasons": {
+      "invalid-identifier": 0,
+      "blank-type": 12,
+      "unknown-type": 0,
+      "out-of-scope-type": 0,
+      "pending-status": 922,
+      "closed-status": 3764,
+      "withdrawn-status": 0,
+      "unknown-status": 0,
+      "duplicate-license": 0,
+      "missing-address": 26
+    },
+    "invalidIdentifiers": [],
+    "duplicateFacilityNumbers": [],
+    "missingAddressCount": 26,
+    "capacityMissingCount": 13337,
+    "coordinatesMissingCount": 13337
+  },
+  "arf": {
+    "rowCount": 11040,
+    "activeCandidates": 6788,
+    "restrictedCandidates": 13,
+    "excluded": 4234,
+    "exceptions": 5,
+    "byStatus": {
+      "LICENSED": 8123,
+      "CLOSED": 2345,
+      "PENDING": 559,
+      "ON PROBATION": 13
+    },
+    "byType": {
+      "ADULT DAY PROGRAM": 1381,
+      "ADULT RESIDENTIAL": 8784,
+      "ADULT RESIDENTIAL FACILITY FOR PERSONS WITH SPECIAL HEALTH CARE NEEDS": 117,
+      "COMMUNITY CRISIS HOME - ARF": 38,
+      "ENHANCED BEHAVIORAL SUPPORTS HOME - ARF": 139,
+      "MEDICAL FOSTER HOMES FOR VETERANS": 1,
+      "RESIDENTIAL FACILITY CHRONICALLY ILL": 16,
+      "SOCIAL REHABILITATION FACILITY": 559,
+      "(blank)": 5
+    },
+    "exclusionReasons": {
+      "invalid-identifier": 1,
+      "blank-type": 5,
+      "unknown-type": 0,
+      "out-of-scope-type": 1957,
+      "pending-status": 559,
+      "closed-status": 2345,
+      "withdrawn-status": 0,
+      "unknown-status": 0,
+      "duplicate-license": 0,
+      "missing-address": 12
+    },
+    "invalidIdentifiers": [
+      "95354"
+    ],
+    "duplicateFacilityNumbers": [],
+    "missingAddressCount": 12,
+    "capacityMissingCount": 11040,
+    "coordinatesMissingCount": 11040
+  },
+  "exceptions": [
+    {
+      "facilityNumber": "366401835",
+      "file": "ARF",
+      "classification": "historical-data-defect",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT RESIDENTIAL",
+      "liveStatus": "Licensed",
+      "summary": "Historical CHHS facility_status was the date string 9/2/1997 (data defect). Download and FacilityDetail both show LICENSED / Licensed for an eligible ARF type. Documented exception; eligible under Phase 6 rules if present in the download with valid address.",
+      "gateImpact": "document-only-eligible-if-rules-pass"
+    },
+    {
+      "facilityNumber": "374604731",
+      "file": "ARF",
+      "classification": "possible-relicense",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "liveStatus": "Licensed",
+      "summary": "Historical CLOSED → download LICENSED with later license-first date (possible relicense). FacilityDetail = Licensed, but type is ADULT DAY PROGRAM (out of scope / non-residential). Exclude from publication candidates.",
+      "gateImpact": "exclude-out-of-scope"
+    },
+    {
+      "facilityNumber": "198601400",
+      "file": "ARF",
+      "classification": "unusual-transition",
+      "downloadStatus": "PENDING",
+      "downloadType": "ADULT RESIDENTIAL",
+      "liveStatus": "Pending",
+      "summary": "Historical LICENSED → download PENDING (unusual). FacilityDetail confirms Pending. Eligible ARF type but PENDING status is ineligible.",
+      "gateImpact": "exclude-ineligible-status"
+    },
+    {
+      "facilityNumber": "306006749",
+      "file": "ARF",
+      "classification": "application-withdrawn-mapping-gap",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "liveStatus": "Application Withdrawn",
+      "summary": "Download CLOSED maps to FacilityDetail Application Withdrawn (not Closed*). ADP out of scope and withdrawn-ineligible.",
+      "gateImpact": "exclude-withdrawn-mapping-gap"
+    },
+    {
+      "facilityNumber": "306006799",
+      "file": "ARF",
+      "classification": "application-withdrawn-mapping-gap",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "liveStatus": "Application Withdrawn",
+      "summary": "Download CLOSED maps to FacilityDetail Application Withdrawn (not Closed*). ADP out of scope and withdrawn-ineligible.",
+      "gateImpact": "exclude-withdrawn-mapping-gap"
+    },
+    {
+      "facilityNumber": "95354",
+      "file": "ARF",
+      "classification": "invalid-identifier",
+      "downloadStatus": "PENDING",
+      "downloadType": "ADULT RESIDENTIAL",
+      "liveStatus": null,
+      "summary": "Corrupt/shifted download row: Facility Number 95354 matches ZIP and fails 8–9 digit facility-number validation. FacilityDetail not found. Must reject.",
+      "gateImpact": "exclude-invalid-id"
+    }
+  ]
+}
