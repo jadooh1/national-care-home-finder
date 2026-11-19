@@ -1,0 +1,18 @@
+{
+  "rcfe": {
+    "contentType": "text/csv",
+    "contentDisposition": "attachment; filename=ResidentialElderCareFacility11152026.csv",
+    "observedBytes": 8635782,
+    "observedSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "observedRowCount": 13337
+  },
+  "arf": {
+    "contentType": "text/csv",
+    "contentDisposition": "attachment; filename=AdultResidentialFacilities11152026.csv",
+    "observedBytes": 5434124,
+    "observedSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "observedRowCount": 11040
+  },
+  "observedOn": "2026-11-19",
+  "api": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData"
+}
