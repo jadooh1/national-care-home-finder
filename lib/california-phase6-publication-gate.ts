@@ -135,7 +135,11 @@ export type CaliforniaPhase6DownloadRow = {
   licenseFirstDate: string;
   closedDate: string;
   lastVisitDate: string;
-  /** DownloadStateData has no capacity column; optional for alternate sources only. */
+  /**
+   * Official Facility Capacity from DownloadStateData when the parser preserves it.
+   * Phase 6 historically treated capacity as absent; Phase 7+ confirmed the column
+   * exists. Empty/missing remains common; never invent a value.
+   */
   capacity?: string | number | null;
   latitude?: string | number | null;
   longitude?: string | number | null;

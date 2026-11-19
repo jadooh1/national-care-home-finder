@@ -220,6 +220,9 @@ jobs:
       - name: Check the California Phase 7 accounting and freshness
         run: node --experimental-strip-types --test supabase/proposals/tests/california_phase7_accounting_freshness.ts
 
+      - name: Check the California Phase 8 capacity, coordinates, and freshness
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase8_capacity_coordinates_freshness.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 

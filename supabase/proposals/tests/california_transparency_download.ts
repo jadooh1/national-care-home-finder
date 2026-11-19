@@ -98,6 +98,8 @@ test("parses DownloadStateData CSV fixtures and preserves leading-zero facility 
   assert.ok(leading);
   assert.equal(leading?.facilityStatus, "LICENSED");
   assert.equal(leading?.facilityType, "RCFE-CONTINUING CARE RETIREMENT COMMUNITY");
+  // Fixtures without Facility Capacity still parse; capacity is blank, never invented.
+  assert.equal(leading?.facilityCapacity, "");
   assert.equal(isCaliforniaTransparencyFacilityNumber("015601302"), true);
   assert.equal(isCaliforniaTransparencyFacilityNumber("15601302"), true);
   assert.equal(isCaliforniaTransparencyFacilityNumber("95354"), false);
@@ -106,6 +108,7 @@ test("parses DownloadStateData CSV fixtures and preserves leading-zero facility 
   const conflict = arf.find(row => row.facilityNumber === "011400493");
   assert.equal(conflict?.facilityStatus, "CLOSED");
   assert.equal(conflict?.closedDate, "4/28/2025");
+  assert.equal(conflict?.facilityCapacity, "");
   const invalid = arf.find(row => row.facilityNumber === "95354");
   assert.equal(invalid?.facilityZip, "95354");
 });
