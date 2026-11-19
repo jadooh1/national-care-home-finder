@@ -217,6 +217,9 @@ jobs:
       - name: Check the California Phase 6 publication gate
         run: node --experimental-strip-types --test supabase/proposals/tests/california_phase6_publication_gate.ts
 
+      - name: Check the California Phase 7 accounting and freshness
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase7_accounting_freshness.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 

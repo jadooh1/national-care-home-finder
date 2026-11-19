@@ -1,0 +1,79 @@
+{
+  "phase6ExceptionOutcomes": [
+    "374604731",
+    "198601400",
+    "306006749",
+    "306006799",
+    "95354"
+  ],
+  "evidence": [
+    {
+      "facilityNumber": "374604731",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-out-of-scope",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "primaryExclusionReasons": [
+        "out-of-scope-type"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "Documented possible-relicense; ADP out of scope. Phase 6 diverted to exception outcome instead of excluded."
+    },
+    {
+      "facilityNumber": "198601400",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-ineligible-status",
+      "downloadStatus": "PENDING",
+      "downloadType": "ADULT RESIDENTIAL",
+      "primaryExclusionReasons": [
+        "pending-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "Documented unusual LICENSED→PENDING transition; PENDING ineligible. Phase 6 diverted to exception outcome."
+    },
+    {
+      "facilityNumber": "306006749",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-withdrawn-mapping-gap",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "primaryExclusionReasons": [
+        "out-of-scope-type",
+        "closed-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "CLOSED↔Application Withdrawn mapping-gap; ADP out of scope. Phase 6 diverted to exception outcome."
+    },
+    {
+      "facilityNumber": "306006799",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-withdrawn-mapping-gap",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "primaryExclusionReasons": [
+        "out-of-scope-type",
+        "closed-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "CLOSED↔Application Withdrawn mapping-gap; ADP out of scope. Phase 6 diverted to exception outcome."
+    },
+    {
+      "facilityNumber": "95354",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-invalid-id",
+      "downloadStatus": "PENDING",
+      "downloadType": "ADULT RESIDENTIAL",
+      "primaryExclusionReasons": [
+        "invalid-identifier",
+        "pending-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "Corrupt/shifted Facility Number 95354 (ZIP collision). Phase 6 diverted to exception outcome."
+    }
+  ]
+}

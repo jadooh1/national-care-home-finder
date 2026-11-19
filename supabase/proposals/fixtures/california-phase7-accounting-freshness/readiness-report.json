@@ -1,0 +1,94 @@
+{
+  "reliableSourceAndDate": false,
+  "freshnessRequirementSatisfied": false,
+  "verifiedCurrentStatusRosterWide": false,
+  "uniqueValidIdentifiers": false,
+  "correctRcfeArfCategories": true,
+  "statusClassificationRulesDefined": true,
+  "exclusiveBucketAccountingInvariant": true,
+  "phase6FiveRecordGapResolved": true,
+  "capacityColumnPresentInDownload": true,
+  "capacityMappedThroughCoreParser": false,
+  "coordinatesPresentInDownload": false,
+  "closedSubtypeMappingComplete": false,
+  "verifiedDisclosureLinks": false,
+  "sampleVerificationSufficient": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "blockers": [
+    {
+      "id": "no-authoritative-iso-export-date",
+      "severity": "blocking",
+      "summary": "No verified CDSS DownloadStateData ISO export/freshness timestamp; filename MMDDYYYY, download timestamp, HTTP Date, CHHS file_date text, and GIS edit clocks remain non-authoritative. Gate stays blocked."
+    },
+    {
+      "id": "coordinates-absent-from-download",
+      "severity": "blocking",
+      "summary": "DownloadStateData has no latitude/longitude columns; coordinate-ready publication fields remain incomplete from this source alone."
+    },
+    {
+      "id": "capacity-parser-gap-and-empty-cells",
+      "severity": "blocking",
+      "summary": "Facility Capacity exists in DownloadStateData but the Transparency core parser historically dropped it; empty capacity cells remain on many CLOSED/PENDING rows. Parser mapping and empty-cell policy are still required before publication."
+    },
+    {
+      "id": "closed-application-withdrawn-mapping-gap",
+      "severity": "blocking",
+      "summary": "Download CLOSED includes FacilityDetail Application Withdrawn; Closed* subtype mapping is still required for withdrawn vs closed."
+    },
+    {
+      "id": "roster-wide-current-status-unverified",
+      "severity": "blocking",
+      "summary": "FacilityDetail verification remains sample-bounded; roster-wide current status is not verified."
+    },
+    {
+      "id": "invalid-and-exceptional-identifiers",
+      "severity": "blocking",
+      "summary": "Invalid identifiers (e.g. 95354) and documented exceptional IDs must remain fail-closed excluded or specially handled; none may bypass the publication gate."
+    },
+    {
+      "id": "sample-insufficient-for-publication",
+      "severity": "blocking",
+      "summary": "Bounded FacilityDetail samples and Phase 7 accounting cannot approve California publication."
+    }
+  ],
+  "observedOn": "2026-11-19",
+  "totals": {
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "invariantHolds": true,
+    "publicationCandidatesIfGateOpened": 15451,
+    "invalidIdentifiers": 1,
+    "unknownStatuses": 0,
+    "unknownTypes": 0,
+    "missingAddresses": 38,
+    "unsupportedStatusMappings": 2
+  },
+  "phase6FiveRecordGap": {
+    "threeBucketSum": 24372,
+    "fourBucketSum": 24377,
+    "apparentDifference": 5,
+    "resolved": true,
+    "exceptionOutcomeIds": [
+      "374604731",
+      "198601400",
+      "306006749",
+      "306006799",
+      "95354"
+    ],
+    "explanation": "Phase 6 reported active+restricted+excluded=24372 against 24377 rows (gap 5). The 5 missing rows are the ARF exception-documented-exclude outcomes 374604731, 198601400, 306006749, 306006799, 95354; including that exclusive bucket yields 24377."
+  },
+  "freshness": {
+    "satisfied": false,
+    "authoritativeIsoExportDate": null,
+    "acceptedChannels": 0,
+    "rejectedChannels": 5,
+    "absentChannels": 6
+  }
+}
