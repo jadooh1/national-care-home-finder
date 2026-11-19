@@ -240,6 +240,12 @@ export default function Home() {
             })}
           </div>
 
+          <aside style={{ marginTop: 28, background: "#eaf3ff", border: "1px solid #cfe2fb", borderRadius: 18, padding: "24px 28px", color: "#103a70" }}>
+            <h3 style={{ fontSize: 23, margin: "0 0 12px" }}>{locale === "es" ? "¿Por qué elegir National Care Home Finder?" : "Why Choose National Care Home Finder?"}</h3>
+            <p style={{ lineHeight: 1.7, margin: "0 0 10px" }}>{locale === "es" ? "Explore información de hogares de cuidado y enlaces a fuentes oficiales disponibles." : "Explore care home information and available links to official state resources."}</p>
+            <p style={{ lineHeight: 1.7, margin: 0 }}>{locale === "es" ? "Compare opciones con preguntas sobre servicios, personal y costos; confirme los detalles directamente con cada hogar." : "Compare options using questions about services, staffing, and costs; confirm details directly with each home."}</p>
+          </aside>
+
           <p aria-live="polite">{locale === "es" ? localizedStateStatus(locale, filteredStates.length) : stateFilterStatus(filteredStates.length)}</p>
 
           <p
