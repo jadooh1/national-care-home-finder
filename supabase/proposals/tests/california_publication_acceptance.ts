@@ -107,8 +107,13 @@ test("recorded conflicts, placeholders, and inconclusive responses are not accep
 });
 
 test("bad identifiers, categories, dates, and links fail without using coordinates as a requirement", () => {
-  assert.equal(californiaPublicationAcceptance(ready({ originalFacilityNumber: "01234567", liveFacilityNumber: "01234567" })).fieldFailures.includes("official-facility-identifier"), true);
+  // Official CDSS numbers may keep a leading zero; format acceptance is not publication.
+  const padded = californiaPublicationAcceptance(ready({ originalFacilityNumber: "015601302", liveFacilityNumber: "015601302" }));
+  assert.equal(padded.fieldFailures.includes("official-facility-identifier"), false);
+  assert.equal(padded.officialIdentifier, "015601302");
+  assert.equal(padded.accepted, false);
   assert.equal(californiaPublicationAcceptance(ready({ originalFacilityNumber: "0", liveFacilityNumber: "0" })).officialIdentifier, null);
+  assert.equal(californiaPublicationAcceptance(ready({ originalFacilityNumber: "ABC", liveFacilityNumber: "ABC" })).fieldFailures.includes("official-facility-identifier"), true);
   assert.equal(californiaPublicationAcceptance(ready({
     originalCategory: "ADULT DAY PROGRAM",
     liveFacilityType: "ADULT DAY PROGRAM",

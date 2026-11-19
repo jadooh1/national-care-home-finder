@@ -49,7 +49,8 @@ export const CALIFORNIA_PROFILE_URL = null;
 export const CALIFORNIA_COORDINATE_COLUMNS = false;
 export const CALIFORNIA_FACILITY_DETAIL_PREFIX =
   "https://www.ccld.dss.ca.gov/carefacilitysearch/?Rewrite=FacDetail/";
-const CALIFORNIA_OFFICIAL_FACILITY_NUMBER = /^(?:[1-9][0-9]{7}|[1-9][0-9]{8})$/;
+/** Official CDSS facility numbers are 8–9 digit strings and may keep a leading zero. */
+const CALIFORNIA_OFFICIAL_FACILITY_NUMBER = /^\d{8,9}$/;
 
 export const CALIFORNIA_DETAIL_VERIFICATION = {
   observedOn: "2026-11-13",

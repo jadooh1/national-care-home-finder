@@ -1,6 +1,9 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { reconcileCaliforniaCclGis } from "../../../lib/california-ccl-reconciliation.ts";
+import {
+  classifyCaliforniaGisFacilityType,
+  reconcileCaliforniaCclGis,
+} from "../../../lib/california-ccl-reconciliation.ts";
 
 test("reconciles identifiers without inferring numeric GIS status meanings", () => {
   const result = reconcileCaliforniaCclGis(
@@ -20,6 +23,7 @@ test("reconciles identifiers without inferring numeric GIS status meanings", () 
   assert.equal(result.invalidGisIdentifiers, 1);
   assert.equal(result.missingGisCoordinates, 1);
   assert.equal(result.invalidGisCoordinates, 2);
+  assert.deepEqual(result.leadingZeroRepresentationMismatches, []);
   assert.equal(result.statusConflicts, null);
   assert.equal(result.currentLicenseStatusVerified, false);
   assert.equal(result.publication, "unpublished");
@@ -35,6 +39,32 @@ test("rejects malformed identifiers without guessing a match", () => {
   assert.equal(result.matchedLicenses, 0);
   assert.deepEqual(result.missingFromGis, ["0012"]);
   assert.deepEqual(result.gisOnly, ["12"]);
+  assert.deepEqual(result.leadingZeroRepresentationMismatches, ["0012"]);
+});
+
+test("leading-zero GIS integer truncation is reported without becoming a match", () => {
+  const result = reconcileCaliforniaCclGis(
+    [{ facility_number: "015601302", facility_status: "LICENSED" },
+      { facility_number: "100400070", facility_status: "LICENSED" }],
+    [{ FAC_NBR: 15601302, STATUS: 3, FAC_TYPE_DESC: "RESIDENTIAL-ELDERLY", FAC_LATITUDE: "37.5", FAC_LONGITUDE: "-122.0" },
+      { FAC_NBR: 100400070, STATUS: 3, FAC_TYPE_DESC: "RESIDENTIAL-ELDERLY", FAC_LATITUDE: "36.7", FAC_LONGITUDE: "-119.7" }],
+  );
+  assert.equal(result.matchedLicenses, 1);
+  assert.deepEqual(result.missingFromGis, ["015601302"]);
+  assert.deepEqual(result.leadingZeroRepresentationMismatches, ["015601302"]);
+  assert.equal(result.currentLicenseStatusVerified, false);
+  assert.equal(result.publication, "unpublished");
+});
+
+test("GIS facility-type prefixes classify RCFE/ARF-like rows without accepting STATUS", () => {
+  assert.equal(classifyCaliforniaGisFacilityType("RESIDENTIAL-ELDERLY "), "rcfe-like");
+  assert.equal(classifyCaliforniaGisFacilityType("RESIDENTIAL ELDERLY-"), "rcfe-like");
+  assert.equal(classifyCaliforniaGisFacilityType("ADULT RESIDENTIAL   "), "arf-like");
+  assert.equal(classifyCaliforniaGisFacilityType("ARF-ENHANCED BEHAVIO"), "arf-like");
+  assert.equal(classifyCaliforniaGisFacilityType("ARFPSHN"), "arf-like");
+  assert.equal(classifyCaliforniaGisFacilityType("COMMUNITY CRISIS HOM"), "arf-like");
+  assert.equal(classifyCaliforniaGisFacilityType("DAY CARE CENTER"), "other");
+  assert.equal(classifyCaliforniaGisFacilityType("ENHANCED BEHAVIORAL SUPPORTS HOME - GH"), "other");
 });
 
 test("empty inputs stay unpublished and do not invent facility counts", () => {
@@ -42,6 +72,7 @@ test("empty inputs stay unpublished and do not invent facility counts", () => {
   assert.equal(result.historicalRows, 0);
   assert.equal(result.gisRows, 0);
   assert.deepEqual(result.missingFromGis, []);
+  assert.deepEqual(result.leadingZeroRepresentationMismatches, []);
   assert.equal(result.currentLicenseStatusVerified, false);
   assert.equal(result.publication, "unpublished");
 });

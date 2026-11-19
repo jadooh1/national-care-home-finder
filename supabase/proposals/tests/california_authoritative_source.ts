@@ -72,6 +72,23 @@ test("placeholder addresses and non-ISO dates stay unresolved", () => {
   assert.equal(dated.officialPageUrl, `${CALIFORNIA_AUTHORITATIVE_PAGE}12345678`);
 });
 
+test("official facility numbers may keep a leading zero without becoming currently active", () => {
+  const classified = classifyCaliforniaLiveDetail({
+    facilityNumber: "015601302",
+    facilityType: "RCFE-CONTINUING CARE RETIREMENT COMMUNITY",
+    status: "Licensed",
+    streetAddress: "34400 MISSION BLVD.",
+    dateValues: [],
+  });
+  assert.equal(classified.officialIdentifier, "015601302");
+  assert.equal(classified.officialPageUrl, `${CALIFORNIA_AUTHORITATIVE_PAGE}015601302`);
+  assert.equal(classified.currentlyActive, false);
+  assert.equal(classified.publication, "unpublished");
+  assert.equal(californiaDisclosureUrl("015601302"), `${CALIFORNIA_AUTHORITATIVE_PAGE}015601302`);
+  assert.equal(californiaDisclosureUrl("15601302"), "https://www.ccld.dss.ca.gov/carefacilitysearch/?Rewrite=FacDetail/15601302");
+  assert.equal(californiaDisclosureUrl("123"), null);
+});
+
 test("the recheck records the completed adult-residential conflict and the failed residential-care query", () => {
   assert.equal(CALIFORNIA_AUTHORITATIVE_API, CALIFORNIA_DETAIL_VERIFICATION.api);
   assert.equal(CALIFORNIA_LIVE_RECHECK.arf, "completed");
