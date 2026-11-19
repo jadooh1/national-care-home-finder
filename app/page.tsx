@@ -123,7 +123,10 @@ export default function Home() {
               {t.exploreCare}
             </a>
           </div>
-          <div style={{ background: "#e3eefb", borderRadius: 24, padding: 18, boxShadow: "0 14px 36px rgba(9,50,100,.12)" }}><WelcomeScene /></div>
+          <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", background: "linear-gradient(145deg,#d7eafa,#f2f8ff)", minHeight: 320, boxShadow: "0 14px 36px rgba(9,50,100,.12)", display: "grid", placeItems: "center" }}>
+            <WelcomeScene />
+            <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "15px 20px", background: "linear-gradient(transparent,rgba(11,48,96,.8))", color: "white", fontWeight: 700 }}>{locale === "es" ? "Encuentre atención con confianza" : "Find care with confidence"}</div>
+          </div>
         </div>
       </section>
 
