@@ -208,6 +208,9 @@ jobs:
       - name: Check the California Transparency download verification
         run: node --experimental-strip-types --test supabase/proposals/tests/california_transparency_download.ts
 
+      - name: Check the California Phase 4 full reconciliation
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase4_reconciliation.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 

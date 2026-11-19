@@ -1,0 +1,107 @@
+{
+  "observedOn": "2026-11-19",
+  "download": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rcfeFilename": "ResidentialElderCareFacility11152026.csv",
+    "arfFilename": "AdultResidentialFacilities11152026.csv",
+    "rcfeSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arfSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "filenameIsoCandidate": "2026-11-15",
+    "authoritativeIsoExportDate": null
+  },
+  "historicalCompare": {
+    "rcfe": {
+      "historicalRows": 12522,
+      "exact": 11292,
+      "leadingZero": 0,
+      "historicalOnly": 1230,
+      "downloadOnly": 2045,
+      "statusConflicts": 1520,
+      "licensedToNonLicensed": 795
+    },
+    "arf": {
+      "historicalRows": 10498,
+      "exact": 9754,
+      "leadingZero": 0,
+      "historicalOnly": 744,
+      "downloadOnly": 1286,
+      "statusConflicts": 1000,
+      "licensedToNonLicensed": 508
+    }
+  },
+  "gisCompare": {
+    "allTypes": 37887,
+    "rcfe": {
+      "gisCategoryRows": 8639,
+      "exactIdMatches": 7866,
+      "leadingZeroRepresentationMismatches": 773,
+      "downloadMissingEvenCollapsed": 4698
+    },
+    "arf": {
+      "gisCategoryRows": 6806,
+      "exactIdMatches": 6207,
+      "leadingZeroRepresentationMismatches": 592,
+      "downloadMissingEvenCollapsed": 4241
+    }
+  },
+  "addressCompare": {
+    "rcfe": {
+      "exactCompared": 11292,
+      "addressDiff": 988,
+      "cityDiff": 25,
+      "zipDiff": 20
+    },
+    "arf": {
+      "exactCompared": 9754,
+      "addressDiff": 876,
+      "cityDiff": 18,
+      "zipDiff": 42
+    }
+  },
+  "capacityCompareHistVsGis": {
+    "rcfe": {
+      "compared": 7746,
+      "capacityDiff": 158
+    },
+    "arf": {
+      "compared": 7523,
+      "capacityDiff": 231
+    }
+  },
+  "downloadIntegrity": {
+    "rcfeDuplicates": 0,
+    "arfDuplicates": 0,
+    "rcfeInvalid": [],
+    "arfInvalid": [
+      "95354"
+    ],
+    "rcfeArfOverlap": 0,
+    "rcfeBlankAddress": 26,
+    "arfBlankAddress": 12,
+    "arfZipEqualsId": 1
+  },
+  "category": {
+    "rcfePublishable": 13325,
+    "rcfeOther": 12,
+    "arfPublishable": 9078,
+    "arfOther": 1962
+  },
+  "facilityDetailSample": {
+    "match": 13,
+    "conflict": 2,
+    "invalid-download-id": 1,
+    "missing-live": 0,
+    "sampleSize": 16
+  },
+  "publication": "unpublished",
+  "facilityDetailSampleExpanded": {
+    "sampleSize": 32,
+    "summary": {
+      "match": 29,
+      "conflict": 2,
+      "invalid-download-id": 1
+    },
+    "note": "Exploratory expansion beyond coded sample; includes one duplicate id row"
+  }
+}
