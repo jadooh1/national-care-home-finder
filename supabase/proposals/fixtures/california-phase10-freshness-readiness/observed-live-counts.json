@@ -1,0 +1,58 @@
+{
+  "observedOn": "2026-11-19",
+  "download": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rcfeSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arfSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "filenameIsoCandidate": "2026-11-15",
+    "authoritativeIsoExportDate": null,
+    "capacityColumnPresent": true,
+    "coordinatesPresentInDownload": false,
+    "httpLastModifiedPresent": false,
+    "httpEtagPresent": false,
+    "bytesUnchangedVsPhase9": true
+  },
+  "accounting": {
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "invariantHolds": true,
+    "phase6FiveRecordGapResolved": true,
+    "publicationCandidatesIfGateOpened": 15451
+  },
+  "missingCapacity": {
+    "totalMissing": 21,
+    "rcfeMissing": 17,
+    "arfMissing": 4,
+    "publicationCandidateMissing": 0,
+    "officialValuesOverwritten": 0,
+    "inventedCapacities": 0
+  },
+  "coordinates": {
+    "candidateCount": 15451,
+    "exactMatchWithValidCoords": 14059,
+    "newlyVerifiedIdentityCorroborated": 1364,
+    "verifiedOfficialCoords": 15423,
+    "leadingZeroIdentityRejected": 1,
+    "unmatched": 27,
+    "unresolved": 28,
+    "fabricatedCoordinates": 0
+  },
+  "freshness": {
+    "satisfied": false,
+    "authoritativeIsoExportDate": null,
+    "gate": "blocked",
+    "keepGateBlocked": true,
+    "officialWeeklyCadence": "The data is updated weekly.",
+    "weeklyCadenceUnlocksPublication": false
+  },
+  "gate": {
+    "allowsPublication": false,
+    "publication": "unpublished"
+  }
+}
