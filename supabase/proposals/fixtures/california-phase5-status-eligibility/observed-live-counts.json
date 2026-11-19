@@ -1,0 +1,112 @@
+{
+  "observedOn": "2026-11-19",
+  "download": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rcfeFilename": "ResidentialElderCareFacility11152026.csv",
+    "arfFilename": "AdultResidentialFacilities11152026.csv",
+    "rcfeSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arfSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "filenameIsoCandidate": "2026-11-15",
+    "authoritativeIsoExportDate": null,
+    "freshness": {
+      "httpLastModifiedPresent": false,
+      "csvBodyFileDateColumnPresent": false,
+      "facilityDetailExportTimestampPresent": false,
+      "chhsRawFileDateText": "05252025"
+    }
+  },
+  "historicalConflicts": {
+    "total": 2520,
+    "rcfe": {
+      "exact": 11292,
+      "conflictCount": 1520,
+      "transitions": {
+        "LICENSED -> CLOSED": 779,
+        "PENDING -> CLOSED": 124,
+        "PENDING -> LICENSED": 587,
+        "ON PROBATION -> CLOSED": 6,
+        "ON PROBATION -> LICENSED": 8,
+        "LICENSED -> ON PROBATION": 16
+      },
+      "buckets": {
+        "licensedToClosed": 779,
+        "licensedToPending": 0,
+        "licensedToOnProbation": 16,
+        "closedToLicensed": 0,
+        "closedToPending": 0,
+        "closedToOnProbation": 0,
+        "pendingToLicensed": 587,
+        "pendingToClosed": 124,
+        "pendingToOnProbation": 0,
+        "onProbationToLicensed": 8,
+        "onProbationToClosed": 6,
+        "onProbationToPending": 0,
+        "other": 0
+      }
+    },
+    "arf": {
+      "exact": 9754,
+      "conflictCount": 1000,
+      "transitions": {
+        "PENDING -> CLOSED": 85,
+        "LICENSED -> CLOSED": 498,
+        "PENDING -> LICENSED": 399,
+        "ON PROBATION -> LICENSED": 4,
+        "LICENSED -> PENDING": 1,
+        "CLOSED -> LICENSED": 1,
+        "LICENSED -> ON PROBATION": 9,
+        "9/2/1997 -> LICENSED": 1,
+        "ON PROBATION -> CLOSED": 2
+      },
+      "buckets": {
+        "licensedToClosed": 498,
+        "licensedToPending": 1,
+        "licensedToOnProbation": 9,
+        "closedToLicensed": 1,
+        "closedToPending": 0,
+        "closedToOnProbation": 0,
+        "pendingToLicensed": 399,
+        "pendingToClosed": 85,
+        "pendingToOnProbation": 0,
+        "onProbationToLicensed": 4,
+        "onProbationToClosed": 2,
+        "onProbationToPending": 0,
+        "other": 1
+      }
+    },
+    "classification": {
+      "expected-time-drift": 2517,
+      "unusual-transition": 1,
+      "possible-relicense": 1,
+      "historical-data-defect": 1
+    }
+  },
+  "category": {
+    "rcfeEligible": 13325,
+    "rcfeBlank": 12,
+    "arfEligible": 9078,
+    "arfOutOfScope": {
+      "ADULT DAY PROGRAM": 1381,
+      "SOCIAL REHABILITATION FACILITY": 559,
+      "RESIDENTIAL FACILITY CHRONICALLY ILL": 16,
+      "MEDICAL FOSTER HOMES FOR VETERANS": 1,
+      "(blank)": 5
+    }
+  },
+  "facilityDetailSample": {
+    "sampleSize": 41,
+    "statusPairs": {
+      "LICENSED => Licensed": 15,
+      "PENDING => Pending": 6,
+      "CLOSED => Application Withdrawn": 5,
+      "CLOSED => Closed, Change of Ownership": 4,
+      "CLOSED => Closed, Licensee Initiated": 4,
+      "CLOSED => Closed, Change of Location": 1,
+      "ON PROBATION => Probationary License": 4,
+      "CLOSED => Closed, Agency Initiated": 1,
+      "PENDING => (missing)": 1
+    }
+  },
+  "publication": "unpublished"
+}
