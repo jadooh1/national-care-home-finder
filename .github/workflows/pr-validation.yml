@@ -202,6 +202,9 @@ jobs:
       - name: Check the California CCL reconciliation report
         run: node --experimental-strip-types --test supabase/proposals/tests/california_ccl_reconciliation.ts
 
+      - name: Check the California status verification sample
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
