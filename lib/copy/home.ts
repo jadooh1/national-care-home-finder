@@ -30,8 +30,8 @@ export const copy: Record<Locale, HomeCopy> = {
   en: {
     pageTitle: "National Care Home Finder",
     eyebrow: "RESIDENTIAL CARE DIRECTORY",
-    heading: "Find the right care home for your loved one.",
-    lead: "Explore residential care options across the United States. Understand care types, discover official licensing resources, and make informed decisions.",
+    heading: "Trusted Care Home Options Across America",
+    lead: "Find the right care home for your loved one. Explore Washington adult family homes with official licensing resources.",
     facilityLabel: "Facility name, ZIP, or license",
     facilityPlaceholder: "e.g. 759392",
     cityLabel: "City",
@@ -66,8 +66,8 @@ export const copy: Record<Locale, HomeCopy> = {
   es: {
     pageTitle: "Buscador Nacional de Hogares de Cuidado",
     eyebrow: "DIRECTORIO DE CUIDADO RESIDENCIAL",
-    heading: "Encuentre el hogar de cuidado adecuado para su ser querido.",
-    lead: "Explore opciones de cuidado residencial en los Estados Unidos. Comprenda los tipos de cuidado, descubra recursos oficiales de licencias y tome decisiones informadas.",
+    heading: "Opciones de cuidado confiables en todo Estados Unidos",
+    lead: "Encuentre el hogar de cuidado adecuado para su ser querido. Explore hogares familiares para adultos en Washington con recursos oficiales de licencias.",
     facilityLabel: "Nombre del establecimiento, ZIP o licencia",
     facilityPlaceholder: "p. ej. 759392",
     cityLabel: "Ciudad",
