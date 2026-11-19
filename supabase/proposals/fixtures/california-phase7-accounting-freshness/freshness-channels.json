@@ -1,0 +1,85 @@
+{
+  "observedOn": "2026-11-19",
+  "authoritativeIsoExportDate": null,
+  "satisfied": false,
+  "gate": "blocked",
+  "channels": [
+    {
+      "id": "download-content-disposition-filename-mmddyyyy",
+      "channel": "DownloadStateData Content-Disposition filename stamp",
+      "observedValue": "11152026 → iso-candidate 2026-11-15",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "Filename MMDDYYYY is a download attachment label only; not an official ISO export timestamp channel."
+    },
+    {
+      "id": "download-http-last-modified",
+      "channel": "DownloadStateData HTTP Last-Modified",
+      "observedValue": null,
+      "verdict": "absent",
+      "rationale": "Response headers omit Last-Modified on both RCFE and ARF downloads."
+    },
+    {
+      "id": "download-http-date",
+      "channel": "DownloadStateData HTTP Date (response clock)",
+      "observedValue": "present (response generation clock)",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "HTTP Date is the response generation clock, not a dataset export date."
+    },
+    {
+      "id": "download-csv-file-date-column",
+      "channel": "DownloadStateData CSV file_date column",
+      "observedValue": null,
+      "verdict": "absent",
+      "rationale": "CSV header has no file_date column (unlike historical CHHS dumps)."
+    },
+    {
+      "id": "download-client-timestamp",
+      "channel": "Local download / agent observation timestamp",
+      "observedValue": null,
+      "verdict": "rejected-non-authoritative",
+      "rationale": "Client download time must never substitute for an authoritative export date."
+    },
+    {
+      "id": "facilitydetail-export-timestamp",
+      "channel": "FacilityDetail JSON export/version timestamp fields",
+      "observedValue": null,
+      "verdict": "absent",
+      "rationale": "FacilityDetail payload exposes license/visit dates and CAPACITY/STATUS but no export-date or roster-version field."
+    },
+    {
+      "id": "transparency-openapi-swagger",
+      "channel": "Transparency API OpenAPI / swagger discovery",
+      "observedValue": "swagger.json / openapi.json / api/Help → HTTP 404",
+      "verdict": "absent",
+      "rationale": "No public OpenAPI document describing an export-date or dataset-version endpoint was found."
+    },
+    {
+      "id": "ccld-pin-24-01-transparency-site",
+      "channel": "CCLD Transparency Site PIN 24-01 documentation",
+      "observedValue": "describes Download Data / Facility Detail; no ISO export date field",
+      "verdict": "absent",
+      "rationale": "Official PIN describes site features and five-year retention; it does not document an authoritative bulk-export ISO timestamp."
+    },
+    {
+      "id": "chhs-file-date-text",
+      "channel": "Historical CHHS open-data file_date text",
+      "observedValue": "05252025",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "CHHS raw file_date text is not an ISO export date and is not the live DownloadStateData channel."
+    },
+    {
+      "id": "gis-data-last-edit",
+      "channel": "ArcGIS / publish.data.ca.gov layer edit / catalog update clocks",
+      "observedValue": "portal/resource update timestamps (e.g. 2026-09-30 / dataLastEdit)",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "Catalog update and GIS dataLastEdit clocks are not DownloadStateData export dates."
+    },
+    {
+      "id": "official-iso-export-timestamp-channel",
+      "channel": "Verified official CDSS ISO export-timestamp channel",
+      "observedValue": null,
+      "verdict": "absent",
+      "rationale": "No official CDSS channel returned a verified ISO export date for DownloadStateData in Phase 7 probes."
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "observedOn": "2026-11-19",
+  "download": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rcfeFilename": "ResidentialElderCareFacility11152026.csv",
+    "arfFilename": "AdultResidentialFacilities11152026.csv",
+    "rcfeSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arfSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "filenameIsoCandidate": "2026-11-15",
+    "authoritativeIsoExportDate": null,
+    "fieldAudit": {
+      "rcfe": {
+        "facilityCapacityColumnPresent": true,
+        "latitudeColumnPresent": false,
+        "longitudeColumnPresent": false,
+        "fileDateColumnPresent": false,
+        "capacityNonEmptyCount": 13320,
+        "capacityEmptyCount": 17,
+        "rowCount": 13337,
+        "phase6CapacityAbsentClaimCorrected": true,
+        "coordinatesStillAbsent": true
+      },
+      "arf": {
+        "facilityCapacityColumnPresent": true,
+        "latitudeColumnPresent": false,
+        "longitudeColumnPresent": false,
+        "fileDateColumnPresent": false,
+        "capacityNonEmptyCount": 11036,
+        "capacityEmptyCount": 4,
+        "rowCount": 11040,
+        "phase6CapacityAbsentClaimCorrected": true,
+        "coordinatesStillAbsent": true
+      }
+    }
+  },
+  "phase6FiveRecordGap": {
+    "threeBucketSum": 24372,
+    "fourBucketSum": 24377,
+    "apparentDifference": 5,
+    "resolved": true,
+    "exceptionOutcomeIds": [
+      "374604731",
+      "198601400",
+      "306006749",
+      "306006799",
+      "95354"
+    ],
+    "explanation": "Phase 6 reported active+restricted+excluded=24372 against 24377 rows (gap 5). The 5 missing rows are the ARF exception-documented-exclude outcomes 374604731, 198601400, 306006749, 306006799, 95354; including that exclusive bucket yields 24377."
+  },
+  "exceptionDocumentedExcludeIds": [
+    "198601400",
+    "306006749",
+    "306006799",
+    "374604731",
+    "95354"
+  ],
+  "exceptionOutcomeEvidence": [
+    {
+      "facilityNumber": "374604731",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-out-of-scope",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "primaryExclusionReasons": [
+        "out-of-scope-type"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "Documented possible-relicense; ADP out of scope. Phase 6 diverted to exception outcome instead of excluded."
+    },
+    {
+      "facilityNumber": "198601400",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-ineligible-status",
+      "downloadStatus": "PENDING",
+      "downloadType": "ADULT RESIDENTIAL",
+      "primaryExclusionReasons": [
+        "pending-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "Documented unusual LICENSED→PENDING transition; PENDING ineligible. Phase 6 diverted to exception outcome."
+    },
+    {
+      "facilityNumber": "306006749",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-withdrawn-mapping-gap",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "primaryExclusionReasons": [
+        "out-of-scope-type",
+        "closed-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "CLOSED↔Application Withdrawn mapping-gap; ADP out of scope. Phase 6 diverted to exception outcome."
+    },
+    {
+      "facilityNumber": "306006799",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-withdrawn-mapping-gap",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "primaryExclusionReasons": [
+        "out-of-scope-type",
+        "closed-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "CLOSED↔Application Withdrawn mapping-gap; ADP out of scope. Phase 6 diverted to exception outcome."
+    },
+    {
+      "facilityNumber": "95354",
+      "file": "ARF",
+      "phase6Outcome": "exception",
+      "gateImpact": "exclude-invalid-id",
+      "downloadStatus": "PENDING",
+      "downloadType": "ADULT RESIDENTIAL",
+      "primaryExclusionReasons": [
+        "invalid-identifier",
+        "pending-status"
+      ],
+      "withoutExceptionCatalogWouldBe": "excluded",
+      "summary": "Corrupt/shifted Facility Number 95354 (ZIP collision). Phase 6 diverted to exception outcome."
+    }
+  ],
+  "totals": {
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "invariantHolds": true,
+    "publicationCandidatesIfGateOpened": 15451,
+    "invalidIdentifiers": 1,
+    "unknownStatuses": 0,
+    "unknownTypes": 0,
+    "missingAddresses": 38,
+    "unsupportedStatusMappings": 2
+  },
+  "gate": {
+    "publication": "unpublished",
+    "ownerClaimEligible": false,
+    "freshnessSatisfied": false,
+    "allowsPublication": false
+  }
+}
