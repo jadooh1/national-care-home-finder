@@ -1,0 +1,15 @@
+[
+  {
+    "facilityNumber": "011405838",
+    "gisLicenseId": "11405838",
+    "identity": {
+      "typeFamilyMatch": true,
+      "nameCompatible": false,
+      "addressCompatible": true,
+      "cityMatch": true,
+      "zipMatch": false,
+      "downloadTypeFamily": "arf",
+      "gisTypeFamily": "arf"
+    }
+  }
+]

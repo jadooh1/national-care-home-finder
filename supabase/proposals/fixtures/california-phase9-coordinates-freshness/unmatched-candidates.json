@@ -1,0 +1,164 @@
+[
+  {
+    "facilityNumber": "345920416",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "365530238",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "365530117",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "347000691",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched"
+  },
+  {
+    "facilityNumber": "079200787",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "331880803",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "547209622",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "435202953",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "197609365",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "019200734",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "197610054",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "374604082",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched"
+  },
+  {
+    "facilityNumber": "079200750",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "331881453",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched"
+  },
+  {
+    "facilityNumber": "019200744",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "019200684",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "565850301",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "331881184",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched"
+  },
+  {
+    "facilityNumber": "019200753",
+    "file": "RCFE",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "502701867",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched"
+  },
+  {
+    "facilityNumber": "198602394",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "374604054",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "315920188",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "198600856",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched"
+  },
+  {
+    "facilityNumber": "366425640",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched"
+  },
+  {
+    "facilityNumber": "565850358",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  },
+  {
+    "facilityNumber": "198602399",
+    "file": "ARF",
+    "outcome": "active-candidate",
+    "matchKind": "unmatched-address-or-name-divergent-id-rejected"
+  }
+]

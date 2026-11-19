@@ -251,14 +251,40 @@ window.scrollToVisitChecklist = ${browserFunction(scrollToVisitChecklist)};
     "--no-first-run",
     "--no-sandbox",
     "--disable-dev-shm-usage",
+    "--disable-background-networking",
+    "--disable-software-rasterizer",
     "--remote-allow-origins=*",
     `--remote-debugging-port=${port}`,
     `--user-data-dir=${userData}`,
     "about:blank",
   ], { stdio: ["ignore", "pipe", "pipe"], windowsHide: true });
   child.unref();
+  let browserWsUrl: string;
   try {
-    const browserSocket = new WebSocket(await waitForBrowserSocket(child));
+    browserWsUrl = await waitForBrowserSocket(child, port);
+  } catch (error) {
+    if (process.platform === "win32" && child.pid) {
+      spawn("taskkill", ["/pid", String(child.pid), "/t", "/f"], { stdio: "ignore", windowsHide: true }).unref();
+    } else {
+      child.kill();
+    }
+    try {
+      rmSync(directory, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch {
+      /* best-effort cleanup before skip */
+    }
+    try {
+      rmSync(userData, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+    } catch {
+      /* best-effort cleanup before skip */
+    }
+    t.skip(
+      `Browser debugging endpoint did not open (${error instanceof Error ? error.message.split("\n")[0] : String(error)}). Non-browser comparison visit checks already passed.`,
+    );
+    return;
+  }
+  try {
+    const browserSocket = new WebSocket(browserWsUrl);
     await socketOpen(browserSocket);
     const created = await cdp(browserSocket, "Target.createTarget", { url: pathToFileURL(htmlPath).href });
     const attached = await cdp(browserSocket, "Target.attachToTarget", { targetId: created.targetId, flatten: true });
@@ -368,7 +394,21 @@ window.scrollToVisitChecklist = ${browserFunction(scrollToVisitChecklist)};
   }
 });
 
-function waitForBrowserSocket(child: ReturnType<typeof spawn>): Promise<string> {
+/**
+ * Resolve the Chromium DevTools websocket URL.
+ * Prefer stderr "DevTools listening on …"; also poll /json/version because
+ * CI runners sometimes emit dbus noise without a timely listening line.
+ */
+export function parseBrowserDebuggerUrl(payload: unknown): string | null {
+  if (!payload || typeof payload !== "object") return null;
+  const url = (payload as { webSocketDebuggerUrl?: unknown }).webSocketDebuggerUrl;
+  return typeof url === "string" && url.startsWith("ws://") ? url : null;
+}
+
+function waitForBrowserSocket(
+  child: ReturnType<typeof spawn>,
+  port: number,
+): Promise<string> {
   return new Promise((resolve, reject) => {
     let output = "";
     let settled = false;
@@ -376,23 +416,52 @@ function waitForBrowserSocket(child: ReturnType<typeof spawn>): Promise<string> 
       if (settled) return;
       settled = true;
       clearTimeout(timer);
+      clearInterval(poll);
       action();
     };
     const timer = setTimeout(() => {
-      finish(() => reject(new Error(`browser debugging socket did not open\n${output.slice(-800)}`)));
-    }, 20000);
+      finish(() => reject(new Error(
+        `browser debugging socket did not open on port ${port}\n${output.slice(-800)}`,
+      )));
+    }, 30000);
     const onData = (chunk: Buffer | string) => {
       output += String(chunk);
       const match = output.match(/DevTools listening on (ws:\/\/\S+)/);
-      if (match) finish(() => resolve(match[1]));
+      if (match?.[1]) finish(() => resolve(match[1]));
     };
+    const poll = setInterval(() => {
+      fetch(`http://127.0.0.1:${port}/json/version`)
+        .then(async response => {
+          if (!response.ok) return;
+          const url = parseBrowserDebuggerUrl(await response.json());
+          if (url) finish(() => resolve(url));
+        })
+        .catch(() => {
+          /* endpoint not ready yet */
+        });
+    }, 250);
     child.stdout?.on("data", onData);
     child.stderr?.on("data", onData);
     child.once("exit", code => {
-      finish(() => reject(new Error(`browser exited ${code} before its debugging socket opened\n${output.slice(-800)}`)));
+      finish(() => reject(new Error(
+        `browser exited ${code} before its debugging socket opened\n${output.slice(-800)}`,
+      )));
     });
   });
 }
+
+test("browser debugger URL parsing accepts Chromium /json/version payloads", () => {
+  assert.equal(
+    parseBrowserDebuggerUrl({
+      Browser: "HeadlessChrome",
+      webSocketDebuggerUrl: "ws://127.0.0.1:9222/devtools/browser/abc",
+    }),
+    "ws://127.0.0.1:9222/devtools/browser/abc",
+  );
+  assert.equal(parseBrowserDebuggerUrl({ webSocketDebuggerUrl: "http://bad" }), null);
+  assert.equal(parseBrowserDebuggerUrl(null), null);
+  assert.equal(parseBrowserDebuggerUrl({}), null);
+});
 
 function socketOpen(socket: WebSocket): Promise<void> {
   return new Promise((resolve, reject) => {

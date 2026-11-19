@@ -1,0 +1,20 @@
+{
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "freshnessRequirementSatisfied": false,
+  "exclusiveBucketAccountingInvariant": true,
+  "missingCapacityAudited": true,
+  "leadingZeroIdentityCorroborationApplied": true,
+  "coordinatesPresentInDownload": false,
+  "gate": "blocked",
+  "blockingIds": [
+    "no-authoritative-iso-export-date",
+    "coordinates-require-verified-official-match",
+    "capacity-empty-cells-documented",
+    "closed-application-withdrawn-mapping-gap",
+    "roster-wide-current-status-unverified",
+    "invalid-and-exceptional-identifiers",
+    "sample-insufficient-for-publication"
+  ]
+}
