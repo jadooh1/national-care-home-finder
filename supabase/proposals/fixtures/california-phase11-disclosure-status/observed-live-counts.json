@@ -1,0 +1,60 @@
+{
+  "observedOn": "2026-11-19",
+  "accounting": {
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "invariantHolds": true,
+    "activeRestrictedCandidates": 15451
+  },
+  "missingCapacity": {
+    "totalMissing": 21,
+    "publicationCandidateMissing": 0
+  },
+  "coordinates": {
+    "verifiedOfficialCoords": 15423,
+    "unresolved": 28,
+    "fabricatedCoordinates": 0
+  },
+  "download": {
+    "rcfeSha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arfSha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "authoritativeIsoExportDate": null,
+    "sha256MatchesPhase10Baseline": true
+  },
+  "disclosureLinks": {
+    "sampleSize": 20,
+    "working": 18,
+    "missing": 0,
+    "ambiguous": 1,
+    "invalid": 1,
+    "leadingZeroPreservedWorking": 4,
+    "statewideCoverageClaimed": false,
+    "sampleIsStatewideConclusion": false
+  },
+  "licensingStatus": {
+    "sampleSize": 22,
+    "match": 16,
+    "mappingGap": 5,
+    "conflict": 0,
+    "missing": 0,
+    "inconclusive": 0,
+    "invalidId": 1,
+    "applicationWithdrawnGaps": 5,
+    "sampleIsStatewideConclusion": false,
+    "inferredFromHistorical": false
+  },
+  "gate": {
+    "allowsPublication": false,
+    "publication": "unpublished",
+    "gate": "blocked"
+  },
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "duplicateInquiryAllowed": false
+  }
+}
