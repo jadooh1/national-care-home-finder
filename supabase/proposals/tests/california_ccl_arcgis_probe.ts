@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   CALIFORNIA_CCL_REQUIRED_FIELDS,
   assessCaliforniaCclLayer,
+  fetchCaliforniaCclGisPages,
   probeCaliforniaCclLayer,
 } from "../../../lib/california-ccl-arcgis-probe.ts";
 
@@ -64,4 +65,35 @@ test("ArcGIS errors and invalid counts fail closed", async () => {
   let calls = 0;
   const invalidCount = async () => new Response(JSON.stringify(++calls === 1 ? metadata : { count: "unknown" }), { status: 200 });
   await assert.rejects(probeCaliforniaCclLayer(invalidCount as typeof fetch), /count missing/);
+});
+
+test("paginated attribute fetch stays read-only and stops when complete", async () => {
+  const calls: string[] = [];
+  const fetcher = async (url: string | URL | Request) => {
+    calls.push(String(url));
+    const href = String(url);
+    const offset = Number(new URL(href).searchParams.get("resultOffset") ?? "0");
+    if (offset === 0) {
+      return new Response(JSON.stringify({
+        exceededTransferLimit: true,
+        features: [{ attributes: { FAC_NBR: 100400070, STATUS: 3, FAC_TYPE_DESC: "RESIDENTIAL-ELDERLY", FAC_LATITUDE: "36.7", FAC_LONGITUDE: "-119.7" } }],
+      }), { status: 200 });
+    }
+    return new Response(JSON.stringify({
+      features: [{ attributes: { FAC_NBR: 100403816, STATUS: 3, FAC_TYPE_DESC: "ADULT RESIDENTIAL", FAC_LATITUDE: "36.8", FAC_LONGITUDE: "-119.8" } }],
+    }), { status: 200 });
+  };
+  const result = await fetchCaliforniaCclGisPages({ pageSize: 1, fetcher: fetcher as typeof fetch });
+  assert.equal(result.complete, true);
+  assert.equal(result.pages, 2);
+  assert.equal(result.rows.length, 2);
+  assert.equal(result.rows[0]?.FAC_NBR, 100400070);
+  assert.match(calls[0] ?? "", /returnGeometry=false/);
+  assert.match(calls[0] ?? "", /orderByFields=ObjectId/);
+});
+
+test("paginated fetch fails closed on ArcGIS errors and rejects invalid page sizes", async () => {
+  await assert.rejects(fetchCaliforniaCclGisPages({ pageSize: 0 }), /pageSize/);
+  const fetcher = async () => new Response(JSON.stringify({ error: { code: 400 } }), { status: 200 });
+  await assert.rejects(fetchCaliforniaCclGisPages({ pageSize: 10, fetcher: fetcher as typeof fetch }), /page returned an error/);
 });

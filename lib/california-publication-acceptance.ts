@@ -1,4 +1,5 @@
-const FACILITY_NUMBER = /^(?:[1-9][0-9]{7}|[1-9][0-9]{8})$/;
+/** Official CDSS facility numbers are 8–9 digit strings and may keep a leading zero. */
+const FACILITY_NUMBER = /^\d{8,9}$/;
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const FIVE_DIGIT_ZIP = /^\d{5}$/;
 const ADDRESS_PLACEHOLDERS = ["See FAQs", "Unavailable"] as const;
