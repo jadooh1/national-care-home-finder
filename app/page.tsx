@@ -212,10 +212,11 @@ export default function Home() {
               <div
                 key={state}
                 style={{
-                  background: "#f7f9fc",
-                  border: "1px solid #e2e8f0",
-                  borderRadius: 9,
-                  padding: "16px 18px",
+                  background: "#f1f7ff",
+                  border: "1px solid #d1e3fb",
+                  borderRadius: 14,
+                  padding: "22px 18px",
+                  boxShadow: "0 5px 16px rgba(15,55,115,.06)",
                   fontWeight: 600,
                 }}
               >
@@ -229,10 +230,10 @@ export default function Home() {
                       display: "block",
                     }}
                   >
-                    {state}
+                    <span aria-hidden="true" style={{ display: "block", fontSize: 26, marginBottom: 10 }}>⌂</span>{state}
                   </Link>
                 ) : (
-                  state
+                  <><span aria-hidden="true" style={{ display: "block", fontSize: 26, marginBottom: 10, color: "#3976b8" }}>⌂</span>{state}</>
                 )}
               </div>
               );
