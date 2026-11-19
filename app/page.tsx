@@ -246,7 +246,7 @@ export default function Home() {
             <p style={{ lineHeight: 1.7, margin: 0 }}>{locale === "es" ? "Compare opciones con preguntas sobre servicios, personal y costos; confirme los detalles directamente con cada hogar." : "Compare options using questions about services, staffing, and costs; confirm details directly with each home."}</p>
           </aside>
 
-          <p aria-live="polite">{locale === "es" ? localizedStateStatus(locale, filteredStates.length) : stateFilterStatus(filteredStates.length)}</p>
+          <div style={{ marginTop: 26, display: "flex", flexWrap: "wrap", gap: 14, alignItems: "center", color: "#245487", fontWeight: 700, fontSize: 14 }}><span>✓ {locale === "es" ? "Recursos oficiales" : "Official state resources"}</span><span>✓ {locale === "es" ? "Información clara" : "Clear facility information"}</span><span>✓ {locale === "es" ? "Herramientas de búsqueda" : "Care home search tools"}</span></div>\n\n          <p aria-live="polite">{locale === "es" ? localizedStateStatus(locale, filteredStates.length) : stateFilterStatus(filteredStates.length)}</p>
 
           <p
             style={{
