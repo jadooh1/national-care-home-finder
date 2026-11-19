@@ -1,0 +1,23 @@
+{
+  "FacilityDetail": {
+    "CAPACITY": "6",
+    "CITY": "FRESNO",
+    "FACILITYNAME": "MANTE'S BOARD & CARE HOME",
+    "FACILITYNUMBER": "100403816",
+    "FACILITYTYPE": "ADULT RESIDENTIAL",
+    "STATUS": "Licensed",
+    "STREETADDRESS": "5624 WEST OLIVE",
+    "ZIPCODE": "93722",
+    "DATECLOSED": "",
+    "LICENSEEFFECTIVEDATE": "1/23/1994",
+    "LICENSEFIRSTDATE": "1/25/1983",
+    "STATE": "CA",
+    "COUNTY": "Fresno"
+  },
+  "TSO": {
+    "FacilityNumber": "",
+    "CaseClosed": "",
+    "PleadingDate": "",
+    "ActionType": ""
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "FacilityDetail": {
+    "CAPACITY": "3",
+    "CITY": "CASTRO VALLEY",
+    "FACILITYNAME": "LAKE CHABOT ASSISTED LIVING",
+    "FACILITYNUMBER": "019201420",
+    "FACILITYTYPE": "RESIDENTIAL CARE ELDERLY",
+    "STATUS": "Application Withdrawn",
+    "STREETADDRESS": "18821 CARLTON AVENUE",
+    "ZIPCODE": "94546",
+    "DATECLOSED": "6/4/2025",
+    "LICENSEEFFECTIVEDATE": "",
+    "LICENSEFIRSTDATE": "",
+    "STATE": "CA",
+    "COUNTY": "Alameda"
+  },
+  "TSO": {
+    "FacilityNumber": "",
+    "CaseClosed": "",
+    "PleadingDate": "",
+    "ActionType": ""
+  }
+}

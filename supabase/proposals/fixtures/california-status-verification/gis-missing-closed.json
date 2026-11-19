@@ -1,0 +1,23 @@
+{
+  "FacilityDetail": {
+    "CAPACITY": "135",
+    "CITY": "OAKLAND",
+    "FACILITYNAME": "GRAND LAKE GARDENS",
+    "FACILITYNUMBER": "011400246",
+    "FACILITYTYPE": "RCFE-CONTINUING CARE RETIREMENT COMMUNITY",
+    "STATUS": "Closed, Licensee Initiated",
+    "STREETADDRESS": "401 SANTA CLARA AVENUE",
+    "ZIPCODE": "94610",
+    "DATECLOSED": "3/7/2023",
+    "LICENSEEFFECTIVEDATE": "1/29/1994",
+    "LICENSEFIRSTDATE": "1/25/1985",
+    "STATE": "CA",
+    "COUNTY": "Alameda"
+  },
+  "TSO": {
+    "FacilityNumber": "",
+    "CaseClosed": "",
+    "PleadingDate": "",
+    "ActionType": ""
+  }
+}

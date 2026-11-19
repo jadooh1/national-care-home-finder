@@ -1,0 +1,23 @@
+{
+  "FacilityDetail": {
+    "CAPACITY": "412",
+    "CITY": "FRESNO",
+    "FACILITYNAME": "CALIFORNIA ARMENIAN HOME",
+    "FACILITYNUMBER": "100400070",
+    "FACILITYTYPE": "RCFE-CONTINUING CARE RETIREMENT COMMUNITY",
+    "STATUS": "Licensed",
+    "STREETADDRESS": "6720 E KINGS CANYON RD",
+    "ZIPCODE": "93727",
+    "DATECLOSED": "",
+    "LICENSEEFFECTIVEDATE": "3/20/1994",
+    "LICENSEFIRSTDATE": "3/20/1985",
+    "STATE": "CA",
+    "COUNTY": "Fresno"
+  },
+  "TSO": {
+    "FacilityNumber": "",
+    "CaseClosed": "",
+    "PleadingDate": "",
+    "ActionType": ""
+  }
+}

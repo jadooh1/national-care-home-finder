@@ -1,0 +1,23 @@
+{
+  "FacilityDetail": {
+    "CAPACITY": "376",
+    "CITY": "UNION CITY",
+    "FACILITYNAME": "ACACIA CREEK - UNION CITY",
+    "FACILITYNUMBER": "015601302",
+    "FACILITYTYPE": "RCFE-CONTINUING CARE RETIREMENT COMMUNITY",
+    "STATUS": "Licensed",
+    "STREETADDRESS": "34400 MISSION BLVD.",
+    "ZIPCODE": "94587",
+    "DATECLOSED": "",
+    "LICENSEEFFECTIVEDATE": "5/20/2010",
+    "LICENSEFIRSTDATE": "5/20/2010",
+    "STATE": "CA",
+    "COUNTY": "Alameda"
+  },
+  "TSO": {
+    "FacilityNumber": "",
+    "CaseClosed": "",
+    "PleadingDate": "",
+    "ActionType": ""
+  }
+}

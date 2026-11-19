@@ -1,0 +1,23 @@
+{
+  "FacilityDetail": {
+    "CAPACITY": "Facility Number Not Found",
+    "CITY": "",
+    "FACILITYNAME": "Facility Number Not Found",
+    "FACILITYNUMBER": "Facility Number Not Found",
+    "FACILITYTYPE": "",
+    "STATUS": "",
+    "STREETADDRESS": "",
+    "ZIPCODE": "",
+    "DATECLOSED": "",
+    "LICENSEEFFECTIVEDATE": "",
+    "LICENSEFIRSTDATE": "",
+    "STATE": "",
+    "COUNTY": ""
+  },
+  "TSO": {
+    "FacilityNumber": "",
+    "CaseClosed": "",
+    "PleadingDate": "",
+    "ActionType": ""
+  }
+}

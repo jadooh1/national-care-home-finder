@@ -1,0 +1,23 @@
+{
+  "FacilityDetail": {
+    "CAPACITY": "9",
+    "CITY": "OAKLAND",
+    "FACILITYNAME": "PALM TREE HOME",
+    "FACILITYNUMBER": "011400493",
+    "FACILITYTYPE": "ADULT RESIDENTIAL",
+    "STATUS": "Closed, Licensee Initiated",
+    "STREETADDRESS": "2219 EAST 19TH STREET",
+    "ZIPCODE": "94606",
+    "DATECLOSED": "4/28/2025",
+    "LICENSEEFFECTIVEDATE": "1/28/1994",
+    "LICENSEFIRSTDATE": "1/28/1994",
+    "STATE": "CA",
+    "COUNTY": "Alameda"
+  },
+  "TSO": {
+    "FacilityNumber": "",
+    "CaseClosed": "",
+    "PleadingDate": "",
+    "ActionType": ""
+  }
+}
