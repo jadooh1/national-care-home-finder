@@ -1,0 +1,711 @@
+{
+  "observedOn": "2026-11-20",
+  "adoption": {
+    "adoptedForOfflineClassification": true,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "allowsPublication": false,
+    "gate": "blocked",
+    "policySource": "lib/california-phase18-exclusion-policy.ts",
+    "note": "Phase 20 applies the Phase 18 exclusion policy for offline classification only. Do not activate product-layer exclusions in app/DB without a separate activation decision. Preserve known licensing conflicts, invalid IDs, withdrawn apps, and 28 unresolved coords."
+  },
+  "totalFindings": 14884,
+  "byClass": {
+    "unverified-or-conflicting-status": 144,
+    "invalid-or-mismatched-ids": 0,
+    "missing-license-evidence": 14,
+    "unverified-coordinates": 1,
+    "bad-disclosure-links": 2,
+    "closed-pending-withdrawn": 66,
+    "none-clear-for-listing-if-otherwise-eligible": 14657
+  },
+  "uniqueFacilitiesWithFindings": 88,
+  "workingDisclosureWithoutExclusionSignal": 14657,
+  "activatedInApplicationOrDatabase": false,
+  "altersAuthoritativeGovernmentRecords": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "findingsSample": [
+    {
+      "facilityNumber": "374604742",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "374604742",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "045920148",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "045920148",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392701057",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392701057",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "374604751",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "374604751",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392700647",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392700647",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "435294286",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "435294286",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "197606348",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "197606348",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "552701748",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "552701748",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "336426330",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "336426330",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392701601",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392701601",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "079201725",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download LICENSED with empty License First Date — missing license evidence; keep unknown-ineligible.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "downloadLicenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "306005986",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "306005986",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "502701889",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download LICENSED with empty License First Date — missing license evidence; keep unknown-ineligible.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "downloadLicenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "374604986",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "374604986",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "347000846",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "347000846",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "198320787",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License"
+      }
+    },
+    {
+      "facilityNumber": "374605020",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download LICENSED with empty License First Date — missing license evidence; keep unknown-ineligible.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "downloadLicenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "015601083",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "015601083",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392701730",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "392701730",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "366425800",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "366425800",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "335530021",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "335530021",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "365530102",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "closed-pending-withdrawn",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Closed, pending, or withdrawn application status is not a publication candidate.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "365530102",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    }
+  ],
+  "findingsNote": "Fixture stores sample findings only; full offline classification remains in local audit-out."
+}

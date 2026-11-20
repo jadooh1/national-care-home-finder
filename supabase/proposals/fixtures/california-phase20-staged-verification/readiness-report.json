@@ -1,0 +1,120 @@
+{
+  "observedOn": "2026-11-20",
+  "items": [
+    {
+      "id": "authoritative-iso-export-date",
+      "area": "freshness",
+      "status": "fail",
+      "severity": "launch-blocking",
+      "summary": "No verified CDSS ISO export/version stamp. Awaiting CDSS response; do not resend clarification."
+    },
+    {
+      "id": "licensing-status-eligibility-rules",
+      "area": "licensing-status",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Staged FacilityDetail status evidence expands under Phase 13 harness. Known conflicts remain unknown-ineligible."
+    },
+    {
+      "id": "eligible-facility-types",
+      "area": "facility-types",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "RCFE and ARF eligible Facility Type strings remain defined; out-of-scope types stay excluded."
+    },
+    {
+      "id": "unique-valid-identifiers",
+      "area": "unique-ids",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Official 8–9 digit IDs preserved with leading zeros. Invalid/truncated IDs remain fail-closed."
+    },
+    {
+      "id": "capacity-field-integrity",
+      "area": "capacity",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Baseline preserved: 21 official blanks on PENDING excluded rows only. Official blanks never invented."
+    },
+    {
+      "id": "coordinate-integrity",
+      "area": "coordinates",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "15,423 verified official coords / 28 unresolved. Unresolved stay map-suppressed; no fabricate/re-probe."
+    },
+    {
+      "id": "disclosure-link-coverage",
+      "area": "disclosure-links",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Phase 20 staged crawl adds up to 14,744 previously-unverified disclosure probes on top of 707. Claim roster-complete only when authorized queue exhausted."
+    },
+    {
+      "id": "staged-verification-authorized",
+      "area": "staged-verification",
+      "status": "pass",
+      "severity": "optional-enhancement",
+      "summary": "User authorized staged statewide crawl ≤14,744 additional unique facilities in batches ≤250."
+    },
+    {
+      "id": "audit-harness-safeguards",
+      "area": "audit-harness",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "Phase 13 harness: concurrency=1, minIntervalMs=450, checkpoint/resume, auto-stop on 429/403/sustained 5xx/consecutive inconclusive."
+    },
+    {
+      "id": "exclusion-offline-only",
+      "area": "exclusion-policy",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "Phase 18 exclusion policy applied offline only. Not activated in app/DB."
+    },
+    {
+      "id": "cdss-clarification",
+      "area": "cdss-correspondence",
+      "status": "fail",
+      "severity": "launch-blocking",
+      "summary": "CDSS clarification still sent-awaiting-response. Duplicate inquiry not allowed."
+    },
+    {
+      "id": "accounting-invariant",
+      "area": "accounting",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "Exclusive-bucket accounting baseline preserved (24,377 rows; 15,451 candidates)."
+    },
+    {
+      "id": "safeguards-publication-gate",
+      "area": "safeguards",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "Publication gate remains BLOCKED. No California publication, owner-claim, Design 2, billing, or auth changes."
+    }
+  ],
+  "stopGo": {
+    "decision": "STOP",
+    "gate": "blocked",
+    "allowsPublication": false,
+    "rationale": "Phase 20 executes authorized staged disclosure verification only. Global launch blockers (ISO export date, CDSS clarification, exclusion activation) remain open. Gate stays BLOCKED."
+  },
+  "allowsPublication": false,
+  "gate": "blocked",
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "baselinePreserved": true,
+  "disclosureAudit": {
+    "coverageBaseline": 707,
+    "incrementalVerifiedCount": 14744,
+    "cumulativeVerifiedCount": 15451,
+    "rosterDenominator": 15451,
+    "statewideRosterVerificationComplete": true,
+    "statewideCoverageClaimed": true
+  },
+  "activeRestrictedCandidates": 15451,
+  "unresolvedCoords": 28,
+  "verifiedCoords": 15423,
+  "cdssClarification": "sent-awaiting-response",
+  "exclusionActivatedInAppOrDb": false
+}

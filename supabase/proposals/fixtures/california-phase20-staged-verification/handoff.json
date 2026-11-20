@@ -1,0 +1,18 @@
+{
+  "observedOn": "2026-11-20",
+  "incomplete": false,
+  "checkpointPath": "california-phase20-audit-out/disclosure-audit-checkpoint.json",
+  "completed": 14744,
+  "queueTotal": 14744,
+  "remaining": 0,
+  "stopReason": "queue-exhausted",
+  "hardStopReason": null,
+  "rateLimitedOrAccessRestricted": false,
+  "coverageBaseline": 707,
+  "newlyVerified": 14744,
+  "cumulativeVerified": 15451,
+  "remainingApprox": 0,
+  "resumeCommand": "node --experimental-strip-types scripts/california-phase20-staged-verification-run.mjs --out california-phase20-audit-out --checkpoint california-phase20-audit-out/disclosure-audit-checkpoint.json --resume --batch-size 250 --max-additional 14744",
+  "gate": "blocked",
+  "allowsPublication": false
+}

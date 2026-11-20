@@ -1,0 +1,555 @@
+{
+  "observedOn": "2026-11-20",
+  "disclosure": {
+    "coverageBaseline": 707,
+    "incrementalSampleSize": 14744,
+    "incrementalWorking": 14742,
+    "incrementalMissing": 0,
+    "incrementalAmbiguous": 0,
+    "incrementalInvalid": 0,
+    "incrementalInconclusive": 2,
+    "leadingZeroPreservedWorking": 1285,
+    "cumulativeVerifiedCount": 15451,
+    "rosterDenominator": 15451,
+    "remainingApprox": 0,
+    "incrementalCoveragePercentRounded": 95.42,
+    "cumulativeCoveragePercentRounded": 100,
+    "statewideCoverageClaimed": true,
+    "statewideRosterVerificationComplete": true,
+    "stopReason": "queue-exhausted",
+    "hardStopReason": null
+  },
+  "status": {
+    "sampleSize": 14744,
+    "match": 14671,
+    "documentedCoarsening": 0,
+    "conflict": 71,
+    "missing": 0,
+    "inconclusive": 2,
+    "invalidId": 0,
+    "inventedClosedStarEquivalence": false,
+    "treatsWithdrawnAsLicensed": false,
+    "sampleIsStatewideConclusion": false
+  },
+  "exclusion": {
+    "adoptedForOfflineClassification": true,
+    "activatedInApplicationOrDatabase": false,
+    "byClass": {
+      "unverified-or-conflicting-status": 144,
+      "invalid-or-mismatched-ids": 0,
+      "missing-license-evidence": 14,
+      "unverified-coordinates": 1,
+      "bad-disclosure-links": 2,
+      "closed-pending-withdrawn": 66,
+      "none-clear-for-listing-if-otherwise-eligible": 14657
+    },
+    "totalFindings": 14884,
+    "uniqueFacilitiesWithFindings": 88
+  },
+  "progress": {
+    "coverageBaseline": 707,
+    "newlyVerified": 14744,
+    "cumulativeVerified": 15451,
+    "remainingApprox": 0,
+    "rosterDenominator": 15451,
+    "authorizedAdditional": 14744,
+    "batchesCompleted": 59,
+    "batchProgress": [
+      {
+        "batchIndex": 0,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113212
+      },
+      {
+        "batchIndex": 1,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113124
+      },
+      {
+        "batchIndex": 2,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113043
+      },
+      {
+        "batchIndex": 3,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113881
+      },
+      {
+        "batchIndex": 4,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113315
+      },
+      {
+        "batchIndex": 5,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113604
+      },
+      {
+        "batchIndex": 6,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116939
+      },
+      {
+        "batchIndex": 7,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 115003
+      },
+      {
+        "batchIndex": 8,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114660
+      },
+      {
+        "batchIndex": 9,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113355
+      },
+      {
+        "batchIndex": 10,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112971
+      },
+      {
+        "batchIndex": 11,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1014744
+      },
+      {
+        "batchIndex": 12,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113606
+      },
+      {
+        "batchIndex": 13,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113757
+      },
+      {
+        "batchIndex": 14,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116500
+      },
+      {
+        "batchIndex": 15,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 157322
+      },
+      {
+        "batchIndex": 16,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113017
+      },
+      {
+        "batchIndex": 17,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113705
+      },
+      {
+        "batchIndex": 18,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112862
+      },
+      {
+        "batchIndex": 19,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1942170
+      },
+      {
+        "batchIndex": 20,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113302
+      },
+      {
+        "batchIndex": 21,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113607
+      },
+      {
+        "batchIndex": 22,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114115
+      },
+      {
+        "batchIndex": 23,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113654
+      },
+      {
+        "batchIndex": 24,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 115327
+      },
+      {
+        "batchIndex": 25,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118394
+      },
+      {
+        "batchIndex": 26,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114625
+      },
+      {
+        "batchIndex": 27,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 2020074
+      },
+      {
+        "batchIndex": 28,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 120283
+      },
+      {
+        "batchIndex": 29,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114582
+      },
+      {
+        "batchIndex": 30,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116987
+      },
+      {
+        "batchIndex": 31,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 124998
+      },
+      {
+        "batchIndex": 32,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118270
+      },
+      {
+        "batchIndex": 33,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112924
+      },
+      {
+        "batchIndex": 34,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 2208893
+      },
+      {
+        "batchIndex": 35,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116972
+      },
+      {
+        "batchIndex": 36,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113292
+      },
+      {
+        "batchIndex": 37,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113106
+      },
+      {
+        "batchIndex": 38,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112814
+      },
+      {
+        "batchIndex": 39,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113617
+      },
+      {
+        "batchIndex": 40,
+        "completed": 250,
+        "working": 248,
+        "inconclusive": 2,
+        "stopReason": "max-requests",
+        "elapsedMs": 2915978
+      },
+      {
+        "batchIndex": 41,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 117619
+      },
+      {
+        "batchIndex": 42,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1704736
+      },
+      {
+        "batchIndex": 43,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118428
+      },
+      {
+        "batchIndex": 44,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118404
+      },
+      {
+        "batchIndex": 45,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 191361
+      },
+      {
+        "batchIndex": 46,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 133517
+      },
+      {
+        "batchIndex": 47,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113222
+      },
+      {
+        "batchIndex": 48,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1690832
+      },
+      {
+        "batchIndex": 49,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113454
+      },
+      {
+        "batchIndex": 50,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113475
+      },
+      {
+        "batchIndex": 51,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 119708
+      },
+      {
+        "batchIndex": 52,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113214
+      },
+      {
+        "batchIndex": 53,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 121247
+      },
+      {
+        "batchIndex": 54,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114331
+      },
+      {
+        "batchIndex": 55,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113636
+      },
+      {
+        "batchIndex": 56,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1317793
+      },
+      {
+        "batchIndex": 57,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114612
+      },
+      {
+        "batchIndex": 58,
+        "completed": 244,
+        "working": 244,
+        "inconclusive": 0,
+        "stopReason": "queue-exhausted",
+        "elapsedMs": 113768
+      }
+    ],
+    "disclosureFailures": {
+      "missing": 0,
+      "ambiguous": 0,
+      "invalid": 0,
+      "inconclusive": 2
+    },
+    "licensingConflicts": 71,
+    "rateLimitOrAccessStops": 0,
+    "hardStopReason": null,
+    "statewideRosterVerificationComplete": true,
+    "statewideCoverageClaimed": true
+  },
+  "downloadSha256MatchesBaseline": true,
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "stagedStatewideStarted": true,
+  "stagedStatewideAuthorized": true,
+  "cdssClarification": "sent-awaiting-response",
+  "outDir": "california-phase20-audit-out",
+  "checkpointPath": "california-phase20-audit-out/disclosure-audit-checkpoint.json",
+  "fullOutPath": "california-phase20-audit-out/california-phase20-staged-verification-live.json",
+  "handoffPath": "california-phase20-audit-out/handoff.json",
+  "elapsedMs": 20841283
+}

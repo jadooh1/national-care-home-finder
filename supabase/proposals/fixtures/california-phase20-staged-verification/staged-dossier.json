@@ -1,0 +1,663 @@
+{
+  "observedOn": "2026-11-20",
+  "authorization": {
+    "stagedStatewideAuthorized": true,
+    "stagedStatewideStarted": true,
+    "facilityCapPerBatch": 250,
+    "authorizedAdditionalUnique": 14744,
+    "coverageBaseline": 707,
+    "rosterDenominator": 15451,
+    "harness": "california-phase13-disclosure-audit",
+    "concurrency": 1,
+    "minIntervalMs": 450,
+    "duplicateCdssEmailAllowed": false,
+    "allowsPublication": false,
+    "gate": "blocked",
+    "exclusionActivatedInAppOrDb": false
+  },
+  "progress": {
+    "coverageBaseline": 707,
+    "newlyVerified": 14744,
+    "cumulativeVerified": 15451,
+    "remainingApprox": 0,
+    "rosterDenominator": 15451,
+    "authorizedAdditional": 14744,
+    "batchesCompleted": 59,
+    "batchProgress": [
+      {
+        "batchIndex": 0,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113212
+      },
+      {
+        "batchIndex": 1,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113124
+      },
+      {
+        "batchIndex": 2,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113043
+      },
+      {
+        "batchIndex": 3,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113881
+      },
+      {
+        "batchIndex": 4,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113315
+      },
+      {
+        "batchIndex": 5,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113604
+      },
+      {
+        "batchIndex": 6,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116939
+      },
+      {
+        "batchIndex": 7,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 115003
+      },
+      {
+        "batchIndex": 8,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114660
+      },
+      {
+        "batchIndex": 9,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113355
+      },
+      {
+        "batchIndex": 10,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112971
+      },
+      {
+        "batchIndex": 11,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1014744
+      },
+      {
+        "batchIndex": 12,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113606
+      },
+      {
+        "batchIndex": 13,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113757
+      },
+      {
+        "batchIndex": 14,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116500
+      },
+      {
+        "batchIndex": 15,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 157322
+      },
+      {
+        "batchIndex": 16,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113017
+      },
+      {
+        "batchIndex": 17,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113705
+      },
+      {
+        "batchIndex": 18,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112862
+      },
+      {
+        "batchIndex": 19,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1942170
+      },
+      {
+        "batchIndex": 20,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113302
+      },
+      {
+        "batchIndex": 21,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113607
+      },
+      {
+        "batchIndex": 22,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114115
+      },
+      {
+        "batchIndex": 23,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113654
+      },
+      {
+        "batchIndex": 24,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 115327
+      },
+      {
+        "batchIndex": 25,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118394
+      },
+      {
+        "batchIndex": 26,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114625
+      },
+      {
+        "batchIndex": 27,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 2020074
+      },
+      {
+        "batchIndex": 28,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 120283
+      },
+      {
+        "batchIndex": 29,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114582
+      },
+      {
+        "batchIndex": 30,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116987
+      },
+      {
+        "batchIndex": 31,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 124998
+      },
+      {
+        "batchIndex": 32,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118270
+      },
+      {
+        "batchIndex": 33,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112924
+      },
+      {
+        "batchIndex": 34,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 2208893
+      },
+      {
+        "batchIndex": 35,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 116972
+      },
+      {
+        "batchIndex": 36,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113292
+      },
+      {
+        "batchIndex": 37,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113106
+      },
+      {
+        "batchIndex": 38,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 112814
+      },
+      {
+        "batchIndex": 39,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113617
+      },
+      {
+        "batchIndex": 40,
+        "completed": 250,
+        "working": 248,
+        "inconclusive": 2,
+        "stopReason": "max-requests",
+        "elapsedMs": 2915978
+      },
+      {
+        "batchIndex": 41,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 117619
+      },
+      {
+        "batchIndex": 42,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1704736
+      },
+      {
+        "batchIndex": 43,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118428
+      },
+      {
+        "batchIndex": 44,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 118404
+      },
+      {
+        "batchIndex": 45,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 191361
+      },
+      {
+        "batchIndex": 46,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 133517
+      },
+      {
+        "batchIndex": 47,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113222
+      },
+      {
+        "batchIndex": 48,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1690832
+      },
+      {
+        "batchIndex": 49,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113454
+      },
+      {
+        "batchIndex": 50,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113475
+      },
+      {
+        "batchIndex": 51,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 119708
+      },
+      {
+        "batchIndex": 52,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113214
+      },
+      {
+        "batchIndex": 53,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 121247
+      },
+      {
+        "batchIndex": 54,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114331
+      },
+      {
+        "batchIndex": 55,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 113636
+      },
+      {
+        "batchIndex": 56,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 1317793
+      },
+      {
+        "batchIndex": 57,
+        "completed": 250,
+        "working": 250,
+        "inconclusive": 0,
+        "stopReason": "max-requests",
+        "elapsedMs": 114612
+      },
+      {
+        "batchIndex": 58,
+        "completed": 244,
+        "working": 244,
+        "inconclusive": 0,
+        "stopReason": "queue-exhausted",
+        "elapsedMs": 113768
+      }
+    ],
+    "disclosureFailures": {
+      "missing": 0,
+      "ambiguous": 0,
+      "invalid": 0,
+      "inconclusive": 2
+    },
+    "licensingConflicts": 71,
+    "rateLimitOrAccessStops": 0,
+    "hardStopReason": null,
+    "statewideRosterVerificationComplete": true,
+    "statewideCoverageClaimed": true
+  },
+  "auditHarness": {
+    "checkpointPath": "california-phase20-audit-out/disclosure-audit-checkpoint.json",
+    "stopReason": "queue-exhausted",
+    "queueTotal": 14744,
+    "completed": 14744,
+    "mode": "roster-resume",
+    "config": {
+      "minIntervalMs": 450,
+      "maxAttempts": 3,
+      "retryStatuses": [
+        429,
+        500,
+        502,
+        503,
+        504
+      ],
+      "backoffMs": [
+        500,
+        1500,
+        3000
+      ],
+      "maxRequests": 250,
+      "maxDurationMs": 28800000,
+      "checkpointEvery": 10,
+      "maxConsecutiveInconclusive": 8,
+      "rosterDenominator": 15451
+    },
+    "concurrency": 1,
+    "minIntervalMs": 450,
+    "skipPageProbe": true,
+    "statewideCoverageClaimed": true,
+    "coverageBaseline": 707,
+    "rateLimitedOrAccessRestricted": false,
+    "hardStopReason": null,
+    "elapsedMs": 20840001,
+    "batchesThisRun": 59
+  },
+  "disclosure": {
+    "priorBaseline": 707,
+    "coverage": {
+      "coverageBaseline": 707,
+      "incrementalVerifiedCount": 14744,
+      "cumulativeVerifiedCount": 15451,
+      "rosterDenominator": 15451,
+      "remainingApprox": 0,
+      "incrementalCoverageFraction": 0.9542424438547666,
+      "cumulativeCoverageFraction": 1,
+      "incrementalCoveragePercentRounded": 95.42,
+      "cumulativeCoveragePercentRounded": 100,
+      "authorizedAdditional": 14744,
+      "statewideRosterVerificationComplete": true,
+      "statewideCoverageClaimed": true,
+      "sampleIsStatewideConclusion": false,
+      "publication": "unpublished",
+      "ownerClaimEligible": false,
+      "notes": [
+        "Coverage baseline entering Phase 20: 707/15451.",
+        "Phase 20 incremental disclosure probes: 14744 (authorized ≤14744).",
+        "Cumulative verified coverage: 15451/15451.",
+        "Authorized remaining roster verification complete under Phase 20 authorization.",
+        "California remains unpublished; owner claims stay ineligible; gate BLOCKED."
+      ]
+    },
+    "incremental": {
+      "sampleSize": 14744,
+      "working": 14742,
+      "missing": 0,
+      "ambiguous": 0,
+      "invalid": 0,
+      "inconclusive": 2,
+      "leadingZeroPreservedWorking": 1285
+    }
+  },
+  "status": {
+    "sampleSize": 14744,
+    "match": 14671,
+    "documented-coarsening": 0,
+    "conflict": 71,
+    "missing": 0,
+    "inconclusive": 2,
+    "invalid-id": 0
+  },
+  "exclusionOfflineClassification": {
+    "adoption": {
+      "adoptedForOfflineClassification": true,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "allowsPublication": false,
+      "gate": "blocked",
+      "policySource": "lib/california-phase18-exclusion-policy.ts",
+      "note": "Phase 20 applies the Phase 18 exclusion policy for offline classification only. Do not activate product-layer exclusions in app/DB without a separate activation decision. Preserve known licensing conflicts, invalid IDs, withdrawn apps, and 28 unresolved coords."
+    },
+    "totalFindings": 14884,
+    "byClass": {
+      "unverified-or-conflicting-status": 144,
+      "invalid-or-mismatched-ids": 0,
+      "missing-license-evidence": 14,
+      "unverified-coordinates": 1,
+      "bad-disclosure-links": 2,
+      "closed-pending-withdrawn": 66,
+      "none-clear-for-listing-if-otherwise-eligible": 14657
+    },
+    "uniqueFacilitiesWithFindings": 88,
+    "workingDisclosureWithoutExclusionSignal": 14657,
+    "activatedInApplicationOrDatabase": false
+  },
+  "quality": {
+    "allowsPublication": false,
+    "gate": "blocked",
+    "downloadSha256MatchesBaseline": true,
+    "verifiedCoverage": {
+      "coverageBaseline": 707,
+      "incrementalVerifiedCount": 14744,
+      "cumulativeVerifiedCount": 15451,
+      "rosterDenominator": 15451,
+      "statewideCoverageClaimed": true
+    },
+    "baselinePreserved": true
+  },
+  "readiness": {
+    "allowsPublication": false,
+    "gate": "blocked",
+    "stopGo": {
+      "decision": "STOP",
+      "gate": "blocked",
+      "allowsPublication": false,
+      "rationale": "Phase 20 executes authorized staged disclosure verification only. Global launch blockers (ISO export date, CDSS clarification, exclusion activation) remain open. Gate stays BLOCKED."
+    },
+    "disclosureAudit": {
+      "coverageBaseline": 707,
+      "incrementalVerifiedCount": 14744,
+      "cumulativeVerifiedCount": 15451,
+      "rosterDenominator": 15451,
+      "statewideRosterVerificationComplete": true,
+      "statewideCoverageClaimed": true
+    },
+    "cdssClarification": "sent-awaiting-response"
+  },
+  "downloadSha256MatchesBaseline": true,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "exclusionActivatedInAppOrDb": false,
+  "cdssClarification": "sent-awaiting-response",
+  "notes": [
+    "Preserve known licensing conflicts, invalid IDs, withdrawn apps, and 28 unresolved coords.",
+    "Do not activate exclusions in app/DB.",
+    "Do not send duplicate CDSS email.",
+    "Publication gate remains BLOCKED regardless of roster verification progress."
+  ]
+}
