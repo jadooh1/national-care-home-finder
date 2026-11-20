@@ -19,4 +19,6 @@ scripts/dshs/output/
 # Phase 20 live crawl working directory (fixtures copied separately)
 california-phase20-audit-out/
 california-phase20-crawl.log
+# Phase 25 local rehearsal output (fixtures copied separately)
+california-phase25-audit-out/
 package-lock.json

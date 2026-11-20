@@ -271,6 +271,9 @@ jobs:
       - name: Check the California Phase 24 freshness launch decisions
         run: node --experimental-strip-types --test supabase/proposals/tests/california_phase24_freshness_launch_decisions.ts
 
+      - name: Check the California Phase 25 launch QA security
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase25_launch_qa_security.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
