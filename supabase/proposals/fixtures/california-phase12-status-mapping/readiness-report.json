@@ -1,0 +1,37 @@
+{
+  "observedOn": "2026-11-20",
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "authoritativeIsoExportDate": null,
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "duplicateInquiryAllowed": false
+  },
+  "baselinePreserved": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "missingCapacitiesOnExcluded": 21
+  },
+  "statusMapping": {
+    "phase11GapsResolvedAsDocumentedCoarsening": true,
+    "inventedClosedStarEquivalence": false,
+    "treatsWithdrawnAsLicensed": false,
+    "rosterWideFacilityDetailComplete": false
+  },
+  "verdict": "California is NOT publication-ready. Keep unpublished. Gate BLOCKED until an authoritative ISO export date and remaining launch blockers (including roster-complete disclosure/status evidence) are resolved. Phase 12 documented coarsening + expanded samples do not unlock publication.",
+  "launchBlockingFailures": [
+    "authoritative-iso-export-date",
+    "licensing-status-eligibility-rules",
+    "unique-valid-identifiers",
+    "capacity-field-integrity",
+    "official-coordinates",
+    "official-disclosure-links",
+    "sample-vs-roster-verification",
+    "cdss-clarification-awaiting-response"
+  ]
+}
