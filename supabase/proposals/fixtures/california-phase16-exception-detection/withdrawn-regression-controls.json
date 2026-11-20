@@ -1,0 +1,74 @@
+{
+  "count": 5,
+  "ids": [
+    "306006749",
+    "306006799",
+    "405802282",
+    "374604911",
+    "019201529"
+  ],
+  "allWithdrawnIneligible": true,
+  "allDocumentedCoarsening": true,
+  "observations": [
+    {
+      "facilityNumber": "306006749",
+      "file": "ARF",
+      "downloadStatus": "CLOSED",
+      "liveStatus": "Application Withdrawn",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "regressionControl": true,
+      "stratum": "application-withdrawn",
+      "label": "p16-withdrawn-reg-1"
+    },
+    {
+      "facilityNumber": "306006799",
+      "file": "ARF",
+      "downloadStatus": "CLOSED",
+      "liveStatus": "Application Withdrawn",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "regressionControl": true,
+      "stratum": "application-withdrawn",
+      "label": "p16-withdrawn-reg-2"
+    },
+    {
+      "facilityNumber": "405802282",
+      "file": "RCFE",
+      "downloadStatus": "CLOSED",
+      "liveStatus": "Application Withdrawn",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "regressionControl": true,
+      "stratum": "application-withdrawn",
+      "label": "p16-withdrawn-reg-3"
+    },
+    {
+      "facilityNumber": "374604911",
+      "file": "RCFE",
+      "downloadStatus": "CLOSED",
+      "liveStatus": "Application Withdrawn",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "regressionControl": true,
+      "stratum": "application-withdrawn",
+      "label": "p16-withdrawn-reg-4"
+    },
+    {
+      "facilityNumber": "019201529",
+      "file": "ARF",
+      "downloadStatus": "CLOSED",
+      "liveStatus": "Application Withdrawn",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "regressionControl": true,
+      "stratum": "leading-zero-withdrawn",
+      "label": "p16-withdrawn-reg-5-lz"
+    }
+  ]
+}

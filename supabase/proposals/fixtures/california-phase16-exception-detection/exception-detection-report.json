@@ -1,0 +1,1229 @@
+{
+  "observedOn": "2026-11-20",
+  "sampledFindings": [
+    {
+      "facilityNumber": "342700333",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "4/16/2018",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "496803751",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "12/28/2022",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "335530163",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "1/16/2024",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "496802077",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "6/25/2007",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "342701152",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "5/6/2022",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "515002949",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "1/6/2023",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "374604709",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "345920131",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "198320662",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "374604898",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "095002858",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "95354",
+      "exceptionClass": "facility-id-malformed",
+      "eligibility": "invalid-id-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "requestedFacilityNumber": "95354",
+        "liveFacilityNumber": null,
+        "apiHttpStatus": 200,
+        "notes": "Official CDSS facility numbers are 8\u20139 digits; generator refuse-closed."
+      },
+      "classification": "malformed-facility-id",
+      "unresolvedQuestions": [
+        "Is there an authoritative corrected facility number for this download row?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility number \"95354\" is not an official 8\u20139 digit CDSS identifier; treat as invalid-id-ineligible."
+    },
+    {
+      "facilityNumber": "486804268",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "downloadLicenseFirstDate": "10/29/2024",
+        "liveLicenseFirstDate": "10/29/2024",
+        "liveLicenseEffectiveDate": "10/30/2024",
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"LICENSED\" conflicts with FacilityDetail \"Licensed/Pending Increase\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "107209715",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed",
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date."
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 107209715 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "195850781",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed",
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": "10/12/2026",
+        "notes": "Download LICENSED with empty License First Date."
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 195850781 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "198320716",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed",
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": "10/30/2026",
+        "notes": "Download LICENSED with empty License First Date."
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 198320716 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "195850785",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed",
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": "10/20/2026",
+        "notes": "Download LICENSED with empty License First Date."
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 195850785 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "342700333",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "4/16/2018",
+        "liveLicenseFirstDate": "4/16/2018",
+        "liveLicenseEffectiveDate": "4/16/2018",
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "496803751",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "12/28/2022",
+        "liveLicenseFirstDate": "12/28/2022",
+        "liveLicenseEffectiveDate": "12/28/2022",
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "335530163",
+      "exceptionClass": "status-conflict",
+      "eligibility": "unknown-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "ON PROBATION",
+        "liveStatus": "Probationary License",
+        "downloadLicenseFirstDate": "1/16/2024",
+        "liveLicenseFirstDate": "1/16/2024",
+        "liveLicenseEffectiveDate": "1/16/2024",
+        "notes": "Status labels disagree across authoritative sources."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"ON PROBATION\" conflicts with FacilityDetail \"Probationary License\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "107209426",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "sampled",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    }
+  ],
+  "statewideChecks": [
+    {
+      "facilityNumber": "502701889",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 502701889 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "198320716",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 198320716 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "195850785",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 195850785 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "079201725",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 079201725 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "197610992",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 197610992 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "374605020",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 374605020 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "107209715",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 107209715 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "195850781",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 195850781 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "197611051",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=RCFE"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 197611051 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "502701880",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=ARF"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 502701880 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "360951409",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=ARF"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 360951409 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "342701894",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=ARF"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 342701894 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "342701856",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=ARF"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 342701856 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "198604006",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "statewide-check",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=ARF"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 198604006 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    }
+  ],
+  "regressionControls": [
+    {
+      "facilityNumber": "502701867",
+      "exceptionClass": "unknown-ineligible-control",
+      "eligibility": "unknown-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Pending Incomplete Application",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Never-licensed markers present (empty license dates on both sources)."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"LICENSED\" conflicts with FacilityDetail \"Pending Incomplete Application\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "502701867",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Pending Incomplete Application",
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date."
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 502701867 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "95354",
+      "exceptionClass": "facility-id-malformed",
+      "eligibility": "invalid-id-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "requestedFacilityNumber": "95354",
+        "liveFacilityNumber": null,
+        "apiHttpStatus": null,
+        "notes": "Official CDSS facility numbers are 8\u20139 digits; generator refuse-closed."
+      },
+      "classification": "malformed-facility-id",
+      "unresolvedQuestions": [
+        "Is there an authoritative corrected facility number for this download row?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility number \"95354\" is not an official 8\u20139 digit CDSS identifier; treat as invalid-id-ineligible."
+    },
+    {
+      "facilityNumber": "95354",
+      "exceptionClass": "disclosure-invalid",
+      "eligibility": "invalid-id-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "requestedFacilityNumber": "95354",
+        "apiHttpStatus": null,
+        "pageHttpStatus": null,
+        "notes": "Disclosure URL generator refuse-closed for non 8\u20139 digit IDs."
+      },
+      "classification": "invalid-disclosure-id",
+      "unresolvedQuestions": [
+        "Is there a corrected official facility number that should replace this row?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Disclosure ID 95354 is invalid; refuse-closed; no fabricated URL."
+    },
+    {
+      "facilityNumber": "15601219",
+      "exceptionClass": "facility-id-lost-leading-zeros",
+      "eligibility": "unknown-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "requestedFacilityNumber": "15601219",
+        "liveFacilityNumber": "015601219",
+        "apiHttpStatus": 200,
+        "notes": "Leading-zero difference between request and FacilityDetail FACILITYNUMBER."
+      },
+      "classification": "lost-or-padded-leading-zeros",
+      "unresolvedQuestions": [
+        "Which exact official ID (with leading zeros) is authoritative for disclosure URLs?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Request 15601219 and live 015601219 collapse to the same digits but differ in leading zeros; keep exact official ID only."
+    },
+    {
+      "facilityNumber": "15601219",
+      "exceptionClass": "facility-id-lost-leading-zeros",
+      "eligibility": "unknown-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "requestedFacilityNumber": "15601219",
+        "liveFacilityNumber": "015601219",
+        "apiHttpStatus": 200,
+        "notes": "leading-zero-canonicalization"
+      },
+      "classification": "ambiguous-leading-zero-disclosure",
+      "unresolvedQuestions": [
+        "Which exact official facility number should be used in the disclosure URL?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Ambiguous leading-zero disclosure for request 15601219; publish only exact official ID."
+    },
+    {
+      "facilityNumber": "306006749",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "306006799",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "405802282",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "374604911",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "019201529",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "306006749",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "306006799",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "405802282",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "374604911",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "019201529",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "eligibility": "withdrawn-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "CLOSED",
+        "liveStatus": "Application Withdrawn",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Documented Download CLOSED \u2192 FacilityDetail Application Withdrawn coarsening."
+      },
+      "classification": "documented-coarsening-withdrawn-ineligible",
+      "unresolvedQuestions": [],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download CLOSED coarsens to FacilityDetail Application Withdrawn; remain withdrawn-ineligible."
+    },
+    {
+      "facilityNumber": "502701867",
+      "exceptionClass": "unknown-ineligible-control",
+      "eligibility": "unknown-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Pending Incomplete Application",
+        "downloadLicenseFirstDate": null,
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Never-licensed markers present (empty license dates on both sources)."
+      },
+      "classification": "conflicting-official-licensing-status",
+      "unresolvedQuestions": [
+        "Which official status is authoritative for eligibility until CDSS clarifies?",
+        "Is this a reporting delay, record reuse, or substantive inconsistency?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Download status \"LICENSED\" conflicts with FacilityDetail \"Pending Incomplete Application\"; keep unknown-ineligible; do not invent equivalence."
+    },
+    {
+      "facilityNumber": "502701867",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Pending Incomplete Application",
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date."
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 502701867 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    },
+    {
+      "facilityNumber": "95354",
+      "exceptionClass": "disclosure-invalid",
+      "eligibility": "invalid-id-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "requestedFacilityNumber": "95354",
+        "apiHttpStatus": 200,
+        "pageHttpStatus": null,
+        "notes": "Disclosure URL generator refuse-closed for non 8\u20139 digit IDs."
+      },
+      "classification": "invalid-disclosure-id",
+      "unresolvedQuestions": [
+        "Is there a corrected official facility number that should replace this row?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Disclosure ID 95354 is invalid; refuse-closed; no fabricated URL."
+    },
+    {
+      "facilityNumber": "502701867",
+      "exceptionClass": "licensed-missing-initial-date",
+      "eligibility": "unknown-ineligible",
+      "scope": "regression-control",
+      "sourceEvidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": null,
+        "downloadLicenseFirstDate": "",
+        "liveLicenseFirstDate": null,
+        "liveLicenseEffectiveDate": null,
+        "notes": "Download LICENSED with empty License First Date.; file=ARF"
+      },
+      "classification": "licensed-missing-initial-license-date",
+      "unresolvedQuestions": [
+        "Was this facility ever licensed, or is Download mislabeling a pending/never-licensed row?",
+        "What is the authoritative initial license date if any?"
+      ],
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "sampleIsStatewideConclusion": false,
+      "rationale": "Facility 502701867 is Download LICENSED with empty License First Date; keep unknown-ineligible until authoritative dates exist."
+    }
+  ],
+  "byClass": {
+    "unknown-ineligible-control": 2,
+    "licensed-missing-initial-date": 21,
+    "facility-id-malformed": 2,
+    "disclosure-invalid": 2,
+    "facility-id-lost-leading-zeros": 2,
+    "withdrawn-ineligible-control": 16,
+    "status-conflict": 10
+  },
+  "newlyDetectedCount": 35,
+  "sampleIsStatewideConclusion": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "gate": "blocked",
+  "notes": [
+    "Sampled findings are not statewide conclusions.",
+    "Statewide checks (e.g. Download sha256 drift) are roster-level, not per-facility samples.",
+    "Regression controls preserve known unsafe/ineligible cases.",
+    "Uncertain records remain ineligible until authoritative evidence supports another class.",
+    "Do not repeat unsuccessful investigation of the 28 unresolved coordinates without new evidence."
+  ]
+}

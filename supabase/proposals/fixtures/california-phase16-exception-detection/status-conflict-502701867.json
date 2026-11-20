@@ -1,0 +1,15 @@
+{
+  "facilityNumber": "502701867",
+  "relation": "conflict",
+  "eligibility": "unknown-ineligible",
+  "resolution": "unresolved-conflict-keep-unknown-ineligible",
+  "neverLicensedMarkersPresent": true,
+  "identityMatched": true,
+  "recordReuseSupported": false,
+  "gisHitCount": 0,
+  "adoptedHypothesis": null,
+  "publicationEligible": false,
+  "ownerClaimEligible": false,
+  "canPublish": false,
+  "canClaim": false
+}

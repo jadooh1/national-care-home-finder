@@ -1,0 +1,59 @@
+{
+  "observedOn": "2026-11-20",
+  "disclosure": {
+    "phase15CumulativeVerifiedCount": 347,
+    "incrementalSampleSize": 115,
+    "incrementalWorking": 115,
+    "incrementalMissing": 0,
+    "incrementalAmbiguous": 0,
+    "incrementalInvalid": 0,
+    "incrementalInconclusive": 0,
+    "leadingZeroPreservedWorking": 17,
+    "cumulativeVerifiedCount": 462,
+    "rosterDenominator": 15451,
+    "incrementalCoveragePercentRounded": 0.74,
+    "cumulativeCoveragePercentRounded": 2.99,
+    "statewideCoverageClaimed": false,
+    "stopReason": "queue-exhausted"
+  },
+  "status": {
+    "sampleSize": 36,
+    "match": 27,
+    "documentedCoarsening": 6,
+    "conflict": 2,
+    "invalidId": 1,
+    "regressionControlsResolvedAsDocumentedCoarsening": 5
+  },
+  "exceptionDetection": {
+    "newlyDetectedCount": 35,
+    "sampledFindings": 21,
+    "statewideChecks": 14,
+    "regressionControls": 20,
+    "byClass": {
+      "unknown-ineligible-control": 2,
+      "licensed-missing-initial-date": 21,
+      "facility-id-malformed": 2,
+      "disclosure-invalid": 2,
+      "facility-id-lost-leading-zeros": 2,
+      "withdrawn-ineligible-control": 16,
+      "status-conflict": 10
+    },
+    "licensedMissingDateStatewideScanCount": 15,
+    "licensedMissingDateStatewideHits": 15,
+    "sampleIsStatewideConclusion": false
+  },
+  "downloadClosedBucket": {
+    "total": 6109,
+    "emptyLicenseFirstDate": 1241,
+    "withLicenseFirstDate": 4868
+  },
+  "downloadSha256MatchesBaseline": true,
+  "baseline": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "missingCapacitiesOnExcluded": 21
+  },
+  "gate": "blocked"
+}
