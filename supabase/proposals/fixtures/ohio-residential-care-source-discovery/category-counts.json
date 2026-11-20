@@ -1,0 +1,18 @@
+{
+  "licensedRows": 1157,
+  "L12": 1152,
+  "L17": 5,
+  "uniqueFacidL12": 1152,
+  "ACTIVE": 801,
+  "ACTIVE_PENDING_RENEWAL": 16,
+  "PENDING": 26,
+  "CLOSED": 309,
+  "statusCounts": {
+    "ACTIVE - PENDING RENEWAL": 16,
+    "CLOSED-OWNER": 220,
+    "PENDING": 26,
+    "ACTIVE": 801,
+    "CLOSED-STATE": 31,
+    "CLOSED-OTHER": 58
+  }
+}
