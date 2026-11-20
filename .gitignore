@@ -28,4 +28,5 @@ pennsylvania-investigation-out/
 # Michigan investigation local output (fixtures copied separately)
 michigan-investigation-out/
 wisconsin-investigation-out/
+minnesota-investigation-out/
 package-lock.json

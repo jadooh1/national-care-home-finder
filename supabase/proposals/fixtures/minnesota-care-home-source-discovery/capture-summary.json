@@ -1,0 +1,33 @@
+{
+  "observedOn": "2026-11-20",
+  "priorDhsLookup": {
+    "profileLinksObserved": 1148,
+    "renderedLicenseSummaryTotal": 1149,
+    "figuresReconciled": false
+  },
+  "mdhAnnualPdf2026": {
+    "asOf": "2026-03-13",
+    "pages": 9,
+    "containsFacilityLevelRows": false,
+    "sha256": "c89aff6bcbe65f4c3fc789e3bf408d1dc8bc1a9e5e39baccc48f02d3f2ce5416",
+    "assistedLivingFacilities": 1083,
+    "assistedLivingDementiaCare": 566,
+    "provisionalAssistedLiving": 310,
+    "provisionalAssistedLivingDementiaCare": 6,
+    "boardingCareHomes": 17,
+    "supervisedLivingFacilities": 183
+  },
+  "interactiveDirectory": {
+    "availableThisRun": false,
+    "maintenanceNotice": "Due to server maintenance, interactive data may not be available from Nov. 20-23.",
+    "facilityLevelSampleRows": 0
+  },
+  "fieldOutline": {
+    "accessDeniedThisRun": true,
+    "documentedUniqueId": "HFID",
+    "documentedAddressMeaning": "MAILING STREET ADDRESS"
+  },
+  "categoryEquivalenceToWashingtonAfh": false,
+  "recordedExportDate": null,
+  "publicationEligible": 0
+}
