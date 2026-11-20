@@ -145,10 +145,18 @@ test("print media keeps a long comparison address without blank directory pages"
       socket.addEventListener("open", () => resolve(), { once: true });
       socket.addEventListener("error", () => reject(new Error("browser socket failed")), { once: true });
     });
-    const target = await cdp(socket, "Target.createTarget", { url: pathToFileURL(htmlPath).href });
+    // Open about:blank first, enable Page/Runtime, then navigate so we do not
+    // race Runtime.evaluate against Target.createTarget's in-flight file:// load
+    // (CI surfaced that race as a bare "Uncaught" at the first evaluate).
+    const target = await cdp(socket, "Target.createTarget", { url: "about:blank" });
     const attached = await cdp(socket, "Target.attachToTarget", { targetId: target.targetId, flatten: true });
     const sessionId = String(attached.sessionId);
+    await cdp(socket, "Page.enable", {}, sessionId);
     await cdp(socket, "Runtime.enable", {}, sessionId);
+    const loadWait = waitForCdpEvent(socket, "Page.loadEventFired", sessionId, 15000);
+    await cdp(socket, "Page.navigate", { url: pathToFileURL(htmlPath).href }, sessionId);
+    await loadWait;
+    await waitUntilTrue(socket, sessionId, `Boolean(document.getElementById("address"))`, 10000);
     const screenHeight = await evaluate(socket, sessionId, "document.documentElement.scrollHeight");
     await cdp(socket, "Emulation.setEmulatedMedia", { media: "print" }, sessionId);
     const printed = await evaluate(socket, sessionId, `(() => {
@@ -238,7 +246,12 @@ function cdp(socket: WebSocket, method: string, params: Record<string, unknown>,
   const id = Math.floor(Math.random() * 1_000_000_000);
   return new Promise((resolve, reject) => {
     const onMessage = (event: MessageEvent) => {
-      const message = JSON.parse(String(event.data)) as { id?: number; result?: Record<string, unknown>; error?: { message: string } };
+      const message = JSON.parse(String(event.data)) as {
+        id?: number;
+        sessionId?: string;
+        result?: Record<string, unknown>;
+        error?: { message: string };
+      };
       if (message.id !== id) return;
       socket.removeEventListener("message", onMessage);
       if (message.error) reject(new Error(message.error.message));
@@ -249,9 +262,70 @@ function cdp(socket: WebSocket, method: string, params: Record<string, unknown>,
   });
 }
 
+function waitForCdpEvent(
+  socket: WebSocket,
+  method: string,
+  sessionId: string,
+  timeoutMs: number,
+): Promise<Record<string, unknown>> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      socket.removeEventListener("message", onMessage);
+      reject(new Error(`timed out waiting for ${method}`));
+    }, timeoutMs);
+    const onMessage = (event: MessageEvent) => {
+      const message = JSON.parse(String(event.data)) as {
+        method?: string;
+        sessionId?: string;
+        params?: Record<string, unknown>;
+      };
+      if (message.method !== method) return;
+      if (message.sessionId && message.sessionId !== sessionId) return;
+      clearTimeout(timer);
+      socket.removeEventListener("message", onMessage);
+      resolve(message.params ?? {});
+    };
+    socket.addEventListener("message", onMessage);
+  });
+}
+
+async function waitUntilTrue(
+  socket: WebSocket,
+  sessionId: string,
+  expression: string,
+  timeoutMs: number,
+): Promise<void> {
+  const deadline = Date.now() + timeoutMs;
+  let lastError: unknown;
+  while (Date.now() < deadline) {
+    try {
+      const value = await evaluate(socket, sessionId, expression);
+      if (value) return;
+    } catch (error) {
+      lastError = error;
+    }
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  const detail = lastError instanceof Error ? lastError.message : String(lastError ?? "false");
+  throw new Error(`timed out waiting for (${expression}): ${detail}`);
+}
+
 async function evaluate(socket: WebSocket, sessionId: string, expression: string): Promise<any> {
-  const result = await cdp(socket, "Runtime.evaluate", { expression, returnByValue: true, awaitPromise: true }, sessionId);
-  const details = result.exceptionDetails as { text?: string } | undefined;
-  if (details) throw new Error(details.text ?? "browser evaluation failed");
+  const result = await cdp(socket, "Runtime.evaluate", {
+    expression,
+    returnByValue: true,
+    awaitPromise: true,
+  }, sessionId);
+  const details = result.exceptionDetails as {
+    text?: string;
+    exception?: { description?: string; value?: unknown };
+  } | undefined;
+  if (details) {
+    const detailText = details.exception?.description
+      ?? (typeof details.exception?.value === "string" ? details.exception.value : null)
+      ?? details.text
+      ?? "browser evaluation failed";
+    throw new Error(detailText);
+  }
   return (result.result as { value?: unknown }).value;
 }
