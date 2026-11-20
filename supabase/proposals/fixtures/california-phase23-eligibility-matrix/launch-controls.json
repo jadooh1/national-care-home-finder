@@ -1,0 +1,147 @@
+{
+  "observedOn": "2026-11-20",
+  "stopGo": {
+    "recommendation": "STOP",
+    "publicationReady": false,
+    "allowsPublication": false,
+    "gate": "blocked",
+    "goRequiresAll": [
+      "authoritative-iso-export-date-verified",
+      "cdss-clarification-resolved-or-human-policy-override",
+      "exclusion-policy-activation-approved-and-applied",
+      "unique-id-capacity-launch-integrity-approved",
+      "source-licensing-terms-accepted",
+      "human-qa-launch-signoff",
+      "explicit-human-gate-open-approval"
+    ],
+    "goDoesNotRequireClearingAlone": [
+      "facility-level-provisional-conflicts",
+      "licensed-pending-increase-overlays",
+      "twenty-eight-unresolved-coordinates",
+      "fourteen-licensed-missing-date"
+    ],
+    "rationale": "Statewide blockers remain open. Facility exceptions are catalogued offline and do not clear the gate. STOP until every goRequiresAll item is human-confirmed."
+  },
+  "releaseChecklist": [
+    {
+      "id": "confirm-iso-export-channel",
+      "lane": "statewide-blocker",
+      "action": "Confirm authoritative DownloadStateData ISO export/version stamp (or approved human policy).",
+      "owner": "human",
+      "blocksGo": true
+    },
+    {
+      "id": "mailbox-cdss-reply",
+      "lane": "statewide-blocker",
+      "action": "Check authorized mailbox for CDSS reply; never resend duplicate inquiry from agents.",
+      "owner": "human",
+      "blocksGo": true
+    },
+    {
+      "id": "activate-exclusions",
+      "lane": "statewide-blocker",
+      "action": "Explicitly approve and activate offline exclusion policy in app/DB for listing/map/disclosure scopes.",
+      "owner": "human",
+      "blocksGo": true
+    },
+    {
+      "id": "status-mapping-approvals",
+      "lane": "facility-policy",
+      "action": "Approve or reject Provisional License and Licensed/Pending Increase publication mappings.",
+      "owner": "human",
+      "blocksGo": true
+    },
+    {
+      "id": "revalidate-download-sha",
+      "lane": "development",
+      "action": "Re-download DownloadStateData; confirm sha256 / accounting 24,377; investigate any delta before launch.",
+      "owner": "engineering",
+      "blocksGo": true
+    },
+    {
+      "id": "apply-eligibility-matrix",
+      "lane": "development",
+      "action": "Apply Phase 23 offline matrix (listing vs map vs disclosure) without altering government source fields.",
+      "owner": "engineering",
+      "blocksGo": true
+    },
+    {
+      "id": "source-licensing-terms",
+      "lane": "statewide-blocker",
+      "action": "Confirm CDSS/Transparency source licensing and attribution terms for publication.",
+      "owner": "human",
+      "blocksGo": true
+    },
+    {
+      "id": "qa-signoff",
+      "lane": "statewide-blocker",
+      "action": "Human QA on search, map, disclosure links, and unpublished-elsewhere safeguards.",
+      "owner": "human",
+      "blocksGo": true
+    },
+    {
+      "id": "gate-open-approval",
+      "lane": "statewide-blocker",
+      "action": "Separate explicit approval to open californiaDirectoryReady / publication gate.",
+      "owner": "human",
+      "blocksGo": true
+    },
+    {
+      "id": "post-launch-monitor",
+      "lane": "operations",
+      "action": "Monitor CDSS source drift, disclosure failures, and exclusion reinstatement audits.",
+      "owner": "engineering",
+      "blocksGo": false
+    }
+  ],
+  "rollbackPlan": {
+    "title": "California launch rollback plan (future use only)",
+    "triggers": [
+      "Authoritative source delta invalidates roster freshness claims",
+      "Widespread FacilityDetail/disclosure failures or rate-limit lockout",
+      "Incorrect publication of excluded / provisional / missing-date facilities",
+      "Human request to revert California to unpublished"
+    ],
+    "steps": [
+      "1. Immediately set California directory publication back to unpublished (gate blocked).",
+      "2. Disable owner-claim eligibility for California if it was enabled.",
+      "3. Keep offline exclusion matrix and audit evidence intact; do not delete government source snapshots.",
+      "4. Revert or disable any activated exclusion wiring that is misbehaving; prefer fail-closed suppressions.",
+      "5. Announce rollback in ops notes; do not silently re-publish.",
+      "6. Re-enter STOP state until goRequiresAll criteria are re-satisfied."
+    ],
+    "nonGoals": [
+      "Do not rewrite DownloadStateData / FacilityDetail government fields.",
+      "Do not deploy from agents without human approval.",
+      "Do not treat rollback as permission to invent coordinates or capacities."
+    ],
+    "verificationAfterRollback": [
+      "californiaDirectoryReady() === false",
+      "directoryContract('California').publication === 'unpublished'",
+      "allowsPublication === false",
+      "WA/OR publication contracts unchanged"
+    ]
+  },
+  "verificationRequirements": {
+    "beforeAnyFutureGo": [
+      "Authoritative ISO export date present or explicit human override documented",
+      "Download sha256 + exclusive-bucket 24,377 revalidated",
+      "Eligibility matrix applied offline with audit trail; activation approved",
+      "No unresolved provisional/pending-increase IDs left publication-eligible without mapping approval",
+      "28 unresolved coords map-suppressed",
+      "CA/WA/OR regression suites + npm run build green"
+    ],
+    "rateLimitSafeguardsIfNarrowProbesNeeded": {
+      "concurrency": 1,
+      "minIntervalMs": 450,
+      "hardStopOn": [
+        403,
+        429
+      ],
+      "statewideCrawl": "forbidden-without-new-authorization"
+    }
+  },
+  "allowsPublication": false,
+  "gate": "blocked",
+  "deployedOrPublished": false
+}
