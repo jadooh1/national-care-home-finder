@@ -178,6 +178,9 @@ jobs:
       - name: Check the Virginia assisted-living source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/virginia_assisted_living_source_discovery.ts
 
+      - name: Check the Maryland assisted-living source discovery
+        run: node --experimental-strip-types --test supabase/proposals/tests/maryland_assisted_living_source_discovery.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 
