@@ -75,7 +75,7 @@ const ASSESSMENTS = [
   row("Connecticut", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Delaware", "B", "unpublished", "Delaware licensed assisted living facilities page", "https://dhss.delaware.gov/dhcq/dhcq/licensed-assisted-living-facilities/", null, true, true, false, false, false, "medium", "The HTML listing shows license number, address, and beds. It is not a delimited file, and it has no per-row status or disclosure prefix."),
   row("Florida", "B", "unpublished", "FloridaHealthFinder ALF comparison embed and AHCA profile/inspection links", "https://quality.healthfinder.fl.gov/Facility-Provider/ALF?LS=1&type=1", 3025, true, true, true, true, true, "high", "ALF embed has 3,025 rows with unique FileNumber/LicenseID, street address, BedCount 4–510, and LicenseStatus (LICENSED 2,253). LicenseID → Profile/?LID= and FileNumber → AHCA inspection details are verified. No ISO export date; nightly-update claim and Miami-Dade sample stamp rejected. Coordinates present but undescribed and not accepted as licensing coordinates. County/specialty absent from list embed. AFCH is a separate ≤5-resident type (230 rows). DOH GIS layer is a May 2013 snapshot and is rejected. ALF/AFCH are not Washington AFH. Florida stays unpublished."),
-  row("Georgia", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
+  row("Georgia", "B", "unpublished", "Georgia DCH/HFRD GetFacilitiesData PCH and ALC roster", "https://forms.dch.georgia.gov/HFRD/GetFacilitiesData.svc/GetData", 1899, true, true, true, false, true, "high", "Verified 2026-11-20: GetFacilitiesData returns PERSONAL CARE HOME 1,573 and ASSISTED LIVING COMMUNITY 326 (1,899 unique FACIDs, overlap 0) with ADDRESS, OPERSTDESC Active/ACTIVE, Beds, and geocoded Latitude/Longitude Accuracy. No ISO export date; HTTP Last-Modified absent; List_Of_Regulated_Facilities.pdf Last-Modified 2020-03-10 rejected. FACID disclosure prefix not verified (Verify_License/GaMap2Care ignore FACID; WebLink inspection is generic search). Status domain Active-only; closed-facility presence unverified. Coordinates are Google geocode, not licensing. PCH (Ch. 111-8-62) and ALC (Ch. 111-8-63) stay separate and are not Washington AFH. Georgia stays unpublished."),
   row("Hawaii", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Idaho", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Illinois", "B", "unpublished", "IDPH assisted living and shared housing licensed establishments", "https://data.illinois.gov/Health-and-Human-Services/IDPH-Assisted-Living-and-Shared-Housing-Licensed-E/8z4a-ix8q", 495, true, true, false, false, false, "high", "All 495 rows have a license number and address. There is no per-row status or disclosure prefix. The portal time 2024-02-16 is not an export date. The state column is blank on 169 rows."),
@@ -430,6 +430,27 @@ FIELD_EVIDENCE.Florida = {
   "coordinate-accuracy": fact("not-verified", "low"),
 };
 
+FIELD_EVIDENCE.Georgia = {
+  "regulatory-identifier": fact("present", "high", "FACID"),
+  "identifier-type": fact("present", "high", "facility-id"),
+  "issuing-authority": fact("present", "high", "Georgia DCH/HFRD"),
+  "physical-address": fact("present", "high", "ADDRESS"),
+  "official-export-date": fact("rejected", "high"),
+  "source-publication-date": fact("rejected", "high", "regulated-pdf-2020"),
+  "retrieval-timestamp": fact("present", "high", "2026-11-20"),
+  "freshness-verification": fact("absent", "high"),
+  "facility-disclosure": fact("absent", "high"),
+  "generic-search": fact("present", "high", "verify-license-gamap2care-weblink"),
+  "unverified-url-pattern": fact("rejected", "high", "FACID query"),
+  "original-category": fact("present", "high", "PERSONAL CARE HOME / ASSISTED LIVING COMMUNITY"),
+  "original-status": fact("present", "high", "OPERSTDESC"),
+  "normalized-category": fact("rejected", "high"),
+  "normalized-status": fact("absent", "high"),
+  "coordinates": fact("present", "high"),
+  "coordinate-source": fact("rejected", "high", "google-geocode"),
+  "coordinate-accuracy": fact("present", "medium", "Accuracy ROOFTOP"),
+};
+
 for (const state of ["Alabama", "Nebraska", "Nevada", "New Jersey", "New Mexico", "Ohio", "Rhode Island"]) {
   FIELD_EVIDENCE[state] = {
     "generic-search": fact("present", "medium", "generic-search"),
@@ -486,6 +507,7 @@ export const ONBOARDING_SEQUENCE = [
   "Arizona",
   "Texas",
   "Florida",
+  "Georgia",
   "Alabama",
   "Arkansas",
   "Louisiana",
@@ -499,7 +521,6 @@ export const ONBOARDING_SEQUENCE = [
   "Rhode Island",
   "Alaska",
   "Connecticut",
-  "Georgia",
   "Hawaii",
   "Idaho",
   "Kansas",
