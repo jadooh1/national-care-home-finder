@@ -1,0 +1,62 @@
+{
+  "observedOn": "2026-11-20",
+  "conflicts": {
+    "expected": 71,
+    "probed": 71,
+    "byClass": {
+      "explainable-coarsening-or-timing": 66,
+      "genuine-unresolved-licensing-conflict": 5,
+      "invalid-or-mismatched-identity": 0,
+      "closed-pending-or-withdrawn": 0,
+      "requires-cdss-clarification": 0,
+      "inconclusive-transport-or-server-error": 0,
+      "match-no-longer-discrepant": 0
+    },
+    "downloadVsLivePairs": {
+      "LICENSED=>Licensed/Pending Increase": 66,
+      "LICENSED=>Provisional License": 5
+    }
+  },
+  "inconclusive": {
+    "ids": [
+      "365530371",
+      "331881723"
+    ],
+    "retryPerformed": true,
+    "byClass": {
+      "explainable-coarsening-or-timing": 0,
+      "genuine-unresolved-licensing-conflict": 0,
+      "invalid-or-mismatched-identity": 0,
+      "closed-pending-or-withdrawn": 0,
+      "requires-cdss-clarification": 0,
+      "inconclusive-transport-or-server-error": 0,
+      "match-no-longer-discrepant": 2
+    }
+  },
+  "ledger": {
+    "totalEntries": 97,
+    "byCategory": {
+      "licensing-discrepancy": 71,
+      "inconclusive-facility-detail": 2,
+      "prior-known-status-conflict": 3,
+      "missing-license-evidence": 14,
+      "withdrawn-regression-control": 5,
+      "invalid-identifier": 1,
+      "unverified-coordinates": 1
+    },
+    "unresolvedCoordinateCount": 28,
+    "missingLicenseEvidenceCount": 14
+  },
+  "downloadSha256MatchesBaseline": true,
+  "rateLimitedOrAccessRestricted": false,
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "exclusionActivatedInAppOrDb": false,
+  "statewideCrawlRepeated": false,
+  "cdssClarification": "sent-awaiting-response",
+  "mailboxCheckAvailable": false,
+  "stopGo": "STOP",
+  "elapsedMs": 37417,
+  "outDir": "california-phase21-audit-out"
+}
