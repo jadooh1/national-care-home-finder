@@ -1,0 +1,54 @@
+{
+  "observedOn": "2026-11-20",
+  "expected": {
+    "rosterDenominator": 15451,
+    "listingExclusionsInCandidates": 88,
+    "otherwiseClearOffline": 15363,
+    "mapOnlySuppressions": 27,
+    "underlyingUnresolvedCoordinates": 28,
+    "listingExcludedTotalIncludingOutsideResidual": 94,
+    "withdrawnOutsideResidual": 5,
+    "invalidIdOutsideResidual": 1
+  },
+  "observed": {
+    "rosterDenominator": 15451,
+    "listingExclusionsInCandidates": 88,
+    "otherwiseClearOffline": 15363,
+    "mapOnlySuppressions": 27,
+    "underlyingUnresolvedCoordinates": 28,
+    "residualPlusListingEqualsDenominator": true
+  },
+  "composition": {
+    "provisionalLicenseConflicts": 5,
+    "licensedPendingIncreaseOverlays": 66,
+    "priorStatusControls": 3,
+    "missingLicenseEvidence": 14,
+    "uniqueInCandidateSet": 88,
+    "notes": [
+      "019201167 and 019201133 are prior controls (Licensed/Pending Increase) and are not double-counted inside the 66 Phase 21 overlays.",
+      "Withdrawn regression controls (5) and invalid ID 95354 sit outside the 15,451 residual denominator."
+    ]
+  },
+  "coordinateOverlap": {
+    "underlyingUnresolvedCoordinates": 28,
+    "mapOnlyAfterListingOverlap": 27,
+    "listingAndCoordinateOverlapIds": [
+      "502701867"
+    ],
+    "overlapExplanation": "Exactly one unresolved-coordinate ID (502701867) is also a prior-status listing exclusion (Download LICENSED vs FacilityDetail Pending Incomplete Application). Listing exclusion wins for that ID; the remaining 27 unresolved-coordinate IDs are map-only suppressions with listingEligibleOffline=true.",
+    "mapDoesNotChangeLicensingEligibility": true
+  },
+  "safeguards": {
+    "licensingConflictsUnknownIneligible": true,
+    "leadingZerosPreserved": true,
+    "invalidId95354RefuseClosed": true,
+    "capacityBlanksNotInvented": true,
+    "fabricatedCoordinates": 0,
+    "inventedCapacities": 0,
+    "exclusionActivatedInAppOrDb": false,
+    "altersAuthoritativeGovernmentRecords": false
+  },
+  "matchesPhase23": true,
+  "allowsPublication": false,
+  "gate": "blocked"
+}
