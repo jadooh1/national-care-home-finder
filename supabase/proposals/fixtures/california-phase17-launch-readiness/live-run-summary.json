@@ -1,0 +1,96 @@
+{
+  "observedOn": "2026-11-20",
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "launchAllowsPublication": false,
+  "downloadProbe": {
+    "rcfe": {
+      "kind": "rcfe",
+      "url": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData/ResidentialElderCareFacility",
+      "status": 200,
+      "sha": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "contentDisposition": "attachment; filename=ResidentialElderCareFacility11152026.csv",
+      "lastModified": null,
+      "etag": null,
+      "date": "Fri, 20 Nov 2026 02:03:41 GMT",
+      "cacheControl": "no-cache",
+      "filenameDate": {
+        "raw": "11152026",
+        "month": 11,
+        "day": 15,
+        "year": 2026,
+        "isoCandidate": "2026-11-15",
+        "authoritativeIsoExportDate": null
+      },
+      "bytes": 8635782
+    },
+    "arf": {
+      "kind": "arf",
+      "url": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData/AdultResidentialFacilities",
+      "status": 200,
+      "sha": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+      "contentDisposition": "attachment; filename=AdultResidentialFacilities11152026.csv",
+      "lastModified": null,
+      "etag": null,
+      "date": "Fri, 20 Nov 2026 02:03:47 GMT",
+      "cacheControl": "no-cache",
+      "filenameDate": {
+        "raw": "11152026",
+        "month": 11,
+        "day": 15,
+        "year": 2026,
+        "isoCandidate": "2026-11-15",
+        "authoritativeIsoExportDate": null
+      },
+      "bytes": 5434124
+    }
+  },
+  "downloadSha256MatchesBaseline": true,
+  "faq": {
+    "url": "https://www.ccld.dss.ca.gov/transparencyapi/api/FAQ?mode=Public&id=context",
+    "status": 200,
+    "weeklyCadencePresent": true,
+    "noDateOnFileMention": true
+  },
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "mailboxCheck": {
+      "attempted": true,
+      "available": false,
+      "result": "mailbox-unavailable",
+      "duplicateInquirySent": false
+    },
+    "duplicateInquiryAllowed": false,
+    "toSuggested": [
+      "cclwebmaster@dss.ca.gov",
+      "opendata@cdss.ca.gov"
+    ],
+    "notes": [
+      "CDSS clarification email already sent in a prior phase.",
+      "Phase 17 must not send duplicate inquiries.",
+      "No authorized connected mailbox was available to inspect for a reply.",
+      "Human should check the authorized sending mailbox and update status when a reply is found."
+    ]
+  },
+  "decisionMatrix": [
+    "authoritative-iso-export-date",
+    "roster-wide-facilitydetail-status",
+    "disclosure-link-roster-coverage",
+    "cdss-clarification-response",
+    "unique-valid-identifiers",
+    "capacity-field-integrity"
+  ],
+  "disclosureCumulative": 462,
+  "exceptionRisks": [
+    "statewide-licensed-missing-initial-date",
+    "sampled-status-conflicts",
+    "sampled-licensed-missing-initial-date",
+    "sampled-withdrawn-controls",
+    "sampled-invalid-id-95354",
+    "regression-502701867",
+    "regression-leading-zeros",
+    "regression-withdrawn-five"
+  ],
+  "readinessGate": "blocked"
+}

@@ -1,0 +1,231 @@
+{
+  "observedOn": "2026-11-20",
+  "phase16SampledFindings": 21,
+  "phase16StatewideLicensedMissingDate": 14,
+  "genuineEligibilityRiskRows": [
+    "statewide-licensed-missing-initial-date",
+    "sampled-status-conflicts",
+    "sampled-licensed-missing-initial-date",
+    "sampled-withdrawn-controls",
+    "sampled-invalid-id-95354",
+    "regression-502701867",
+    "regression-leading-zeros",
+    "regression-withdrawn-five"
+  ],
+  "facilityExcludable": [
+    "statewide-licensed-missing-initial-date",
+    "sampled-status-conflicts",
+    "sampled-licensed-missing-initial-date",
+    "sampled-withdrawn-controls",
+    "sampled-invalid-id-95354",
+    "regression-502701867",
+    "regression-leading-zeros",
+    "regression-withdrawn-five",
+    "unresolved-coordinates-28"
+  ],
+  "statewidePublicationBlockersFromExceptionsAlone": [],
+  "preservesFailClosed": true,
+  "avoidsRepeatingUnsuccessfulCoordChecks": true,
+  "allowsFabrication": false,
+  "publicationEligibleAnyExceptionRow": false,
+  "ownerClaimEligibleAnyExceptionRow": false,
+  "rows": [
+    {
+      "id": "statewide-licensed-missing-initial-date",
+      "sourcePhase": "phase16",
+      "scope": "statewide-check",
+      "exceptionClass": "licensed-missing-initial-date",
+      "facilityNumbers": [
+        "502701889",
+        "198320716",
+        "195850785",
+        "079201725",
+        "197610992",
+        "374605020",
+        "107209715",
+        "195850781",
+        "197611051",
+        "502701880",
+        "360951409",
+        "342701894",
+        "342701856",
+        "198604006"
+      ],
+      "count": 14,
+      "riskClass": "genuine-eligibility-risk-exclude",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Download LICENSED with empty License First Date is a genuine eligibility risk (possible never-licensed / mislabeled). Keep unknown-ineligible; exclude from publication candidates. FAQ \"No date on file\" confirms dates may be unavailable — does not authorize publication."
+    },
+    {
+      "id": "sampled-status-conflicts",
+      "sourcePhase": "phase16",
+      "scope": "sampled",
+      "exceptionClass": "status-conflict",
+      "facilityNumbers": [
+        "342700333",
+        "496803751",
+        "335530163",
+        "496802077",
+        "342701152",
+        "515002949",
+        "486804268"
+      ],
+      "count": 7,
+      "riskClass": "genuine-eligibility-risk-exclude",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "ON PROBATION vs Probationary License (and similar) label disagreements are genuine conflicts until CDSS-authoritative mapping exists. Do not invent equivalence. Exclude affected facilities. Sample only — not a statewide conflict rate."
+    },
+    {
+      "id": "sampled-licensed-missing-initial-date",
+      "sourcePhase": "phase16",
+      "scope": "sampled",
+      "exceptionClass": "licensed-missing-initial-date",
+      "facilityNumbers": [
+        "107209715",
+        "195850781",
+        "198320716",
+        "195850785"
+      ],
+      "count": 4,
+      "riskClass": "genuine-eligibility-risk-exclude",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Overlaps statewide LICENSED-missing-date set; reinforces exclude-until-dated policy. Not a new statewide count beyond the 14."
+    },
+    {
+      "id": "sampled-withdrawn-controls",
+      "sourcePhase": "phase16",
+      "scope": "sampled",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "facilityNumbers": [
+        "374604709",
+        "345920131",
+        "198320662",
+        "374604898",
+        "095002858",
+        "107209426"
+      ],
+      "count": 6,
+      "riskClass": "documented-coarsening-ineligible",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Documented CLOSED→Application Withdrawn coarsening remains withdrawn-ineligible. Safeguard, not a new mapping invention."
+    },
+    {
+      "id": "sampled-invalid-id-95354",
+      "sourcePhase": "phase16",
+      "scope": "sampled",
+      "exceptionClass": "facility-id-malformed",
+      "facilityNumbers": [
+        "95354"
+      ],
+      "count": 1,
+      "riskClass": "safeguard-control-preserve",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Invalid non 8–9 digit ID; refuse-closed; already in exception-documented-exclude bucket."
+    },
+    {
+      "id": "regression-502701867",
+      "sourcePhase": "phase16",
+      "scope": "regression-control",
+      "exceptionClass": "status-conflict + licensed-missing-initial-date",
+      "facilityNumbers": [
+        "502701867"
+      ],
+      "count": 1,
+      "riskClass": "safeguard-control-preserve",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Individual facility exception; unknown-ineligible / unpublishable / unclaimable. Not a separate statewide blocker beyond roster status verification."
+    },
+    {
+      "id": "regression-leading-zeros",
+      "sourcePhase": "phase16",
+      "scope": "regression-control",
+      "exceptionClass": "facility-id-lost-leading-zeros",
+      "facilityNumbers": [
+        "15601219",
+        "015601219"
+      ],
+      "count": 2,
+      "riskClass": "safeguard-control-preserve",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Publish only exact official ID 015601219; truncated 15601219 remains non-canonical."
+    },
+    {
+      "id": "regression-withdrawn-five",
+      "sourcePhase": "phase16",
+      "scope": "regression-control",
+      "exceptionClass": "withdrawn-ineligible-control",
+      "facilityNumbers": [
+        "306006749",
+        "306006799",
+        "405802282",
+        "374604911",
+        "019201529"
+      ],
+      "count": 5,
+      "riskClass": "safeguard-control-preserve",
+      "genuineEligibilityRisk": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Five CLOSED→Application Withdrawn controls remain withdrawn-ineligible."
+    },
+    {
+      "id": "unresolved-coordinates-28",
+      "sourcePhase": "phase16",
+      "scope": "regression-control",
+      "exceptionClass": "unresolved-coordinates",
+      "facilityNumbers": [],
+      "count": 28,
+      "riskClass": "genuine-eligibility-risk-exclude",
+      "genuineEligibilityRisk": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "preventsStatewidePublicationAlone": false,
+      "canExcludeFacilities": true,
+      "preserveFailClosed": true,
+      "rationale": "Map completeness gap, not a licensing-status risk. Exclude from map publication; do not fabricate; do not re-probe without new authoritative evidence."
+    }
+  ],
+  "notes": [
+    "None of the Phase 16 exception classes alone is a statewide publication blocker if affected facilities are excluded under a human-approved exclusion policy.",
+    "Roster-wide status/disclosure verification gaps remain separate statewide blockers.",
+    "Uncertain records stay ineligible until authoritative evidence supports another class."
+  ]
+}

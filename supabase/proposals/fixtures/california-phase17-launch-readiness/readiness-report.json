@@ -1,0 +1,92 @@
+{
+  "gate": "blocked",
+  "publicationReady": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "baselinePreserved": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "missingCapacitiesOnExcluded": 21
+  },
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "mailboxCheckAvailable": false,
+    "cdssReplyConfirmed": false,
+    "duplicateInquiryAllowed": false
+  },
+  "disclosureAudit": {
+    "cumulativeVerifiedCount": 462,
+    "rosterDenominator": 15451,
+    "additionalSmallSamplesRecommended": false,
+    "fullRosterCrawlRequiresSeparateApproval": true,
+    "statewideCoverageClaimed": false
+  },
+  "exceptions": {
+    "preservesWithdrawnIneligible": true,
+    "refusesInvalid95354": true,
+    "preservesLeadingZeros": true,
+    "unresolvedCoordsBaseline": 28,
+    "statewideLicensedMissingDate": 14,
+    "sampledFindings": 21,
+    "allowsFabrication": false,
+    "avoidsRepeatingUnsuccessfulCoordChecks": true
+  },
+  "stopGo": {
+    "publicationReady": false,
+    "recommendation": "STOP",
+    "stopConditionsStillOpen": [
+      "authoritative-iso-export-date-absent",
+      "cdss-clarification-reply-unconfirmed",
+      "roster-wide-facilitydetail-status-incomplete",
+      "disclosure-link-coverage-not-roster-complete",
+      "sample-verification-insufficient-for-publication"
+    ],
+    "goConditionsRequired": [
+      "authoritative-iso-export-date-verified-or-human-approved-freshness-policy",
+      "roster-wide-status-verification-complete-or-human-approved-exclusion-policy",
+      "disclosure-links-verified-roster-complete-or-human-approved-exclusion-policy",
+      "exception-facilities-excluded-under-fail-closed-rules",
+      "exclusive-bucket-accounting-holds",
+      "publication-gate-opened-only-by-explicit-human-approval"
+    ],
+    "agentMustNot": [
+      "open-or-weaken-publication-gate",
+      "publish-california",
+      "send-duplicate-cdss-inquiry",
+      "run-uncontrolled-statewide-crawl",
+      "fabricate-coordinates-or-capacities",
+      "merge-without-human-approval"
+    ]
+  },
+  "humanDecisionsRequired": [
+    {
+      "id": "check-cdss-mailbox-and-interpret-reply",
+      "summary": "Human checks the authorized sending mailbox for a CDSS reply and records whether an authoritative ISO export channel was provided."
+    },
+    {
+      "id": "approve-or-deny-full-roster-disclosure-status-crawl",
+      "summary": "Separate approval required before any large-scale rate-limited full-roster FacilityDetail / disclosure crawl (~15k remaining)."
+    },
+    {
+      "id": "approve-facility-exclusion-policy",
+      "summary": "Approve excluding LICENSED-missing-date rows, status-conflict samples, invalid IDs, withdrawn, and 28 unresolved-coord facilities from any future candidate set."
+    },
+    {
+      "id": "approve-publication-gate-open-only-when-stop-go-met",
+      "summary": "Only a human may open the California publication gate after stop/go conditions are satisfied. Agents must keep gate BLOCKED."
+    }
+  ],
+  "launchBlockingFailures": [
+    "authoritative-iso-export-date",
+    "cdss-clarification-awaiting-response",
+    "licensing-status-eligibility-rules",
+    "unique-valid-identifiers",
+    "capacity-field-integrity",
+    "official-coordinates",
+    "official-disclosure-links",
+    "sample-vs-roster-verification"
+  ]
+}

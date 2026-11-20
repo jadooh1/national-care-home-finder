@@ -1,0 +1,328 @@
+/**
+ * California Phase 17 — prioritized launch-readiness decision matrix.
+ * Separates statewide publication blockers from facility-excludable exceptions.
+ * Does not change or open the publication gate.
+ *
+ * Intentionally free of sibling runtime imports so Next.js typecheck and
+ * Node --experimental-strip-types tests both resolve this module.
+ */
+
+export const CALIFORNIA_PHASE17_OBSERVED_ON = "2026-11-20";
+
+export type CaliforniaPhase17BlockerKind =
+  | "statewide-publication-blocker"
+  | "facility-excludable-exception"
+  | "safeguard-preserved"
+  | "optional-enhancement";
+
+export type CaliforniaPhase17RemediationOwner =
+  | "cdss-response"
+  | "human-policy"
+  | "engineering-exclusion"
+  | "rate-limited-audit"
+  | "none-preserved";
+
+export type CaliforniaPhase17DecisionRow = {
+  id: string;
+  rank: number;
+  kind: CaliforniaPhase17BlockerKind;
+  area: string;
+  title: string;
+  evidence: string;
+  riskIfIgnored: string;
+  preventsStatewidePublication: boolean;
+  canMitigateByExcludingFacilities: boolean;
+  requiredRemediation: string;
+  remediationOwner: CaliforniaPhase17RemediationOwner;
+  humanApprovalRequired: boolean;
+  status: "open" | "partial" | "pass" | "blocked-awaiting-external";
+};
+
+/**
+ * Ranked decision matrix. Lower `rank` = higher priority for launch readiness.
+ * Statewide blockers cannot be cleared by excluding a handful of facilities alone
+ * when the gap is roster-wide verification or missing authoritative freshness.
+ */
+export const CALIFORNIA_PHASE17_DECISION_MATRIX: readonly CaliforniaPhase17DecisionRow[] = [
+  {
+    id: "authoritative-iso-export-date",
+    rank: 1,
+    kind: "statewide-publication-blocker",
+    area: "freshness",
+    title: "Authoritative ISO export / version stamp for DownloadStateData",
+    evidence:
+      "Phase 17 live DownloadStateData sha256 unchanged vs Phase 10–16 baseline; filename MMDDYYYY still 11152026 → ISO candidate 2026-11-15 (rejected); FAQ still \"updated weekly\" (policy-only); no Last-Modified/ETag; mailbox check for CDSS reply unavailable in this environment — clarification remains sent-awaiting-response.",
+    riskIfIgnored:
+      "Published roster could not cite a source-issued as-of date; freshness claims would be non-authoritative.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: false,
+    requiredRemediation:
+      "Obtain CDSS-confirmed authoritative ISO export date or equivalent source-issued version channel; do not resend clarification; do not substitute filename/download/weekly cadence.",
+    remediationOwner: "cdss-response",
+    humanApprovalRequired: true,
+    status: "blocked-awaiting-external",
+  },
+  {
+    id: "roster-wide-facilitydetail-status",
+    rank: 2,
+    kind: "statewide-publication-blocker",
+    area: "licensing-status",
+    title: "Roster-wide FacilityDetail status verification",
+    evidence:
+      "Phase 16 status sample N=36 only (27 match / 6 documented-coarsening / 2 conflict / 1 invalid-id). Roster-wide FacilityDetail complete=false. Sampled ON PROBATION↔Probationary License conflicts kept unknown-ineligible without invented equivalence.",
+    riskIfIgnored:
+      "Undetected Download↔FacilityDetail conflicts could publish ineligible or mislabeled facilities.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: false,
+    requiredRemediation:
+      "Complete rate-limited roster FacilityDetail status verification under separate human approval, or adopt an explicit human-approved policy that unverified candidates remain excluded until verified.",
+    remediationOwner: "rate-limited-audit",
+    humanApprovalRequired: true,
+    status: "open",
+  },
+  {
+    id: "disclosure-link-roster-coverage",
+    rank: 3,
+    kind: "statewide-publication-blocker",
+    area: "disclosure-links",
+    title: "Official disclosure-link coverage not roster-complete",
+    evidence:
+      "Cumulative verified disclosure links 462 / 15,451 (~2.99%). Phase 16 incremental 115 all working. statewideCoverageClaimed=false. Additional ~100-facility samples add <1pp coverage and do not change launch readiness.",
+    riskIfIgnored:
+      "Cannot claim every published facility has a verified official disclosure URL.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Pause small incremental samples. When separately approved, run rate-limited full-roster disclosure verification via Phase 13 harness; until then keep unverified candidates unpublished/unclaimable.",
+    remediationOwner: "rate-limited-audit",
+    humanApprovalRequired: true,
+    status: "partial",
+  },
+  {
+    id: "cdss-clarification-response",
+    rank: 4,
+    kind: "statewide-publication-blocker",
+    area: "cdss-correspondence",
+    title: "CDSS clarification response for export-date channel",
+    evidence:
+      "Clarification already sent in prior phase. Phase 17: no authorized connected mailbox available to inspect inbox; duplicate inquiry forbidden. Official docs re-probed — still no ISO export stamp.",
+    riskIfIgnored:
+      "Freshness gate remains blocked indefinitely without an authoritative channel or human policy change.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: false,
+    requiredRemediation:
+      "Human checks authorized mailbox / CDSS reply; if reply arrives, capture evidence and evaluate channel; never resend duplicate inquiry from agents.",
+    remediationOwner: "human-policy",
+    humanApprovalRequired: true,
+    status: "blocked-awaiting-external",
+  },
+  {
+    id: "unique-valid-identifiers",
+    rank: 5,
+    kind: "statewide-publication-blocker",
+    area: "unique-ids",
+    title: "Unique valid facility identifiers with fail-closed invalid IDs",
+    evidence:
+      "8–9 digit IDs with leading zeros preserved. Invalid 95354 refuse-closed. Truncated 15601219 non-canonical vs exact 015601219. Safeguards pass; roster publication still requires fail-closed ID policy statewide.",
+    riskIfIgnored:
+      "Malformed or truncated IDs could generate wrong disclosure URLs or duplicate identities.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Keep fail-closed ID rules; exclude invalid/ambiguous IDs from any future candidate set.",
+    remediationOwner: "engineering-exclusion",
+    humanApprovalRequired: false,
+    status: "partial",
+  },
+  {
+    id: "capacity-field-integrity",
+    rank: 6,
+    kind: "statewide-publication-blocker",
+    area: "capacity",
+    title: "Capacity field integrity (no invented capacities)",
+    evidence:
+      "Baseline: 21 official blanks on PENDING excluded rows only; 0 publication-candidate blanks; invented capacities=0.",
+    riskIfIgnored:
+      "Inventing capacities would falsify official roster fields.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Preserve official blanks; never invent. Candidate capacity integrity currently passes (0 blanks).",
+    remediationOwner: "none-preserved",
+    humanApprovalRequired: false,
+    status: "partial",
+  },
+  {
+    id: "official-coordinates-completeness",
+    rank: 7,
+    kind: "facility-excludable-exception",
+    area: "coordinates",
+    title: "28 unresolved official coordinates",
+    evidence:
+      "15,423 verified official coords / 28 unresolved / 0 fabricated. Phase 16–17 do not re-probe without new authoritative evidence.",
+    riskIfIgnored:
+      "Map pins for 28 facilities would be missing or fabricated if forced.",
+    preventsStatewidePublication: false,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Exclude the 28 unresolved facilities from map publication until authoritative coords exist; do not geocode/fabricate; do not repeat unsuccessful probes.",
+    remediationOwner: "engineering-exclusion",
+    humanApprovalRequired: true,
+    status: "partial",
+  },
+  {
+    id: "licensed-missing-initial-date-statewide",
+    rank: 8,
+    kind: "facility-excludable-exception",
+    area: "exceptions",
+    title: "14 statewide LICENSED + empty License First Date rows",
+    evidence:
+      "Phase 16 statewide-check IDs: 502701889, 198320716, 195850785, 079201725, 197610992, 374605020, 107209715, 195850781, 197611051, 502701880, 360951409, 342701894, 342701856, 198604006 (plus regression 502701867). FAQ notes some first license dates may be unavailable (\"No date on file\").",
+    riskIfIgnored:
+      "Publishing LICENSED rows without initial dates risks never-licensed / mislabeled eligibility.",
+    preventsStatewidePublication: false,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Keep unknown-ineligible / unpublishable / unclaimable until authoritative dates exist; exclude from candidate set. FAQ \"No date on file\" does not authorize publication.",
+    remediationOwner: "engineering-exclusion",
+    humanApprovalRequired: true,
+    status: "open",
+  },
+  {
+    id: "sampled-status-conflicts",
+    rank: 9,
+    kind: "facility-excludable-exception",
+    area: "exceptions",
+    title: "Sampled status conflicts (e.g. ON PROBATION vs Probationary License)",
+    evidence:
+      "Phase 16 sampled conflicts include 342700333, 496803751, 335530163, 496802077, 342701152, 515002949, 486804268 kept unknown-ineligible. Not a statewide equivalence mapping.",
+    riskIfIgnored:
+      "Invented status equivalence could misclassify restricted/probationary facilities as fully licensed.",
+    preventsStatewidePublication: false,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Exclude conflicting facilities; do not invent Closed*/Probation equivalence; optional CDSS status-label clarification is separate from export-date inquiry (do not duplicate export-date email).",
+    remediationOwner: "engineering-exclusion",
+    humanApprovalRequired: true,
+    status: "open",
+  },
+  {
+    id: "status-conflict-502701867",
+    rank: 10,
+    kind: "facility-excludable-exception",
+    area: "status-conflict",
+    title: "Individual conflict facility 502701867",
+    evidence:
+      "Download LICENSED vs FacilityDetail Pending Incomplete Application; empty license dates; unknown-ineligible / unpublishable / unclaimable.",
+    riskIfIgnored:
+      "Could publish a never-licensed / pending application as licensed.",
+    preventsStatewidePublication: false,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Keep excluded; preserve regression control.",
+    remediationOwner: "none-preserved",
+    humanApprovalRequired: false,
+    status: "pass",
+  },
+  {
+    id: "invalid-id-95354-and-withdrawn",
+    rank: 11,
+    kind: "safeguard-preserved",
+    area: "safeguards",
+    title: "Invalid ID 95354 + withdrawn Application Withdrawn controls",
+    evidence:
+      "95354 refuse-closed; five CLOSED→Application Withdrawn regression controls withdrawn-ineligible; leading zeros preserved.",
+    riskIfIgnored:
+      "Weakening would allow invalid IDs or withdrawn applications into publication.",
+    preventsStatewidePublication: false,
+    canMitigateByExcludingFacilities: true,
+    requiredRemediation:
+      "Preserve fail-closed safeguards unchanged.",
+    remediationOwner: "none-preserved",
+    humanApprovalRequired: false,
+    status: "pass",
+  },
+  {
+    id: "eligible-facility-types-accounting",
+    rank: 12,
+    kind: "safeguard-preserved",
+    area: "accounting",
+    title: "Eligible RCFE/ARF types + exclusive-bucket accounting 24,377",
+    evidence:
+      "Exclusive buckets 15,413 active + 38 restricted + 8,921 excluded + 5 exceptions = 24,377. Download sha256 unchanged in Phase 17 live probe.",
+    riskIfIgnored:
+      "Accounting drift would invalidate roster denominators used for readiness claims.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: false,
+    requiredRemediation:
+      "Preserve exclusive-bucket invariant; re-validate on any source-data change.",
+    remediationOwner: "none-preserved",
+    humanApprovalRequired: false,
+    status: "pass",
+  },
+  {
+    id: "publication-owner-claim-safeguards",
+    rank: 13,
+    kind: "safeguard-preserved",
+    area: "safeguards",
+    title: "Publication and owner-claim safeguards remain closed",
+    evidence:
+      "californiaDirectoryReady()=false; californiaPhase17AllowsPublication()=false; gate blocked; California unpublished; owner claims ineligible.",
+    riskIfIgnored:
+      "Opening safeguards early would publish incomplete California data.",
+    preventsStatewidePublication: true,
+    canMitigateByExcludingFacilities: false,
+    requiredRemediation:
+      "Do not change or open the publication gate until human-approved stop/go conditions are all met.",
+    remediationOwner: "human-policy",
+    humanApprovalRequired: true,
+    status: "pass",
+  },
+  {
+    id: "public-portal-future-channel",
+    rank: 14,
+    kind: "optional-enhancement",
+    area: "freshness",
+    title: "Future CCLD Public Portal / FMS channels",
+    evidence:
+      "Modernization docs describe future portals; not usable today as DownloadStateData export date.",
+    riskIfIgnored: "None for current launch decision.",
+    preventsStatewidePublication: false,
+    canMitigateByExcludingFacilities: false,
+    requiredRemediation: "Watch only; do not treat as current freshness evidence.",
+    remediationOwner: "none-preserved",
+    humanApprovalRequired: false,
+    status: "pass",
+  },
+] as const;
+
+export function californiaPhase17StatewideBlockers() {
+  return CALIFORNIA_PHASE17_DECISION_MATRIX.filter(
+    row => row.kind === "statewide-publication-blocker" && row.status !== "pass",
+  );
+}
+
+export function californiaPhase17FacilityExcludableExceptions() {
+  return CALIFORNIA_PHASE17_DECISION_MATRIX.filter(
+    row => row.kind === "facility-excludable-exception",
+  );
+}
+
+export function californiaPhase17HumanApprovalsRequired() {
+  return CALIFORNIA_PHASE17_DECISION_MATRIX.filter(row => row.humanApprovalRequired);
+}
+
+export function summarizeCaliforniaPhase17DecisionMatrix() {
+  const rows = CALIFORNIA_PHASE17_DECISION_MATRIX;
+  return {
+    observedOn: CALIFORNIA_PHASE17_OBSERVED_ON,
+    totalRows: rows.length,
+    statewidePublicationBlockersOpen: californiaPhase17StatewideBlockers().map(r => r.id),
+    facilityExcludableExceptions: californiaPhase17FacilityExcludableExceptions().map(r => r.id),
+    humanApprovalsRequired: californiaPhase17HumanApprovalsRequired().map(r => r.id),
+    publicationReady: false as const,
+    gate: "blocked" as const,
+    allowsPublication: false as const,
+    rows,
+  };
+}
