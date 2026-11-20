@@ -1,0 +1,29 @@
+{
+  "performNow": false,
+  "crawlStarted": false,
+  "authorizedNow": false,
+  "requiresSeparateHumanApproval": true,
+  "gate": "blocked",
+  "allowsPublication": false,
+  "sampleEvidence": {
+    "rosterDenominator": 15451,
+    "cumulativeVerifiedDisclosure": 462,
+    "remainingUnverifiedApprox": 14989,
+    "statewideCoverageClaimed": false
+  },
+  "harnessDefaults": {
+    "minIntervalMs": 450,
+    "maxAttempts": 3,
+    "concurrency": 1,
+    "checkpointEvery": 10,
+    "maxConsecutiveInconclusive": 8
+  },
+  "recommendedOptionIfCrawlAuthorized": "limited-pilot",
+  "recommendedFollowOnAfterPilot": "staged-statewide",
+  "durationEstimate": {
+    "remainingFacilities": 14989,
+    "estimatedSessionsAtCap": 60,
+    "minWallHoursApprox": 3.75,
+    "conservativeWallHoursApprox": 4.68
+  }
+}

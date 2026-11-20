@@ -1,0 +1,21 @@
+{
+  "phase": 18,
+  "gate": "blocked",
+  "allowsPublication": false,
+  "publicationReady": false,
+  "crawlStarted": false,
+  "exclusionPolicyActivated": false,
+  "requestsPublicationGateOpen": false,
+  "stopGo": {
+    "recommendation": "STOP",
+    "publicationReady": false
+  },
+  "accounting": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "disclosureSamples": 462,
+    "statewideMissingLicenseDateFlags": 14
+  }
+}

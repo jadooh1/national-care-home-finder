@@ -250,6 +250,9 @@ jobs:
       - name: Check the California Phase 17 launch readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/california_phase17_launch_readiness.ts
 
+      - name: Check the California Phase 18 verification and exclusion
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase18_verification_exclusion.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
