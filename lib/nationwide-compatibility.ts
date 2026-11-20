@@ -74,7 +74,7 @@ const ASSESSMENTS = [
   row("Colorado", "B", "unpublished", "CDPHE health facilities FeatureServer (ALR filter)", "https://services3.arcgis.com/66aUo8zsujfVXRIT/arcgis/rest/services/CDPHE_Health_Facilities/FeatureServer/0", 685, true, true, true, false, true, "high", "Facility_Type Assisted Living Residence returns 685 unique Facility_ID rows with Address_Full, Operating_Status, Licensed_Beds_Total, and geocoded Latitude/Longitude. The mixed layer still requires an ALR filter. Date_Data_Updated, layer editingInfo, and HTTP Last-Modified are not an ISO export date. Find and Compare is a Tableau search dashboard, not a verified Facility_ID detail prefix. Coordinates are address geocode matches, not licensing coordinates. ALR under 6 CCR 1011-1 Ch. 7 is not Washington AFH. Colorado stays unpublished."),
   row("Connecticut", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Delaware", "B", "unpublished", "Delaware licensed assisted living facilities page", "https://dhss.delaware.gov/dhcq/dhcq/licensed-assisted-living-facilities/", null, true, true, false, false, false, "medium", "The HTML listing shows license number, address, and beds. It is not a delimited file, and it has no per-row status or disclosure prefix."),
-  row("Florida", "C", "unpublished", "FloridaHealthFinder assisted living comparison", "https://quality.healthfinder.fl.gov/compare-tools/ALF", null, null, null, null, null, null, "medium", "The official tool is a comparison search. No licensing file was opened."),
+  row("Florida", "B", "unpublished", "FloridaHealthFinder ALF comparison embed and AHCA profile/inspection links", "https://quality.healthfinder.fl.gov/Facility-Provider/ALF?LS=1&type=1", 3025, true, true, true, true, true, "high", "ALF embed has 3,025 rows with unique FileNumber/LicenseID, street address, BedCount 4–510, and LicenseStatus (LICENSED 2,253). LicenseID → Profile/?LID= and FileNumber → AHCA inspection details are verified. No ISO export date; nightly-update claim and Miami-Dade sample stamp rejected. Coordinates present but undescribed and not accepted as licensing coordinates. County/specialty absent from list embed. AFCH is a separate ≤5-resident type (230 rows). DOH GIS layer is a May 2013 snapshot and is rejected. ALF/AFCH are not Washington AFH. Florida stays unpublished."),
   row("Georgia", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Hawaii", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Idaho", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
@@ -414,7 +414,23 @@ const FIELD_EVIDENCE: Record<string, Partial<Record<EvidenceField, EvidenceFact>
   },
 };
 
-for (const state of ["Alabama", "Florida", "Nebraska", "Nevada", "New Jersey", "New Mexico", "Ohio", "Rhode Island"]) {
+FIELD_EVIDENCE.Florida = {
+  "regulatory-identifier": fact("present", "high", "FileNumber and LicenseID"),
+  "identifier-type": fact("present", "high", "AHCA file number / license id"),
+  "physical-address": fact("present", "high", "street AddressType=ST"),
+  "mailing-address": fact("present", "medium", "profile AddressType=MA"),
+  "official-export-date": fact("rejected", "high"),
+  "source-publication-date": fact("rejected", "high", "nightly-update claim / Miami-Dade sample stamp"),
+  "retrieval-timestamp": fact("present", "high", "2026-11-20"),
+  "facility-disclosure": fact("present", "high", "Profile/?LID={LicenseID}"),
+  "original-category": fact("present", "high", "Assisted Living Facility"),
+  "original-status": fact("present", "high", "LicenseStatus"),
+  "coordinates": fact("present", "medium"),
+  "coordinate-source": fact("absent", "high"),
+  "coordinate-accuracy": fact("not-verified", "low"),
+};
+
+for (const state of ["Alabama", "Nebraska", "Nevada", "New Jersey", "New Mexico", "Ohio", "Rhode Island"]) {
   FIELD_EVIDENCE[state] = {
     "generic-search": fact("present", "medium", "generic-search"),
     "facility-disclosure": fact("not-verified", "low"),
@@ -469,9 +485,9 @@ export const ONBOARDING_SEQUENCE = [
   "Colorado",
   "Arizona",
   "Texas",
+  "Florida",
   "Alabama",
   "Arkansas",
-  "Florida",
   "Louisiana",
   "Massachusetts",
   "Nebraska",
