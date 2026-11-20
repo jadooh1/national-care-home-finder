@@ -1,0 +1,69 @@
+{
+  "observedOn": "2026-11-20",
+  "captureTimeUtc": "2026-11-20T19:31:34.524Z",
+  "downloadSha256MatchesBaseline": true,
+  "authoritativeIsoExportDate": null,
+  "provisional": {
+    "expected": 5,
+    "unresolved": 5,
+    "byClass": {
+      "genuine-unresolved-licensing-conflict": 6,
+      "explainable-coarsening-or-timing": 2,
+      "match-no-longer-discrepant": 0,
+      "inconclusive-transport-or-server-error": 0,
+      "invalid-or-mismatched-identity": 0,
+      "requires-cdss-clarification": 0
+    },
+    "ids": [
+      "198320787",
+      "455920513",
+      "197611076",
+      "197611060",
+      "134605014"
+    ]
+  },
+  "controls": {
+    "expected": 3,
+    "assessed": 3,
+    "ids": [
+      "502701867",
+      "019201167",
+      "019201133"
+    ]
+  },
+  "policyCases": {
+    "total": 8,
+    "unresolvedForLaunch": 4
+  },
+  "ledger": {
+    "totalEntries": 23,
+    "byCategory": {
+      "freshness-blocker": 1,
+      "cdss-correspondence": 1,
+      "exclusion-policy": 1,
+      "statewide-prerequisite": 2,
+      "unique-id-capacity-case": 8,
+      "provisional-license-conflict": 5,
+      "prior-control": 3,
+      "facility-exception-preserved": 2
+    },
+    "provisionalUnresolved": 5
+  },
+  "baseline": {
+    "officialRecords": 24377,
+    "publicationCandidates": 15451,
+    "verifiedOfficialCoords": 15423,
+    "unresolvedCoords": 28
+  },
+  "rateLimitedOrAccessRestricted": false,
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "exclusionActivatedInAppOrDb": false,
+  "statewideCrawlRepeated": false,
+  "cdssClarification": "sent-awaiting-response",
+  "mailboxCheckAvailable": false,
+  "duplicateCdssInquirySent": false,
+  "stopGo": "STOP",
+  "elapsedMs": 10553
+}

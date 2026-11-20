@@ -1,0 +1,318 @@
+/**
+ * California Phase 22 — readiness decision matrix.
+ * Separates statewide prerequisites from per-facility suppressions.
+ * Distinguishes development-only actions vs later-approval actions.
+ * Keep launch recommendation STOP. Do not activate exclusions or gate.
+ *
+ * Intentionally free of sibling runtime imports.
+ */
+
+export const CALIFORNIA_PHASE22_MATRIX_OBSERVED_ON = "2026-11-20";
+
+export type CaliforniaPhase22BlockerKind =
+  | "statewide-publication-blocker"
+  | "facility-excludable-exception"
+  | "safeguard-preserved"
+  | "optional-enhancement";
+
+export type CaliforniaPhase22ActionLane =
+  | "development-only"
+  | "requires-later-human-approval"
+  | "blocked-awaiting-external"
+  | "none-preserved";
+
+export type CaliforniaPhase22DecisionRow = {
+  id: string;
+  rank: number;
+  kind: CaliforniaPhase22BlockerKind;
+  area: string;
+  title: string;
+  evidence: string;
+  preventsStatewidePublication: boolean;
+  canMitigateByExcludingFacilities: boolean;
+  developmentOnlyAction: string;
+  laterApprovalAction: string | null;
+  actionLane: CaliforniaPhase22ActionLane;
+  humanApprovalRequired: boolean;
+  status:
+    | "open"
+    | "partial"
+    | "pass"
+    | "blocked-awaiting-external"
+    | "adopted-not-activated";
+};
+
+export const CALIFORNIA_PHASE22_DECISION_MATRIX: readonly CaliforniaPhase22DecisionRow[] =
+  [
+    {
+      id: "authoritative-iso-export-date",
+      rank: 1,
+      kind: "statewide-publication-blocker",
+      area: "freshness",
+      title: "Authoritative ISO export / version stamp for DownloadStateData",
+      evidence:
+        "Phase 22 live probes: sha256 unchanged vs Phase 10–21 baseline; filename 11152026 → 2026-11-15 rejected; FAQ weekly cadence policy-only; DownloadStateData Last-Modified/ETag absent; website Last-Modified 2026-05-08 is static-asset clock; catalog metadata_modified 2026-11-11 rejected; official ISO channel absent.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Continue documenting channel verdicts, hashes, capture times, and clock-class distinctions; never invent ISO dates.",
+      laterApprovalAction:
+        "Adopt a CDSS-confirmed ISO export/version channel (or an explicit human policy change). Do not open the gate without it.",
+      actionLane: "blocked-awaiting-external",
+      humanApprovalRequired: true,
+      status: "blocked-awaiting-external",
+    },
+    {
+      id: "cdss-clarification-response",
+      rank: 2,
+      kind: "statewide-publication-blocker",
+      area: "cdss-correspondence",
+      title: "CDSS clarification response for export-date channel",
+      evidence:
+        "Clarification already sent. Phase 22: no authorized connected mailbox available; duplicate inquiry forbidden. Status remains sent-awaiting-response.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Record mailbox-unavailable; do not resend CDSS email; keep freshness blocker open.",
+      laterApprovalAction:
+        "Human checks authorized mailbox / CDSS reply; if reply arrives, capture evidence and evaluate channel.",
+      actionLane: "blocked-awaiting-external",
+      humanApprovalRequired: true,
+      status: "blocked-awaiting-external",
+    },
+    {
+      id: "exclusion-policy-activation",
+      rank: 3,
+      kind: "statewide-publication-blocker",
+      area: "exclusion-policy",
+      title: "Offline exclusion policy adopted but not activated",
+      evidence:
+        "Phase 18–21: exclusion policy adopted for offline classification only. activatedInApplicationOrDatabase=false. Phase 22 does not activate.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Keep offline ledger / classification current; do not wire exclusions into app or DB.",
+      laterApprovalAction:
+        "Explicit human approval to activate exclusions in application/database (separate from classification).",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "adopted-not-activated",
+    },
+    {
+      id: "unique-valid-identifiers-policy-bound",
+      rank: 4,
+      kind: "statewide-publication-blocker",
+      area: "unique-ids",
+      title: "Unique-ID / capacity integrity still policy-bound for launch",
+      evidence:
+        "Live scan: 0 duplicates; 2,102 leading-zero IDs preserved; invalid 95354 refuse-closed; truncated 15601219 absent vs canonical 015601219; 21 PENDING blank capacities / 0 candidate blanks; invented capacities=0. Safeguards pass but launch claims remain policy-bound.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: true,
+      developmentOnlyAction:
+        "Document fail-closed ID/capacity cases; preserve leading zeros; refuse invalid IDs; never invent capacities.",
+      laterApprovalAction:
+        "Approve launch-ready unique-ID/capacity integrity language and/or activate related exclusions.",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "partial",
+    },
+    {
+      id: "source-licensing-terms",
+      rank: 5,
+      kind: "statewide-publication-blocker",
+      area: "source-licensing",
+      title: "Source licensing / terms acceptance for publication",
+      evidence:
+        "DownloadStateData / Transparency Site terms and any required attribution remain a human publication prerequisite; Phase 22 does not assert legal clearance.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Keep provenance URLs and limitation notes in fixtures/docs; do not claim legal clearance.",
+      laterApprovalAction:
+        "Human confirms source licensing/terms acceptance before any publication path.",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "open",
+    },
+    {
+      id: "qa-signoff",
+      rank: 6,
+      kind: "statewide-publication-blocker",
+      area: "qa",
+      title: "Human QA sign-off for California launch",
+      evidence:
+        "Automated Phase 4–22 suites + build validate contracts; product QA / launch sign-off is not claimed by agents.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Run CA suite, WA/OR regressions, and npm run build on the draft PR; keep California unpublished.",
+      laterApprovalAction:
+        "Human QA review and launch sign-off after other statewide blockers clear.",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "open",
+    },
+    {
+      id: "provisional-license-five-conflicts",
+      rank: 7,
+      kind: "facility-excludable-exception",
+      area: "licensing-status",
+      title: "Five LICENSED ↔ Provisional License conflicts",
+      evidence:
+        "Phase 22 narrow re-probe (concurrency=1, ≥450ms): IDs 198320787, 455920513, 197611076, 197611060, 134605014 all remain Download LICENSED vs FacilityDetail Provisional License. Raw pair preserved; unknown-ineligible.",
+      preventsStatewidePublication: false,
+      canMitigateByExcludingFacilities: true,
+      developmentOnlyAction:
+        "Keep offline unknown-ineligible classification; preserve raw LICENSED vs Provisional License evidence.",
+      laterApprovalAction:
+        "Approve a Provisional License mapping (or keep excluded) after any CDSS status clarification; activation of exclusion is separate.",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "open",
+    },
+    {
+      id: "licensed-pending-increase-overlays",
+      rank: 8,
+      kind: "facility-excludable-exception",
+      area: "licensing-status",
+      title: "Licensed/Pending Increase overlays (66 + controls)",
+      evidence:
+        "Phase 21: 66 explainable LICENSED↔Licensed/Pending Increase overlays still unknown-ineligible. Phase 22 controls 019201167 and 019201133 reconfirm the pattern.",
+      preventsStatewidePublication: false,
+      canMitigateByExcludingFacilities: true,
+      developmentOnlyAction:
+        "Keep explainable-but-ineligible offline classification; do not invent Licensed≡Licensed/Pending Increase for publication.",
+      laterApprovalAction:
+        "Approve or reject a publication mapping for Licensed/Pending Increase.",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "open",
+    },
+    {
+      id: "prior-control-502701867",
+      rank: 9,
+      kind: "facility-excludable-exception",
+      area: "status-conflict",
+      title: "Control 502701867 Pending Incomplete Application",
+      evidence:
+        "Phase 22 re-probe: Download LICENSED vs FacilityDetail Pending Incomplete Application; empty live license dates; unknown-ineligible.",
+      preventsStatewidePublication: false,
+      canMitigateByExcludingFacilities: true,
+      developmentOnlyAction: "Keep excluded as regression control.",
+      laterApprovalAction: null,
+      actionLane: "none-preserved",
+      humanApprovalRequired: false,
+      status: "pass",
+    },
+    {
+      id: "fourteen-licensed-missing-date",
+      rank: 10,
+      kind: "facility-excludable-exception",
+      area: "exceptions",
+      title: "14 statewide LICENSED + empty License First Date",
+      evidence:
+        "Phase 16–21 IDs preserved (14). FAQ notes some first license dates may be unavailable; does not authorize publication.",
+      preventsStatewidePublication: false,
+      canMitigateByExcludingFacilities: true,
+      developmentOnlyAction:
+        "Keep unknown-ineligible / unpublishable until authoritative dates exist.",
+      laterApprovalAction:
+        "Approve exclusion activation or accept FAQ-backed date absence only with explicit human policy (not recommended by current fail-closed rules).",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "open",
+    },
+    {
+      id: "twenty-eight-unresolved-coordinates",
+      rank: 11,
+      kind: "facility-excludable-exception",
+      area: "coordinates",
+      title: "28 unresolved official coordinates",
+      evidence:
+        "15,423 verified / 28 unresolved / 0 fabricated. Phase 22 does not re-probe without verified source delta.",
+      preventsStatewidePublication: false,
+      canMitigateByExcludingFacilities: true,
+      developmentOnlyAction:
+        "Keep map-suppressed; do not geocode/fabricate; do not repeat unsuccessful probes.",
+      laterApprovalAction:
+        "Approve map exclusion activation or provide authoritative coordinate source delta.",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "partial",
+    },
+    {
+      id: "roster-verification-complete",
+      rank: 12,
+      kind: "safeguard-preserved",
+      area: "licensing-status",
+      title: "Roster FacilityDetail / disclosure verification complete",
+      evidence:
+        "Phase 20: cumulative 15,451/15,451 under authorization. Phase 21 resolved prior HTTP 500 inconclusives. Phase 22 does not redo statewide crawl.",
+      preventsStatewidePublication: false,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Preserve coverage claims; narrow probes only for listed conflicts/controls.",
+      laterApprovalAction: null,
+      actionLane: "development-only",
+      humanApprovalRequired: false,
+      status: "pass",
+    },
+    {
+      id: "eligible-facility-types-accounting",
+      rank: 13,
+      kind: "safeguard-preserved",
+      area: "accounting",
+      title: "Eligible RCFE/ARF types + exclusive-bucket accounting 24,377",
+      evidence:
+        "Exclusive buckets 15,413 active + 38 restricted + 8,921 excluded + 5 exceptions = 24,377. Download sha256 unchanged in Phase 22 live probe.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Preserve exclusive-bucket invariant; re-validate on any source-data change.",
+      laterApprovalAction: null,
+      actionLane: "none-preserved",
+      humanApprovalRequired: false,
+      status: "pass",
+    },
+    {
+      id: "publication-owner-claim-safeguards",
+      rank: 14,
+      kind: "safeguard-preserved",
+      area: "safeguards",
+      title: "Publication and owner-claim safeguards remain closed",
+      evidence:
+        "californiaDirectoryReady()=false; californiaPhase22AllowsPublication()=false; gate blocked; California unpublished; owner claims ineligible.",
+      preventsStatewidePublication: true,
+      canMitigateByExcludingFacilities: false,
+      developmentOnlyAction:
+        "Do not change or open the publication gate; keep STOP recommendation.",
+      laterApprovalAction:
+        "Any later gate-open request requires explicit human approval after all statewide blockers clear.",
+      actionLane: "requires-later-human-approval",
+      humanApprovalRequired: true,
+      status: "pass",
+    },
+  ] as const;
+
+export function summarizeCaliforniaPhase22DecisionMatrix(
+  rows: readonly CaliforniaPhase22DecisionRow[] = CALIFORNIA_PHASE22_DECISION_MATRIX,
+) {
+  const statewide = rows.filter(r => r.kind === "statewide-publication-blocker");
+  const facility = rows.filter(r => r.kind === "facility-excludable-exception");
+  const developmentOnly = rows.filter(r => r.actionLane === "development-only");
+  const laterApproval = rows.filter(
+    r => r.actionLane === "requires-later-human-approval",
+  );
+  const external = rows.filter(r => r.actionLane === "blocked-awaiting-external");
+  return {
+    total: rows.length,
+    statewidePublicationBlockers: statewide.length,
+    facilityExcludableExceptions: facility.length,
+    developmentOnlyActions: developmentOnly.length,
+    laterApprovalActions: laterApproval.length,
+    blockedAwaitingExternal: external.length,
+    stopGo: "STOP" as const,
+    allowsPublication: false as const,
+    gate: "blocked" as const,
+  };
+}

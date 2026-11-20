@@ -1,0 +1,100 @@
+{
+  "captureTimeUtc": "2026-11-20T19:31:34.524Z",
+  "observedOn": "2026-11-20",
+  "baselineSha256": {
+    "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+  },
+  "sha256MatchesBaseline": true,
+  "rcfe": {
+    "httpStatus": 200,
+    "url": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData?id=ResidentialElderCareFacility&GUID=<redacted>",
+    "bytes": 8635782,
+    "sha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "rows": 13337,
+    "responseHeaders": {
+      "date": "Fri, 20 Nov 2026 19:31:35 GMT",
+      "cache-control": "no-cache",
+      "content-type": "text/csv",
+      "content-disposition": "attachment; filename=ResidentialElderCareFacility11152026.csv",
+      "expires": "-1"
+    },
+    "allHeaderKeys": [
+      "cache-control",
+      "content-disposition",
+      "content-type",
+      "date",
+      "expires",
+      "pragma",
+      "set-cookie",
+      "strict-transport-security",
+      "transfer-encoding",
+      "vary",
+      "x-powered-by"
+    ],
+    "filenameDate": {
+      "raw": "11152026",
+      "month": 11,
+      "day": 15,
+      "year": 2026,
+      "isoCandidate": "2026-11-15",
+      "authoritativeIsoExportDate": null
+    },
+    "contentDisposition": "attachment; filename=ResidentialElderCareFacility11152026.csv"
+  },
+  "arf": {
+    "httpStatus": 200,
+    "url": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData?id=AdultResidentialFacilities&GUID=<redacted>",
+    "bytes": 5434124,
+    "sha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "rows": 11040,
+    "responseHeaders": {
+      "date": "Fri, 20 Nov 2026 19:31:34 GMT",
+      "cache-control": "no-cache",
+      "content-type": "text/csv",
+      "content-disposition": "attachment; filename=AdultResidentialFacilities11152026.csv",
+      "expires": "-1"
+    },
+    "allHeaderKeys": [
+      "cache-control",
+      "content-disposition",
+      "content-type",
+      "date",
+      "expires",
+      "pragma",
+      "set-cookie",
+      "strict-transport-security",
+      "transfer-encoding",
+      "vary",
+      "x-powered-by"
+    ],
+    "filenameDate": {
+      "raw": "11152026",
+      "month": 11,
+      "day": 15,
+      "year": 2026,
+      "isoCandidate": "2026-11-15",
+      "authoritativeIsoExportDate": null
+    },
+    "contentDisposition": "attachment; filename=AdultResidentialFacilities11152026.csv"
+  },
+  "distinctions": {
+    "websiteUpdateTime": "downloadstatedata.html Last-Modified Fri, 08 May 2026 03:01:06 GMT (static page asset; not dataset export)",
+    "downloadFilenameStamp": {
+      "raw": "11152026",
+      "month": 11,
+      "day": 15,
+      "year": 2026,
+      "isoCandidate": "2026-11-15",
+      "authoritativeIsoExportDate": null
+    },
+    "httpTransportClocks": {
+      "date": "Fri, 20 Nov 2026 19:31:35 GMT",
+      "lastModified": null,
+      "etag": null
+    },
+    "datasetExportIso": null,
+    "note": "Filename stamp, HTTP Date, and website Last-Modified are NOT adopted as authoritative ISO export dates."
+  },
+  "authoritativeIsoExportDate": null
+}
