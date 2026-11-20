@@ -1,5 +1,5 @@
 export const NORTH_CAROLINA_PUBLICATION = "unpublished" as const;
-export const NORTH_CAROLINA_OBSERVED_ON = "2026-11-13";
+export const NORTH_CAROLINA_OBSERVED_ON = "2026-11-20";
 export const NORTH_CAROLINA_LISTINGS_URL = "https://info.ncdhhs.gov/dhsr/reports.htm";
 export const NORTH_CAROLINA_ADULT_WORKBOOK_URL = "https://info.ncdhhs.gov/dhsr/data/Ahlist.xlsx";
 export const NORTH_CAROLINA_FAMILY_WORKBOOK_URL = "https://info.ncdhhs.gov/dhsr/data/Fchlist.xlsx";
@@ -20,8 +20,8 @@ export const NORTH_CAROLINA_SITE_ADDRESSES = 1086;
 export const NORTH_CAROLINA_FIVE_DIGIT_SITE_ZIPS = 1086;
 export const NORTH_CAROLINA_ADULT_COUNTIES = 96;
 export const NORTH_CAROLINA_FAMILY_COUNTIES = 64;
-export const NORTH_CAROLINA_IDENTICAL_MAILING_ADDRESSES = 184;
-export const NORTH_CAROLINA_DISTINCT_MAILING_ADDRESSES = 902;
+export const NORTH_CAROLINA_IDENTICAL_MAILING_ADDRESSES = 189;
+export const NORTH_CAROLINA_DISTINCT_MAILING_ADDRESSES = 897;
 export const NORTH_CAROLINA_ADULT_BED_MINIMUM = 9;
 export const NORTH_CAROLINA_FAMILY_BEDS_OUTSIDE_RANGE = 0;
 export const NORTH_CAROLINA_STAR_NOT_AVAILABLE = 27;

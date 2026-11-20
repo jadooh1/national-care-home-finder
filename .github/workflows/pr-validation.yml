@@ -166,6 +166,9 @@ jobs:
       - name: Check the Florida assisted-living source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/florida_assisted_living_source_discovery.ts
 
+      - name: Check the North Carolina care-home source discovery
+        run: node --experimental-strip-types --test supabase/proposals/tests/north_carolina_care_home_source_discovery.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 
