@@ -1,0 +1,871 @@
+[
+  {
+    "licenseId": 52728,
+    "facilityName": "A Daughter's Embrace Residential Care",
+    "address": {
+      "streetNumber": "6345",
+      "addressLine1": "Springcrest Lane",
+      "city": "HENRICO",
+      "state": "VA",
+      "zipCode": "23231",
+      "countyFipsCode": "087",
+      "additionalProperties": []
+    },
+    "phoneNumber": "804-306-7953",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-04-30 00:00:00",
+    "capacity": 4,
+    "licenseFacilityId": "1105255",
+    "qualificationHoverTexts": [
+      "Ambulatory Only",
+      "ResidentialOnly"
+    ],
+    "inspectionCount": 3,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=52728&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 50446,
+    "facilityName": "Benchmark at Alexandria",
+    "address": {
+      "streetNumber": "3440",
+      "addressLine1": "Berkeley Street",
+      "city": "ALEXANDRIA",
+      "state": "VA",
+      "zipCode": "22302",
+      "countyFipsCode": "510",
+      "additionalProperties": []
+    },
+    "phoneNumber": "571-386-2200",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-09-30 00:00:00",
+    "capacity": 134,
+    "licenseFacilityId": "1105155",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory",
+      "Special Care Un"
+    ],
+    "inspectionCount": 13,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=50446&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 34706,
+    "facilityName": "The Haven Assisted Living@Cold Harbor",
+    "address": {
+      "streetNumber": "6367",
+      "addressLine1": "Cold Harbor Road",
+      "city": "MECHANICSVILLE",
+      "state": "VA",
+      "zipCode": "23111",
+      "countyFipsCode": "085",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(804) 779-4847",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-02-19 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1104071",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 6,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=34706&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 30607,
+    "facilityName": "The Residences at Lynn House",
+    "address": {
+      "streetNumber": "4400",
+      "addressLine1": "W. Braddock Road",
+      "city": "ALEXANDRIA",
+      "state": "VA",
+      "zipCode": "22304",
+      "countyFipsCode": "510",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(703) 379-6000",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2028-06-12 00:00:00",
+    "capacity": 12,
+    "licenseFacilityId": "1103839",
+    "qualificationHoverTexts": [
+      "Assisted Living"
+    ],
+    "inspectionCount": 4,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=30607&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 38755,
+    "facilityName": "North Roanoke Assisted Living",
+    "address": {
+      "streetNumber": "6910",
+      "addressLine1": "Williamson Road",
+      "city": "ROANOKE",
+      "state": "VA",
+      "zipCode": "24019",
+      "countyFipsCode": "161",
+      "additionalProperties": []
+    },
+    "phoneNumber": "540-265-2173",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-02-09 00:00:00",
+    "capacity": 225,
+    "licenseFacilityId": "1104266",
+    "qualificationHoverTexts": [
+      "Non-Ambulatory",
+      "Assisted Living"
+    ],
+    "inspectionCount": 20,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=38755&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 25145,
+    "facilityName": "Our Father's House Christian Home",
+    "address": {
+      "streetNumber": "15261",
+      "addressLine1": "Jubilee Road",
+      "city": "CULPEPER",
+      "state": "VA",
+      "zipCode": "22701-4501",
+      "countyFipsCode": "047",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(540) 727-8292",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-06-17 00:00:00",
+    "capacity": 23,
+    "licenseFacilityId": "1086051",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 5,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=25145&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 30140,
+    "facilityName": "Special Care for Special People",
+    "address": {
+      "streetNumber": "4004",
+      "addressLine1": "Wilmont Drive",
+      "city": "RICHMOND",
+      "state": "VA",
+      "zipCode": "23222",
+      "countyFipsCode": "760",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(804) 228-9700",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-07-28 00:00:00",
+    "capacity": 14,
+    "licenseFacilityId": "1103822",
+    "qualificationHoverTexts": [
+      "ResidentialOnly",
+      "Ambulatory Only"
+    ],
+    "inspectionCount": 6,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=30140&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 40426,
+    "facilityName": "8337 Lewinsville-Larmax",
+    "address": {
+      "streetNumber": "8337",
+      "addressLine1": "Lewinsville Road",
+      "city": "MC LEAN",
+      "state": "VA",
+      "zipCode": "22102",
+      "countyFipsCode": "059",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(571) 730-4029",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-01-02 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1104414",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 4,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=40426&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 8398,
+    "facilityName": "Emily Green Shores",
+    "address": {
+      "streetNumber": "500",
+      "addressLine1": "Westmoreland Avenue",
+      "city": "PORTSMOUTH",
+      "state": "VA",
+      "zipCode": "23707",
+      "countyFipsCode": "740",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(757)399-3442",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-06-30 00:00:00",
+    "capacity": 39,
+    "licenseFacilityId": "18252",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 14,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=8398&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 44057,
+    "facilityName": "Harris Manor 2",
+    "address": {
+      "streetNumber": "15609",
+      "addressLine1": "Kellers Mill Road",
+      "city": "DEWITT",
+      "state": "VA",
+      "zipCode": "23840",
+      "countyFipsCode": "053",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(804) 283-2111",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-09-04 00:00:00",
+    "capacity": 4,
+    "licenseFacilityId": "1104659",
+    "qualificationHoverTexts": [
+      "ResidentialOnly"
+    ],
+    "inspectionCount": 5,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=44057&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 31572,
+    "facilityName": "Pauline's Pavilion, LLC",
+    "address": {
+      "streetNumber": "19312",
+      "addressLine1": "White Oak Road",
+      "city": "SUTHERLAND",
+      "state": "VA",
+      "zipCode": "23832",
+      "countyFipsCode": "053",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(804) 265-8708",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "3YR",
+    "expirationDate": "2027-08-30 00:00:00",
+    "capacity": 16,
+    "licenseFacilityId": "1103882",
+    "qualificationHoverTexts": [
+      "Ambulatory Only",
+      "ResidentialOnly"
+    ],
+    "inspectionCount": 5,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=31572&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 52898,
+    "facilityName": "Cambridge Gardens Assisted Living",
+    "address": {
+      "streetNumber": "9300",
+      "addressLine1": "Onyx Ct",
+      "city": "FREDERICKSBURG",
+      "state": "VA",
+      "zipCode": "22407",
+      "countyFipsCode": "177",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(540) 893-8604",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "COND",
+    "expirationDate": "2026-09-29 00:00:00",
+    "capacity": 60,
+    "licenseFacilityId": "1105268",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 5,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=52898&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 23680,
+    "facilityName": "Avalon House on High Street",
+    "address": {
+      "streetNumber": "6712",
+      "addressLine1": "High Street",
+      "city": "FALLS CHURCH",
+      "state": "VA",
+      "zipCode": "22046",
+      "countyFipsCode": "610",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(703) 532-6303",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-10-20 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1066521",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 6,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=23680&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 44487,
+    "facilityName": "Linden House",
+    "address": {
+      "streetNumber": "1250",
+      "addressLine1": "Branchlands Drive",
+      "city": "CHARLOTTESVILLE",
+      "state": "VA",
+      "zipCode": "22901",
+      "countyFipsCode": "003",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(434) 973-0311",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-11-24 00:00:00",
+    "capacity": 94,
+    "licenseFacilityId": "1104701",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Special Care Un",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 11,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=44487&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 46987,
+    "facilityName": "Cogir of Old Town, Alexandria",
+    "address": {
+      "streetNumber": "400",
+      "addressLine1": "N.Washington Street",
+      "city": "ALEXANDRIA",
+      "state": "VA",
+      "zipCode": "22314",
+      "countyFipsCode": "510",
+      "additionalProperties": []
+    },
+    "phoneNumber": "703-236-1226",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2026-10-11 00:00:00",
+    "capacity": 115,
+    "licenseFacilityId": "1104947",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory",
+      "Special Care Un"
+    ],
+    "inspectionCount": 15,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=46987&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 46135,
+    "facilityName": "Regency at Augusta",
+    "address": {
+      "streetNumber": "43",
+      "addressLine1": "Pinnacle Drive",
+      "city": "FISHERSVILLE",
+      "state": "VA",
+      "zipCode": "22939",
+      "countyFipsCode": "015",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(540) 213-4400",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "3YR",
+    "expirationDate": "2027-02-05 00:00:00",
+    "capacity": 96,
+    "licenseFacilityId": "1104872",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Special Care Un",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 23,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=46135&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 34157,
+    "facilityName": "Jeanne's Elderly Care",
+    "address": {
+      "streetNumber": "1682",
+      "addressLine1": "Monterey Road",
+      "city": "ROANOKE",
+      "state": "VA",
+      "zipCode": "24019",
+      "countyFipsCode": "770",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(540) 563-1262",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-11-05 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1104032",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 16,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=34157&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 45245,
+    "facilityName": "Cha Cha's Care Home, LLC #2",
+    "address": {
+      "streetNumber": "6290",
+      "addressLine1": "Simi Court",
+      "city": "MECHANICSVILLE",
+      "state": "VA",
+      "zipCode": "23111",
+      "countyFipsCode": "085",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(804) 252-0967",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "3YR",
+    "expirationDate": "2029-10-09 00:00:00",
+    "capacity": 5,
+    "licenseFacilityId": "1104783",
+    "qualificationHoverTexts": [
+      "Ambulatory Only",
+      "ResidentialOnly"
+    ],
+    "inspectionCount": 5,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=45245&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 45187,
+    "facilityName": "English Meadows Crozet Campus",
+    "address": {
+      "streetNumber": "1220",
+      "addressLine1": "Crozet Avenue",
+      "city": "CROZET",
+      "state": "VA",
+      "zipCode": "22932",
+      "countyFipsCode": "003",
+      "additionalProperties": []
+    },
+    "phoneNumber": "540-810-6200",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "3YR",
+    "expirationDate": "2028-10-21 00:00:00",
+    "capacity": 98,
+    "licenseFacilityId": "1104776",
+    "qualificationHoverTexts": [
+      "Non-Ambulatory",
+      "Special Care Un",
+      "Assisted Living"
+    ],
+    "inspectionCount": 10,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=45187&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 40493,
+    "facilityName": "Aspen Hill at Harbor Place",
+    "address": {
+      "streetNumber": "12628",
+      "addressLine1": "Harbor Drive",
+      "city": "WOODBRIDGE",
+      "state": "VA",
+      "zipCode": "22192",
+      "countyFipsCode": "153",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(703) 597-2627",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-01-25 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1104420",
+    "qualificationHoverTexts": [
+      "Non-Ambulatory",
+      "Assisted Living"
+    ],
+    "inspectionCount": 5,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=40493&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 49101,
+    "facilityName": "Watercrest Richmond Assisted Living and Memory Care",
+    "address": {
+      "streetNumber": "5250",
+      "addressLine1": "Grandin Avenue",
+      "city": "MOSELEY",
+      "state": "VA",
+      "zipCode": "23120",
+      "countyFipsCode": "041",
+      "additionalProperties": []
+    },
+    "phoneNumber": "804-495-0601",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-09-07 00:00:00",
+    "capacity": 122,
+    "licenseFacilityId": "1105080",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Special Care Un"
+    ],
+    "inspectionCount": 14,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=49101&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 48855,
+    "facilityName": "Tilden Memory Care & Assisted Living",
+    "address": {
+      "streetNumber": "7800",
+      "addressLine1": "Belvedere Drive",
+      "city": "ALEXANDRIA",
+      "state": "VA",
+      "zipCode": "22306",
+      "countyFipsCode": "059",
+      "additionalProperties": []
+    },
+    "phoneNumber": "571-556-9339",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-06-30 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1105062",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 8,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=48855&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 47486,
+    "facilityName": "Edgeworth Park at New Town",
+    "address": {
+      "streetNumber": "5501",
+      "addressLine1": "Discovery Park Boulevard",
+      "city": "WILLIAMSBURG",
+      "state": "VA",
+      "zipCode": "23188",
+      "countyFipsCode": "095",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(757) 345-5005",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-04-30 00:00:00",
+    "capacity": 95,
+    "licenseFacilityId": "1104981",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Special Care Un",
+      "Non-Ambulatory"
+    ],
+    "inspectionCount": 22,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=47486&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 47538,
+    "facilityName": "First Choice South Brunswick",
+    "address": {
+      "streetNumber": "6520",
+      "addressLine1": "Dry Bread Road",
+      "city": "LAWRENCEVILLE",
+      "state": "VA",
+      "zipCode": "23868",
+      "countyFipsCode": "025",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(434) 848-0353",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "3YR",
+    "expirationDate": "2028-08-02 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1104988",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Ambulatory Only"
+    ],
+    "inspectionCount": 8,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=47538&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 53238,
+    "facilityName": "Homestead Estates Senior Living LLC",
+    "address": {
+      "streetNumber": "5920",
+      "addressLine1": "Colchester Road",
+      "city": "FAIRFAX",
+      "state": "VA",
+      "zipCode": "22030",
+      "countyFipsCode": "059",
+      "additionalProperties": []
+    },
+    "phoneNumber": "202-805-2689",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "COND",
+    "expirationDate": "2026-11-07 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1105299",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Ambulatory Only"
+    ],
+    "inspectionCount": 3,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=53238&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 52653,
+    "facilityName": "Hampton Manor of Chesapeake",
+    "address": {
+      "streetNumber": "1909",
+      "addressLine1": "Edinburgh Parkway",
+      "city": "CHESAPEAKE",
+      "state": "VA",
+      "zipCode": "23322",
+      "countyFipsCode": "550",
+      "additionalProperties": []
+    },
+    "phoneNumber": "757-317-2800",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "COND",
+    "expirationDate": "2026-03-11 00:00:00",
+    "capacity": 102,
+    "licenseFacilityId": "1105245",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Special Care Un"
+    ],
+    "inspectionCount": 14,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=52653&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 8599,
+    "facilityName": "Hairston Home for Adults",
+    "address": {
+      "streetNumber": "601",
+      "addressLine1": "Armstead Ave",
+      "city": "MARTINSVILLE",
+      "state": "VA",
+      "zipCode": "24112",
+      "countyFipsCode": "690",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(276) 638-5121",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-04-30 00:00:00",
+    "capacity": 38,
+    "licenseFacilityId": "25712",
+    "qualificationHoverTexts": [
+      "Ambulatory Only",
+      "Assisted Living"
+    ],
+    "inspectionCount": 10,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=8599&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 47883,
+    "facilityName": "Continued Care II",
+    "address": {
+      "streetNumber": "5113",
+      "addressLine1": "Cavedo Lane",
+      "city": "RICHMOND",
+      "state": "VA",
+      "zipCode": "23231",
+      "countyFipsCode": "087",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(804) 447-9049",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "3YR",
+    "expirationDate": "2028-09-21 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1105031",
+    "qualificationHoverTexts": [
+      "Ambulatory Only",
+      "ResidentialOnly"
+    ],
+    "inspectionCount": 7,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=47883&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 44359,
+    "facilityName": "Atkinson's Retirement Home",
+    "address": {
+      "streetNumber": "4001",
+      "addressLine1": "Elmswell Drive",
+      "city": "RICHMOND",
+      "state": "VA",
+      "zipCode": "23223",
+      "countyFipsCode": "087",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(804) 836-5325",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2027-09-19 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1104684",
+    "qualificationHoverTexts": [
+      "Ambulatory Only",
+      "ResidentialOnly"
+    ],
+    "inspectionCount": 6,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=44359&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 51676,
+    "facilityName": "A.L.B. Non Medical Home Care LLC Hazelhurst",
+    "address": {
+      "streetNumber": "609",
+      "addressLine1": "Hazelhurst Ave",
+      "city": "RICHMOND",
+      "state": "VA",
+      "zipCode": "23222",
+      "countyFipsCode": "760",
+      "additionalProperties": []
+    },
+    "phoneNumber": "804-386-2070",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "2YR",
+    "expirationDate": "2028-06-15 00:00:00",
+    "capacity": 8,
+    "licenseFacilityId": "1105191",
+    "qualificationHoverTexts": [
+      "Ambulatory Only",
+      "ResidentialOnly"
+    ],
+    "inspectionCount": 5,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=51676&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 45858,
+    "facilityName": "Calveria Living at Fishersville",
+    "address": {
+      "streetNumber": "25",
+      "addressLine1": "Old Oaks Drive",
+      "city": "FISHERSVILLE",
+      "state": "VA",
+      "zipCode": "22939",
+      "countyFipsCode": "015",
+      "additionalProperties": []
+    },
+    "phoneNumber": "(540) 705-1004",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-05-17 00:00:00",
+    "capacity": 66,
+    "licenseFacilityId": "1104849",
+    "qualificationHoverTexts": [
+      "Special Care Un",
+      "Assisted Living"
+    ],
+    "inspectionCount": 21,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=45858&endpoint=alf",
+    "coordinatesPresent": false
+  },
+  {
+    "licenseId": 44051,
+    "facilityName": "Liberty Ridge Memory Support - Pearls of Life",
+    "address": {
+      "streetNumber": "107",
+      "addressLine1": "Monica Blvd.",
+      "city": "LYNCHBURG",
+      "state": "VA",
+      "zipCode": "24502",
+      "countyFipsCode": "680",
+      "additionalProperties": []
+    },
+    "phoneNumber": "434-237-2268",
+    "licensed": true,
+    "facilityType": "Assisted Living Facility",
+    "licenseType": "1YR",
+    "expirationDate": "2027-05-10 00:00:00",
+    "capacity": 84,
+    "licenseFacilityId": "1104657",
+    "qualificationHoverTexts": [
+      "Assisted Living",
+      "Non-Ambulatory",
+      "Special Care Un"
+    ],
+    "inspectionCount": 63,
+    "disclosureUrl": "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/?licenseId=44051&endpoint=alf",
+    "coordinatesPresent": false
+  }
+]

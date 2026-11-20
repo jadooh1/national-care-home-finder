@@ -53,7 +53,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Texas | B | unpublished | 2019 | yes | yes | yes | no | no | high |
 | Utah | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Vermont | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
-| Virginia | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| Virginia | B | unpublished | 575 | yes | yes | yes | yes | no | high |
 | Washington | A | public | 6278 | yes | yes | yes | yes | yes | high |
 | West Virginia | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Wisconsin | C | unpublished | — | not verified | not verified | not verified | not verified | no | high |

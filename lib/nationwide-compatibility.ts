@@ -111,7 +111,7 @@ const ASSESSMENTS = [
   row("Texas", "B", "unpublished", "Texas HHSC active assisted-living workbook and TULIP search", "https://apps.hhs.texas.gov/providers/directories/al.xlsx", 2019, true, true, true, false, false, "high", "The active-license workbook has 2,019 assisted-living rows (TYPE A 335 / B 1,676 / C 8), unique Facility ID (leading zeros preserved) and License No, physical address, and capacity. Facility Licensed=YES on all rows is a membership flag, not operating status. As-of label 11/19/2026 and Last-Modified are not an ISO export date. TULIP detail needs an account id absent from the workbook. Closures PDF overlap with active IDs is 0. Geo Location has 82 comma-only cells; coordinate source is undescribed. Type A/B/C (26 TAC §553.5) are not Washington AFH. Texas stays unpublished."),
   row("Utah", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Vermont", "D", "unpublished", "Vermont assisted living residence directory", "https://dlp.vermont.gov/document/assisted-living-residence-directory", null, null, null, null, null, null, "medium", "A PDF dated January 27, 2025 is published. Its columns were not read."),
-  row("Virginia", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
+  row("Virginia", "B", "unpublished", "Virginia DSS Assisted Living Facility Search", "https://www.dss.virginia.gov/licensed-care/search-licensing-programs/assisted-living-facility-search/", 575, true, true, true, true, false, "high", "Verified 2026-11-20: ALF Search returns 576 list rows / 575 unique licenseId values with licensed=true, facilityType Assisted Living Facility, and street/city/state/ZIP. One duplicate licenseId (53896). No ISO export date; HTTP Last-Modified absent; legacy alf.cgi redirects to licensed-care. Capacity and licenseType (1YR/2YR/3YR/COND in a 32-row detail sample) are detail-only and not extrapolated. ?licenseId={id}&endpoint=alf is a verified disclosure prefix with inspections. No coordinates. Virginia ALF is not Washington AFH. Virginia stays unpublished."),
   row("Washington", "A", "public", "Washington DSHS adult family home listing", "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHAdvLookup.aspx", 6278, true, true, true, true, true, "high", "The public directory and map already accept the official license number, address, status, beds, coordinates, disclosure link, and source date."),
   row("West Virginia", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Wisconsin", "C", "unpublished", "Wisconsin adult family home PDF and GIS layer", null, null, null, null, null, null, null, "high", "The PDF and GIS counts are not reconciled, so neither source is the accepted directory."),
@@ -430,6 +430,24 @@ FIELD_EVIDENCE.Florida = {
   "coordinate-accuracy": fact("not-verified", "low"),
 };
 
+FIELD_EVIDENCE.Virginia = {
+  "regulatory-identifier": fact("present", "high", "licenseId"),
+  "identifier-type": fact("present", "high", "license-id"),
+  "issuing-authority": fact("present", "high", "Virginia DSS DOLP"),
+  "physical-address": fact("present", "high", "streetNumber+addressLine1"),
+  "official-export-date": fact("rejected", "high"),
+  "retrieval-timestamp": fact("present", "high", "2026-11-20"),
+  "freshness-verification": fact("absent", "high"),
+  "facility-disclosure": fact("present", "high", "licenseId query endpoint=alf"),
+  "generic-search": fact("present", "high", "alf-search"),
+  "original-category": fact("present", "high", "Assisted Living Facility"),
+  "original-status": fact("present", "medium", "licensed boolean"),
+  "normalized-category": fact("rejected", "high"),
+  "normalized-status": fact("absent", "high"),
+  "coordinates": fact("absent", "high"),
+  "coordinate-source": fact("absent", "high"),
+};
+
 FIELD_EVIDENCE.Ohio = {
   "regulatory-identifier": fact("present", "high", "FACID"),
   "identifier-type": fact("present", "high", "facility-id / state-id"),
@@ -530,6 +548,7 @@ export const ONBOARDING_SEQUENCE = [
   "Florida",
   "Georgia",
   "Ohio",
+  "Virginia",
   "Alabama",
   "Arkansas",
   "Louisiana",
@@ -557,7 +576,6 @@ export const ONBOARDING_SEQUENCE = [
   "Tennessee",
   "Utah",
   "Vermont",
-  "Virginia",
   "West Virginia",
   "Wyoming",
 ] as const;
