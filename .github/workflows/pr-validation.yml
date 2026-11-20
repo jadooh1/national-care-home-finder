@@ -151,6 +151,9 @@ jobs:
       - name: Check the Pennsylvania onboarding readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_onboarding_readiness.ts
 
+      - name: Check the Pennsylvania onboarding investigation
+        run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_onboarding_investigation.ts
+
       - name: Check the North Carolina onboarding assessment
         run: node --experimental-strip-types --test supabase/proposals/tests/north_carolina_onboarding.ts
 

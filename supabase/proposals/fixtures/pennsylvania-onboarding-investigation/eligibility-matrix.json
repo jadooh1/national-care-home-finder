@@ -1,0 +1,26 @@
+{
+  "observedOn": "2026-11-20",
+  "counts": {
+    "rosterRows": 989,
+    "structurallyTypedPersonalCareHomes": 989,
+    "usableStreetRows": 976,
+    "addressExceptions": 13,
+    "otherwiseClearOfflineEstimate": 0,
+    "publicationEligible": 0,
+    "ownerClaimEligible": 0,
+    "licensingCoordinates": 0,
+    "georeferencedRows": 989
+  },
+  "exclusiveBuckets": {
+    "address-exception-offline": 13,
+    "usable-street-but-blocked": 976,
+    "publication-eligible": 0
+  },
+  "residualOk": true,
+  "offlineDoesNotGrantPublicVisibility": true,
+  "ownerClaimEligible": false,
+  "publication": "unpublished",
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": "STOP"
+}
