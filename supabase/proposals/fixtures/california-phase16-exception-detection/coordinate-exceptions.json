@@ -1,0 +1,14 @@
+{
+  "reProbed": false,
+  "genuinelyNewAuthoritativeEvidence": false,
+  "summary": {
+    "investigated": 0,
+    "resolvedWithOfficialCoords": 0,
+    "remainingUnresolved": 28,
+    "fabricatedCoordinates": 0,
+    "geocoded": 0,
+    "baselineUnresolved": 28,
+    "reProbedUnsuccessfulChecks": false,
+    "note": "Phase 16 preserves the 28 unresolved coords without repeating unsuccessful Phase 14/15 FacilityDetail+ArcGIS checks (no new authoritative evidence)."
+  }
+}

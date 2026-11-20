@@ -1,0 +1,50 @@
+{
+  "gate": "blocked",
+  "publicationReady": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "baselinePreserved": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "missingCapacitiesOnExcluded": 21
+  },
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "duplicateInquiryAllowed": false
+  },
+  "disclosureAudit": {
+    "phase15CumulativeVerifiedCount": 347,
+    "incrementalVerifiedCount": 115,
+    "cumulativeVerifiedCount": 462,
+    "rosterDenominator": 15451,
+    "statewideCoverageClaimed": false
+  },
+  "statusConflict": {
+    "facilityNumber": "502701867",
+    "eligibility": "unknown-ineligible",
+    "publicationEligible": false,
+    "ownerClaimEligible": false,
+    "canPublish": false
+  },
+  "exceptionDetection": {
+    "newlyDetectedCount": 35,
+    "sampledFindings": 21,
+    "statewideChecks": 14,
+    "regressionControls": 20,
+    "byClass": {
+      "unknown-ineligible-control": 2,
+      "licensed-missing-initial-date": 21,
+      "facility-id-malformed": 2,
+      "disclosure-invalid": 2,
+      "facility-id-lost-leading-zeros": 2,
+      "withdrawn-ineligible-control": 16,
+      "status-conflict": 10
+    },
+    "licensedMissingDateStatewideScanCount": 15,
+    "licensedMissingDateStatewideHits": 15,
+    "sampleIsStatewideConclusion": false
+  }
+}

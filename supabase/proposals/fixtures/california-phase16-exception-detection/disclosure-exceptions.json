@@ -1,0 +1,52 @@
+{
+  "summary": {
+    "investigated": 2,
+    "resolvedExactOfficialIdWorks": 0,
+    "confirmedInvalidRefuseClosed": 1,
+    "preservedNoRepeat": 1
+  },
+  "findings": [
+    {
+      "kind": "ambiguous-truncated-leading-zero",
+      "officialFacilityNumber": "015601219",
+      "requestFacilityNumber": "15601219",
+      "truncatedProbe": {
+        "facilityNumber": "15601219",
+        "classification": "ambiguous",
+        "identifierRelation": "leading-zero-canonicalization",
+        "liveFacilityNumber": "015601219",
+        "apiFound": true,
+        "rationale": "FacilityDetail canonicalized a leading-zero difference.",
+        "sampleIsStatewideConclusion": false
+      },
+      "canonicalProbe": {
+        "facilityNumber": "015601219",
+        "classification": "working",
+        "identifierRelation": "exact",
+        "liveFacilityNumber": "015601219",
+        "apiFound": true,
+        "rationale": "FacilityDetail FACILITYNUMBER matches exactly.",
+        "sampleIsStatewideConclusion": false
+      },
+      "resolution": "preserved-from-phase15-no-repeat",
+      "fabricatedLink": false,
+      "rationale": "Phases 14\u201315 already resolved exact official ID 015601219 works; truncated remains non-canonical. Phase 16 preserves the safeguard without repeating unsuccessful truncated-as-canonical checks."
+    },
+    {
+      "kind": "invalid-id",
+      "officialFacilityNumber": "95354",
+      "requestFacilityNumber": "95354",
+      "truncatedProbe": null,
+      "canonicalProbe": {
+        "facilityNumber": "95354",
+        "classification": "invalid",
+        "identifierRelation": "not-applicable",
+        "rationale": "Facility number is not an official 8\u20139 digit CDSS identifier; generator refuses URLs (fail-closed).",
+        "sampleIsStatewideConclusion": false
+      },
+      "resolution": "confirmed-invalid-id-refuse-closed",
+      "fabricatedLink": false,
+      "rationale": "Confirmed: 95354 is not an 8\u20139 digit CDSS identifier; generator refuse-closed; no disclosure URL fabricated."
+    }
+  ]
+}
