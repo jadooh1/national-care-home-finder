@@ -1,0 +1,20 @@
+[
+  {
+    "kind": "facility-detail-page",
+    "pattern": "https://www.ccld.dss.ca.gov/carefacilitysearch/?Rewrite=FacDetail/{facilityNumber}",
+    "canonicalForPublication": true,
+    "notes": "Canonical public disclosure / FacDetail rewrite. Identical for RCFE and ARF."
+  },
+  {
+    "kind": "facility-detail-api",
+    "pattern": "https://www.ccld.dss.ca.gov/transparencyapi/api/FacilityDetail/{facilityNumber}",
+    "canonicalForPublication": false,
+    "notes": "Authoritative per-facility JSON used to prove the disclosure target resolves."
+  },
+  {
+    "kind": "facility-reports-api",
+    "pattern": "https://www.ccld.dss.ca.gov/transparencyapi/api/FacilityReports/{facilityNumber}",
+    "canonicalForPublication": false,
+    "notes": "Supporting inspection/complaint list; not the facility disclosure link."
+  }
+]
