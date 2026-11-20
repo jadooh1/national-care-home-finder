@@ -1,0 +1,16 @@
+{
+  "observedOn": "2026-11-20",
+  "authoritativeIsoExportDate": null,
+  "globalBlockerUnchanged": true,
+  "priorInquiryStatus": "sent-awaiting-response",
+  "followUpDraftStatus": "draft-do-not-send",
+  "duplicateInquiryAllowed": false,
+  "mailSentThisPhase": false,
+  "mailboxAccessibleThisEnvironment": false,
+  "newAuthoritativeEvidenceFound": false,
+  "exactEvidenceStillNeeded": "Source-issued ISO as-of date or authoritative dataset version stamp that uniquely identifies a DownloadStateData attachment (not filename MMDDYYYY, FAQ cadence, or website Last-Modified).",
+  "note": "Phase 24 already documented freshness channels and prepared a draft-do-not-send follow-up. Phase 26 does not resend, does not re-crawl, and does not invent ISO dates.",
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": "STOP"
+}

@@ -1,0 +1,127 @@
+{
+  "version": "26.0.0",
+  "observedOn": "2026-11-20",
+  "priorPhases": [
+    {
+      "phase": 20,
+      "title": "Staged FacilityDetail verification",
+      "pr": "#163",
+      "outcome": "Statewide verification stages; conflicts/inconclusives documented.",
+      "gate": "blocked"
+    },
+    {
+      "phase": 21,
+      "title": "Exception reconciliation",
+      "pr": "#164",
+      "outcome": "Exception ledger + conflict classification offline.",
+      "gate": "blocked"
+    },
+    {
+      "phase": 22,
+      "title": "Launch-blocker evidence",
+      "pr": "#165",
+      "outcome": "Freshness evidence + capacity/ID policy + provisional conflicts.",
+      "gate": "blocked"
+    },
+    {
+      "phase": 23,
+      "title": "Eligibility matrix + launch controls",
+      "pr": "#166",
+      "outcome": "15,451 candidates; 88 listing exclusions; 15,363 otherwise-clear offline.",
+      "gate": "blocked"
+    },
+    {
+      "phase": 24,
+      "title": "Freshness + launch-dependency decisions",
+      "pr": "#167",
+      "outcome": "ISO absent; CDSS follow-up draft-do-not-send; counts reconciled.",
+      "gate": "blocked"
+    },
+    {
+      "phase": 25,
+      "title": "Launch QA / security",
+      "pr": "#168",
+      "outcome": "Unpublished access audit leak-count 0; source-data safeguards pass.",
+      "gate": "blocked"
+    }
+  ],
+  "baseline": {
+    "matches": true,
+    "residualOk": true,
+    "coordOk": true,
+    "exclusiveOk": true,
+    "exclusiveSum": 24377,
+    "observed": {
+      "official": 24377,
+      "candidates": 15451,
+      "listing": 88,
+      "otherwise": 15363,
+      "coords": 28,
+      "mapOnly": 27
+    },
+    "targets": {
+      "officialRecords": 24377,
+      "activeCandidates": 15413,
+      "restrictedCandidates": 38,
+      "excluded": 8921,
+      "exceptionDocumentedExclude": 5,
+      "californiaCandidates": 15451,
+      "listingExclusionsInCandidates": 88,
+      "otherwiseClearOffline": 15363,
+      "unresolvedCoordinates": 28,
+      "mapOnlySuppressions": 27,
+      "provisionalConflicts": 5,
+      "pendingIncreaseOverlays": 66,
+      "priorControls": 3,
+      "missingLicenseEvidence": 14,
+      "coordinateListingOverlapId": "502701867"
+    },
+    "publicationEligibleCount": 0,
+    "offlineDoesNotGrantPublicVisibility": true
+  },
+  "unresolvedLicensingConflictIds": [
+    "198320787",
+    "455920513",
+    "197611076",
+    "197611060",
+    "134605014",
+    "502701867"
+  ],
+  "sourceDataLimitations": [
+    {
+      "id": "no-authoritative-iso-export-date",
+      "severity": "blocker",
+      "summary": "No source-issued ISO as-of / version stamp for DownloadStateData."
+    },
+    {
+      "id": "downloadstatedata-no-coordinates",
+      "severity": "known-limitation",
+      "summary": "DownloadStateData has no lat/lng; map coords from separate GIS evidence."
+    },
+    {
+      "id": "leading-zero-identity",
+      "severity": "control",
+      "summary": "Official 8–9 digit strings preserve leading zeros; truncated IDs are not equivalent."
+    },
+    {
+      "id": "capacity-blanks",
+      "severity": "control",
+      "summary": "Official capacity blanks preserved; blanks are not invented."
+    },
+    {
+      "id": "status-mapping-unresolved",
+      "severity": "blocker",
+      "summary": "Provisional / Pending Increase mapping decisions require future approval."
+    },
+    {
+      "id": "exclusions-offline-only",
+      "severity": "blocker",
+      "summary": "Eligibility exclusions remain offline; not activated in app/DB."
+    }
+  ],
+  "californiaDirectoryReady": false,
+  "publication": "unpublished",
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": "STOP"
+}
