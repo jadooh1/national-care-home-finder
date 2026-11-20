@@ -1,0 +1,235 @@
+{
+  "coverageBaseline": 707,
+  "authorizedAdditional": 14744,
+  "plannedUnique": 14744,
+  "poolSize": 16190,
+  "byStratum": {
+    "active-licensed": 13457,
+    "restricted-probation": 2,
+    "leading-zero-active": 1285,
+    "leading-zero-probation": 0
+  },
+  "skipPageProbe": true,
+  "sampleHead": [
+    {
+      "facilityNumber": "415600358",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-415600358",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "496803760",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-496803760",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "565850322",
+      "file": "ARF",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT RESIDENTIAL",
+      "stratum": "active-licensed",
+      "label": "arf-lic-565850322",
+      "publicationCandidate": true,
+      "geographicRegion": "central",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "197610457",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-197610457",
+      "publicationCandidate": true,
+      "geographicRegion": "central",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "198204377",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-198204377",
+      "publicationCandidate": true,
+      "geographicRegion": "southern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "191291008",
+      "file": "ARF",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT RESIDENTIAL",
+      "stratum": "active-licensed",
+      "label": "arf-lic-191291008",
+      "publicationCandidate": true,
+      "geographicRegion": "central",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "286803879",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-286803879",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "197604926",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-197604926",
+      "publicationCandidate": true,
+      "geographicRegion": "southern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "547208245",
+      "file": "ARF",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT RESIDENTIAL",
+      "stratum": "active-licensed",
+      "label": "arf-lic-547208245",
+      "publicationCandidate": true,
+      "geographicRegion": "central",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "392701368",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-392701368",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "191501668",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RCFE-CONTINUING CARE RETIREMENT COMMUNITY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-191501668",
+      "publicationCandidate": true,
+      "geographicRegion": "southern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "435202485",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-435202485",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "306006805",
+      "file": "ARF",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ENHANCED BEHAVIORAL SUPPORTS HOME - ARF",
+      "stratum": "active-licensed",
+      "label": "arf-lic-306006805",
+      "publicationCandidate": true,
+      "geographicRegion": "southern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "435202785",
+      "file": "ARF",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT RESIDENTIAL",
+      "stratum": "active-licensed",
+      "label": "arf-lic-435202785",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "306005858",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-306005858",
+      "publicationCandidate": true,
+      "geographicRegion": "southern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "275200750",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-275200750",
+      "publicationCandidate": true,
+      "geographicRegion": "central",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "306006834",
+      "file": "ARF",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT RESIDENTIAL",
+      "stratum": "active-licensed",
+      "label": "arf-lic-306006834",
+      "publicationCandidate": true,
+      "geographicRegion": "southern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "198601001",
+      "file": "ARF",
+      "downloadStatus": "LICENSED",
+      "downloadType": "ADULT RESIDENTIAL",
+      "stratum": "active-licensed",
+      "label": "arf-lic-198601001",
+      "publicationCandidate": true,
+      "geographicRegion": "southern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "315920016",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-315920016",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    },
+    {
+      "facilityNumber": "486804072",
+      "file": "RCFE",
+      "downloadStatus": "LICENSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "active-licensed",
+      "label": "rcfe-lic-486804072",
+      "publicationCandidate": true,
+      "geographicRegion": "bay-northern",
+      "previouslyUnverified": true
+    }
+  ]
+}

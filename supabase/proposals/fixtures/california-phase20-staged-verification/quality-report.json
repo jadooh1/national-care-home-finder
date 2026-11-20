@@ -1,0 +1,62 @@
+{
+  "observedOn": "2026-11-20",
+  "accounting": {
+    "holds": true,
+    "rowCount": 24377,
+    "bucketSum": 24377,
+    "difference": 0,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "reason": "Every input row belongs to exactly one exclusive classification bucket."
+  },
+  "downloadSha256MatchesBaseline": true,
+  "downloadSha256": {
+    "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+  },
+  "coordinates": {
+    "verifiedOfficialCoords": 15423,
+    "unresolved": 28,
+    "fabricatedCoordinates": 0
+  },
+  "disclosure": {
+    "sampleSize": 14744,
+    "working": 14742,
+    "missing": 0,
+    "ambiguous": 0,
+    "invalid": 0,
+    "inconclusive": 2,
+    "verifiedCount": 15451,
+    "rosterDenominator": 15451,
+    "coverageBaseline": 707,
+    "incrementalVerifiedCount": 14744,
+    "cumulativeVerifiedCount": 15451,
+    "statewideCoverageClaimed": true
+  },
+  "status": {
+    "sampleSize": 14744,
+    "match": 14671,
+    "documentedCoarsening": 0,
+    "conflict": 71,
+    "missing": 0,
+    "inconclusive": 2,
+    "invalidId": 0,
+    "regressionControlsResolved": 0
+  },
+  "verifiedCoverage": {
+    "coverageBaseline": 707,
+    "incrementalVerifiedCount": 14744,
+    "cumulativeVerifiedCount": 15451,
+    "rosterDenominator": 15451,
+    "statewideCoverageClaimed": true
+  },
+  "allowsPublication": false,
+  "gate": "blocked",
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "baselinePreserved": true
+}

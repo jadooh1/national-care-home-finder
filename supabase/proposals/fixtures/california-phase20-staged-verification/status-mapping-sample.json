@@ -1,0 +1,14 @@
+{
+  "sampleSize": 14744,
+  "match": 14671,
+  "documentedCoarsening": 0,
+  "conflict": 71,
+  "missing": 0,
+  "inconclusive": 2,
+  "invalidId": 0,
+  "byEligibility": {
+    "active-candidate": 14669,
+    "unknown-ineligible": 73,
+    "active-restricted": 2
+  }
+}

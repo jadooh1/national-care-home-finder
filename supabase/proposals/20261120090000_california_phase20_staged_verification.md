@@ -29,7 +29,7 @@
 
 ## Artifacts
 
-- `lib/california-phase20-sample.ts`
+- `lib/california-phase20-sample.ts` (includes prior-verified ID exclude lists)
 - `lib/california-phase20-disclosure-audit.ts`
 - `lib/california-phase20-exclusion-classification.ts`
 - `lib/california-phase20-quality.ts`

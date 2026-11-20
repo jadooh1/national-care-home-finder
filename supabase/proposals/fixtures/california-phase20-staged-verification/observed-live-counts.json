@@ -1,0 +1,88 @@
+{
+  "observedOn": "2026-11-20",
+  "coverageBaseline": 707,
+  "newlyVerified": 14744,
+  "cumulativeVerified": 15451,
+  "remaining": 0,
+  "disclosure": {
+    "coverageBaseline": 707,
+    "incrementalSampleSize": 14744,
+    "incrementalWorking": 14742,
+    "incrementalMissing": 0,
+    "incrementalAmbiguous": 0,
+    "incrementalInvalid": 0,
+    "incrementalInconclusive": 2,
+    "leadingZeroPreservedWorking": 1285,
+    "cumulativeVerifiedCount": 15451,
+    "rosterDenominator": 15451,
+    "remainingApprox": 0,
+    "incrementalCoveragePercentRounded": 95.42,
+    "cumulativeCoveragePercentRounded": 100,
+    "statewideCoverageClaimed": true,
+    "statewideRosterVerificationComplete": true,
+    "stopReason": "queue-exhausted",
+    "hardStopReason": null
+  },
+  "status": {
+    "sampleSize": 14744,
+    "match": 14671,
+    "documentedCoarsening": 0,
+    "conflict": 71,
+    "missing": 0,
+    "inconclusive": 2,
+    "invalidId": 0,
+    "inventedClosedStarEquivalence": false,
+    "treatsWithdrawnAsLicensed": false,
+    "sampleIsStatewideConclusion": false
+  },
+  "exclusion": {
+    "adoptedForOfflineClassification": true,
+    "activatedInApplicationOrDatabase": false,
+    "byClass": {
+      "unverified-or-conflicting-status": 144,
+      "invalid-or-mismatched-ids": 0,
+      "missing-license-evidence": 14,
+      "unverified-coordinates": 1,
+      "bad-disclosure-links": 2,
+      "closed-pending-withdrawn": 66,
+      "none-clear-for-listing-if-otherwise-eligible": 14657
+    },
+    "totalFindings": 14884,
+    "uniqueFacilitiesWithFindings": 88
+  },
+  "downloadSha256MatchesBaseline": true,
+  "gate": "blocked",
+  "allowsPublication": false,
+  "statewideRosterVerificationComplete": true,
+  "rateLimitOrAccessStops": 0,
+  "hardStopReason": null,
+  "elapsedMs": 20841283,
+  "batchesCompleted": 59,
+  "inconclusiveFacilityNumbers": [
+    "365530371",
+    "331881723"
+  ],
+  "licensingConflictCount": 71,
+  "missingLicenseEvidenceCount": 14,
+  "missingLicenseEvidenceIds": [
+    "079201725",
+    "502701889",
+    "374605020",
+    "342701856",
+    "197610992",
+    "342701894",
+    "502701880",
+    "198604006",
+    "195850781",
+    "107209715",
+    "195850785",
+    "197611051",
+    "360951409",
+    "198320716"
+  ],
+  "knownPreservedConflicts": [
+    "502701867",
+    "019201167",
+    "019201133"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "mode": "roster-resume",
+  "observedOn": "2026-11-20",
+  "queueTotal": 14744,
+  "completed": 14744,
+  "stopReason": "queue-exhausted",
+  "consecutiveInconclusive": 0,
+  "statewideCoverageClaimed": false,
+  "config": {
+    "minIntervalMs": 450,
+    "maxAttempts": 3,
+    "retryStatuses": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoffMs": [
+      500,
+      1500,
+      3000
+    ],
+    "maxRequests": 250,
+    "maxDurationMs": 28800000,
+    "checkpointEvery": 10,
+    "maxConsecutiveInconclusive": 8,
+    "rosterDenominator": 15451
+  },
+  "sampleResultHead": [
+    {
+      "facilityNumber": "415600358",
+      "classification": "working",
+      "identifierRelation": "exact",
+      "liveStatus": "Licensed"
+    },
+    {
+      "facilityNumber": "496803760",
+      "classification": "working",
+      "identifierRelation": "exact",
+      "liveStatus": "Licensed"
+    },
+    {
+      "facilityNumber": "565850322",
+      "classification": "working",
+      "identifierRelation": "exact",
+      "liveStatus": "Licensed"
+    }
+  ],
+  "inconclusiveResults": [
+    {
+      "facilityNumber": "365530371",
+      "httpStatus": 500,
+      "timedOut": false,
+      "liveStatus": null
+    },
+    {
+      "facilityNumber": "331881723",
+      "httpStatus": 500,
+      "timedOut": false,
+      "liveStatus": null
+    }
+  ]
+}

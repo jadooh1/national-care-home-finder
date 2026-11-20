@@ -273,6 +273,8 @@ test("phase 20 fixtures: prior-verified list present; live summary gate blocked 
   assert.equal(summary.allowsPublication, false);
   assert.equal(summary.stagedStatewideStarted, true);
   assert.equal(summary.disclosure.coverageBaseline, 707);
+  // After full authorized crawl, statewideCoverageClaimed may be true; gate stays blocked.
+  assert.equal(typeof summary.disclosure.statewideCoverageClaimed, "boolean");
   assert.equal(summary.exclusion.adoptedForOfflineClassification, true);
   assert.equal(summary.exclusion.activatedInApplicationOrDatabase, false);
 });
