@@ -286,11 +286,17 @@ window.scrollToVisitChecklist = ${browserFunction(scrollToVisitChecklist)};
   try {
     const browserSocket = new WebSocket(browserWsUrl);
     await socketOpen(browserSocket);
-    const created = await cdp(browserSocket, "Target.createTarget", { url: pathToFileURL(htmlPath).href });
+    // Open about:blank first, enable Page/Runtime, then navigate so we do not
+    // race Runtime.evaluate against Target.createTarget's in-flight file:// load
+    // (CI surfaced that race as "Execution context was destroyed.").
+    const created = await cdp(browserSocket, "Target.createTarget", { url: "about:blank" });
     const attached = await cdp(browserSocket, "Target.attachToTarget", { targetId: created.targetId, flatten: true });
     const sessionId = attached.sessionId as string;
     await cdp(browserSocket, "Page.enable", {}, sessionId);
     await cdp(browserSocket, "Runtime.enable", {}, sessionId);
+    const loadWait = waitForCdpEvent(browserSocket, "Page.loadEventFired", sessionId, 15000);
+    await cdp(browserSocket, "Page.navigate", { url: pathToFileURL(htmlPath).href }, sessionId);
+    await loadWait;
     const ready = await evaluate(browserSocket, sessionId, `new Promise(resolve => {
       const start = Date.now();
       const tick = () => {
@@ -484,6 +490,33 @@ function cdp(socket: WebSocket, method: string, params: Record<string, unknown>,
     };
     socket.addEventListener("message", onMessage);
     socket.send(JSON.stringify({ id, method, params, sessionId }));
+  });
+}
+
+function waitForCdpEvent(
+  socket: WebSocket,
+  method: string,
+  sessionId: string,
+  timeoutMs: number,
+): Promise<Record<string, unknown>> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      socket.removeEventListener("message", onMessage);
+      reject(new Error(`timed out waiting for ${method}`));
+    }, timeoutMs);
+    const onMessage = (event: MessageEvent) => {
+      const message = JSON.parse(String(event.data)) as {
+        method?: string;
+        sessionId?: string;
+        params?: Record<string, unknown>;
+      };
+      if (message.method !== method) return;
+      if (message.sessionId && message.sessionId !== sessionId) return;
+      clearTimeout(timer);
+      socket.removeEventListener("message", onMessage);
+      resolve(message.params ?? {});
+    };
+    socket.addEventListener("message", onMessage);
   });
 }
 

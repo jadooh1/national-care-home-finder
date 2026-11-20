@@ -1,0 +1,40 @@
+{
+  "observedOn": "2026-11-20",
+  "assertion": {
+    "matches": true,
+    "residualOk": true,
+    "coordOk": true,
+    "observed": {
+      "roster": 15451,
+      "listing": 88,
+      "otherwise": 15363,
+      "coords": 28,
+      "mapOnly": 27
+    },
+    "targets": {
+      "rosterDenominator": 15451,
+      "listingExclusionsInCandidates": 88,
+      "otherwiseClearOffline": 15363,
+      "unresolvedCoordinates": 28,
+      "mapOnlySuppressions": 27,
+      "provisionalConflicts": 5,
+      "pendingIncreaseOverlays": 66,
+      "priorControls": 3,
+      "missingLicenseEvidence": 14,
+      "coordinateListingOverlapId": "502701867"
+    },
+    "offlineDoesNotGrantPublicVisibility": true,
+    "publicationEligibleCount": 0,
+    "allowsPublication": false,
+    "gate": "blocked"
+  },
+  "unresolvedLicensingConflictIds": [
+    "198320787",
+    "455920513",
+    "197611076",
+    "197611060",
+    "134605014",
+    "502701867"
+  ],
+  "note": "otherwiseClearOffline candidates remain unpublished while californiaDirectoryReady()=false."
+}
