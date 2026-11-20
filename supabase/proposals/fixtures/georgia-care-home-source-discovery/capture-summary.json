@@ -1,0 +1,61 @@
+{
+  "observedOn": "2026-11-20",
+  "sourceUrl": "https://forms.dch.georgia.gov/HFRD/GetFacilitiesData.svc/GetData",
+  "facilityFinderUrl": "https://forms.dch.georgia.gov/HFRD/GaMap2Care.html",
+  "hfrdHomeUrl": "https://forms.dch.georgia.gov/HFRD/",
+  "pchProgramUrl": "https://dch.georgia.gov/divisionsoffices/hfrd/facilities-provider-information/personal-care-homes",
+  "payloadBytes": 20792202,
+  "payloadSha256": "e15441fd0210e0691e7fe00f9ca586122d993c5c485573039c857800a1504aae",
+  "allFacilityTypeRows": 36194,
+  "pchRows": 1573,
+  "alcRows": 326,
+  "uniqueFacidsPch": 1573,
+  "uniqueFacidsAlc": 326,
+  "facidOverlap": 0,
+  "pchStatus": {
+    "Active": 1349,
+    "ACTIVE": 224
+  },
+  "alcStatus": {
+    "Active": 313,
+    "ACTIVE": 13
+  },
+  "pchBeds": {
+    "zero": 63,
+    "nullish": 0,
+    "min": 0.0,
+    "max": 200.0,
+    "ge25": 147,
+    "lt25": 1426
+  },
+  "alcBeds": {
+    "zero": 4,
+    "nullish": 0,
+    "min": 0.0,
+    "max": 307.0,
+    "ge25": 321,
+    "lt25": 5
+  },
+  "pchBlankAddress": 0,
+  "alcBlankAddress": 0,
+  "pchStateGaNormalized": 1506,
+  "alcStateGaNormalized": 324,
+  "pchBlankState": 67,
+  "alcBlankState": 2,
+  "coordinatePairs": 1899,
+  "coordinateAccuracyRooftop": 1579,
+  "coordinatesAreLicensingCoordinates": false,
+  "coordinateSourceDescribed": true,
+  "coordinateSource": "Google geocode Accuracy field (ROOFTOP/etc)",
+  "closedDatePresentOnPchAlc": 0,
+  "perRowStatusPresent": true,
+  "statusDomainOnlyActiveVariants": true,
+  "disclosurePrefixVerified": false,
+  "recordedExportDate": null,
+  "httpLastModified": null,
+  "regulatedFacilitiesPdfRejectedAsCurrent": true,
+  "regulatedFacilitiesPdfLastModified": "Tue, 10 Mar 2020 13:52:02 GMT",
+  "categoryEquivalenceToWashingtonAfh": false,
+  "publicationEligible": 0,
+  "sampleRows": 32
+}
