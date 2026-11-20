@@ -1,0 +1,35 @@
+{
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "authoritativeIsoExportDate": null,
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "duplicateInquiryAllowed": false
+  },
+  "baselinePreserved": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "missingCapacitiesOnExcluded": 21
+  },
+  "disclosureAudit": {
+    "phase14CumulativeVerifiedCount": 233,
+    "incrementalVerifiedCount": 114,
+    "cumulativeVerifiedCount": 347,
+    "rosterDenominator": 15451,
+    "statewideCoverageClaimed": false
+  },
+  "statusConflict": {
+    "facilityNumber": "502701867",
+    "relation": "conflict",
+    "eligibility": "unknown-ineligible",
+    "statewidePublicationBlocker": false,
+    "individualFacilityException": true,
+    "publicationEligible": false,
+    "ownerClaimEligible": false
+  }
+}

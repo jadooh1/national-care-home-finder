@@ -1,0 +1,42 @@
+{
+  "count": 5,
+  "allWithdrawnIneligible": true,
+  "allDocumentedCoarsening": true,
+  "controls": [
+    {
+      "facilityNumber": "306006749",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "liveStatus": "Application Withdrawn",
+      "downloadStatus": "CLOSED"
+    },
+    {
+      "facilityNumber": "306006799",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "liveStatus": "Application Withdrawn",
+      "downloadStatus": "CLOSED"
+    },
+    {
+      "facilityNumber": "405802282",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "liveStatus": "Application Withdrawn",
+      "downloadStatus": "CLOSED"
+    },
+    {
+      "facilityNumber": "374604911",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "liveStatus": "Application Withdrawn",
+      "downloadStatus": "CLOSED"
+    },
+    {
+      "facilityNumber": "019201529",
+      "relation": "documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "liveStatus": "Application Withdrawn",
+      "downloadStatus": "CLOSED"
+    }
+  ]
+}

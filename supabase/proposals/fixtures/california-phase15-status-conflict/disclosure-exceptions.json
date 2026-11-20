@@ -1,0 +1,26 @@
+{
+  "summary": {
+    "investigated": 2,
+    "resolvedExactOfficialIdWorks": 0,
+    "confirmedInvalidRefuseClosed": 1,
+    "preservedNoRepeat": 1
+  },
+  "findings": [
+    {
+      "kind": "ambiguous-truncated-leading-zero",
+      "officialFacilityNumber": "015601219",
+      "requestFacilityNumber": "15601219",
+      "resolution": "preserved-from-phase14-no-repeat",
+      "fabricatedLink": false,
+      "rationale": "Phase 14 already resolved exact official ID 015601219 works; truncated remains non-canonical. Phase 15 preserves the safeguard without repeating unsuccessful truncated-as-canonical checks."
+    },
+    {
+      "kind": "invalid-id",
+      "officialFacilityNumber": "95354",
+      "requestFacilityNumber": "95354",
+      "resolution": "confirmed-invalid-id-refuse-closed",
+      "fabricatedLink": false,
+      "rationale": "Confirmed: 95354 is not an 8\u20139 digit CDSS identifier; generator refuse-closed; no disclosure URL fabricated."
+    }
+  ]
+}
