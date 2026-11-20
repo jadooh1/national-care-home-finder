@@ -1,0 +1,91 @@
+{
+  "observedOn": "2026-11-20",
+  "sourceUrl": "https://apps.hhs.texas.gov/providers/directories/al.xlsx",
+  "httpStatus": 200,
+  "bytes": 575194,
+  "sha256": "7b83f02c3fa33baf90ab428159b6f562ef0180899afd489ba11de891d2dce476",
+  "lastModified": "Fri, 20 Nov 2026 14:11:45 GMT",
+  "lastModifiedIsExportDate": false,
+  "sheet": "ALF_Directory",
+  "activeAsOfLabel": "11/19/2026",
+  "activeAsOfIsIsoExportDate": false,
+  "rewrittenIsoRejected": "2026-11-19",
+  "rows": 2019,
+  "uniqueFacilityIds": 2019,
+  "uniqueLicenseNumbers": 2019,
+  "duplicateFacilityIds": 0,
+  "duplicateLicenseNumbers": 0,
+  "facilityIdLeadingZerosPreserved": 533,
+  "programType": {
+    "Assisted Living": 2019
+  },
+  "serviceType": {
+    "TYPE B": 1676,
+    "TYPE A": 335,
+    "TYPE C": 8
+  },
+  "state": {
+    "TX": 1522,
+    "TEXAS": 497
+  },
+  "facilityLicensedYes": 2019,
+  "facilityCertifiedYes": 1,
+  "facilityCertifiedNo": 2018,
+  "blankAddress": 0,
+  "blankCity": 0,
+  "addressLetterDigit": 2019,
+  "blankCapacity": 0,
+  "zeroCapacity": 0,
+  "capacityMin": 4,
+  "capacityMax": 335,
+  "zipFive": 2009,
+  "zipNineDash": 10,
+  "zipNine": 0,
+  "geoPairs": 1937,
+  "geoCommaOnly": 82,
+  "blankEffective": 1,
+  "blankExpiration": 1,
+  "blankInitial": 448,
+  "alzheimerCertificatePresent": 738,
+  "ownerMailingPresent": 1728,
+  "accountIdColumnPresent": false,
+  "physicalAddressLabeledSeparatelyFromOwnerMailing": true,
+  "sampleRows": 32,
+  "recordedExportDate": null,
+  "coordinatesAreLicensingCoordinates": false,
+  "coordinateSourceDescribed": false,
+  "disclosurePrefixVerified": false,
+  "categoryEquivalenceToWashingtonAfh": false,
+  "publicationEligible": 0,
+  "priorNov13": {
+    "rows": 2016,
+    "typeA": 336,
+    "typeB": 1672,
+    "typeC": 8,
+    "asOf": "11/12/2026",
+    "geoComma": 78
+  },
+  "closures": {
+    "sourceUrl": "https://apps.hhs.texas.gov/providers/directories/Closures/alf_closures.pdf",
+    "httpStatus": 200,
+    "lastModified": "Mon, 16 Nov 2026 15:33:00 GMT",
+    "lastModifiedIsExportDate": false,
+    "bytes": 967269,
+    "uniqueFacilityIds": 1515,
+    "dateTokens": 1650,
+    "typeCounts": {
+      "TYPE B": 512,
+      "TYPE A": 791,
+      "TYPE C": 190,
+      "TYPE E": 22
+    },
+    "overlapExactWithActiveWorkbook": 0,
+    "overlapNormalizedWithActiveWorkbook": 0
+  },
+  "tulip": {
+    "searchUrl": "https://tulip.hhs.texas.gov/TULIP/s/ltc-provider-search",
+    "detailUrl": "https://tulip.hhs.texas.gov/TULIP/s/ltc-provider-detail",
+    "accountIdInWorkbook": false,
+    "guessedDetailFromFacilityIdOrLicenseAccepted": false
+  }
+}

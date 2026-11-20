@@ -18,7 +18,7 @@ test("every state is classified once and only Washington is publication-ready", 
   assert.equal(assessments.length, 50);
   assert.deepEqual(assessments.map(item => item.state), [...STATE_NAMES]);
   assert.equal(new Set(assessments.map(item => item.state)).size, 50);
-  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 10, C: 19, D: 19 });
+  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 11, C: 18, D: 19 });
   assert.deepEqual(
     assessments.filter(item => item.publicationReady).map(item => item.state),
     ["Washington"],
@@ -58,6 +58,11 @@ test("schema fit stays separate from publication and from missing coordinates", 
   assert.equal(compatibilityAssessment("Arizona")?.licenseIdentifier, true);
   assert.equal(compatibilityAssessment("Arizona")?.disclosureLink, false);
   assert.equal(compatibilityAssessment("Arizona")?.isoExportDate, false);
+  assert.equal(compatibilityAssessment("Texas")?.compatibility, "B");
+  assert.equal(compatibilityAssessment("Texas")?.observedRows, 2019);
+  assert.equal(compatibilityAssessment("Texas")?.licenseIdentifier, true);
+  assert.equal(compatibilityAssessment("Texas")?.disclosureLink, false);
+  assert.equal(compatibilityAssessment("Texas")?.isoExportDate, false);
   assert.equal(compatibilityAssessment("North Carolina")?.compatibility, "B");
   assert.equal(compatibilityAssessment("North Carolina")?.observedRows, 1086);
   assert.equal(compatibilityAssessment("Iowa")?.licenseIdentifier, false);
