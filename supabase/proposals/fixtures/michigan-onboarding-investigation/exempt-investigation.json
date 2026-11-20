@@ -1,0 +1,39 @@
+{
+  "observedOn": "2026-11-20",
+  "cohort": {
+    "typeCode": "XH",
+    "rows": 234,
+    "statusExempt": 234,
+    "statusOther": 0,
+    "blankEffectiveAndExpirationPairs": 234,
+    "describedInRecordKey": false,
+    "categoryLabelAssigned": false,
+    "publicationEligible": false,
+    "ownerClaimEligible": false
+  },
+  "findings": [
+    {
+      "id": "xh-absent-from-described-type-key",
+      "verdict": "undescribed-keep-ineligible",
+      "evidence": "Prior LARA adult foster care record description lists AF/AS/AM/AL/AG/AI/AH only. XH is not a described type code."
+    },
+    {
+      "id": "xh-all-exempt-blank-dates",
+      "verdict": "undescribed-keep-ineligible",
+      "evidence": "Current capture: all 234 XH rows have status EXEMPT and blank effective/expiration date pairs."
+    },
+    {
+      "id": "xh-profile-http-200",
+      "verdict": "profile-reachable-not-authorization",
+      "evidence": "FacilityProfile URLs for XH licenses return HTTP 200 (sampled). Reachability is not a licensing-category definition or publication authorization."
+    },
+    {
+      "id": "record-description-page-403",
+      "verdict": "record-key-unavailable",
+      "evidence": "Record-description page returned HTTP 403 during this investigation; prior documented key remains the described-type authority. No new XH definition was obtained."
+    }
+  ],
+  "inclusionAuthorized": false,
+  "allowsPublication": false,
+  "gate": "blocked"
+}

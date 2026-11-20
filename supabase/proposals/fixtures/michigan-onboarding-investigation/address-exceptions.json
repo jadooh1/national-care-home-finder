@@ -1,0 +1,81 @@
+{
+  "observedOn": "2026-11-20",
+  "capture": {
+    "rows": 4476,
+    "streetBlank": 4419,
+    "streetLetterAndDigit": 57,
+    "usablePhysicalStreetRows": 57,
+    "unresolvedBlankStreetRows": 4419,
+    "publicationEligibleRows": 0,
+    "supplementalEqualsLicenseeAddressPrior": 904,
+    "streetEqualsLicenseeAddressPrior": 4,
+    "addressInterpretation": "unresolved",
+    "supplementalRole": null
+  },
+  "profileSamples": [
+    {
+      "license": "AM410008657",
+      "kind": "blank-street",
+      "httpStatus": 200,
+      "addressLabel": "Address:",
+      "physicalOrMailingLabelPresent": false,
+      "evidence": "Blank official Street column; profile displays supplemental-looking text under unlabeled Address:. Not adopted as physical."
+    },
+    {
+      "license": "AM410079586",
+      "kind": "blank-street",
+      "httpStatus": 200,
+      "addressLabel": "Address:",
+      "physicalOrMailingLabelPresent": false,
+      "evidence": "Same unlabeled Address: pattern on blank-street row."
+    },
+    {
+      "license": "AS790309069",
+      "kind": "blank-street",
+      "httpStatus": 200,
+      "addressLabel": "Address:",
+      "physicalOrMailingLabelPresent": false,
+      "evidence": "Same unlabeled Address: pattern on blank-street row."
+    },
+    {
+      "license": "AS810405904",
+      "kind": "street-text",
+      "httpStatus": 200,
+      "addressLabel": "Address:",
+      "physicalOrMailingLabelPresent": false,
+      "evidence": "Official Street already had letter+digit text; profile still uses unlabeled Address:."
+    },
+    {
+      "license": "XH220394302",
+      "kind": "xh-exempt",
+      "httpStatus": 200,
+      "addressLabel": "Address:",
+      "physicalOrMailingLabelPresent": false,
+      "evidence": "XH/EXEMPT profile reachable; address display does not authorize publication."
+    }
+  ],
+  "streetTextByType": {
+    "AF": 6,
+    "AS": 17,
+    "AM": 7,
+    "AL": 19,
+    "AG": 0,
+    "AI": 0,
+    "AH": 6,
+    "XH": 2
+  },
+  "summary": {
+    "blankStreetRows": 4419,
+    "usableStreetRows": 57,
+    "streetTextByTypeSum": 57,
+    "residualOk": true,
+    "streetTextMatches57": true,
+    "supplementalAdoptedAsPhysical": false,
+    "mailingAdoptedAsPhysical": false,
+    "profileDefinesPhysicalVsMailing": false,
+    "publicationEligibleRows": 0
+  },
+  "policy": "Blank Street rows stay unresolved. Supplemental / licensee / profile Address: text is not substituted as physical without an authoritative field definition.",
+  "allowsPublication": false,
+  "gate": "blocked"
+}

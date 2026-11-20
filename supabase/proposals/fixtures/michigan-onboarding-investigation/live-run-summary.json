@@ -1,0 +1,63 @@
+{
+  "observedOn": "2026-11-20",
+  "captureTimeUtc": "2026-11-20T20:35:47.477Z",
+  "gate": "blocked",
+  "stopGo": "STOP",
+  "allowsPublication": false,
+  "michiganDirectoryReady": false,
+  "directoryPublication": "unpublished",
+  "directoryHref": null,
+  "mapHref": null,
+  "priorRows": 4480,
+  "currentRows": 4476,
+  "rowDelta": -4,
+  "blankStreetRows": 4419,
+  "usableStreetRows": 57,
+  "xhRows": 234,
+  "exemptRows": 234,
+  "xhInclusionAuthorized": false,
+  "ownerClaimEligible": false,
+  "exportDate": null,
+  "sha256": "32cfa06c8f55fc6aee626b114069095f5a99c6583d043a2c9fe95292e1de042b",
+  "lastModified": "Fri, 20 Nov 2026 03:38:59 GMT",
+  "qualityAllPass": true,
+  "readiness": {
+    "observedOn": "2026-11-20",
+    "qualityPass": true,
+    "michiganDirectoryReady": false,
+    "publication": "unpublished",
+    "ownerClaimEligible": false,
+    "productionWrites": false,
+    "californiaRecrawl": false,
+    "exclusionActivation": false,
+    "allowsPublication": false,
+    "gate": "blocked",
+    "stopGo": "STOP",
+    "blockers": [
+      "no-authoritative-iso-export-date",
+      "file-server-last-modified-is-not-an-export-date",
+      "blank-street-physical-address-unresolved",
+      "supplemental-address-is-not-defined-as-a-physical-or-mailing-address",
+      "xh-type-undescribed-and-exempt-ineligible",
+      "publication-safeguards-closed"
+    ],
+    "futureApprovals": [
+      "Obtain authoritative physical-address field definition (or Street population policy).",
+      "Obtain authoritative XH / EXEMPT definition before any inclusion decision.",
+      "Adopt ISO export / version stamp for afc_sw.txt.",
+      "Separate human approval before Michigan publication or owner-claim enablement."
+    ]
+  },
+  "publicationStopGo": {
+    "decision": "STOP",
+    "publicationReady": false,
+    "allowsPublication": false,
+    "michiganDirectoryReady": false,
+    "ownerClaimEligible": false,
+    "gate": "blocked",
+    "reason": "Michigan investigation confirmed blank-street and XH/EXEMPT blockers without authorizing publication. STOP."
+  },
+  "californiaRecrawl": false,
+  "exclusionActivation": false,
+  "productionWrites": false
+}

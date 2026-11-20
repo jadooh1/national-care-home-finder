@@ -145,6 +145,9 @@ jobs:
       - name: Check the Michigan licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/michigan_licensing.ts
 
+      - name: Check the Michigan onboarding investigation
+        run: node --experimental-strip-types --test supabase/proposals/tests/michigan_onboarding_investigation.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 
