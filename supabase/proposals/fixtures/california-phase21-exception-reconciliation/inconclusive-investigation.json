@@ -1,0 +1,92 @@
+{
+  "phase20Evidence": [
+    {
+      "facilityNumber": "365530371",
+      "httpStatus": 500,
+      "timedOut": false
+    },
+    {
+      "facilityNumber": "331881723",
+      "httpStatus": 500,
+      "timedOut": false
+    }
+  ],
+  "retryPerformed": true,
+  "summary": {
+    "total": 2,
+    "byClass": {
+      "explainable-coarsening-or-timing": 0,
+      "genuine-unresolved-licensing-conflict": 0,
+      "invalid-or-mismatched-identity": 0,
+      "closed-pending-or-withdrawn": 0,
+      "requires-cdss-clarification": 0,
+      "inconclusive-transport-or-server-error": 0,
+      "match-no-longer-discrepant": 2
+    },
+    "publicationEligibleCount": 0,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false
+  },
+  "classifications": [
+    {
+      "facilityNumber": "365530371",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "match-no-longer-discrepant",
+      "eligibility": "active-candidate",
+      "rationale": "Re-probe shows exact Licensed match. Recorded for ledger only; publication still gated by statewide blockers.",
+      "evidence": {
+        "source": "phase20-inconclusive-retry",
+        "note": "publicationEligible remains false"
+      }
+    },
+    {
+      "facilityNumber": "331881723",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "match-no-longer-discrepant",
+      "eligibility": "active-candidate",
+      "rationale": "Re-probe shows exact Licensed match. Recorded for ledger only; publication still gated by statewide blockers.",
+      "evidence": {
+        "source": "phase20-inconclusive-retry",
+        "note": "publicationEligible remains false"
+      }
+    }
+  ],
+  "probes": [
+    {
+      "facilityNumber": "365530371",
+      "httpStatus": 200,
+      "timedOut": false,
+      "attempts": 1,
+      "found": true,
+      "liveFacilityNumber": "365530371",
+      "liveStatus": "Licensed",
+      "liveLicenseFirstDate": "7/10/2025",
+      "liveLicenseEffectiveDate": "7/10/2025",
+      "liveFacilityType": "RESIDENTIAL CARE ELDERLY",
+      "liveDateClosed": null
+    },
+    {
+      "facilityNumber": "331881723",
+      "httpStatus": 200,
+      "timedOut": false,
+      "attempts": 1,
+      "found": true,
+      "liveFacilityNumber": "331881723",
+      "liveStatus": "Licensed",
+      "liveLicenseFirstDate": "8/27/2025",
+      "liveLicenseEffectiveDate": "8/27/2025",
+      "liveFacilityType": "ADULT RESIDENTIAL",
+      "liveDateClosed": null
+    }
+  ]
+}

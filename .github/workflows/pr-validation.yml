@@ -259,6 +259,9 @@ jobs:
       - name: Check the California Phase 20 staged verification
         run: node --experimental-strip-types --test supabase/proposals/tests/california_phase20_staged_verification.ts
 
+      - name: Check the California Phase 21 exception reconciliation
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase21_exception_reconciliation.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 

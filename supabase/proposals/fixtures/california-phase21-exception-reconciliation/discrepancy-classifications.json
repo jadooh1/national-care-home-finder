@@ -1,0 +1,1296 @@
+{
+  "summary": {
+    "total": 71,
+    "byClass": {
+      "explainable-coarsening-or-timing": 66,
+      "genuine-unresolved-licensing-conflict": 5,
+      "invalid-or-mismatched-identity": 0,
+      "closed-pending-or-withdrawn": 0,
+      "requires-cdss-clarification": 0,
+      "inconclusive-transport-or-server-error": 0,
+      "match-no-longer-discrepant": 0
+    },
+    "publicationEligibleCount": 0,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false
+  },
+  "downloadVsLivePairs": {
+    "LICENSED=>Licensed/Pending Increase": 66,
+    "LICENSED=>Provisional License": 5
+  },
+  "classifications": [
+    {
+      "facilityNumber": "374604742",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "045920148",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701057",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604751",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392700647",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "435294286",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "197606348",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "552701748",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "336426330",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701601",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306005986",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604986",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "347000846",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "198320787",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Provisional License",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail Provisional License is not an approved coarsening. Keep unknown-ineligible; may require CDSS clarification for a durable mapping.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "source": "phase20-conflict"
+      }
+    },
+    {
+      "facilityNumber": "015601083",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701730",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "366425800",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "335530021",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "365530102",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331881673",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107200486",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "157204130",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604375",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "079201349",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "336426289",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "455920513",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Provisional License",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail Provisional License is not an approved coarsening. Keep unknown-ineligible; may require CDSS clarification for a durable mapping.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "source": "phase20-conflict"
+      }
+    },
+    {
+      "facilityNumber": "107209383",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374603495",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306006109",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "371881418",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107206544",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331881036",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "198603784",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604213",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "365530299",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374601445",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342700591",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701427",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701658",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107209533",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "347001484",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331880891",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "197611076",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Provisional License",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail Provisional License is not an approved coarsening. Keep unknown-ineligible; may require CDSS clarification for a durable mapping.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "source": "phase20-conflict"
+      }
+    },
+    {
+      "facilityNumber": "336400036",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "079201384",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "410508825",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342701384",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342700984",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "370808095",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107206560",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "435201626",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306004005",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374601420",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "486804268",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "015601284",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "347001961",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "335530026",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604454",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "300605585",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331881303",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306000870",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604710",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "197611060",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Provisional License",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail Provisional License is not an approved coarsening. Keep unknown-ineligible; may require CDSS clarification for a durable mapping.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "source": "phase20-conflict"
+      }
+    },
+    {
+      "facilityNumber": "134605014",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Provisional License",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail Provisional License is not an approved coarsening. Keep unknown-ineligible; may require CDSS clarification for a durable mapping.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "source": "phase20-conflict"
+      }
+    },
+    {
+      "facilityNumber": "370808447",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374600429",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "195850551",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "371881438",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "191603551",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342701723",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604532",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "rationale": "Download LICENSED vs FacilityDetail \"Licensed/Pending Increase\" is consistent with a licensed facility that has a pending capacity-increase process overlay. Treat as explainable timing/process difference for ledger purposes, but keep unknown-ineligible until a human-approved mapping exists. Do not invent Licensed\u2261Licensed/Pending Increase equivalence for publication.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "source": "phase20-conflict",
+        "mappingApprovedForPublication": false
+      }
+    }
+  ]
+}
