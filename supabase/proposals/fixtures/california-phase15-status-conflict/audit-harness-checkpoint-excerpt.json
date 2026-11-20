@@ -1,0 +1,12 @@
+{
+  "mode": "stratified-sample",
+  "stopReason": "queue-exhausted",
+  "queueTotal": 114,
+  "completed": 114,
+  "statewideCoverageClaimed": false,
+  "config": {
+    "minIntervalMs": 450,
+    "maxRequests": 250,
+    "maxConsecutiveInconclusive": 8
+  }
+}

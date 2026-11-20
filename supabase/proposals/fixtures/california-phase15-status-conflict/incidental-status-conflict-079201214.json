@@ -1,0 +1,10 @@
+{
+  "facilityNumber": "079201214",
+  "downloadStatus": "CLOSED",
+  "liveStatus": "Application Denied",
+  "relation": "conflict",
+  "eligibility": "unknown-ineligible",
+  "note": "Incidental Phase 15 status-sample observation. CLOSED vs Application Denied. Do not invent Closed* or Denied equivalence. Keep unknown-ineligible. Individual facility exception \u2014 not a change to statewide baseline accounting.",
+  "publicationEligible": false,
+  "ownerClaimEligible": false
+}

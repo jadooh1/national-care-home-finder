@@ -1,0 +1,45 @@
+{
+  "facilityNumber": "502701867",
+  "downloadStatus": "LICENSED",
+  "liveStatus": "Pending Incomplete Application",
+  "relation": "conflict",
+  "eligibility": "unknown-ineligible",
+  "resolution": "unresolved-conflict-keep-unknown-ineligible",
+  "evidenceKind": "facility-detail-verified",
+  "neverLicensedMarkersPresent": true,
+  "identityMatched": true,
+  "recordReuseSupported": false,
+  "gisHitCount": 0,
+  "adoptedHypothesis": null,
+  "inventedEquivalence": false,
+  "publicationEligible": false,
+  "ownerClaimEligible": false,
+  "canPublish": false,
+  "canClaim": false,
+  "safeguards": {
+    "keepUnknownIneligibleUntilReliableEvidence": true,
+    "doNotAssumeLicensedEquivalence": true,
+    "doNotAssumePendingEquivalence": true,
+    "statewidePublicationBlocker": false,
+    "individualFacilityException": true
+  },
+  "download": {
+    "status": "LICENSED",
+    "licenseFirstDate": null,
+    "facilityName": "DORSAKU RESIDENTIAL",
+    "facilityAddress": "4373 VANGUARD DRIVE",
+    "facilityCity": "MODESTO",
+    "facilityZip": "95356",
+    "filenameIsoCandidate": "2026-11-15"
+  },
+  "facilityDetail": {
+    "status": "Pending Incomplete Application",
+    "licenseFirstDate": null,
+    "licenseEffectiveDate": null,
+    "facilityName": "DORSAKU RESIDENTIAL",
+    "facilityAddress": "4373 VANGUARD DRIVE",
+    "facilityCity": "MODESTO",
+    "facilityZip": "95356"
+  },
+  "note": "DownloadStateData LICENSED conflicts with FacilityDetail Pending Incomplete Application. Facility identity matches across sources (same number/name/address/city/ZIP), so record reuse is not supported. Never-licensed markers are present (empty Download License First Date and empty FacilityDetail license dates), which is inconsistent with a verified Licensed status and compatible with a never-licensed pending application \u2014 but Download still labels LICENSED. ArcGIS CCL layer has no FAC_NBR hit, so GIS cannot corroborate either status. Possible explanations include reporting delay between the weekly DownloadStateData snapshot and live FacilityDetail, or a substantive Download mislabel of a pending incomplete application. Do not invent equivalence. Do not adopt Licensed or Pending as resolved. Keep eligibility unknown-ineligible; facility cannot be published or claimed."
+}

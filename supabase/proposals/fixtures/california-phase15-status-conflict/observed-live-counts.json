@@ -1,0 +1,124 @@
+{
+  "observedOn": "2026-11-20",
+  "baseline": {
+    "rowCount": 24377,
+    "publicationCandidatesIfGateOpened": 15451,
+    "coordinates": {
+      "verifiedOfficialCoords": 15423,
+      "unresolved": 28,
+      "fabricatedCoordinates": 0
+    },
+    "missingCapacity": {
+      "totalMissing": 21,
+      "publicationCandidateMissing": 0
+    },
+    "phase14DisclosureCumulative": 233
+  },
+  "download": {
+    "rcfe": {
+      "httpStatus": 200,
+      "contentDisposition": "attachment; filename=ResidentialElderCareFacility11152026.csv",
+      "bytes": 8635782,
+      "sha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "rows": 13337,
+      "filenameIsoCandidate": "2026-11-15"
+    },
+    "arf": {
+      "httpStatus": 200,
+      "contentDisposition": "attachment; filename=AdultResidentialFacilities11152026.csv",
+      "bytes": 5434124,
+      "sha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+      "rows": 11040,
+      "filenameIsoCandidate": "2026-11-15"
+    },
+    "authoritativeIsoExportDate": null,
+    "sha256MatchesPhase10Baseline": true,
+    "baselineSha256": {
+      "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+    },
+    "closedBucket": {
+      "total": 6109,
+      "emptyLicenseFirstDate": 1241,
+      "withLicenseFirstDate": 4868,
+      "downloadOnlyWithdrawnIndicatorCount": 1241,
+      "note": "Download-only counts; empty License First Date is consistent with Application Withdrawn coarsening but is not FacilityDetail-verified statewide."
+    }
+  },
+  "downloadSha256MatchesBaseline": true,
+  "disclosure": {
+    "phase14CumulativeVerifiedCount": 233,
+    "incrementalSampleSize": 114,
+    "incrementalWorking": 114,
+    "incrementalMissing": 0,
+    "incrementalAmbiguous": 0,
+    "incrementalInvalid": 0,
+    "incrementalInconclusive": 0,
+    "leadingZeroPreservedWorking": 16,
+    "cumulativeVerifiedCount": 347,
+    "rosterDenominator": 15451,
+    "incrementalCoveragePercentRounded": 0.74,
+    "cumulativeCoveragePercentRounded": 2.25,
+    "statewideCoverageClaimed": false,
+    "stopReason": "queue-exhausted"
+  },
+  "status": {
+    "sampleSize": 36,
+    "match": 28,
+    "documentedCoarsening": 5,
+    "conflict": 2,
+    "missing": 0,
+    "inconclusive": 0,
+    "invalidId": 1,
+    "applicationWithdrawnDocumented": 5,
+    "regressionControlsResolvedAsDocumentedCoarsening": 5,
+    "regressionControlCount": 5,
+    "byEvidenceKind": {
+      "facility-detail-verified": 35,
+      "download-only-indicator": 0,
+      "not-applicable": 1
+    },
+    "inventedClosedStarEquivalence": false,
+    "treatsWithdrawnAsLicensed": false,
+    "sampleIsStatewideConclusion": false
+  },
+  "statusConflict": {
+    "facilityNumber": "502701867",
+    "relation": "conflict",
+    "eligibility": "unknown-ineligible",
+    "resolution": "unresolved-conflict-keep-unknown-ineligible",
+    "neverLicensedMarkersPresent": true,
+    "identityMatched": true,
+    "recordReuseSupported": false,
+    "gisHitCount": 0,
+    "adoptedHypothesis": null,
+    "publicationEligible": false,
+    "ownerClaimEligible": false,
+    "canPublish": false,
+    "canClaim": false
+  },
+  "exceptions": {
+    "observedOn": "2026-11-20",
+    "disclosureExceptions": {
+      "investigated": 2,
+      "resolvedExactOfficialIdWorks": 0,
+      "confirmedInvalidRefuseClosed": 1,
+      "preservedNoRepeat": 1
+    },
+    "coordinateExceptions": {
+      "investigated": 0,
+      "resolvedWithOfficialCoords": 0,
+      "remainingUnresolved": 28,
+      "fabricatedCoordinates": 0,
+      "geocoded": 0,
+      "baselineUnresolved": 28,
+      "reProbedUnsuccessfulChecks": false,
+      "note": "Phase 15 preserves the 28 unresolved coords without repeating unsuccessful Phase 14 FacilityDetail+ArcGIS checks (no new authoritative evidence)."
+    },
+    "sampleIsStatewideConclusion": false,
+    "publication": "unpublished",
+    "ownerClaimEligible": false
+  },
+  "gate": "blocked",
+  "publication": "unpublished"
+}
