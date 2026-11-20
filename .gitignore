@@ -15,3 +15,7 @@ npm-debug.log*
 __pycache__/
 *.py[cod]
 scripts/dshs/output/
+
+# Phase 20 live crawl working directory (fixtures copied separately)
+california-phase20-audit-out/
+california-phase20-crawl.log
