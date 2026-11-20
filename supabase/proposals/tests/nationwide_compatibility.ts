@@ -18,7 +18,7 @@ test("every state is classified once and only Washington is publication-ready", 
   assert.equal(assessments.length, 50);
   assert.deepEqual(assessments.map(item => item.state), [...STATE_NAMES]);
   assert.equal(new Set(assessments.map(item => item.state)).size, 50);
-  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 18, C: 14, D: 16 });
+  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 19, C: 14, D: 15 });
   assert.deepEqual(
     assessments.filter(item => item.publicationReady).map(item => item.state),
     ["Washington"],
@@ -113,6 +113,14 @@ test("schema fit stays separate from publication and from missing coordinates", 
   assert.equal(compatibilityAssessment("Massachusetts")?.disclosureLink, true);
   assert.equal(compatibilityAssessment("Massachusetts")?.isoExportDate, false);
   assert.equal(compatibilityAssessment("Massachusetts")?.coordinateColumns, false);
+  assert.equal(compatibilityAssessment("Tennessee")?.compatibility, "B");
+  assert.equal(compatibilityAssessment("Tennessee")?.observedRows, 333);
+  assert.equal(compatibilityAssessment("Tennessee")?.licenseIdentifier, true);
+  assert.equal(compatibilityAssessment("Tennessee")?.physicalAddress, true);
+  assert.equal(compatibilityAssessment("Tennessee")?.perRowStatus, true);
+  assert.equal(compatibilityAssessment("Tennessee")?.disclosureLink, false);
+  assert.equal(compatibilityAssessment("Tennessee")?.isoExportDate, false);
+  assert.equal(compatibilityAssessment("Tennessee")?.coordinateColumns, false);
   assert.equal(compatibilityAssessment("Iowa")?.licenseIdentifier, false);
   assert.equal(compatibilityAssessment("Iowa")?.observedRows, 335);
   assert.equal(compatibilityAssessment("Illinois")?.observedRows, 495);
@@ -139,7 +147,8 @@ test("unverified states do not receive invented counts or directory routes", () 
   assert.equal(ONBOARDING_SEQUENCE.indexOf("Virginia") < ONBOARDING_SEQUENCE.indexOf("Maryland"), true);
   assert.equal(ONBOARDING_SEQUENCE.indexOf("Maryland") < ONBOARDING_SEQUENCE.indexOf("New Jersey"), true);
   assert.equal(ONBOARDING_SEQUENCE.indexOf("New Jersey") < ONBOARDING_SEQUENCE.indexOf("Massachusetts"), true);
-  assert.equal(ONBOARDING_SEQUENCE.indexOf("Massachusetts") < ONBOARDING_SEQUENCE.indexOf("Alabama"), true);
+  assert.equal(ONBOARDING_SEQUENCE.indexOf("Massachusetts") < ONBOARDING_SEQUENCE.indexOf("Tennessee"), true);
+  assert.equal(ONBOARDING_SEQUENCE.indexOf("Tennessee") < ONBOARDING_SEQUENCE.indexOf("Alabama"), true);
   const source = readFileSync(new URL("../../../lib/nationwide-compatibility.ts", import.meta.url), "utf8");
   const page = readFileSync(new URL("../../../app/development/onboarding/page.tsx", import.meta.url), "utf8");
   const proposal = readFileSync(new URL("../20261110080000_nationwide_compatibility_audit.md", import.meta.url), "utf8");
