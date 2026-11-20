@@ -1,0 +1,8 @@
+{
+  "CRCF": 427,
+  "ACT": 427,
+  "alzCareY": 171,
+  "alzUnitY": 139,
+  "NursingHome_note": "Separate PERMIT_TYPE HLNURSINGCARE (192); not merged into CRCF.",
+  "ICF_note": "Separate HLHABITATIONR15 (56) and HLHABITATIONR16 (8); not merged into CRCF."
+}
