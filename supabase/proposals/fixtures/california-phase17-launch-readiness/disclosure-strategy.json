@@ -1,0 +1,59 @@
+{
+  "observedOn": "2026-11-20",
+  "coverage": {
+    "rosterDenominator": 15451,
+    "phase15CumulativeVerifiedCount": 347,
+    "phase16IncrementalVerifiedCount": 115,
+    "cumulativeVerifiedCount": 462,
+    "coverageFraction": 0.029900977283023752,
+    "coveragePercentApprox": 2.99,
+    "statewideCoverageClaimed": false,
+    "phase16IncrementalAllWorking": true,
+    "phase16StopReason": "queue-exhausted"
+  },
+  "additionalSmallSamplesMeaningfullyImproveLaunchReadiness": false,
+  "decision": "pause-small-incremental-samples",
+  "rationale": [
+    "Cumulative coverage is ~2.99% (462/15451). Another ~100–250 facility sample adds <2 percentage points and cannot clear the roster-complete disclosure blocker.",
+    "Phase 16 incremental batch was 115/115 working — generator/link patterns look stable, so more small samples mainly repeat confidence rather than unlock publication.",
+    "Launch readiness is blocked first by authoritative ISO export date and roster-wide status verification; disclosure sampling does not satisfy those gates.",
+    "Uncontrolled statewide FacilityDetail crawling is forbidden without separate human approval."
+  ],
+  "proposedFullRosterPlan": {
+    "requiresSeparateHumanApproval": true,
+    "approvalRequiredBeforeAnyLargeScaleCrawl": true,
+    "performNow": false,
+    "harness": "california-phase13-disclosure-audit (rate-limited, checkpointed, resumable)",
+    "defaults": {
+      "minIntervalMs": 450,
+      "maxAttempts": 3,
+      "backoffMs": [
+        500,
+        1500,
+        3000
+      ],
+      "checkpointEvery": 10,
+      "maxRequestsPerSession": 250,
+      "maxDurationMs": 1800000,
+      "stopAfterConsecutiveInconclusive": 8
+    },
+    "estimatedSessionsAt250Cap": 60,
+    "remainingFacilitiesApprox": 14989,
+    "rules": [
+      "Resume from checkpoint; skip completedKeys.",
+      "Preserve leading zeros; refuse non 8–9 digit IDs.",
+      "Do not re-probe 28 unresolved coordinates without new authoritative evidence.",
+      "Do not send CDSS email.",
+      "Do not claim statewideCoverageClaimed until remaining queue is exhausted with verified results.",
+      "Keep California unpublished and gate BLOCKED throughout the crawl."
+    ]
+  },
+  "interimPublicationPolicy": {
+    "unverifiedDisclosureCandidates": "exclude-until-verified",
+    "allowsPublicationWithPartialSample": false,
+    "statewideCoverageClaimed": false
+  },
+  "allowsUncontrolledStatewideRequests": false,
+  "allowsPublication": false,
+  "gate": "blocked"
+}

@@ -1,0 +1,105 @@
+{
+  "phase": 17,
+  "title": "California launch-readiness dossier",
+  "observedOn": "2026-11-20",
+  "issue": "https://github.com/jadooh1/national-care-home-finder/issues/131",
+  "priorPhase16Commit": "c35669300ce455a989e050014a95f6f349e76712",
+  "scope": {
+    "developmentOnly": true,
+    "californiaUnpublished": true,
+    "gate": "blocked",
+    "allowsPublication": false,
+    "ownerClaimEligible": false,
+    "noProductionWrites": true,
+    "noSupabaseWrites": true,
+    "noCdssResend": true,
+    "noUncontrolledStatewideCrawl": true,
+    "noPublicationGateChange": true
+  },
+  "verdict": "NOT publication-ready. Gate BLOCKED. Statewide blockers remain (authoritative ISO export date, roster-wide status/disclosure verification). Facility exceptions are excludable under fail-closed rules. CDSS reply not confirmed (mailbox unavailable). No duplicate inquiry sent.",
+  "decisionMatrix": {
+    "statewidePublicationBlockersOpen": [
+      "authoritative-iso-export-date",
+      "roster-wide-facilitydetail-status",
+      "disclosure-link-roster-coverage",
+      "cdss-clarification-response",
+      "unique-valid-identifiers",
+      "capacity-field-integrity"
+    ],
+    "facilityExcludableExceptions": [
+      "official-coordinates-completeness",
+      "licensed-missing-initial-date-statewide",
+      "sampled-status-conflicts",
+      "status-conflict-502701867"
+    ],
+    "humanApprovalsRequired": [
+      "authoritative-iso-export-date",
+      "roster-wide-facilitydetail-status",
+      "disclosure-link-roster-coverage",
+      "cdss-clarification-response",
+      "official-coordinates-completeness",
+      "licensed-missing-initial-date-statewide",
+      "sampled-status-conflicts",
+      "publication-owner-claim-safeguards"
+    ]
+  },
+  "freshness": {
+    "authoritativeIsoExportDate": null,
+    "downloadSha256MatchesBaseline": true,
+    "cdssReplyObserved": false,
+    "mailboxAvailable": false,
+    "gate": "blocked"
+  },
+  "exceptions": {
+    "phase16SampledFindings": 21,
+    "phase16StatewideLicensedMissingDate": 14,
+    "preservesFailClosed": true,
+    "avoidsRepeatingUnsuccessfulCoordChecks": true
+  },
+  "disclosure": {
+    "cumulativeVerifiedCount": 462,
+    "rosterDenominator": 15451,
+    "additionalSmallSamplesRecommended": false,
+    "fullRosterCrawlRequiresSeparateApproval": true,
+    "statewideCoverageClaimed": false
+  },
+  "accounting": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28
+  },
+  "stopGo": {
+    "recommendation": "STOP",
+    "publicationReady": false
+  },
+  "humanDecisionsRequired": [
+    {
+      "id": "check-cdss-mailbox-and-interpret-reply",
+      "summary": "Human checks the authorized sending mailbox for a CDSS reply and records whether an authoritative ISO export channel was provided."
+    },
+    {
+      "id": "approve-or-deny-full-roster-disclosure-status-crawl",
+      "summary": "Separate approval required before any large-scale rate-limited full-roster FacilityDetail / disclosure crawl (~15k remaining)."
+    },
+    {
+      "id": "approve-facility-exclusion-policy",
+      "summary": "Approve excluding LICENSED-missing-date rows, status-conflict samples, invalid IDs, withdrawn, and 28 unresolved-coord facilities from any future candidate set."
+    },
+    {
+      "id": "approve-publication-gate-open-only-when-stop-go-met",
+      "summary": "Only a human may open the California publication gate after stop/go conditions are satisfied. Agents must keep gate BLOCKED."
+    }
+  ],
+  "remediationSequence": [
+    "1. Human checks authorized mailbox for CDSS clarification reply (do not resend).",
+    "2. If reply provides authoritative ISO export/version channel, capture evidence; else keep freshness fail.",
+    "3. Human approves or denies rate-limited full-roster disclosure+status crawl (separate approval).",
+    "4. Apply facility-exclusion policy for LICENSED-missing-date, status conflicts, invalid IDs, withdrawn, and 28 unresolved coords.",
+    "5. Re-validate exclusive-bucket accounting and Download sha256 after any source change.",
+    "6. Only after stop/go conditions are met, human may approve opening the publication gate — agents must not open it."
+  ],
+  "allowsPublication": false,
+  "publicationReady": false,
+  "gate": "blocked"
+}

@@ -1,0 +1,160 @@
+{
+  "observedOn": "2026-11-20",
+  "authoritativeIsoExportDate": null,
+  "freshnessRequirementSatisfied": false,
+  "acceptedAuthoritativeIsoChannels": 0,
+  "acceptedPolicyOnlyChannels": 2,
+  "downloadSha256MatchesBaseline": true,
+  "downloadSha256": {
+    "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+  },
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "mailboxCheck": {
+      "attempted": true,
+      "available": false,
+      "result": "mailbox-unavailable",
+      "duplicateInquirySent": false
+    },
+    "duplicateInquiryAllowed": false,
+    "toSuggested": [
+      "cclwebmaster@dss.ca.gov",
+      "opendata@cdss.ca.gov"
+    ],
+    "notes": [
+      "CDSS clarification email already sent in a prior phase.",
+      "Phase 17 must not send duplicate inquiries.",
+      "No authorized connected mailbox was available to inspect for a reply.",
+      "Human should check the authorized sending mailbox and update status when a reply is found."
+    ]
+  },
+  "cdssReplyObserved": false,
+  "channels": [
+    {
+      "id": "download-sha256-vs-baseline",
+      "channel": "DownloadStateData body sha256 vs Phase 10–16 baseline",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData",
+      "observedValue": "RCFE e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e; ARF f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe — unchanged",
+      "verdict": "unchanged-baseline",
+      "rationale": "Live Phase 17 download matches baseline byte-for-byte; no source-data drift. Sha256 identity is integrity evidence, not an ISO export date."
+    },
+    {
+      "id": "download-content-disposition-filename-mmddyyyy",
+      "channel": "DownloadStateData Content-Disposition filename stamp",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData",
+      "observedValue": "11152026 → iso-candidate 2026-11-15 (rejected)",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "Filename MMDDYYYY is an attachment label only; not an official ISO export timestamp."
+    },
+    {
+      "id": "download-http-last-modified",
+      "channel": "DownloadStateData HTTP Last-Modified",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData",
+      "observedValue": null,
+      "verdict": "absent",
+      "rationale": "Response headers omit Last-Modified on RCFE and ARF downloads."
+    },
+    {
+      "id": "download-http-etag",
+      "channel": "DownloadStateData HTTP ETag",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData",
+      "observedValue": null,
+      "verdict": "absent",
+      "rationale": "No ETag observed on DownloadStateData responses."
+    },
+    {
+      "id": "download-http-date",
+      "channel": "DownloadStateData HTTP Date (response clock)",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/transparencyapi/api/DownloadStateData",
+      "observedValue": "present (response generation clock)",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "HTTP Date is the response generation clock, not a dataset export date."
+    },
+    {
+      "id": "download-client-retrieval-timestamp",
+      "channel": "Local download / agent retrieval timestamp",
+      "sourceUrl": null,
+      "observedValue": "2026-11-20 (agent clock)",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "Retrieval timestamp must never substitute for an authoritative export date."
+    },
+    {
+      "id": "transparency-faq-weekly-update",
+      "channel": "Transparency FAQ Download Data: How often is the data updated?",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/transparencyapi/api/FAQ?mode=Public&id=context",
+      "observedValue": "Official FAQ answer under <downloaddata>: \"The data is updated weekly.\"",
+      "verdict": "accepted-policy-only-not-export-date",
+      "rationale": "Authoritative CDSS cadence statement, but weekly cadence alone does not identify the ISO export date of a specific DownloadStateData attachment."
+    },
+    {
+      "id": "transparency-faq-no-date-on-file",
+      "channel": "Transparency FAQ Facility Detail: Why \"No date on file\" for a license date?",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/transparencyapi/api/FAQ?mode=Public&id=context",
+      "observedValue": "\"The department will be adding additional information in future weeks. In some circumstances, the exact first license date may not be available.\"",
+      "verdict": "accepted-policy-only-not-export-date",
+      "rationale": "Explains missing license-first dates on some facilities; does not provide a roster export ISO date and does not authorize publishing LICENSED rows without dates."
+    },
+    {
+      "id": "downloadstatedata-html-calhhs-copy-note",
+      "channel": "downloadstatedata.html CalHHS Open Data Portal copy note",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/carefacilitysearch/downloadstatedata.html",
+      "observedValue": "\"A copy of this data is regularly published to the CalHHS Open Data Portal\"",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "'Regularly' is not an ISO export date; CHHS clocks remain non-authoritative for DownloadStateData."
+    },
+    {
+      "id": "transparency-spa-client-version",
+      "channel": "Transparency SPA Config.js TVERSION / AppVersion",
+      "sourceUrl": "https://www.ccld.dss.ca.gov/carefacilitysearch/javascript/Config.js",
+      "observedValue": "TVERSION=\"11.18.0R\"; AppVersion=\"1.0.1\"",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "Client application version stamps are not DownloadStateData roster export dates."
+    },
+    {
+      "id": "publish-data-ca-gov-catalog-metadata",
+      "channel": "publish.data.ca.gov Community Care Licensing Facilities package metadata",
+      "sourceUrl": "https://publish.data.ca.gov/dataset/community-care-licensing-facilities1",
+      "observedValue": "metadata_modified 2026-11-11T00:54:27; resource created stamps ~2026-09-30 — catalog clocks only",
+      "verdict": "rejected-non-authoritative",
+      "rationale": "Portal/catalog metadata clocks are not authoritative DownloadStateData export dates (Issue #131 boundary)."
+    },
+    {
+      "id": "cdss-clarification-mailbox-check",
+      "channel": "Authorized connected mailbox check for CDSS clarification reply",
+      "sourceUrl": null,
+      "observedValue": "No authorized connected mailbox / email MCP available in this agent environment (secrets: VERCEL_TOKEN + NCHF_DEV_* only). Duplicate inquiry not sent.",
+      "verdict": "mailbox-unavailable",
+      "rationale": "Cannot verify whether CDSS replied from this environment. Clarification status remains sent-awaiting-response. Do not send duplicate inquiries."
+    },
+    {
+      "id": "official-iso-export-timestamp-channel",
+      "channel": "Official ISO export / version stamp channel for DownloadStateData",
+      "sourceUrl": null,
+      "observedValue": null,
+      "verdict": "absent",
+      "rationale": "No verified authoritative ISO export date or source-issued version identifier for a specific DownloadStateData attachment."
+    }
+  ],
+  "requirement": {
+    "requiresAuthoritativeIsoExportDate": true,
+    "acceptsFilenameMmddyyyyAlone": false,
+    "acceptsDownloadTimestampAlone": false,
+    "acceptsHttpDateAlone": false,
+    "acceptsHttpLastModifiedAlone": false,
+    "acceptsHttpEtagAlone": false,
+    "acceptsWeeklyUpdateFaqAlone": false,
+    "acceptsSpaClientVersionAlone": false,
+    "acceptsCalhhsCopyNoteAlone": false,
+    "acceptsPortalCatalogUpdateAlone": false,
+    "acceptsMailboxAbsenceAsCleared": false,
+    "currentAuthoritativeIsoExportDate": null,
+    "officialUpdateCadenceStatement": "The data is updated weekly.",
+    "officialUpdateCadenceSatisfiesIsoExportRequirement": false,
+    "policy": "require-official-iso-export-channel",
+    "gateBlockedReason": "No authoritative ISO export date verified for a specific DownloadStateData attachment; official FAQ weekly cadence is policy-only; CDSS reply not observable from this environment; gate stays BLOCKED."
+  },
+  "gate": "blocked",
+  "allowsPublication": false,
+  "verdict": "Authoritative ISO export date remains null. Gate BLOCKED. CDSS clarification sent-awaiting-response; mailbox unavailable to confirm reply; no duplicate inquiry sent."
+}
