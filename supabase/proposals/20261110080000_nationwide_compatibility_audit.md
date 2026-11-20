@@ -42,7 +42,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | New York | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | North Carolina | B | unpublished | 1086 | yes | yes | no | no | no | high |
 | North Dakota | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
-| Ohio | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| Ohio | B | unpublished | 1152 | yes | yes | yes | no | no | high |
 | Oklahoma | B | unpublished | — | yes | yes | no | no | no | high |
 | Oregon | A | development | 1584 | no | no | yes | yes | no | high |
 | Pennsylvania | C | unpublished | 989 | no | yes | no | no | no | high |

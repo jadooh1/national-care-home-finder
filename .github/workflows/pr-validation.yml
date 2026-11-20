@@ -172,6 +172,9 @@ jobs:
       - name: Check the Georgia care-home source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/georgia_care_home_source_discovery.ts
 
+      - name: Check the Ohio residential-care source discovery
+        run: node --experimental-strip-types --test supabase/proposals/tests/ohio_residential_care_source_discovery.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 

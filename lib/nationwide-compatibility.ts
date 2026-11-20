@@ -100,7 +100,7 @@ const ASSESSMENTS = [
   row("New York", "C", "unpublished", "New York adult care facility sources", "https://www.health.ny.gov/facilities/adult_care/", null, null, null, null, null, null, "medium", "The standalone adult care directory was retired and later official access is split. No replacement row count was adopted."),
   row("North Carolina", "B", "unpublished", "North Carolina adult care home and family care home workbooks", "https://info.ncdhhs.gov/dhsr/reports.htm", 1086, true, true, false, false, false, "high", "Re-verified 2026-11-20: Ahlist.xlsx has 566 HAL rows (beds 9–201) and Fchlist.xlsx has 520 FCL rows (beds 2–6); 1,086 unique licenses, overlap 0, NC site addresses on all licensed rows. Listings 10/28/2026, As of 10/2026, and Last-Modified are not an ISO export date. No per-row status or coordinates. Star search has no license field; guessed License # detail URLs failed. FCL is not Washington AFH. Stale fch.txt (2021) rejected. North Carolina stays unpublished."),
   row("North Dakota", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
-  row("Ohio", "C", "unpublished", "Ohio Department of Health residential care search", null, null, null, null, null, null, null, "medium", "The department search can generate a report. No stable file or reconciled row count was adopted."),
+  row("Ohio", "B", "unpublished", "Ohio Department of Health EID Facility Listing (Residential Care)", "https://publicapps.odh.ohio.gov/EID/reports/EID_Report_Criteria.aspx", 1152, true, true, true, false, false, "high", "Verified 2026-11-20: Facility Listing CSV for provider type Residential Care or Assisted Living has 1,152 unique L12 FACIDs (OHL#####) with STATEID, ADDRESS, OPERSTDESC (ACTIVE 801 / ACTIVE-PENDING RENEWAL 16 / PENDING 26 / CLOSED-* 309), and LIC_BED_TOTAL on ACTIVE rows 5–508. No ISO export date; PDF filename timestamp, server deploy 10/4/2026, software release 01/27/2026, ArcGIS OneSource dataLastEditDate 2026-10-05, and program-page “approximately 720” are rejected. Detail_StateLicense.aspx is session-bound; FACID/STATEID query-string guesses fail. No coordinate columns on the listing; OEMA ArcGIS derivative geocodes are not licensing coordinates. Ohio RCF (ORC 3721 / OAC 3701-16) is not Washington AFH. Ohio stays unpublished."),
   row("Oklahoma", "B", "unpublished", "Oklahoma assisted living facility directory", "https://oklahoma.gov/content/dam/ok/en/health/health2/aem-documents/protective-health/hrds/health-facility-systems/2026/directory-of-facilities/Assisted%20Living.pdf", null, true, true, false, false, false, "high", "The PDF has facility id, address, licensed beds, and county. There is no per-row status or disclosure prefix, and the 2026 path is not an export date."),
   row("Oregon", "A", "development", "Oregon ODHS adult foster home provider export", "https://ltclicensing.oregon.gov/Providers", 1584, false, false, true, true, false, "high", "The existing reduced directory contract already accepts source id, name, city, county, type, status, beds, and profile URL. Missing coordinates do not make that directory incompatible."),
   row("Pennsylvania", "C", "unpublished", "Pennsylvania personal care home open data", "https://data.pa.gov/api/views/pqf4-d4xn/rows.csv?accessType=DOWNLOAD", 989, false, true, false, false, false, "high", "The open-data object id is not a license number, and there is no per-row status."),
@@ -430,6 +430,27 @@ FIELD_EVIDENCE.Florida = {
   "coordinate-accuracy": fact("not-verified", "low"),
 };
 
+FIELD_EVIDENCE.Ohio = {
+  "regulatory-identifier": fact("present", "high", "FACID"),
+  "identifier-type": fact("present", "high", "facility-id / state-id"),
+  "issuing-authority": fact("present", "high", "Ohio Department of Health"),
+  "physical-address": fact("present", "high", "ADDRESS"),
+  "mailing-address": fact("present", "medium", "detail mailing when different"),
+  "official-export-date": fact("rejected", "high"),
+  "source-publication-date": fact("rejected", "high", "server-deploy / software-release / arcgis-edit"),
+  "retrieval-timestamp": fact("present", "high", "2026-11-20"),
+  "freshness-verification": fact("absent", "high"),
+  "facility-disclosure": fact("absent", "high"),
+  "generic-search": fact("present", "high", "provider-search"),
+  "unverified-url-pattern": fact("rejected", "high", "Detail_StateLicense query"),
+  "original-category": fact("present", "high", "L12 Residential Care"),
+  "original-status": fact("present", "high", "OPERSTDESC"),
+  "normalized-category": fact("rejected", "high"),
+  "normalized-status": fact("absent", "high"),
+  "coordinates": fact("absent", "high"),
+  "coordinate-source": fact("rejected", "high", "arcgis-derivative-geocode"),
+};
+
 FIELD_EVIDENCE.Georgia = {
   "regulatory-identifier": fact("present", "high", "FACID"),
   "identifier-type": fact("present", "high", "facility-id"),
@@ -451,7 +472,7 @@ FIELD_EVIDENCE.Georgia = {
   "coordinate-accuracy": fact("present", "medium", "Accuracy ROOFTOP"),
 };
 
-for (const state of ["Alabama", "Nebraska", "Nevada", "New Jersey", "New Mexico", "Ohio", "Rhode Island"]) {
+for (const state of ["Alabama", "Nebraska", "Nevada", "New Jersey", "New Mexico", "Rhode Island"]) {
   FIELD_EVIDENCE[state] = {
     "generic-search": fact("present", "medium", "generic-search"),
     "facility-disclosure": fact("not-verified", "low"),
@@ -508,6 +529,7 @@ export const ONBOARDING_SEQUENCE = [
   "Texas",
   "Florida",
   "Georgia",
+  "Ohio",
   "Alabama",
   "Arkansas",
   "Louisiana",
@@ -517,7 +539,6 @@ export const ONBOARDING_SEQUENCE = [
   "New Jersey",
   "New Mexico",
   "New York",
-  "Ohio",
   "Rhode Island",
   "Alaska",
   "Connecticut",
