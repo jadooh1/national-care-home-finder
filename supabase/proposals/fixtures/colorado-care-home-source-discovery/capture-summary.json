@@ -1,0 +1,71 @@
+{
+  "observedOn": "2026-11-20",
+  "featureServer": "https://services3.arcgis.com/66aUo8zsujfVXRIT/arcgis/rest/services/CDPHE_Health_Facilities/FeatureServer/0",
+  "hubAbout": "https://data-cdphe.opendata.arcgis.com/datasets/CDPHE::cdphe-health-facilities/about",
+  "socrataMirror": "https://data.colorado.gov/Health/Health-Facilities/98pp-s4r4",
+  "socrataViewType": "href",
+  "socrataColumns": 0,
+  "totalLayerRows": 5091,
+  "facilityTypeCounts": {
+    "All Other Factypes": 1984,
+    "Home Care Agency": 1569,
+    "Assisted Living Residence": 685,
+    "Home Health Agency": 479,
+    "Nursing Facilities": 214,
+    "Hospital": 127,
+    "Community Clinic": 33
+  },
+  "alr": {
+    "categoryFilter": "Facility_Type='Assisted Living Residence'",
+    "alrRows": 685,
+    "uniqueFacilityIds": 685,
+    "duplicateFacilityIds": 0,
+    "blankFacilityId": 0,
+    "blankName": 0,
+    "blankAddress": 0,
+    "addressCoZipPattern": 685,
+    "blankCounty": 0,
+    "blankBeds": 0,
+    "zeroBeds": 27,
+    "bedsMin": 0,
+    "bedsMax": 274,
+    "blankLatLon": 0,
+    "operatingStatus": {
+      "Active": 670,
+      "Pending": 15
+    },
+    "licensedFlag": {
+      "Licensed": 659,
+      "HCPF Certified": 26
+    },
+    "typeDetail": {
+      "ALR ONLY": 358,
+      "ALR/ACF": 285,
+      "ALR/BISL": 42
+    },
+    "dateDataUpdatedUnique": [
+      1790665200000
+    ],
+    "dateDataUpdatedIsoUtc": [
+      "2026-09-29"
+    ],
+    "activeLicensedBedsGt0": 646,
+    "alrIdSetSha256": "3e4fa60a3245a7961c98c2c124d4287b29dc6e8f8b364f7045ff88cddc5fde56",
+    "sampleRows": 34,
+    "statewideCrawl": false,
+    "extrapolateStatewideFromSample": false
+  },
+  "layerLastEditDateIsoUtc": "2026-10-16T18:57:42.430000+00:00",
+  "layerLastEditRejectedAsExportDate": true,
+  "dateDataUpdatedRejectedAsExportDate": true,
+  "recordedExportDate": null,
+  "coordinatesGeocodedFromAddress": true,
+  "coordinatesAreLicensingCoordinates": false,
+  "categoryEquivalenceToWashingtonAfh": false,
+  "publicationEligible": 0,
+  "findAndCompareUrl": "https://cdphe.colorado.gov/health-facilities/find-and-compare-facilities",
+  "findAndCompareTableau": "https://cohealthviz.dphe.state.co.us/t/HealthFacilitiesPublic/views/HealthFacilitySearchSite/1_HealthFacilitySearchSite",
+  "disclosurePrefixVerified": false,
+  "chapter7RuleUrl": "https://www.sos.state.co.us/CCR/DisplayRule.do?action=ruleinfo&ruleId=3036&deptID=16&agencyID=144",
+  "chapter2RuleUrl": "https://www.sos.state.co.us/CCR/DisplayRule.do?action=ruleinfo&ruleId=3031&deptID=16&agencyID=144"
+}
