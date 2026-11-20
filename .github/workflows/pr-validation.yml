@@ -229,6 +229,9 @@ jobs:
       - name: Check the California Phase 10 freshness and readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/california_phase10_freshness_readiness.ts
 
+      - name: Check the California Phase 11 disclosure links and status
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase11_disclosure_status.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
