@@ -1,0 +1,63 @@
+{
+  "observedOn": "2026-11-20",
+  "counts": {
+    "rosterRows": 4476,
+    "describedTypeRows": 4242,
+    "xhExemptRows": 234,
+    "usablePhysicalStreetRows": 57,
+    "blankStreetUnresolved": 4419,
+    "publicationEligible": 0,
+    "ownerClaimEligible": 0
+  },
+  "exclusiveBuckets": {
+    "xh-exempt-ineligible": 234,
+    "blank-street-unresolved": 4419,
+    "usable-street-but-blocked": 57,
+    "publication-eligible": 0
+  },
+  "addressResidualOk": true,
+  "typeResidualOk": true,
+  "requirements": [
+    {
+      "id": "physical-address",
+      "requirement": "Authoritative physical street address (Street column or verified definition).",
+      "status": "blocked",
+      "detail": "4419 blank Street rows; supplemental/profile Address: not adopted as physical."
+    },
+    {
+      "id": "licensing-classification",
+      "requirement": "Described type codes only; XH needs authoritative definition before inclusion.",
+      "status": "blocked",
+      "detail": "234 XH/EXEMPT rows remain undescribed and ineligible."
+    },
+    {
+      "id": "capacity",
+      "requirement": "Capacity within described numeric ranges where the record key defines ranges.",
+      "status": "observed-ok",
+      "detail": "Prior/current checks: no AF/AS/AM/AL/AG/AI outside printed ranges. Capacity ≠ availability."
+    },
+    {
+      "id": "zip-code",
+      "requirement": "Usable 5-digit ZIP (9-digit truncated for display only).",
+      "status": "observed-ok",
+      "detail": "4369 five-digit + 107 nine-digit in current capture; originals preserved."
+    },
+    {
+      "id": "disclosure-link",
+      "requirement": "FacilityProfile URL shape is known; publication still requires other blockers cleared.",
+      "status": "partial",
+      "detail": "Prefix /Home/FacilityProfile/{LICENSE} verified; not sufficient alone for publication."
+    },
+    {
+      "id": "freshness",
+      "requirement": "Authoritative ISO export / version stamp for afc_sw.txt.",
+      "status": "blocked",
+      "detail": "Last-Modified and daily-update notices rejected; recordedExportDate=null."
+    }
+  ],
+  "ownerClaimEligible": false,
+  "publication": "unpublished",
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": "STOP"
+}
