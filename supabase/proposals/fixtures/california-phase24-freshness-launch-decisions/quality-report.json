@@ -1,0 +1,56 @@
+{
+  "observedOn": "2026-11-20",
+  "accounting": {
+    "holds": true,
+    "rowCount": 24377,
+    "bucketSum": 24377,
+    "difference": 0,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "reason": "Every input row belongs to exactly one exclusive classification bucket."
+  },
+  "baseline": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "publicationCandidatesIfGateOpened": 15451,
+    "downloadSha256": {
+      "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+    },
+    "authoritativeIsoExportDate": null,
+    "coordinates": {
+      "verifiedOfficialCoords": 15423,
+      "unresolved": 28,
+      "fabricatedCoordinates": 0
+    },
+    "phase23Matrix": {
+      "listingExclusionsInCandidates": 88,
+      "otherwiseClearOffline": 15363,
+      "mapOnlySuppressions": 27
+    }
+  },
+  "downloadSha256MatchesBaseline": true,
+  "countsMatchPhase23": true,
+  "authoritativeIsoExportDate": null,
+  "exclusionPolicyActivatedInAppOrDb": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": "STOP",
+  "cdssClarification": "sent-awaiting-response",
+  "statewideCrawlRepeated": false,
+  "duplicateCdssInquirySent": false,
+  "clarificationFollowUpDraftStatus": "draft-do-not-send"
+}

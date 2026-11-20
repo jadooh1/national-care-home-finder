@@ -1,0 +1,26 @@
+{
+  "status": "draft-do-not-send",
+  "priorInquiryStatus": "sent-awaiting-response",
+  "duplicateOfPriorInquiry": false,
+  "sendRequiresHumanApproval": true,
+  "toSuggested": [
+    "cclwebmaster@dss.ca.gov",
+    "opendata@cdss.ca.gov"
+  ],
+  "subject": "Follow-up (if approved): authoritative as-of / version stamp for CCLD DownloadStateData",
+  "body": "Hello CCLD Transparency / CDSS Open Data team,\n\nThis is a concise follow-up to our earlier clarification request about the public CCLD Transparency DownloadStateData CSV exports (RCFE and Adult Residential Facilities).\n\nWe still cannot locate a source-issued ISO as-of date or authoritative dataset version for a specific DownloadStateData attachment. We do not treat filename MMDDYYYY stamps, website Last-Modified, HTTP Date, weekly FAQ cadence, or open-data catalog clocks as the export date.\n\nIf available, please point us to the exact field, header, or published statement that provides the authoritative as-of date or version for each RCFE/ARF statewide download.\n\nThank you,\nNational Care Home Finder (development research only; California remains unpublished)",
+  "asksFor": [
+    "Exact channel for authoritative DownloadStateData as-of date or version stamp",
+    "Confirmation if no machine-readable stamp exists and what human-readable as-of may be cited"
+  ],
+  "mustNotTreatAsAuthoritativeUntilConfirmed": [
+    "Filename MMDDYYYY",
+    "HTTP Date / Last-Modified / ETag",
+    "Weekly FAQ cadence alone",
+    "Website static-asset Last-Modified",
+    "publish.data.ca.gov / CHHS catalog clocks",
+    "SPA TVERSION / AppVersion",
+    "Agent retrieval timestamp"
+  ],
+  "note": "Do not send without human approval. Prefer checking the authorized mailbox for a reply to the original inquiry before any follow-up send."
+}

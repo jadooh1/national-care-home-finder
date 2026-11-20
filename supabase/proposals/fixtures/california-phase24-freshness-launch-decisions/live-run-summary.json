@@ -1,0 +1,23 @@
+{
+  "observedOn": "2026-11-20",
+  "captureTimeUtc": "2026-11-20T19:56:27.265Z",
+  "authoritativeIsoExportDate": null,
+  "downloadSha256MatchesBaseline": true,
+  "countsMatchPhase23": true,
+  "rosterDenominator": 15451,
+  "listingExclusionsInCandidates": 88,
+  "otherwiseClearOffline": 15363,
+  "mapOnlySuppressions": 27,
+  "unresolvedCoordinates": 28,
+  "coordinateOverlapId": "502701867",
+  "clarificationFollowUpDraftStatus": "draft-do-not-send",
+  "duplicateCdssInquirySent": false,
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "exclusionActivatedInAppOrDb": false,
+  "statewideCrawlRepeated": false,
+  "cdssClarification": "sent-awaiting-response",
+  "stopGo": "STOP",
+  "outDir": "/tmp/california-phase24-live"
+}
