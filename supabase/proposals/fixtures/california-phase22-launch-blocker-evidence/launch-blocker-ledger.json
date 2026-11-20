@@ -1,0 +1,512 @@
+{
+  "observedOn": "2026-11-20",
+  "title": "California Phase 22 launch-blocker evidence ledger",
+  "adoption": {
+    "exclusionPolicyAdoptedForOfflineClassification": true,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false
+  },
+  "baselinePreserved": {
+    "officialRecords": 24377,
+    "publicationCandidates": 15451,
+    "verifiedOfficialCoords": 15423,
+    "unresolvedCoords": 28,
+    "cumulativeDisclosureVerified": 15451,
+    "statewideLicensedMissingDate": 14,
+    "missingCapacitiesOnExcluded": 21,
+    "fabricatedCoords": 0,
+    "inventedCapacities": 0
+  },
+  "entries": [
+    {
+      "id": "authoritative-iso-export-date",
+      "category": "freshness-blocker",
+      "classId": "absent-authoritative-iso",
+      "eligibility": "statewide-blocked",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "blocked-awaiting-external",
+      "evidence": {
+        "authoritativeIsoExportDate": null,
+        "filenameIsoCandidateRejected": "2026-11-15",
+        "weeklyFaqPolicyOnly": true,
+        "downloadSha256MatchesBaseline": true,
+        "globalBlockerUnchanged": true
+      }
+    },
+    {
+      "id": "cdss-clarification-reply",
+      "category": "cdss-correspondence",
+      "classId": "sent-awaiting-response",
+      "eligibility": "statewide-blocked",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "blocked-awaiting-external",
+      "evidence": {
+        "mailboxCheckAvailable": false,
+        "duplicateInquirySent": false,
+        "duplicateInquiryAllowed": false
+      }
+    },
+    {
+      "id": "exclusion-policy-not-activated",
+      "category": "exclusion-policy",
+      "classId": "adopted-offline-not-activated",
+      "eligibility": "statewide-blocked",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "adoptedForOfflineClassification": true,
+        "activatedInApplicationOrDatabase": false
+      }
+    },
+    {
+      "id": "source-licensing-terms",
+      "category": "statewide-prerequisite",
+      "classId": "source-licensing-unconfirmed",
+      "eligibility": "statewide-blocked",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "note": "Human must confirm source licensing/terms before publication."
+      }
+    },
+    {
+      "id": "qa-signoff",
+      "category": "statewide-prerequisite",
+      "classId": "human-qa-pending",
+      "eligibility": "statewide-blocked",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "note": "Automated suites do not substitute for human launch QA sign-off."
+      }
+    },
+    {
+      "id": "invalid-facility-number-95354",
+      "category": "unique-id-capacity-case",
+      "classId": "fail-closed-refuse-invalid-id",
+      "eligibility": "policy-bound-unresolved",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "area": "unique-ids",
+        "title": "Invalid non 8–9 digit facility number 95354",
+        "evidence": "Live roster scan: exactly one invalid Facility Number `95354` (ZIP-shifted corrupt row). Generator refuse-closed since Phase 13.",
+        "recommendation": "Keep refuse-closed / invalid-id-ineligible. Never fabricate a disclosure URL. Exclusion activation (separate decision) would suppress it from any future candidate set.",
+        "exampleIds": [
+          "95354"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "id": "truncated-vs-canonical-leading-zero",
+      "category": "unique-id-capacity-case",
+      "classId": "fail-closed-preserve-leading-zero",
+      "eligibility": "policy-bound-unresolved",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "area": "leading-zeros",
+        "title": "Truncated non-canonical ID vs exact leading-zero canonical",
+        "evidence": "Control pair: truncated `15601219` absent from roster; canonical `015601219` present. Live scan preserves 2,102 leading-zero Facility Numbers. GIS integer FAC_NBR truncates zeros; download strings keep them.",
+        "recommendation": "Publish/probe only exact official 8–9 digit strings with leading zeros preserved. Treat truncated forms as non-canonical / refuse-closed.",
+        "exampleIds": [
+          "15601219",
+          "015601219"
+        ],
+        "count": 2102
+      }
+    },
+    {
+      "id": "duplicate-facility-numbers",
+      "category": "unique-id-capacity-case",
+      "classId": "pass-preserved-no-action",
+      "eligibility": "documented-pass-or-excluded",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "development-only",
+      "evidence": {
+        "area": "duplicates",
+        "title": "Duplicate Facility Number scan",
+        "evidence": "Live DownloadStateData: officialRows=24,377; distinctFacilityNumbers=24,377; duplicates=[]. No unresolved duplicate-identity cases in the official roster.",
+        "recommendation": "No duplicate remediation required on current roster. Re-validate on any source-data delta. Publication still gated by statewide blockers.",
+        "exampleIds": [],
+        "count": 0
+      }
+    },
+    {
+      "id": "capacity-blanks-on-excluded-pending",
+      "category": "unique-id-capacity-case",
+      "classId": "pass-preserved-no-action",
+      "eligibility": "documented-pass-or-excluded",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "development-only",
+      "evidence": {
+        "area": "capacity",
+        "title": "Official blank Facility Capacity on PENDING excluded rows",
+        "evidence": "Live scan: 21 blank capacities, all Facility Status=PENDING; candidateBlank (LICENSED/ON PROBATION + eligible type)=0; inventedCapacities=0.",
+        "recommendation": "Preserve official blanks; never invent. Candidate capacity integrity currently passes. Keep blanks documented for excluded PENDING rows.",
+        "exampleIds": [],
+        "count": 21
+      }
+    },
+    {
+      "id": "capacity-integrity-policy-bound",
+      "category": "unique-id-capacity-case",
+      "classId": "policy-bound-awaiting-activation",
+      "eligibility": "policy-bound-unresolved",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "area": "capacity",
+        "title": "Capacity integrity remains policy-bound for launch claims",
+        "evidence": "Phase 8–21: 0 publication-candidate blanks; 21 excluded PENDING blanks; 0 invented. Policy requires fail-closed handling before any launch claim that cites capacity completeness.",
+        "recommendation": "Development-only: keep documenting blanks and never invent. Launch claims that assert capacity completeness still require human-approved readiness language; do not treat current pass as gate-open.",
+        "exampleIds": [],
+        "count": null
+      }
+    },
+    {
+      "id": "facility-type-eligibility-out-of-scope",
+      "category": "unique-id-capacity-case",
+      "classId": "fail-closed-exclude",
+      "eligibility": "documented-pass-or-excluded",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "development-only",
+      "evidence": {
+        "area": "facility-type",
+        "title": "Out-of-scope facility types remain excluded",
+        "evidence": "Live type counts include non-eligible rows (e.g. ADULT DAY PROGRAM 1,381; SOCIAL REHABILITATION FACILITY 559; blank type 17; MEDICAL FOSTER HOMES FOR VETERANS 1; RESIDENTIAL FACILITY CHRONICALLY ILL 16). Eligible RCFE/ARF types unchanged from Phase 6 gates.",
+        "recommendation": "Keep exclusive-bucket accounting; out-of-scope types stay excluded. Do not widen eligible facility types without human approval.",
+        "exampleIds": [],
+        "count": null
+      }
+    },
+    {
+      "id": "unresolved-coordinates-map-suppression",
+      "category": "unique-id-capacity-case",
+      "classId": "fail-closed-exclude",
+      "eligibility": "documented-pass-or-excluded",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "development-only",
+      "evidence": {
+        "area": "coordinates",
+        "title": "28 unresolved official coordinates (map suppression)",
+        "evidence": "Baseline preserved: 15,423 verified official coords / 28 unresolved / 0 fabricated. Phase 22 does not re-probe without verified source delta.",
+        "recommendation": "Keep map-suppressed until authoritative coords exist. Do not geocode/fabricate. Facility-excludable; does not alone clear global blockers.",
+        "exampleIds": [],
+        "count": 28
+      }
+    },
+    {
+      "id": "unique-id-policy-bound-for-launch",
+      "category": "unique-id-capacity-case",
+      "classId": "policy-bound-awaiting-activation",
+      "eligibility": "policy-bound-unresolved",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "area": "unique-ids",
+        "title": "Unique-ID fail-closed policy still required for launch",
+        "evidence": "Safeguards pass on current roster (leading zeros preserved; 95354 refuse-closed; 0 duplicates), but statewide launch still requires an adopted fail-closed ID policy before publication claims.",
+        "recommendation": "Development-only documentation is complete. Activating exclusion policy / asserting launch-ready unique-ID integrity requires explicit later human approval.",
+        "exampleIds": [],
+        "count": null
+      }
+    },
+    {
+      "id": "provisional-198320787",
+      "category": "provisional-license-conflict",
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Provisional License"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Provisional License remains unresolved. Preserve raw pair; keep unknown-ineligible until human-approved mapping or CDSS clarification resolves the conflict. Do not invent Licensed≡Provisional License equivalence.",
+        "downloadLicenseFirstDate": "8/12/2026",
+        "liveLicenseFirstDate": "8/12/2026",
+        "downloadFacilityType": "RESIDENTIAL CARE ELDERLY",
+        "liveFacilityType": "RESIDENTIAL CARE ELDERLY",
+        "downloadCapacity": "111",
+        "phase21LiveStatus": "Provisional License",
+        "phase22ConfirmsPhase21": true,
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "id": "provisional-455920513",
+      "category": "provisional-license-conflict",
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Provisional License"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Provisional License remains unresolved. Preserve raw pair; keep unknown-ineligible until human-approved mapping or CDSS clarification resolves the conflict. Do not invent Licensed≡Provisional License equivalence.",
+        "downloadLicenseFirstDate": "8/1/2026",
+        "liveLicenseFirstDate": "8/1/2026",
+        "downloadFacilityType": "ADULT RESIDENTIAL FACILITY FOR PERSONS WITH SPECIAL HEALTH CARE NEEDS",
+        "liveFacilityType": "ADULT RESIDENTIAL FACILITY FOR PERSONS WITH SPECIAL HEALTH CARE NEEDS",
+        "downloadCapacity": "5",
+        "phase21LiveStatus": "Provisional License",
+        "phase22ConfirmsPhase21": true,
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "id": "provisional-197611076",
+      "category": "provisional-license-conflict",
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Provisional License"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Provisional License remains unresolved. Preserve raw pair; keep unknown-ineligible until human-approved mapping or CDSS clarification resolves the conflict. Do not invent Licensed≡Provisional License equivalence.",
+        "downloadLicenseFirstDate": "8/3/2026",
+        "liveLicenseFirstDate": "8/3/2026",
+        "downloadFacilityType": "ADULT RESIDENTIAL",
+        "liveFacilityType": "ADULT RESIDENTIAL",
+        "downloadCapacity": "4",
+        "phase21LiveStatus": "Provisional License",
+        "phase22ConfirmsPhase21": true,
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "id": "provisional-197611060",
+      "category": "provisional-license-conflict",
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Provisional License"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Provisional License remains unresolved. Preserve raw pair; keep unknown-ineligible until human-approved mapping or CDSS clarification resolves the conflict. Do not invent Licensed≡Provisional License equivalence.",
+        "downloadLicenseFirstDate": "8/3/2026",
+        "liveLicenseFirstDate": "8/3/2026",
+        "downloadFacilityType": "ADULT RESIDENTIAL",
+        "liveFacilityType": "ADULT RESIDENTIAL",
+        "downloadCapacity": "3",
+        "phase21LiveStatus": "Provisional License",
+        "phase22ConfirmsPhase21": true,
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "id": "provisional-134605014",
+      "category": "provisional-license-conflict",
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Provisional License"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Provisional License remains unresolved. Preserve raw pair; keep unknown-ineligible until human-approved mapping or CDSS clarification resolves the conflict. Do not invent Licensed≡Provisional License equivalence.",
+        "downloadLicenseFirstDate": "8/6/2026",
+        "liveLicenseFirstDate": "8/6/2026",
+        "downloadFacilityType": "ENHANCED BEHAVIORAL SUPPORTS HOME - ARF",
+        "liveFacilityType": "ENHANCED BEHAVIORAL SUPPORTS HOME - ARF",
+        "downloadCapacity": "4",
+        "phase21LiveStatus": "Provisional License",
+        "phase22ConfirmsPhase21": true,
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "id": "control-502701867",
+      "category": "prior-control",
+      "classId": "genuine-unresolved-licensing-conflict",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "none-preserved",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Pending Incomplete Application",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Pending Incomplete Application"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Pending Incomplete Application remains an unresolved conflict (control 502701867). Never treat as licensed for publication.",
+        "relatedControlId": "502701867",
+        "phase22ConfirmsPrior": true
+      }
+    },
+    {
+      "id": "control-019201167",
+      "category": "prior-control",
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "none-preserved",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Licensed/Pending Increase"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Licensed/Pending Increase is explainable timing/process overlay for ledger taxonomy only. Keep unknown-ineligible until a human-approved mapping exists.",
+        "mappingApprovedForPublication": false,
+        "phase22ConfirmsPrior": true
+      }
+    },
+    {
+      "id": "control-019201133",
+      "category": "prior-control",
+      "classId": "explainable-coarsening-or-timing",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "none-preserved",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "preservedRawPair": {
+          "downloadLicensed": true,
+          "facilityDetailStatus": "Licensed/Pending Increase"
+        },
+        "rationale": "Download LICENSED vs FacilityDetail Licensed/Pending Increase is explainable timing/process overlay for ledger taxonomy only. Keep unknown-ineligible until a human-approved mapping exists.",
+        "mappingApprovedForPublication": false,
+        "phase22ConfirmsPrior": true
+      }
+    },
+    {
+      "id": "fourteen-licensed-missing-date",
+      "category": "facility-exception-preserved",
+      "classId": "missing-license-evidence",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "statewideCount": 14,
+        "preservedFrom": "phase16-21"
+      }
+    },
+    {
+      "id": "twenty-eight-unresolved-coordinates",
+      "category": "facility-exception-preserved",
+      "classId": "unverified-coordinates",
+      "eligibility": "unknown-ineligible",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "actionLane": "requires-later-human-approval",
+      "evidence": {
+        "unresolvedCoordinateCount": 28,
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    }
+  ],
+  "summary": {
+    "totalEntries": 23,
+    "byCategory": {
+      "freshness-blocker": 1,
+      "cdss-correspondence": 1,
+      "exclusion-policy": 1,
+      "statewide-prerequisite": 2,
+      "unique-id-capacity-case": 8,
+      "provisional-license-conflict": 5,
+      "prior-control": 3,
+      "facility-exception-preserved": 2
+    },
+    "provisionalUnresolved": 5,
+    "policyCasesUnresolvedForLaunch": 4,
+    "publicationEligibleCount": 0
+  },
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": "STOP"
+}
