@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "mode": "stratified-sample",
+  "stopReason": "queue-exhausted",
+  "queueTotal": 117,
+  "completed": 117,
+  "consecutiveInconclusive": 0,
+  "requestsThisSession": 117,
+  "statewideCoverageClaimed": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "config": {
+    "minIntervalMs": 450,
+    "maxAttempts": 3,
+    "maxRequests": 250,
+    "checkpointEvery": 10,
+    "maxConsecutiveInconclusive": 8,
+    "rosterDenominator": 15451
+  },
+  "sampleCompletedKeys": [
+    "345920416::345920416::p14-coord-ex-345920416",
+    "365530238::365530238::p14-coord-ex-365530238",
+    "365530117::365530117::p14-coord-ex-365530117",
+    "347000691::347000691::p14-coord-ex-347000691",
+    "079200787::079200787::p14-coord-ex-079200787"
+  ]
+}

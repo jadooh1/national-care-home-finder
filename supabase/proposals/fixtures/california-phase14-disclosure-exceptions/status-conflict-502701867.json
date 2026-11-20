@@ -1,0 +1,10 @@
+{
+  "facilityNumber": "502701867",
+  "downloadStatus": "LICENSED",
+  "liveStatus": "Pending Incomplete Application",
+  "relation": "conflict",
+  "eligibility": "unknown-ineligible",
+  "evidenceKind": "facility-detail-verified",
+  "neverLicensedMarkersPresent": true,
+  "note": "Download LICENSED conflicts with FacilityDetail Pending Incomplete Application + empty license dates. Do not invent equivalence; leave unresolved / unknown-ineligible. Not publication-eligible."
+}
