@@ -1,0 +1,63 @@
+{
+  "observedOn": "2026-11-20",
+  "captureTimeUtc": "2026-11-20T20:25:54.570Z",
+  "gate": "blocked",
+  "stopGo": "STOP",
+  "allowsPublication": false,
+  "pennsylvaniaDirectoryReady": false,
+  "pennsylvaniaMapReady": false,
+  "directoryPublication": "unpublished",
+  "directoryHref": null,
+  "mapHref": null,
+  "rows": 989,
+  "usableStreetRows": 976,
+  "addressExceptions": 13,
+  "verifiedFacilitySpecificCount": 0,
+  "ownerClaimEligible": false,
+  "publicationEligible": 0,
+  "sha256": "c91722696b1accbe778f25189fc727e5bd55f5028bac3d529c54d3e8e8192973",
+  "qualityAllPass": true,
+  "readiness": {
+    "observedOn": "2026-11-20",
+    "qualityPass": true,
+    "pennsylvaniaDirectoryReady": false,
+    "publication": "unpublished",
+    "ownerClaimEligible": false,
+    "productionWrites": false,
+    "californiaRecrawl": false,
+    "cdssFollowUpSent": false,
+    "allowsPublication": false,
+    "gate": "blocked",
+    "stopGo": "STOP",
+    "blockers": [
+      "open-data-object-id-is-not-a-license-number",
+      "no-facilities-id",
+      "no-per-row-licensing-status",
+      "catalog-timestamp-is-not-an-export-date",
+      "no-authoritative-iso-export-date",
+      "no-per-facility-disclosure-link-is-recorded",
+      "letter-only-street-values-are-not-corrected",
+      "street-additional-information-is-not-copied-into-the-street",
+      "georeferenced-coordinates-are-not-licensing-coordinates"
+    ],
+    "futureApprovals": [
+      "Obtain license-number / status channel or confirm none exists for open-data rows.",
+      "Adopt authoritative ISO export / version stamp (catalog timestamp is insufficient).",
+      "Verify facility-specific disclosure permalinks before any public listing.",
+      "Decide remediation policy for letter-only streets (do not invent numbers).",
+      "Separate human approval before Pennsylvania publication or owner-claim enablement."
+    ]
+  },
+  "publicationStopGo": {
+    "decision": "STOP",
+    "publicationReady": false,
+    "allowsPublication": false,
+    "pennsylvaniaDirectoryReady": false,
+    "ownerClaimEligible": false,
+    "gate": "blocked",
+    "reason": "Pennsylvania onboarding investigation advanced offline evidence only. License number, status, export date, and facility disclosure remain unresolved. STOP."
+  },
+  "californiaRecrawl": false,
+  "cdssFollowUpSent": false,
+  "productionWrites": false
+}

@@ -23,4 +23,6 @@ california-phase20-crawl.log
 california-phase25-audit-out/
 # Phase 26 local rehearsal output (fixtures copied separately)
 california-phase26-audit-out/
+# Pennsylvania investigation local output (fixtures copied separately)
+pennsylvania-investigation-out/
 package-lock.json
