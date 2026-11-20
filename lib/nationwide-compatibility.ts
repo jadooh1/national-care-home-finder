@@ -85,7 +85,7 @@ const ASSESSMENTS = [
   row("Kentucky", "B", "unpublished", "Kentucky assisted living community directory", "https://www.chfs.ky.gov/agencies/os/oig/dhc/Documents/Assisted%20Living%20Community%20Directory.pdf", null, true, true, false, false, false, "high", "The PDF has license number, address, county, and units. Expiration is not a status. The November 2026 label is not an adopted export date."),
   row("Louisiana", "C", "unpublished", "Louisiana adult residential care directory", "https://ldh.la.gov/directory/category/161", null, false, true, null, null, null, "medium", "The HTML directory shows addresses. A license identifier was not observed."),
   row("Maine", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
-  row("Maryland", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "The licensing directory was not opened. A consumer rate list is not the licensing source."),
+  row("Maryland", "B", "unpublished", "Maryland OHCQ Assisted Living Excel licensee directory", "https://health.maryland.gov/ohcq/docs/Provider-Listings/Excel/Assisted-Living-Excel.xlsx", 1675, true, true, false, false, false, "high", "Verified 2026-11-20: OHCQ Assisted-Living-Excel.xlsx sheet “ALs-EXCEL as of 11-05-26” has 1,676 rows / 1,675 unique License Numbers with Street Address, Capacity 2–319 (≤16: 1,472; >16: 204), and Level of Care (Level 3 1,623 / Level 2 51 / Level 1 1 / blank 1). One near-dup AL-00064. No per-row status. No ISO export date; sheet as-of, page Last Updated Nov 16, and HTTP Last-Modified Nov 6 rejected. No License Number disclosure prefix; Uniform Disclosure is on-request. IMAP/OP&R FeatureServer (1,568 rows, X/Y) rejected as licensing roster/coords. Maryland ALP is not Washington AFH. Maryland stays unpublished."),
   row("Massachusetts", "C", "unpublished", "MassHealth adult foster care", null, null, false, false, null, null, null, "medium", "Adult foster care is organized as agency providers, not a facility roster."),
   row("Michigan", "C", "unpublished", "Michigan adult foster care and home-for-the-aged file", null, 4480, true, false, true, true, false, "high", "License, status, and a disclosure prefix exist. Most street values are blank, and the supplemental column is not a confirmed physical address."),
   row("Minnesota", "C", "unpublished", "Minnesota DHS Licensing Information Lookup", null, null, null, null, null, true, null, "high", "The lookup can post back a CSV. The profile-link count and the rendered license summary are not reconciled."),
@@ -448,6 +448,26 @@ FIELD_EVIDENCE.Virginia = {
   "coordinate-source": fact("absent", "high"),
 };
 
+FIELD_EVIDENCE.Maryland = {
+  "regulatory-identifier": fact("present", "high", "License Number"),
+  "identifier-type": fact("present", "high", "license-number"),
+  "issuing-authority": fact("present", "high", "Maryland Department of Health OHCQ"),
+  "physical-address": fact("present", "high", "Street Address"),
+  "official-export-date": fact("rejected", "high"),
+  "source-publication-date": fact("rejected", "high", "sheet-as-of / page-last-updated / http-last-modified"),
+  "retrieval-timestamp": fact("present", "high", "2026-11-20"),
+  "freshness-verification": fact("absent", "high"),
+  "facility-disclosure": fact("absent", "high"),
+  "generic-search": fact("present", "high", "mhcc-consumer-guide"),
+  "unverified-url-pattern": fact("rejected", "high", "MHCC Facility license query"),
+  "original-category": fact("present", "high", "Assisted Living Program / Level of Care"),
+  "original-status": fact("absent", "high"),
+  "normalized-category": fact("rejected", "high"),
+  "normalized-status": fact("absent", "high"),
+  "coordinates": fact("absent", "high"),
+  "coordinate-source": fact("rejected", "high", "imap-opr-derivative-geocode"),
+};
+
 FIELD_EVIDENCE.Ohio = {
   "regulatory-identifier": fact("present", "high", "FACID"),
   "identifier-type": fact("present", "high", "facility-id / state-id"),
@@ -549,6 +569,7 @@ export const ONBOARDING_SEQUENCE = [
   "Georgia",
   "Ohio",
   "Virginia",
+  "Maryland",
   "Alabama",
   "Arkansas",
   "Louisiana",
@@ -565,7 +586,6 @@ export const ONBOARDING_SEQUENCE = [
   "Idaho",
   "Kansas",
   "Maine",
-  "Maryland",
   "Mississippi",
   "Missouri",
   "Montana",

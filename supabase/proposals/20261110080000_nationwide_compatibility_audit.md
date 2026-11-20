@@ -27,7 +27,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Kentucky | B | unpublished | — | yes | yes | no | no | no | high |
 | Louisiana | C | unpublished | — | no | yes | not verified | not verified | no | medium |
 | Maine | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
-| Maryland | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| Maryland | B | unpublished | 1675 | yes | yes | no | no | no | high |
 | Massachusetts | C | unpublished | — | no | no | not verified | not verified | no | medium |
 | Michigan | C | unpublished | 4480 | yes | no | yes | yes | no | high |
 | Minnesota | C | unpublished | — | not verified | not verified | not verified | yes | no | high |
