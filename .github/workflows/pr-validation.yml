@@ -235,6 +235,9 @@ jobs:
       - name: Check the California Phase 12 status mapping and disclosure
         run: node --experimental-strip-types --test supabase/proposals/tests/california_phase12_status_mapping.ts
 
+      - name: Check the California Phase 13 disclosure audit
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_phase13_disclosure_audit.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 
