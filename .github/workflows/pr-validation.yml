@@ -187,6 +187,9 @@ jobs:
       - name: Check the Massachusetts assisted-living source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/massachusetts_assisted_living_source_discovery.ts
 
+      - name: Check the Tennessee assisted-care living source discovery
+        run: node --experimental-strip-types --test supabase/proposals/tests/tennessee_assisted_care_living_source_discovery.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 

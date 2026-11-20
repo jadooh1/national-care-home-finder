@@ -49,7 +49,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Rhode Island | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | South Carolina | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | South Dakota | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
-| Tennessee | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| Tennessee | B | unpublished | 333 | yes | yes | yes | no | no | high |
 | Texas | B | unpublished | 2019 | yes | yes | yes | no | no | high |
 | Utah | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Vermont | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
@@ -59,7 +59,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Wisconsin | C | unpublished | — | not verified | not verified | not verified | not verified | no | high |
 | Wyoming | C | unpublished | — | yes | no | no | no | no | high |
 
-Counts: A 2, B 11, C 18, D 19.
+Counts: A 2, B 19, C 14, D 15.
 
 ## Verified source inventory
 
