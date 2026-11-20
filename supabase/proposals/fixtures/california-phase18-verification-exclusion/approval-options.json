@@ -1,0 +1,19 @@
+{
+  "requestsPublicationGateOpen": false,
+  "crawlAuthorized": false,
+  "exclusionPolicyAdopted": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "optionIds": [
+    "crawl-authorization",
+    "exclusion-policy-adoption",
+    "publication-preconditions"
+  ],
+  "agentMustNot": [
+    "start-statewide-or-pilot-crawl",
+    "activate-exclusion-policy-without-adoption",
+    "open-or-weaken-publication-gate",
+    "send-duplicate-cdss-inquiry",
+    "request-permission-to-open-publication-gate-in-this-phase"
+  ]
+}

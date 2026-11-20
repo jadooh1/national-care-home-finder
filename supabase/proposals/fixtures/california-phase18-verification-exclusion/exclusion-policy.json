@@ -1,0 +1,19 @@
+{
+  "status": "draft-for-approval",
+  "activated": false,
+  "adopted": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "preservesFailClosedSafeguards": true,
+  "preservesAuthoritativeRecordsUnaltered": true,
+  "ruleIds": [
+    "unverified-or-conflicting-status",
+    "invalid-or-mismatched-ids",
+    "missing-license-evidence",
+    "unverified-coordinates",
+    "bad-disclosure-links",
+    "closed-pending-withdrawn"
+  ],
+  "statewideMissingLicenseDate": 14,
+  "unresolvedCoordinates": 28
+}

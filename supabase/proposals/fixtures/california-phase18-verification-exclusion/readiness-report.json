@@ -1,0 +1,43 @@
+{
+  "gate": "blocked",
+  "publicationReady": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "crawlStarted": false,
+  "exclusionPolicyActivated": false,
+  "exclusionPolicyAdopted": false,
+  "requestsPublicationGateOpen": false,
+  "baselinePreserved": {
+    "officialRecords": 24377,
+    "activeRestrictedCandidates": 15451,
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "missingCapacitiesOnExcluded": 21,
+    "disclosureSamples": 462,
+    "statewideMissingLicenseDateFlags": 14
+  },
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "replyReceived": false,
+    "duplicateInquiryAllowed": false
+  },
+  "globalLaunchBlockers": [
+    "authoritative-iso-export-date",
+    "cdss-clarification-awaiting-response",
+    "licensing-status-eligibility-rules",
+    "official-disclosure-links",
+    "sample-vs-roster-verification",
+    "unique-valid-identifiers",
+    "capacity-field-integrity"
+  ],
+  "facilitySpecificExceptions": [
+    "official-coordinates",
+    "licensed-missing-initial-date-statewide",
+    "status-conflict-502701867"
+  ],
+  "stopGo": {
+    "publicationReady": false,
+    "recommendation": "STOP"
+  }
+}
