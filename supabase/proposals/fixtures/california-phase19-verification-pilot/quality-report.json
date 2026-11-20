@@ -1,0 +1,113 @@
+{
+  "observedOn": "2026-11-20",
+  "accounting": {
+    "holds": true,
+    "rowCount": 24377,
+    "bucketSum": 24377,
+    "difference": 0,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "reason": "Every input row belongs to exactly one exclusive classification bucket."
+  },
+  "baseline": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "publicationCandidatesIfGateOpened": 15451,
+    "exceptionDocumentedExcludeIds": [
+      "374604731",
+      "198601400",
+      "306006749",
+      "306006799",
+      "95354"
+    ],
+    "downloadSha256": {
+      "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+    },
+    "authoritativeIsoExportDate": null,
+    "filenameIsoCandidate": "2026-11-15",
+    "officialWeeklyCadence": "The data is updated weekly.",
+    "coordinates": {
+      "candidateCount": 15451,
+      "verifiedOfficialCoords": 15423,
+      "unresolved": 28,
+      "fabricatedCoordinates": 0
+    },
+    "missingCapacity": {
+      "totalMissing": 21,
+      "publicationCandidateMissing": 0
+    },
+    "downloadClosedBucket": {
+      "total": 6109,
+      "emptyLicenseFirstDate": 1241,
+      "withLicenseFirstDate": 4868
+    },
+    "disclosureCumulativeBaseline": 462,
+    "statewideLicensedMissingDate": 14,
+    "statusConflictFacilityNumber": "502701867"
+  },
+  "downloadSha256MatchesBaseline": true,
+  "disclosure": {
+    "sampleSize": 245,
+    "working": 245,
+    "missing": 0,
+    "ambiguous": 0,
+    "invalid": 0,
+    "inconclusive": 0,
+    "verifiedCount": 707,
+    "rosterDenominator": 15451,
+    "phase16CumulativeVerifiedCount": 462,
+    "incrementalVerifiedCount": 245,
+    "cumulativeVerifiedCount": 707
+  },
+  "status": {
+    "sampleSize": 245,
+    "match": 228,
+    "documentedCoarsening": 15,
+    "conflict": 2,
+    "missing": 0,
+    "inconclusive": 0,
+    "invalidId": 0,
+    "regressionControlsResolved": 0
+  },
+  "verifiedCoverage": {
+    "cumulativeVerifiedCount": 707,
+    "rosterDenominator": 15451,
+    "coverageFraction": 0.045757556145233316,
+    "statewideCoverageClaimed": false
+  },
+  "coordinates": {
+    "verifiedOfficialCoords": 15423,
+    "unresolved": 28,
+    "fabricatedCoordinates": 0,
+    "baselineUnresolved": 28
+  },
+  "statusConflict": {
+    "facilityNumber": "502701867",
+    "eligibility": "unknown-ineligible",
+    "publicationEligible": false,
+    "ownerClaimEligible": false
+  },
+  "authoritativeIsoExportDate": null,
+  "freshnessRequirementSatisfied": false,
+  "sampleIsStatewideConclusion": false,
+  "exclusionPolicyActivatedInAppOrDb": false,
+  "exclusionOfflineClassificationAdopted": true,
+  "stagedStatewideStarted": false,
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "cdssClarification": "sent-awaiting-response"
+}

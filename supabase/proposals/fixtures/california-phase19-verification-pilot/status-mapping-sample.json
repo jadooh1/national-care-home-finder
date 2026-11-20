@@ -1,0 +1,47 @@
+{
+  "sampleSize": 245,
+  "match": 228,
+  "documented-coarsening": 15,
+  "conflict": 2,
+  "missing": 0,
+  "inconclusive": 0,
+  "invalid-id": 0,
+  "byRelation": {
+    "match": 228,
+    "documented-coarsening": 15,
+    "conflict": 2,
+    "missing": 0,
+    "inconclusive": 0,
+    "invalid-id": 0
+  },
+  "byEligibility": {
+    "active-candidate": 192,
+    "active-restricted": 10,
+    "unknown-ineligible": 2,
+    "withdrawn-ineligible": 15,
+    "closed-ineligible": 17,
+    "pending-ineligible": 9
+  },
+  "byEvidenceKind": {
+    "facility-detail-verified": 245,
+    "download-only-indicator": 0,
+    "not-applicable": 0
+  },
+  "conflicts": [
+    {
+      "facilityNumber": "019201167",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "relation": "conflict",
+      "eligibility": "unknown-ineligible"
+    },
+    {
+      "facilityNumber": "019201133",
+      "downloadStatus": "LICENSED",
+      "liveStatus": "Licensed/Pending Increase",
+      "relation": "conflict",
+      "eligibility": "unknown-ineligible"
+    }
+  ],
+  "sampleIsStatewideConclusion": false
+}

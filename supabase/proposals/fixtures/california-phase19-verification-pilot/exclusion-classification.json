@@ -1,0 +1,119 @@
+{
+  "observedOn": "2026-11-20",
+  "adoption": {
+    "adoptedForOfflineClassification": true,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "allowsPublication": false,
+    "gate": "blocked",
+    "policySource": "lib/california-phase18-exclusion-policy.ts",
+    "note": "Phase 19 applies the Phase 18 exclusion policy for offline classification only. Do not activate product-layer exclusions in app/DB without a separate activation decision."
+  },
+  "totalFindings": 89,
+  "byClass": {
+    "unverified-or-conflicting-status": 4,
+    "invalid-or-mismatched-ids": 0,
+    "missing-license-evidence": 0,
+    "unverified-coordinates": 1,
+    "bad-disclosure-links": 0,
+    "closed-pending-withdrawn": 84,
+    "none-clear-for-listing-if-otherwise-eligible": 202
+  },
+  "uniqueFacilitiesWithFindings": 43,
+  "workingDisclosureWithoutExclusionSignal": 202,
+  "activatedInApplicationOrDatabase": false,
+  "altersAuthoritativeGovernmentRecords": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "exampleFindings": [
+    {
+      "facilityNumber": "019201167",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency observed in pilot; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "019201133",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Download vs FacilityDetail status inconsistency observed in pilot; keep unknown-ineligible until resolved.",
+      "evidence": {
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "019201167",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Status conflict or unknown-ineligible eligibility from FacilityDetail mapping.",
+      "evidence": {
+        "relation": "conflict",
+        "eligibility": "unknown-ineligible",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "019201133",
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false,
+      "classId": "unverified-or-conflicting-status",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "rationale": "Status conflict or unknown-ineligible eligibility from FacilityDetail mapping.",
+      "evidence": {
+        "relation": "conflict",
+        "eligibility": "unknown-ineligible",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase"
+      }
+    },
+    {
+      "facilityNumber": "(statewide-unresolved-coordinates)",
+      "classId": "unverified-coordinates",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "rationale": "28 publication candidates lack verified official coordinates; suppress map pins only. Do not fabricate or re-probe without new authoritative evidence.",
+      "evidence": {
+        "unresolvedCoordinateCount": 28,
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      },
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "activatedInApplicationOrDatabase": false
+    }
+  ]
+}
