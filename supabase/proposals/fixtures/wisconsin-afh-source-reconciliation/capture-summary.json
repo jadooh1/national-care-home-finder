@@ -1,0 +1,40 @@
+{
+  "observedOn": "2026-11-20",
+  "prior": {
+    "pdfDistinctParentheticalIds": 1980,
+    "gisFeatures": 2203,
+    "gisBlankLicense": 9
+  },
+  "excel": {
+    "rows": 2479,
+    "uniqueFacilityIds": 2479,
+    "sha256": "bbefc34f6233576c745b8aa622a517e91c8448b0def2678e9a7e10ae55ca6962",
+    "lastModified": "Mon, 20 Jul 2026 13:40:37 GMT",
+    "capacity3": 437,
+    "capacity4": 2042,
+    "mailingStreetDiffers": 1751
+  },
+  "pdf": {
+    "uniqueParentheticalIds": 2516,
+    "nameIdPairs": 2517,
+    "directoryUpdatedStamp": "11/04/2026",
+    "sha256": "e6701ba14ad7877256bc083de734d800c18e72403365df24036e83e1360797eb"
+  },
+  "gis": {
+    "features": 2203,
+    "blankWiLicenseNum": 9,
+    "duplicateWiLicenseKeys": 2,
+    "hasLastEditTime": false
+  },
+  "reconciliation": {
+    "rule": "integer(Facility ID) === WI_LICENSE_NUM",
+    "matchedUnique": 1914,
+    "matchedAmbiguous": 2,
+    "excelOnly": 563,
+    "gisOnlyWithLicense": 276,
+    "gisBlankLicense": 9
+  },
+  "recordedExportDate": null,
+  "publicationEligible": 0,
+  "gisAcceptedAsDirectory": false
+}

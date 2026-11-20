@@ -148,6 +148,9 @@ jobs:
       - name: Check the Michigan onboarding investigation
         run: node --experimental-strip-types --test supabase/proposals/tests/michigan_onboarding_investigation.ts
 
+      - name: Check the Wisconsin AFH source reconciliation
+        run: node --experimental-strip-types --test supabase/proposals/tests/wisconsin_afh_source_reconciliation.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 
