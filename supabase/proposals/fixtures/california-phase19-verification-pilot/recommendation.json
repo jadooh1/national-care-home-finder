@@ -1,0 +1,34 @@
+{
+  "id": "request-staged-statewide-approval",
+  "requestStagedStatewide": true,
+  "startStagedStatewideNow": false,
+  "rationale": "Pilot completed cleanly (incremental=245, stopReason=queue-exhausted, workingRate=1.000). Evidence supports requesting separate human approval for staged statewide crawl (~59 sessions @ 250). Do not start statewide in this phase.",
+  "expectedCosts": {
+    "remainingFacilitiesApprox": 14744,
+    "probesPerFacility": 2,
+    "totalProbesApprox": 29488,
+    "minIntervalMs": 450,
+    "minWallHoursApprox": 3.69,
+    "conservativeWallHoursApprox": 4.61,
+    "sessionsAt250": 59,
+    "note": "Arithmetic from harness defaults + remaining queue. Not a CDSS SLA. Excludes operator pauses and elevated retry pressure."
+  },
+  "risks": [
+    "CDSS rate limits or access restrictions under longer continuous load",
+    "Source sha256 drift mid-campaign requiring full re-baseline",
+    "Status-conflict / missing-license-date rates may differ outside stratified pilot",
+    "Operator fatigue across ~60 sessions without staging discipline",
+    "Publication pressure before global blockers (ISO date, CDSS reply) clear"
+  ],
+  "safeguards": [
+    "concurrency=1",
+    "minIntervalMs>=450 including retries",
+    "checkpoint every 10; --resume skips completedKeys",
+    "stop on 8 consecutive inconclusive / 429-5xx burst / sha256 drift",
+    "preserve exact license IDs including leading zeros",
+    "no duplicate CDSS email",
+    "no parallel multi-agent CDSS sessions",
+    "exclusion offline-only until separate activation approval",
+    "publication gate remains BLOCKED"
+  ]
+}

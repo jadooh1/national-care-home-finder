@@ -1,0 +1,183 @@
+{
+  "observedOn": "2026-11-20",
+  "authorization": {
+    "limitedPilotAuthorized": true,
+    "facilityCap": 250,
+    "harness": "california-phase13-disclosure-audit",
+    "concurrency": 1,
+    "minIntervalMs": 450,
+    "stagedStatewideAuthorized": false,
+    "stagedStatewideStarted": false,
+    "duplicateCdssEmailAllowed": false,
+    "allowsPublication": false,
+    "gate": "blocked"
+  },
+  "auditHarness": {
+    "stopReason": "queue-exhausted",
+    "queueTotal": 245,
+    "completed": 245,
+    "mode": "stratified-sample",
+    "config": {
+      "minIntervalMs": 450,
+      "maxAttempts": 3,
+      "retryStatuses": [
+        429,
+        500,
+        502,
+        503,
+        504
+      ],
+      "backoffMs": [
+        500,
+        1500,
+        3000
+      ],
+      "maxRequests": 250,
+      "maxDurationMs": 3600000,
+      "checkpointEvery": 10,
+      "maxConsecutiveInconclusive": 8,
+      "rosterDenominator": 15451
+    },
+    "concurrency": 1,
+    "minIntervalMs": 450,
+    "statewideCoverageClaimed": false,
+    "phase16CumulativeVerifiedCount": 462,
+    "rateLimitedOrAccessRestricted": false,
+    "elapsedMs": 123669
+  },
+  "disclosure": {
+    "priorBaseline": 462,
+    "coverage": {
+      "phase16CumulativeVerifiedCount": 462,
+      "incrementalVerifiedCount": 245,
+      "cumulativeVerifiedCount": 707,
+      "rosterDenominator": 15451,
+      "incrementalCoverageFraction": 0.015856578862209567,
+      "cumulativeCoverageFraction": 0.045757556145233316,
+      "incrementalCoveragePercentRounded": 1.59,
+      "cumulativeCoveragePercentRounded": 4.58,
+      "statewideCoverageClaimed": false,
+      "sampleIsStatewideConclusion": false,
+      "publication": "unpublished",
+      "ownerClaimEligible": false,
+      "notes": [
+        "Phase 16 cumulative disclosure probes: 462/15451.",
+        "Phase 19 pilot incremental disclosure probes: 245/15451.",
+        "Cumulative verified coverage: 707/15451 \u2014 sample only; statewideCoverageClaimed=false.",
+        "Do not equate a stratified or partial sample with roster-complete verification.",
+        "California remains unpublished; owner claims stay ineligible."
+      ]
+    },
+    "incrementalSummary": {
+      "sampleSize": 245,
+      "working": 245,
+      "missing": 0,
+      "ambiguous": 0,
+      "invalid": 0,
+      "inconclusive": 0,
+      "leadingZeroPreservedWorking": 32,
+      "statewideCoverageClaimed": false,
+      "sampleIsStatewideConclusion": false
+    }
+  },
+  "status": {
+    "sampleSize": 245,
+    "match": 228,
+    "documented-coarsening": 15,
+    "conflict": 2,
+    "missing": 0,
+    "inconclusive": 0,
+    "invalid-id": 0,
+    "byRelation": {
+      "match": 228,
+      "documented-coarsening": 15,
+      "conflict": 2,
+      "missing": 0,
+      "inconclusive": 0,
+      "invalid-id": 0
+    },
+    "byEligibility": {
+      "active-candidate": 192,
+      "active-restricted": 10,
+      "unknown-ineligible": 2,
+      "withdrawn-ineligible": 15,
+      "closed-ineligible": 17,
+      "pending-ineligible": 9
+    },
+    "sampleIsStatewideConclusion": false
+  },
+  "exclusionOfflineClassification": {
+    "adoption": {
+      "adoptedForOfflineClassification": true,
+      "activatedInApplicationOrDatabase": false,
+      "altersAuthoritativeGovernmentRecords": false,
+      "allowsPublication": false,
+      "gate": "blocked",
+      "policySource": "lib/california-phase18-exclusion-policy.ts",
+      "note": "Phase 19 applies the Phase 18 exclusion policy for offline classification only. Do not activate product-layer exclusions in app/DB without a separate activation decision."
+    },
+    "totalFindings": 89,
+    "byClass": {
+      "unverified-or-conflicting-status": 4,
+      "invalid-or-mismatched-ids": 0,
+      "missing-license-evidence": 0,
+      "unverified-coordinates": 1,
+      "bad-disclosure-links": 0,
+      "closed-pending-withdrawn": 84,
+      "none-clear-for-listing-if-otherwise-eligible": 202
+    },
+    "uniqueFacilitiesWithFindings": 43,
+    "workingDisclosureWithoutExclusionSignal": 202,
+    "activatedInApplicationOrDatabase": false
+  },
+  "recommendation": {
+    "id": "request-staged-statewide-approval",
+    "requestStagedStatewide": true,
+    "startStagedStatewideNow": false,
+    "rationale": "Pilot completed cleanly (incremental=245, stopReason=queue-exhausted, workingRate=1.000). Evidence supports requesting separate human approval for staged statewide crawl (~59 sessions @ 250). Do not start statewide in this phase.",
+    "expectedCosts": {
+      "remainingFacilitiesApprox": 14744,
+      "probesPerFacility": 2,
+      "totalProbesApprox": 29488,
+      "minIntervalMs": 450,
+      "minWallHoursApprox": 3.69,
+      "conservativeWallHoursApprox": 4.61,
+      "sessionsAt250": 59,
+      "note": "Arithmetic from harness defaults + remaining queue. Not a CDSS SLA. Excludes operator pauses and elevated retry pressure."
+    },
+    "risks": [
+      "CDSS rate limits or access restrictions under longer continuous load",
+      "Source sha256 drift mid-campaign requiring full re-baseline",
+      "Status-conflict / missing-license-date rates may differ outside stratified pilot",
+      "Operator fatigue across ~60 sessions without staging discipline",
+      "Publication pressure before global blockers (ISO date, CDSS reply) clear"
+    ],
+    "safeguards": [
+      "concurrency=1",
+      "minIntervalMs>=450 including retries",
+      "checkpoint every 10; --resume skips completedKeys",
+      "stop on 8 consecutive inconclusive / 429-5xx burst / sha256 drift",
+      "preserve exact license IDs including leading zeros",
+      "no duplicate CDSS email",
+      "no parallel multi-agent CDSS sessions",
+      "exclusion offline-only until separate activation approval",
+      "publication gate remains BLOCKED"
+    ]
+  },
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stagedStatewideStarted": false,
+  "exclusionActivatedInAppOrDb": false,
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "duplicateInquiryAllowed": false
+  },
+  "notes": [
+    "Distinguish Phase 19 new results from prior 462 baseline.",
+    "Exclusion policy offline-only; government records unaltered.",
+    "Do not start staged statewide without separate approval.",
+    "Publication gate unchanged (BLOCKED)."
+  ]
+}

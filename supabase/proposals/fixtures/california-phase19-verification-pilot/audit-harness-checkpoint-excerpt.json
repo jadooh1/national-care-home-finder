@@ -1,0 +1,29 @@
+{
+  "mode": "stratified-sample",
+  "stopReason": "queue-exhausted",
+  "queueTotal": 245,
+  "completed": 245,
+  "config": {
+    "minIntervalMs": 450,
+    "maxAttempts": 3,
+    "retryStatuses": [
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "backoffMs": [
+      500,
+      1500,
+      3000
+    ],
+    "maxRequests": 250,
+    "maxDurationMs": 3600000,
+    "checkpointEvery": 10,
+    "maxConsecutiveInconclusive": 8,
+    "rosterDenominator": 15451
+  },
+  "statewideCoverageClaimed": false,
+  "consecutiveInconclusive": 0
+}

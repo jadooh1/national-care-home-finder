@@ -1,0 +1,55 @@
+{
+  "observedOn": "2026-11-20",
+  "downloadSha256MatchesBaseline": true,
+  "disclosure": {
+    "phase16CumulativeVerifiedCount": 462,
+    "incrementalSampleSize": 245,
+    "incrementalWorking": 245,
+    "incrementalMissing": 0,
+    "incrementalAmbiguous": 0,
+    "incrementalInvalid": 0,
+    "incrementalInconclusive": 0,
+    "leadingZeroPreservedWorking": 32,
+    "cumulativeVerifiedCount": 707,
+    "rosterDenominator": 15451,
+    "incrementalCoveragePercentRounded": 1.59,
+    "cumulativeCoveragePercentRounded": 4.58,
+    "statewideCoverageClaimed": false,
+    "stopReason": "queue-exhausted"
+  },
+  "status": {
+    "sampleSize": 245,
+    "match": 228,
+    "documentedCoarsening": 15,
+    "conflict": 2,
+    "missing": 0,
+    "inconclusive": 0,
+    "invalidId": 0,
+    "inventedClosedStarEquivalence": false,
+    "treatsWithdrawnAsLicensed": false,
+    "sampleIsStatewideConclusion": false
+  },
+  "exclusion": {
+    "adoptedForOfflineClassification": true,
+    "activatedInApplicationOrDatabase": false,
+    "byClass": {
+      "unverified-or-conflicting-status": 4,
+      "invalid-or-mismatched-ids": 0,
+      "missing-license-evidence": 0,
+      "unverified-coordinates": 1,
+      "bad-disclosure-links": 0,
+      "closed-pending-withdrawn": 84,
+      "none-clear-for-listing-if-otherwise-eligible": 202
+    },
+    "totalFindings": 89,
+    "uniqueFacilitiesWithFindings": 43
+  },
+  "recommendation": {
+    "id": "request-staged-statewide-approval",
+    "requestStagedStatewide": true,
+    "startStagedStatewideNow": false
+  },
+  "gate": "blocked",
+  "allowsPublication": false,
+  "stagedStatewideStarted": false
+}

@@ -1,0 +1,136 @@
+{
+  "observedOn": "2026-11-20",
+  "publication": "unpublished",
+  "ownerClaimEligible": false,
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": {
+    "decision": "STOP",
+    "publicationReady": false,
+    "allowsPublication": false,
+    "gate": "blocked",
+    "stagedStatewideStarted": false,
+    "exclusionActivatedInAppOrDb": false,
+    "rationale": "Pilot evidence improves sample maturity but global launch blockers remain (ISO export date, CDSS reply, roster-incomplete verification). Gate stays BLOCKED."
+  },
+  "items": [
+    {
+      "id": "authoritative-iso-export-date",
+      "area": "freshness",
+      "status": "fail",
+      "severity": "launch-blocking",
+      "summary": "No verified CDSS ISO export/version stamp. Awaiting CDSS response; do not resend clarification."
+    },
+    {
+      "id": "licensing-status-eligibility-rules",
+      "area": "licensing-status",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Pilot expands FacilityDetail status evidence under Phase 13 harness. Roster-wide status still incomplete. 502701867 remains unknown-ineligible."
+    },
+    {
+      "id": "eligible-facility-types",
+      "area": "facility-types",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "RCFE and ARF eligible Facility Type strings remain defined; out-of-scope types stay excluded."
+    },
+    {
+      "id": "unique-valid-identifiers",
+      "area": "unique-ids",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Official 8\u20139 digit IDs preserved with leading zeros. Invalid/truncated IDs remain fail-closed."
+    },
+    {
+      "id": "capacity-field-integrity",
+      "area": "capacity",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Baseline preserved: 21 official blanks on PENDING excluded rows only. Official blanks never invented."
+    },
+    {
+      "id": "coordinate-integrity",
+      "area": "coordinates",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "15,423 verified official coords / 28 unresolved. Unresolved stay map-suppressed; no fabricate/re-probe."
+    },
+    {
+      "id": "disclosure-link-coverage",
+      "area": "disclosure-links",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Phase 19 pilot adds \u2264250 previously-unverified disclosure probes on top of 462. Not roster-complete; statewideCoverageClaimed=false."
+    },
+    {
+      "id": "verification-pilot-executed",
+      "area": "pilot",
+      "status": "pass",
+      "severity": "optional-enhancement",
+      "summary": "Approved limited pilot (\u2264250) executed with Phase 13 harness safeguards. Staged statewide not started."
+    },
+    {
+      "id": "exclusion-offline-classification",
+      "area": "exclusion-policy",
+      "status": "pass",
+      "severity": "optional-enhancement",
+      "summary": "Phase 18 exclusion policy adopted for offline classification only. Not activated in application or database. Government records unaltered."
+    },
+    {
+      "id": "exclusive-accounting",
+      "area": "accounting",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "Baseline 24,377 = 15,413 + 38 + 8,921 + 5 preserved unless live sha256 drift."
+    },
+    {
+      "id": "verification-breadth",
+      "area": "verification-breadth",
+      "status": "partial",
+      "severity": "launch-blocking",
+      "summary": "Sample + pilot only. Remaining ~14,739+ still unverified. Do not claim statewide verification."
+    },
+    {
+      "id": "cdss-clarification",
+      "area": "cdss-correspondence",
+      "status": "fail",
+      "severity": "launch-blocking",
+      "summary": "CDSS clarification still sent-awaiting-response. Duplicate inquiry forbidden."
+    },
+    {
+      "id": "publication-safeguards",
+      "area": "safeguards",
+      "status": "pass",
+      "severity": "launch-blocking",
+      "summary": "California unpublished; owner claims ineligible; gate blocked; no Design 2 / billing / auth / production writes."
+    },
+    {
+      "id": "audit-harness",
+      "area": "audit-harness",
+      "status": "pass",
+      "severity": "optional-enhancement",
+      "summary": "Phase 13 harness: concurrency=1, minIntervalMs\u2265450, checkpoint/resume, retries, consecutive-inconclusive stop."
+    }
+  ],
+  "baselinePreserved": {
+    "officialRecords": 24377,
+    "publicationCandidates": 15451,
+    "verifiedOfficialCoords": 15423,
+    "unresolvedCoords": 28,
+    "disclosureBaseline": 462,
+    "statewideLicensedMissingDate": 14,
+    "missingCapacitiesOnExcluded": 21,
+    "fabricatedCoords": 0,
+    "inventedCapacities": 0
+  },
+  "disclosureAudit": {
+    "phase16CumulativeVerifiedCount": 462,
+    "incrementalVerifiedCount": 245,
+    "cumulativeVerifiedCount": 707,
+    "rosterDenominator": 15451,
+    "statewideCoverageClaimed": false
+  },
+  "cdssClarification": "sent-awaiting-response",
+  "duplicateInquiryAllowed": false
+}
