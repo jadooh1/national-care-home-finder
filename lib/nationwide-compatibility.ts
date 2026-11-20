@@ -95,7 +95,7 @@ const ASSESSMENTS = [
   row("Nebraska", "C", "unpublished", "Nebraska HHS facility license search", "https://www.nebraska.gov/LISSearch/search.cgi", null, null, null, null, null, null, "medium", "The official access is a facility search. No roster file was opened."),
   row("Nevada", "C", "unpublished", "Nevada residential facility for groups search", "https://www.hcqc.nv.gov/regulatory/health-facility-licensing-and-information/non-medical-facilities/residential-facility-for-groups-adult-group-care-assisted-living/", null, null, null, null, null, null, "medium", "A spreadsheet is generated from a credential search. No stable file or columns were adopted."),
   row("New Hampshire", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
-  row("New Jersey", "C", "unpublished", "New Jersey long-term care facility search", "https://healthapps.nj.gov/facilities/fsSetSearch.aspx?by=county", null, null, null, null, null, null, "medium", "The search filters by county and type, including assisted living and adult family care. No roster file was opened."),
+  row("New Jersey", "B", "unpublished", "NJDOH All_LTC.xlsx (ALR, CPCH, ALP)", "https://healthapps.nj.gov/facilities/documents2/All_LTC.xlsx", 305, true, true, false, true, true, "high", "Verified 2026-11-20: All_LTC.xlsx has ASSISTED LIVING RESIDENCE 256, COMPREHENSIVE PERSONAL CARE HOME 32, and ASSISTED LIVING PROGRAM 17 (305 unique FacID/LIC#, overlap 0) with ADDRESS, Lic_Beds_Slots (ALR 21–288 / CPCH 16–308 / ALP all 0), Lic_Expires, and LAT/LNG. No Active/Closed status column. RunDate 2026-11-06 and HTTP Last-Modified rejected as ISO export. fsFacilityDetails.aspx?item={FacID} is a verified disclosure prefix for ALR/CPCH/ALP. LAT/LNG undescribed and not accepted as licensing coordinates (ALR 10 / ALP 2 zero pairs). ALR/CPCH/ALP and Adult Family Care are not Washington AFH. New Jersey stays unpublished."),
   row("New Mexico", "C", "unpublished", "New Mexico assisted living facility search", "https://alf.hca.nm.gov/facility-search/", null, null, null, null, null, null, "medium", "The official page is a map search. License and status columns were not observed."),
   row("New York", "C", "unpublished", "New York adult care facility sources", "https://www.health.ny.gov/facilities/adult_care/", null, null, null, null, null, null, "medium", "The standalone adult care directory was retired and later official access is split. No replacement row count was adopted."),
   row("North Carolina", "B", "unpublished", "North Carolina adult care home and family care home workbooks", "https://info.ncdhhs.gov/dhsr/reports.htm", 1086, true, true, false, false, false, "high", "Re-verified 2026-11-20: Ahlist.xlsx has 566 HAL rows (beds 9–201) and Fchlist.xlsx has 520 FCL rows (beds 2–6); 1,086 unique licenses, overlap 0, NC site addresses on all licensed rows. Listings 10/28/2026, As of 10/2026, and Last-Modified are not an ISO export date. No per-row status or coordinates. Star search has no license field; guessed License # detail URLs failed. FCL is not Washington AFH. Stale fch.txt (2021) rejected. North Carolina stays unpublished."),
@@ -468,6 +468,26 @@ FIELD_EVIDENCE.Maryland = {
   "coordinate-source": fact("rejected", "high", "imap-opr-derivative-geocode"),
 };
 
+FIELD_EVIDENCE["New Jersey"] = {
+  "regulatory-identifier": fact("present", "high", "FacID / LIC#"),
+  "identifier-type": fact("present", "high", "facility-id / license-number"),
+  "issuing-authority": fact("present", "high", "New Jersey Department of Health"),
+  "physical-address": fact("present", "high", "ADDRESS"),
+  "official-export-date": fact("rejected", "high"),
+  "source-publication-date": fact("rejected", "high", "RunDate / http-last-modified"),
+  "retrieval-timestamp": fact("present", "high", "2026-11-20"),
+  "freshness-verification": fact("absent", "high"),
+  "facility-disclosure": fact("present", "high", "fsFacilityDetails.aspx?item={FacID}"),
+  "generic-search": fact("present", "high", "fsSetSearch county/type"),
+  "original-category": fact("present", "high", "ALR / CPCH / ALP"),
+  "original-status": fact("absent", "high"),
+  "normalized-category": fact("rejected", "high"),
+  "normalized-status": fact("absent", "high"),
+  "coordinates": fact("present", "medium"),
+  "coordinate-source": fact("absent", "high"),
+  "coordinate-accuracy": fact("not-verified", "low"),
+};
+
 FIELD_EVIDENCE.Ohio = {
   "regulatory-identifier": fact("present", "high", "FACID"),
   "identifier-type": fact("present", "high", "facility-id / state-id"),
@@ -510,7 +530,7 @@ FIELD_EVIDENCE.Georgia = {
   "coordinate-accuracy": fact("present", "medium", "Accuracy ROOFTOP"),
 };
 
-for (const state of ["Alabama", "Nebraska", "Nevada", "New Jersey", "New Mexico", "Rhode Island"]) {
+for (const state of ["Alabama", "Nebraska", "Nevada", "New Mexico", "Rhode Island"]) {
   FIELD_EVIDENCE[state] = {
     "generic-search": fact("present", "medium", "generic-search"),
     "facility-disclosure": fact("not-verified", "low"),
@@ -570,13 +590,13 @@ export const ONBOARDING_SEQUENCE = [
   "Ohio",
   "Virginia",
   "Maryland",
+  "New Jersey",
   "Alabama",
   "Arkansas",
   "Louisiana",
   "Massachusetts",
   "Nebraska",
   "Nevada",
-  "New Jersey",
   "New Mexico",
   "New York",
   "Rhode Island",
