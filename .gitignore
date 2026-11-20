@@ -27,4 +27,5 @@ california-phase26-audit-out/
 pennsylvania-investigation-out/
 # Michigan investigation local output (fixtures copied separately)
 michigan-investigation-out/
+wisconsin-investigation-out/
 package-lock.json
