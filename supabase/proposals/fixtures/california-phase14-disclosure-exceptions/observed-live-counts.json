@@ -1,0 +1,145 @@
+{
+  "observedOn": "2026-11-20",
+  "baseline": {
+    "rcfeRows": 13337,
+    "arfRows": 11040,
+    "rowCount": 24377,
+    "buckets": {
+      "active-candidate": 15413,
+      "restricted-candidate": 38,
+      "excluded": 8921,
+      "exception-documented-exclude": 5
+    },
+    "publicationCandidatesIfGateOpened": 15451,
+    "exceptionDocumentedExcludeIds": [
+      "374604731",
+      "198601400",
+      "306006749",
+      "306006799",
+      "95354"
+    ],
+    "downloadSha256": {
+      "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+    },
+    "authoritativeIsoExportDate": null,
+    "filenameIsoCandidate": "2026-11-15",
+    "officialWeeklyCadence": "The data is updated weekly.",
+    "coordinates": {
+      "candidateCount": 15451,
+      "verifiedOfficialCoords": 15423,
+      "unresolved": 28,
+      "fabricatedCoordinates": 0
+    },
+    "missingCapacity": {
+      "totalMissing": 21,
+      "publicationCandidateMissing": 0
+    },
+    "downloadClosedBucket": {
+      "total": 6109,
+      "emptyLicenseFirstDate": 1241,
+      "withLicenseFirstDate": 4868
+    },
+    "phase13DisclosureBaseline": 116
+  },
+  "download": {
+    "rcfe": {
+      "httpStatus": 200,
+      "contentDisposition": "attachment; filename=ResidentialElderCareFacility11152026.csv",
+      "bytes": 8635782,
+      "sha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "rows": 13337,
+      "filenameIsoCandidate": "2026-11-15"
+    },
+    "arf": {
+      "httpStatus": 200,
+      "contentDisposition": "attachment; filename=AdultResidentialFacilities11152026.csv",
+      "bytes": 5434124,
+      "sha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+      "rows": 11040,
+      "filenameIsoCandidate": "2026-11-15"
+    },
+    "authoritativeIsoExportDate": null,
+    "sha256MatchesPhase10Baseline": true,
+    "baselineSha256": {
+      "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+      "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+    },
+    "closedBucket": {
+      "total": 6109,
+      "emptyLicenseFirstDate": 1241,
+      "withLicenseFirstDate": 4868,
+      "downloadOnlyWithdrawnIndicatorCount": 1241,
+      "note": "Download-only counts; empty License First Date is consistent with Application Withdrawn coarsening but is not FacilityDetail-verified statewide."
+    }
+  },
+  "downloadSha256MatchesBaseline": true,
+  "disclosure": {
+    "phase13BaselineVerifiedCount": 116,
+    "incrementalSampleSize": 117,
+    "incrementalWorking": 117,
+    "incrementalMissing": 0,
+    "incrementalAmbiguous": 0,
+    "incrementalInvalid": 0,
+    "incrementalInconclusive": 0,
+    "leadingZeroPreservedWorking": 17,
+    "cumulativeVerifiedCount": 233,
+    "rosterDenominator": 15451,
+    "incrementalCoveragePercentRounded": 0.76,
+    "cumulativeCoveragePercentRounded": 1.51,
+    "statewideCoverageClaimed": false,
+    "stopReason": "queue-exhausted"
+  },
+  "status": {
+    "sampleSize": 36,
+    "match": 29,
+    "documentedCoarsening": 5,
+    "conflict": 1,
+    "missing": 0,
+    "inconclusive": 0,
+    "invalidId": 1,
+    "applicationWithdrawnDocumented": 5,
+    "regressionControlsResolvedAsDocumentedCoarsening": 5,
+    "regressionControlCount": 5,
+    "byEvidenceKind": {
+      "facility-detail-verified": 35,
+      "download-only-indicator": 0,
+      "not-applicable": 1
+    },
+    "inventedClosedStarEquivalence": false,
+    "treatsWithdrawnAsLicensed": false,
+    "sampleIsStatewideConclusion": false
+  },
+  "exceptions": {
+    "observedOn": "2026-11-20",
+    "disclosureExceptions": {
+      "investigated": 2,
+      "resolvedExactOfficialIdWorks": 1,
+      "confirmedAmbiguous": 0,
+      "confirmedInvalidRefuseClosed": 1,
+      "unresolved": 0,
+      "inconclusive": 0
+    },
+    "coordinateExceptions": {
+      "investigated": 28,
+      "resolvedWithOfficialCoords": 0,
+      "confirmedStillUnresolved": 28,
+      "inconclusive": 0,
+      "fabricatedCoordinates": 0,
+      "geocoded": 0,
+      "baselineUnresolved": 28,
+      "remainingUnresolvedAfterPhase14": 28
+    },
+    "newlyDiscoveredIdentityMismatches": 0,
+    "sampleIsStatewideConclusion": false,
+    "publication": "unpublished",
+    "ownerClaimEligible": false
+  },
+  "coordinateResolution": {
+    "verifiedCoords": 15423,
+    "unresolvedCoords": 28,
+    "fabricatedCoordinates": 0
+  },
+  "gate": "blocked",
+  "publication": "unpublished"
+}

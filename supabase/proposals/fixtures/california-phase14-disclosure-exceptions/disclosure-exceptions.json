@@ -1,0 +1,33 @@
+{
+  "observedOn": "2026-11-20",
+  "summary": {
+    "investigated": 2,
+    "resolvedExactOfficialIdWorks": 1,
+    "confirmedAmbiguous": 0,
+    "confirmedInvalidRefuseClosed": 1,
+    "unresolved": 0,
+    "inconclusive": 0
+  },
+  "findings": [
+    {
+      "kind": "ambiguous-truncated-leading-zero",
+      "officialFacilityNumber": "015601219",
+      "requestFacilityNumber": "15601219",
+      "resolution": "resolved-exact-official-id-works",
+      "fabricatedLink": false,
+      "rationale": "Authoritative FacilityDetail confirms exact official ID 015601219 works; truncated 15601219 remains ambiguous/non-canonical. Publication links must use the exact official ID with leading zeros.",
+      "truncatedClassification": "ambiguous",
+      "canonicalClassification": "working"
+    },
+    {
+      "kind": "invalid-id",
+      "officialFacilityNumber": "95354",
+      "requestFacilityNumber": "95354",
+      "resolution": "confirmed-invalid-id-refuse-closed",
+      "fabricatedLink": false,
+      "rationale": "Confirmed: 95354 is not an 8–9 digit CDSS identifier; generator refuse-closed; no disclosure URL fabricated.",
+      "truncatedClassification": null,
+      "canonicalClassification": "invalid"
+    }
+  ]
+}

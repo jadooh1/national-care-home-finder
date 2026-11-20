@@ -1,0 +1,85 @@
+{
+  "ids": [
+    "306006749",
+    "306006799",
+    "405802282",
+    "374604911",
+    "019201529"
+  ],
+  "resolvedAsDocumentedCoarsening": 5,
+  "eligibility": "withdrawn-ineligible",
+  "inventedClosedStarEquivalence": false,
+  "treatsWithdrawnAsLicensed": false,
+  "observations": [
+    {
+      "facilityNumber": "306006749",
+      "file": "ARF",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "stratum": "application-withdrawn",
+      "label": "p14-withdrawn-reg-1",
+      "relation": "documented-coarsening",
+      "closedInterpretation": "application-withdrawn-documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "liveStatus": "Application Withdrawn",
+      "regressionControl": true
+    },
+    {
+      "facilityNumber": "306006799",
+      "file": "ARF",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "stratum": "application-withdrawn",
+      "label": "p14-withdrawn-reg-2",
+      "relation": "documented-coarsening",
+      "closedInterpretation": "application-withdrawn-documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "liveStatus": "Application Withdrawn",
+      "regressionControl": true
+    },
+    {
+      "facilityNumber": "405802282",
+      "file": "RCFE",
+      "downloadStatus": "CLOSED",
+      "downloadType": "RCFE-CONTINUING CARE RETIREMENT COMMUNITY",
+      "stratum": "application-withdrawn",
+      "label": "p14-withdrawn-reg-3",
+      "relation": "documented-coarsening",
+      "closedInterpretation": "application-withdrawn-documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "liveStatus": "Application Withdrawn",
+      "regressionControl": true
+    },
+    {
+      "facilityNumber": "374604911",
+      "file": "RCFE",
+      "downloadStatus": "CLOSED",
+      "downloadType": "RESIDENTIAL CARE ELDERLY",
+      "stratum": "application-withdrawn",
+      "label": "p14-withdrawn-reg-4",
+      "relation": "documented-coarsening",
+      "closedInterpretation": "application-withdrawn-documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "liveStatus": "Application Withdrawn",
+      "regressionControl": true
+    },
+    {
+      "facilityNumber": "019201529",
+      "file": "ARF",
+      "downloadStatus": "CLOSED",
+      "downloadType": "ADULT DAY PROGRAM",
+      "stratum": "leading-zero-withdrawn",
+      "label": "p14-withdrawn-reg-5-lz",
+      "relation": "documented-coarsening",
+      "closedInterpretation": "application-withdrawn-documented-coarsening",
+      "eligibility": "withdrawn-ineligible",
+      "evidenceKind": "facility-detail-verified",
+      "liveStatus": "Application Withdrawn",
+      "regressionControl": true
+    }
+  ]
+}
