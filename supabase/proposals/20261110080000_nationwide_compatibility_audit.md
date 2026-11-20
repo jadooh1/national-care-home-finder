@@ -16,7 +16,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Colorado | B | unpublished | 685 | yes | yes | yes | no | no | high |
 | Connecticut | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Delaware | B | unpublished | — | yes | yes | no | no | no | medium |
-| Florida | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| Florida | B | unpublished | 3025 | yes | yes | yes | yes | no | high |
 | Georgia | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Hawaii | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Idaho | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
