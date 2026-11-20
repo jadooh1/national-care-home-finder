@@ -157,6 +157,9 @@ jobs:
       - name: Check the Colorado care-home source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/colorado_care_home_source_discovery.ts
 
+      - name: Check the Arizona care-home source discovery
+        run: node --experimental-strip-types --test supabase/proposals/tests/arizona_care_home_source_discovery.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 
