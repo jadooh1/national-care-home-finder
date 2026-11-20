@@ -1,0 +1,199 @@
+{
+  "observedOn": "2026-11-20",
+  "totalRows": 894,
+  "facilityTypeCounts": {
+    "ADULT DAY HEALTH SERVICES FACILITY": 160,
+    "ADULT DAY HEALTH SERVICES in a LONG-TERM CARE FACILITY": 6,
+    "ALTERNATE FAMILY CARE": 3,
+    "ASSISTED LIVING PROGRAM": 17,
+    "ASSISTED LIVING RESIDENCE": 256,
+    "COMPREHENSIVE PERSONAL CARE HOME": 32,
+    "HOSPITAL BASED - ADULT DAY HEALTH SERVICES": 1,
+    "HOSPITAL BASED - LONG TERM CARE FACILITY SNF/NF": 6,
+    "HOSPITAL BASED - LONG TERM CARE SUB ACUTE FACILITY SNF": 4,
+    "LONG TERM CARE FACILITY": 15,
+    "LONG TERM CARE FACILITY - HOME FOR THE AGED LTC-PRIV": 1,
+    "LONG TERM CARE FACILITY - HOME FOR THE AGED SNF/NF": 23,
+    "LONG TERM CARE FACILITY LTC-PRIV": 5,
+    "LONG TERM CARE FACILITY S/NF DP": 7,
+    "LONG TERM CARE FACILITY SNF/NF": 303,
+    "PEDIATRIC DAY HEALTH SERVICES FACILITY": 13,
+    "RESIDENTIAL DEMENTIA CARE HOME": 31,
+    "RESIDENTIAL HEALTH CARE in a LONG-TERM CARE FACILITY": 10,
+    "ADULT DAY HEALTH SERVICES in an ASSISTED LIVING RESIDENCE": 1
+  },
+  "ALR": {
+    "facilityType": "ASSISTED LIVING RESIDENCE",
+    "rows": 256,
+    "uniqueFacID": 256,
+    "blankFacID": 0,
+    "facIdDupGroups": 0,
+    "uniqueLic": 256,
+    "blankLic": 0,
+    "licDupGroups": 0,
+    "blankAddress": 0,
+    "blankCity": 0,
+    "bedsNullish": 0,
+    "bedsZero": 0,
+    "bedMin": 21.0,
+    "bedMax": 288.0,
+    "nonzeroCoordRows": 246,
+    "zeroCoordRows": 10,
+    "blankCoordRows": 0,
+    "runDateCounts": {
+      "2026-11-06 00:00:00": 256
+    },
+    "licExpiresBlank": 0,
+    "sampleExpires": [
+      [
+        "2027-09-30",
+        26
+      ],
+      [
+        "2026-12-31",
+        25
+      ],
+      [
+        "2027-04-30",
+        25
+      ],
+      [
+        "2027-06-30",
+        24
+      ],
+      [
+        "2027-03-31",
+        23
+      ]
+    ],
+    "facIdDupExamples": [],
+    "licDupExamples": []
+  },
+  "CPCH": {
+    "facilityType": "COMPREHENSIVE PERSONAL CARE HOME",
+    "rows": 32,
+    "uniqueFacID": 32,
+    "blankFacID": 0,
+    "facIdDupGroups": 0,
+    "uniqueLic": 32,
+    "blankLic": 0,
+    "licDupGroups": 0,
+    "blankAddress": 0,
+    "blankCity": 0,
+    "bedsNullish": 0,
+    "bedsZero": 0,
+    "bedMin": 16.0,
+    "bedMax": 308.0,
+    "nonzeroCoordRows": 32,
+    "zeroCoordRows": 0,
+    "blankCoordRows": 0,
+    "runDateCounts": {
+      "2026-11-06 00:00:00": 32
+    },
+    "licExpiresBlank": 0,
+    "sampleExpires": [
+      [
+        "2027-04-30",
+        4
+      ],
+      [
+        "2027-08-31",
+        4
+      ],
+      [
+        "2027-03-31",
+        3
+      ],
+      [
+        "2027-02-28",
+        3
+      ],
+      [
+        "2027-05-31",
+        3
+      ]
+    ],
+    "facIdDupExamples": [],
+    "licDupExamples": []
+  },
+  "ALP": {
+    "facilityType": "ASSISTED LIVING PROGRAM",
+    "rows": 17,
+    "uniqueFacID": 17,
+    "blankFacID": 0,
+    "facIdDupGroups": 0,
+    "uniqueLic": 17,
+    "blankLic": 0,
+    "licDupGroups": 0,
+    "blankAddress": 0,
+    "blankCity": 0,
+    "bedsNullish": 0,
+    "bedsZero": 17,
+    "bedMin": 0.0,
+    "bedMax": 0.0,
+    "nonzeroCoordRows": 15,
+    "zeroCoordRows": 2,
+    "blankCoordRows": 0,
+    "runDateCounts": {
+      "2026-11-06 00:00:00": 17
+    },
+    "licExpiresBlank": 0,
+    "sampleExpires": [
+      [
+        "2026-12-31",
+        3
+      ],
+      [
+        "2027-01-31",
+        2
+      ],
+      [
+        "2027-07-31",
+        2
+      ],
+      [
+        "2025-11-30",
+        2
+      ],
+      [
+        "2027-11-30",
+        1
+      ]
+    ],
+    "facIdDupExamples": [],
+    "licDupExamples": []
+  },
+  "overlaps": {
+    "facid_ALR_CPCH": 0,
+    "facid_ALR_ALP": 0,
+    "facid_CPCH_ALP": 0,
+    "lic_ALR_CPCH": 0,
+    "lic_ALR_ALP": 0,
+    "lic_CPCH_ALP": 0
+  },
+  "combined": {
+    "rows": 305,
+    "uniqueFacID": 305,
+    "uniqueLic": 305
+  },
+  "globalRunDate": {
+    "2026-11-06 00:00:00": 894
+  },
+  "sourceUrl": "https://healthapps.nj.gov/facilities/documents2/All_LTC.xlsx",
+  "httpLastModified": "Fri, 06 Nov 2026 18:16:17 GMT",
+  "sha256": "39d0e7f6af13130a4e7fb328e9cfc7704853702e65f503d6e8b8724dd710f716",
+  "bytes": 248181,
+  "sampleRows": 32,
+  "disclosurePrefixVerified": true,
+  "disclosurePattern": "fsFacilityDetails.aspx?item={FacID}",
+  "runDateIsIsoExportDate": false,
+  "httpLastModifiedIsExportDate": false,
+  "recordedExportDate": null,
+  "perRowOperatingStatusColumn": false,
+  "licExpiresIsOperatingStatus": false,
+  "coordinatesAreLicensingCoordinates": false,
+  "categoryEquivalenceToWashingtonAfh": false,
+  "adultFamilyCareIsSeparateAndNotWashingtonAfh": true,
+  "publicationEligible": 0,
+  "alpBedsAllZero": true
+}

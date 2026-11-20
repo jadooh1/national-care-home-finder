@@ -37,7 +37,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Nebraska | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Nevada | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | New Hampshire | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
-| New Jersey | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
+| New Jersey | B | unpublished | 305 | yes | yes | no | yes | no | high |
 | New Mexico | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | New York | C | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | North Carolina | B | unpublished | 1086 | yes | yes | no | no | no | high |
