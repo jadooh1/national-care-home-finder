@@ -1,0 +1,12 @@
+{
+  "rows": 2019,
+  "TYPE A": 335,
+  "TYPE B": 1676,
+  "TYPE C": 8,
+  "geoPairs": 1937,
+  "geoCommaOnly": 82,
+  "closuresUniqueFacilityIds": 1515,
+  "closuresOverlapExact": 0,
+  "activeAsOfLabel": "11/19/2026",
+  "sha256": "7b83f02c3fa33baf90ab428159b6f562ef0180899afd489ba11de891d2dce476"
+}
