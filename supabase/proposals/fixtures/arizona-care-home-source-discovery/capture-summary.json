@@ -1,0 +1,117 @@
+{
+  "observedOn": "2026-11-20",
+  "homeFeatureServer": "https://services1.arcgis.com/mpVYz37anSdrK4d8/ArcGIS/rest/services/Assisted_Living_Home_Feb_2025/FeatureServer/18",
+  "centerFeatureServer": "https://services1.arcgis.com/mpVYz37anSdrK4d8/ArcGIS/rest/services/Assisted_Living_Center_Feb_2025/FeatureServer/18",
+  "azLicensedResidentialLayer": "https://services1.arcgis.com/mpVYz37anSdrK4d8/ArcGIS/rest/services/AZLicensedFacilities/FeatureServer/12",
+  "hubHomeAbout": "https://geodata-adhsgis.hub.arcgis.com/datasets/ADHSGIS::assisted-living-home-feb-2025/about",
+  "hubCenterAbout": "https://geodata-adhsgis.hub.arcgis.com/datasets/ADHSGIS::assisted-living-center-feb-2025/about",
+  "residentialLicensingPage": "https://www.azdhs.gov/licensing/residential-facilities/index.php",
+  "azCareCheck": "https://azcarecheck.azdhs.gov/s/",
+  "legacySearchRedirect": "https://hsapps.azdhs.gov/ls/sod/SearchProv.aspx?type=AL",
+  "ars36_401": {
+    "assistedLivingHome": "assisted living facility that provides resident rooms to ten or fewer residents",
+    "assistedLivingCenter": "assisted living facility that provides resident rooms or residential units to eleven or more residents",
+    "assistedLivingFacilityIncludesAdultFosterCare": true
+  },
+  "residentialTypeCountsObserved": {
+    "ASSISTED LIVING HOME": 1719,
+    "ASSISTED LIVING CENTER": 328,
+    "BEHAVIORAL HEALTH RESIDENTIAL FACILITY": 830,
+    "ADULT BEHAVIORAL HEALTH THERAPEUTIC HOME": 76,
+    "ADULT FOSTER CARE": 25,
+    "ADULT DAY HEALTH CARE": 15,
+    "BEHAVIORAL HEALTH RESPITE HOME": 8,
+    "BEHAVIORAL HEALTH SUPPORTED GROUP HOMES": 4
+  },
+  "home": {
+    "type": "ASSISTED LIVING HOME",
+    "rows": 1719,
+    "uniqueFacids": 1719,
+    "uniqueLicenseNumbers": 1719,
+    "blankFacid": 0,
+    "blankLicense": 0,
+    "blankAddress": 0,
+    "blankCity": 0,
+    "blankZip": 0,
+    "addressLetterDigit": 1719,
+    "blankCapacityInt": 0,
+    "zeroCapacity": 3,
+    "capacityMin": 0,
+    "capacityMax": 10,
+    "blankNLatLon": 0,
+    "operationStatus": {
+      "ACTIVE": 1719
+    },
+    "subtype": {
+      "ASSISTED LIVING HOME-DIRECTED": 1702,
+      "ASSISTED LIVING HOME-PERSONAL": 16,
+      "ASSISTED LIVING HOME-SUPERVISORY": 1
+    },
+    "runDateIsoUtc": [
+      "2025-02-03"
+    ],
+    "facidSha256": "d05fec63b90490379de5fd3c4ecea33752c263d8a39dc014ad41e397a1095047",
+    "nLocatorType": {
+      "CENTRUS-TOMTOM": 1705,
+      "ESRI-StreetmapPremium": 13,
+      "CENTRUS-USPS": 1
+    },
+    "pMethod": {
+      "Coordinates": 1718,
+      "ZipCode": 1
+    }
+  },
+  "center": {
+    "type": "ASSISTED LIVING CENTER",
+    "rows": 328,
+    "uniqueFacids": 328,
+    "uniqueLicenseNumbers": 328,
+    "blankFacid": 0,
+    "blankLicense": 0,
+    "blankAddress": 0,
+    "blankCity": 0,
+    "blankZip": 0,
+    "addressLetterDigit": 328,
+    "blankCapacityInt": 0,
+    "zeroCapacity": 0,
+    "capacityMin": 13,
+    "capacityMax": 259,
+    "blankNLatLon": 0,
+    "operationStatus": {
+      "ACTIVE": 328
+    },
+    "subtype": {
+      "ASSISTED LIVING CENTER-PERSONAL": 34,
+      "ASSISTED LIVING CENTER-DIRECTED": 293,
+      "ASSISTED LIVING CENTER-SUPERVISORY": 1
+    },
+    "runDateIsoUtc": [
+      "2025-02-03"
+    ],
+    "facidSha256": "9b25024fcc51a01423385adc6e8e56401459deb0f5ad6f6fd8f8ab46a9729354",
+    "nLocatorType": {
+      "CENTRUS-TOMTOM": 309,
+      "ESRI-StreetmapPremium": 16,
+      "CENTRUS-USPS": 3
+    },
+    "pMethod": {
+      "Coordinates": 327,
+      "ZipCode": 1
+    }
+  },
+  "combinedHomeCenterRows": 2047,
+  "facidOverlapHomeCenter": 0,
+  "sampleRows": 27,
+  "licenseEffectiveBlank": true,
+  "licenseExpirationBlank": true,
+  "runDateRejectedAsExportDate": true,
+  "layerDataLastEditRejectedAsExportDate": true,
+  "recordedExportDate": null,
+  "coordinatesGeocoded": true,
+  "coordinatesAreLicensingCoordinates": false,
+  "disclosurePrefixVerified": false,
+  "facilityAspxReturnsEmptyShell": true,
+  "categoryEquivalenceToWashingtonAfh": false,
+  "publicationEligible": 0,
+  "statewideCrawl": false
+}
