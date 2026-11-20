@@ -1,0 +1,22 @@
+{
+  "observedOn": "2026-11-20",
+  "captureTimeUtc": "2026-11-20T19:47:58.825Z",
+  "rosterDenominator": 15451,
+  "otherwiseClearOfflineEstimate": 15363,
+  "uniqueListingExcludedIds": 94,
+  "uniqueMapSuppressedOnlyIds": 27,
+  "downloadSha256MatchesBaseline": true,
+  "authoritativeIsoExportDate": null,
+  "provisionalConflicts": 5,
+  "pendingIncreaseOverlays": 66,
+  "gate": "blocked",
+  "publicationReady": false,
+  "allowsPublication": false,
+  "exclusionActivatedInAppOrDb": false,
+  "statewideCrawlRepeated": false,
+  "cdssClarification": "sent-awaiting-response",
+  "mailboxCheckAvailable": false,
+  "duplicateCdssInquirySent": false,
+  "stopGo": "STOP",
+  "outDir": "/tmp/california-phase23-live"
+}

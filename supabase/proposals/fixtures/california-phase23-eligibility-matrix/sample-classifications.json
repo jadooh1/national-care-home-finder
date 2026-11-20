@@ -1,0 +1,202 @@
+[
+  {
+    "facilityNumber": "198320787",
+    "reasons": [
+      "provisional-license-conflict"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "455920513",
+    "reasons": [
+      "provisional-license-conflict"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "197611076",
+    "reasons": [
+      "provisional-license-conflict"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "197611060",
+    "reasons": [
+      "provisional-license-conflict"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "134605014",
+    "reasons": [
+      "provisional-license-conflict"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "374604742",
+    "reasons": [
+      "licensed-pending-increase-overlay"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "045920148",
+    "reasons": [
+      "licensed-pending-increase-overlay"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "392701057",
+    "reasons": [
+      "licensed-pending-increase-overlay"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "345920416",
+    "reasons": [
+      "unresolved-coordinates"
+    ],
+    "scopes": [
+      "feature-suppression-map"
+    ],
+    "listingEligibleOffline": true,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": true,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Listing may be otherwise clear offline, but map pin suppressed until authoritative coords exist; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "502701867",
+    "reasons": [
+      "prior-status-conflict",
+      "unresolved-coordinates"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-owner-claim",
+      "feature-suppression-map"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  },
+  {
+    "facilityNumber": "95354",
+    "reasons": [
+      "invalid-identifier"
+    ],
+    "scopes": [
+      "complete-listing-exclusion",
+      "feature-suppression-disclosure",
+      "feature-suppression-owner-claim"
+    ],
+    "listingEligibleOffline": false,
+    "mapEligibleOffline": false,
+    "disclosureEligibleOffline": false,
+    "ownerClaimEligible": false,
+    "publicationEligible": false,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false,
+    "note": "Offline complete-listing exclusion until human-approved mapping/activation; publication still gated statewide."
+  }
+]

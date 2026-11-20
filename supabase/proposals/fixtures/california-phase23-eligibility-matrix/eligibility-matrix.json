@@ -1,0 +1,2383 @@
+{
+  "observedOn": "2026-11-20",
+  "title": "California Phase 23 offline eligibility matrix (15,451 candidates)",
+  "rosterDenominator": 15451,
+  "cumulativeDisclosureVerified": 15451,
+  "statewideRosterVerificationComplete": true,
+  "adoption": {
+    "exclusionPolicyAdoptedForOfflineClassification": true,
+    "activatedInApplicationOrDatabase": false,
+    "altersAuthoritativeGovernmentRecords": false
+  },
+  "entries": [
+    {
+      "facilityNumber": "198320787",
+      "category": "provisional-license-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21-22",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License"
+      }
+    },
+    {
+      "facilityNumber": "455920513",
+      "category": "provisional-license-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21-22",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License"
+      }
+    },
+    {
+      "facilityNumber": "197611076",
+      "category": "provisional-license-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21-22",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License"
+      }
+    },
+    {
+      "facilityNumber": "197611060",
+      "category": "provisional-license-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21-22",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License"
+      }
+    },
+    {
+      "facilityNumber": "134605014",
+      "category": "provisional-license-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21-22",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Provisional License"
+      }
+    },
+    {
+      "facilityNumber": "374604742",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "045920148",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701057",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604751",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392700647",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "435294286",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "197606348",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "552701748",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "336426330",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701601",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306005986",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604986",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "347000846",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "015601083",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701730",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "366425800",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "335530021",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "365530102",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331881673",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107200486",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "157204130",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604375",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "079201349",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "336426289",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107209383",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374603495",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306006109",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "371881418",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107206544",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331881036",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "198603784",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604213",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "365530299",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374601445",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342700591",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701427",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "392701658",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107209533",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "347001484",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331880891",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "336400036",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "079201384",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "410508825",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342701384",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342700984",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "370808095",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "107206560",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "435201626",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306004005",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374601420",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "486804268",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "015601284",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "347001961",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "335530026",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604454",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "300605585",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "331881303",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "306000870",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604710",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "370808447",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374600429",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "195850551",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "371881438",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "191603551",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "342701723",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "374604532",
+      "category": "licensed-pending-increase-overlay",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase21",
+        "downloadStatus": "LICENSED",
+        "liveStatus": "Licensed/Pending Increase",
+        "mappingApprovedForPublication": false
+      }
+    },
+    {
+      "facilityNumber": "502701867",
+      "category": "prior-status-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim",
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "note": "Pending Incomplete Application",
+        "additionalCategories": [
+          "unresolved-coordinates-map-only"
+        ],
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "019201167",
+      "category": "prior-status-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase19-22",
+        "note": "Licensed/Pending Increase control"
+      }
+    },
+    {
+      "facilityNumber": "019201133",
+      "category": "prior-status-conflict",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase19-22",
+        "note": "Licensed/Pending Increase control"
+      }
+    },
+    {
+      "facilityNumber": "079201725",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "502701889",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "374605020",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "342701856",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "197610992",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "342701894",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "502701880",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "198604006",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "195850781",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "107209715",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "195850785",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "197611051",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "360951409",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "198320716",
+      "category": "missing-license-evidence",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase16-22",
+        "downloadStatus": "LICENSED",
+        "licenseFirstDate": ""
+      }
+    },
+    {
+      "facilityNumber": "306006749",
+      "category": "withdrawn-regression-control",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase11-22",
+        "note": "CLOSED→Application Withdrawn regression; may sit outside active/restricted candidate set",
+        "candidateSetMembership": "likely-excluded-bucket"
+      }
+    },
+    {
+      "facilityNumber": "306006799",
+      "category": "withdrawn-regression-control",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase11-22",
+        "note": "CLOSED→Application Withdrawn regression; may sit outside active/restricted candidate set",
+        "candidateSetMembership": "likely-excluded-bucket"
+      }
+    },
+    {
+      "facilityNumber": "405802282",
+      "category": "withdrawn-regression-control",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase11-22",
+        "note": "CLOSED→Application Withdrawn regression; may sit outside active/restricted candidate set",
+        "candidateSetMembership": "likely-excluded-bucket"
+      }
+    },
+    {
+      "facilityNumber": "374604911",
+      "category": "withdrawn-regression-control",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase11-22",
+        "note": "CLOSED→Application Withdrawn regression; may sit outside active/restricted candidate set",
+        "candidateSetMembership": "likely-excluded-bucket"
+      }
+    },
+    {
+      "facilityNumber": "019201529",
+      "category": "withdrawn-regression-control",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase11-22",
+        "note": "CLOSED→Application Withdrawn regression; may sit outside active/restricted candidate set",
+        "candidateSetMembership": "likely-excluded-bucket"
+      }
+    },
+    {
+      "facilityNumber": "95354",
+      "category": "invalid-identifier",
+      "scopes": [
+        "complete-listing-exclusion",
+        "feature-suppression-disclosure",
+        "feature-suppression-owner-claim"
+      ],
+      "listingEligibleOffline": false,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": false,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase13-22",
+        "note": "Non 8–9 digit control; outside publication-candidate set",
+        "candidateSetMembership": "not-in-15451"
+      }
+    },
+    {
+      "facilityNumber": "345920416",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "365530238",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "365530117",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "347000691",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "079200787",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "331880803",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "547209622",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "435202953",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "197609365",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "019200734",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "197610054",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "374604082",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "079200750",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "331881453",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "019200744",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "019200684",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "565850301",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "331881184",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "019200753",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "198602394",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "374604054",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "315920188",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "198600856",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "366425640",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "565850358",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "198602399",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    },
+    {
+      "facilityNumber": "011405838",
+      "category": "unresolved-coordinates-map-only",
+      "scopes": [
+        "feature-suppression-map"
+      ],
+      "listingEligibleOffline": true,
+      "mapEligibleOffline": false,
+      "disclosureEligibleOffline": true,
+      "publicationEligible": false,
+      "ownerClaimEligible": false,
+      "activatedInApplicationOrDatabase": false,
+      "evidence": {
+        "source": "phase9-22",
+        "fabricatedCoordinates": 0,
+        "reprobeAllowed": false
+      }
+    }
+  ],
+  "accounting": {
+    "uniqueListingExcludedIds": 94,
+    "uniqueMapSuppressedOnlyIds": 27,
+    "uniqueDisclosureSuppressedIds": 94,
+    "otherwiseClearOfflineEstimate": 15363,
+    "residualPlusExceptionsEqualsDenominator": true,
+    "overlapNotes": [
+      "Map-only suppressions apply to unresolved-coord IDs not already listing-excluded.",
+      "502701867 appears in prior-status-conflict and unresolved-coordinates (listing exclusion wins).",
+      "019201167 / 019201133 are prior controls (Pending Increase) not double-counted in the 66 Phase 21 overlays.",
+      "Withdrawn regression IDs and invalid 95354 are documented but treated outside the 15,451 residual denominator.",
+      "Phase 21 resolved prior HTTP 500 inconclusives to Licensed — no disclosure-bad residual for those IDs.",
+      "otherwiseClearOfflineEstimate is NOT publication-eligible while gate BLOCKED."
+    ]
+  },
+  "summaryByCategory": {
+    "provisional-license-conflict": 5,
+    "licensed-pending-increase-overlay": 66,
+    "prior-status-conflict": 3,
+    "missing-license-evidence": 14,
+    "withdrawn-regression-control": 5,
+    "invalid-identifier": 1,
+    "unresolved-coordinates-map-only": 27
+  },
+  "allowsPublication": false,
+  "gate": "blocked",
+  "stopGo": "STOP"
+}

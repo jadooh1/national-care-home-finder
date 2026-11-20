@@ -1,0 +1,32 @@
+{
+  "skipped": false,
+  "captureTimeUtc": "2026-11-20T19:47:58.825Z",
+  "sha256MatchesBaseline": true,
+  "authoritativeIsoExportDate": null,
+  "rcfe": {
+    "httpStatus": 200,
+    "sha256": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "bytes": 8635782,
+    "filenameDate": {
+      "raw": "11152026",
+      "month": 11,
+      "day": 15,
+      "year": 2026,
+      "isoCandidate": "2026-11-15",
+      "authoritativeIsoExportDate": null
+    }
+  },
+  "arf": {
+    "httpStatus": 200,
+    "sha256": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe",
+    "bytes": 5434124,
+    "filenameDate": {
+      "raw": "11152026",
+      "month": 11,
+      "day": 15,
+      "year": 2026,
+      "isoCandidate": "2026-11-15",
+      "authoritativeIsoExportDate": null
+    }
+  }
+}

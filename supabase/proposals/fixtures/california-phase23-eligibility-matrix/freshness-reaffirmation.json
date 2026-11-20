@@ -1,0 +1,27 @@
+{
+  "observedOn": "2026-11-20",
+  "priorPhaseEvidence": "phase22",
+  "authoritativeIsoExportDate": null,
+  "acceptsFilenameMmddyyyyAlone": false,
+  "acceptsWebsiteLastModifiedAlone": false,
+  "acceptsWeeklyFaqAlone": false,
+  "acceptsCatalogMetadataAlone": false,
+  "acceptsHttpTransportClocksAlone": false,
+  "filenameIsoCandidateRejected": "2026-11-15",
+  "officialUpdateCadenceStatement": "The data is updated weekly.",
+  "officialUpdateCadenceSatisfiesIsoExportRequirement": false,
+  "downloadSha256Baseline": {
+    "rcfe": "e7de752883225faec4d5b0d73007cad48b9039370219514f40e84881f348728e",
+    "arf": "f2cf8a87d0b91534564136c52b02dcd4827a39369504c064f190201981889fbe"
+  },
+  "cdssClarification": {
+    "status": "sent-awaiting-response",
+    "mailboxCheckAvailable": false,
+    "duplicateInquiryAllowed": false,
+    "duplicateInquirySent": false
+  },
+  "globalBlockerUnchanged": true,
+  "gate": "blocked",
+  "policy": "require-official-iso-export-channel",
+  "note": "Phase 23 reaffirms Phase 22 channel verdicts. No authoritative ISO export/version stamp for DownloadStateData. Do not resend CDSS inquiry."
+}
