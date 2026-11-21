@@ -1,0 +1,5 @@
+{
+  "name": "National Care Home Finder",
+  "install": "npm install --ignore-scripts --no-audit --no-fund",
+  "start": "set -euo pipefail\nROOT=\"$(pwd)\"\nif [[ ! -f \"$ROOT/package.json\" && -f \"$ROOT/repos/national-care-home-finder/package.json\" ]]; then\n  ROOT=\"$ROOT/repos/national-care-home-finder\"\nfi\ncd \"$ROOT\"\nexport NEXT_PUBLIC_SUPABASE_URL=\"${NEXT_PUBLIC_SUPABASE_URL:-https://ci.invalid}\"\nexport NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=\"${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:-ci-placeholder-not-a-credential}\"\nif curl -sf -o /dev/null --max-time 2 http://127.0.0.1:3000/; then\n  echo \"Next.js dev server is already responding on port 3000\"\n  exit 0\nfi\nexec npm run dev -- --hostname 0.0.0.0 --port 3000\n"
+}
