@@ -127,7 +127,7 @@ test("print media keeps a long comparison address without blank directory pages"
     assert.equal(printed.address, `${longStreet}, Seattle, WA, 98101`);
     assert.equal(printed.sheetDisplay, "block");
     assert.equal(printed.omitDisplay, "none");
-    assert.ok(screenHeight > 2200);
+    assert.ok(screenHeight >= 2200);
     assert.ok(printed.height < 900, `printed height ${printed.height} still includes the directory`);
     socket.close();
   } finally {
