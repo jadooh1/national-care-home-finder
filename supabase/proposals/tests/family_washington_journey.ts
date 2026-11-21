@@ -8,6 +8,8 @@ import {
   facilityProfilePath,
   invalidZipMessage,
   mapResultSummary,
+  mappedCapacityNote,
+  recordedCapacityText,
   stateFilterStatus,
   WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP,
   WASHINGTON_MAP_DEFAULT_ZIP,
@@ -28,6 +30,7 @@ import {
   washingtonZipFromSearch,
   washingtonZipSearchPath,
 } from "../../../lib/family-journey.ts";
+import { copy as washingtonDetailCopy } from "../../../lib/copy/washington-detail.ts";
 
 test("only a numeric license opens a facility profile", () => {
   assert.equal(facilityProfilePath("100001"), "/washington/100001");
@@ -81,14 +84,19 @@ test("map and demographics navigation keeps a valid ZIP query", () => {
   assert.equal(washingtonZipFromSearch(undefined, WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98038");
   assert.equal(washingtonZipFromSearch("", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
   assert.equal(washingtonZipFromSearch("9805", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98038");
-  assert.equal(washingtonZipFromSearch("980560", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
-  assert.equal(washingtonZipFromSearch("98056-1234", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98038");
-  assert.equal(washingtonZipFromSearch("980561234", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
+  assert.equal(washingtonZipFromSearch("980560", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98038");
+  assert.equal(washingtonZipFromSearch("98056-1234", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98056");
+  assert.equal(washingtonZipFromSearch("98101-9999", WASHINGTON_MAP_DEFAULT_ZIP), "98101");
+  assert.equal(washingtonZipFromSearch("980561234", WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP), "98056");
   assert.equal(washingtonZipFromSearch("98a56", WASHINGTON_MAP_DEFAULT_ZIP), "98056");
   const map = readFileSync("app/washington/map/page.tsx", "utf8");
   const demographics = readFileSync("app/washington/demographics/page.tsx", "utf8");
   const opportunity = readFileSync("app/washington/opportunity/page.tsx", "utf8");
   assert.equal(map.includes("washingtonZipFromSearch"), true);
+  assert.equal(map.includes("mappedCapacityNote"), true);
+  assert.equal(map.includes("text.capacityComplete"), true);
+  assert.equal(map.includes("text.notAvailableBeds"), false);
+  assert.equal(map.includes("washingtonDisclosureUrl"), true);
   assert.equal(map.includes('get("zip")'), true);
   assert.equal(map.includes("WASHINGTON_MAP_DEFAULT_ZIP"), true);
   assert.equal(map.includes("if (!zip) return;"), true);
@@ -111,11 +119,41 @@ test("map and demographics navigation keeps a valid ZIP query", () => {
   assert.equal(directory.includes("t.noMatches"), true);
   assert.equal(directory.includes("t.loadError"), true);
   assert.equal(directory.includes('type="button"'), true);
+  assert.equal(directory.includes("t.officialDisclosure"), true);
   assert.equal(demographics.includes("washingtonDemographicsZipQuery"), true);
   assert.equal(demographics.includes('.eq("zip_code", selectedZip)'), true);
   assert.equal(opportunity.includes("collectWashingtonMarketPages"), true);
   assert.equal(demographics.includes(".range(0, 499)"), false);
   assert.equal(opportunity.includes(".range(0, 499)"), false);
+});
+
+test("recorded capacity is not labeled as current residents or unavailable beds", () => {
+  assert.equal(recordedCapacityText(6), "6");
+  assert.equal(recordedCapacityText(6).includes("residents"), false);
+  assert.equal(recordedCapacityText(null), "Not available");
+  assert.equal(mappedCapacityNote({
+    ready: false,
+    missing: 0,
+    missingLabel: (count) => `${count} home(s) missing capacity`,
+    completeLabel: "Recorded for every mapped home",
+  }), "");
+  assert.equal(mappedCapacityNote({
+    ready: true,
+    missing: 0,
+    missingLabel: (count) => `${count} home(s) missing capacity`,
+    completeLabel: "Recorded for every mapped home",
+  }), "Recorded for every mapped home");
+  assert.equal(mappedCapacityNote({
+    ready: true,
+    missing: 2,
+    missingLabel: (count) => `${count} home(s) missing capacity`,
+    completeLabel: "Recorded for every mapped home",
+  }), "2 home(s) missing capacity");
+  assert.equal(washingtonDetailCopy.en.map.capacityComplete.includes("Not available beds"), false);
+  assert.equal(washingtonDetailCopy.en.profile.capacityValue(6).includes("residents"), false);
+  assert.equal(washingtonDetailCopy.es.profile.capacityValue(6).includes("residentes"), false);
+  const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+  assert.equal(profile.includes("recordedCapacityText"), true);
 });
 
 test("directory and ZIP searches keep the visible query in the address", () => {
