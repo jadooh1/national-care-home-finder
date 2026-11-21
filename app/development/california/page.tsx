@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import {
   CALIFORNIA_ARF_ELIGIBLE_BY_STATUS,
@@ -21,6 +22,11 @@ import {
   CALIFORNIA_COVERAGE_OFFICIAL_URLS,
   buildCaliforniaDisclosureCoveragePrelaunchPreview,
 } from "../../../lib/california-disclosure-coverage-prelaunch";
+import {
+  buildCaliforniaTier1DevDirectoryPreview,
+  californiaTier1DevDetailPath,
+  californiaTier1DevListingPath,
+} from "../../../lib/california-tier1-dev-directory";
 
 const C = {
   navy: "#123c59",
@@ -44,12 +50,35 @@ const GROUPS = [
   },
 ] as const;
 
-export default function CaliforniaDevelopmentDirectoryPage() {
+const fieldStyle: CSSProperties = {
+  boxSizing: "border-box",
+  width: "100%",
+  minWidth: 0,
+  padding: "13px 14px",
+  border: `1px solid ${C.border}`,
+  borderRadius: 10,
+  fontSize: 16,
+  background: "#fff",
+  color: C.navy,
+};
+
+type PageProps = {
+  searchParams: Promise<{ q?: string; category?: string }>;
+};
+
+export default async function CaliforniaDevelopmentDirectoryPage({
+  searchParams,
+}: PageProps) {
+  const params = await searchParams;
   const publication = californiaDirectoryReady()
     ? "California is published."
     : "California is unpublished.";
   const coverage = buildCaliforniaDisclosureCoveragePrelaunchPreview();
-  const loadError = !coverage.arithmeticOk;
+  const tier1 = buildCaliforniaTier1DevDirectoryPreview({
+    q: params.q,
+    category: params.category,
+  });
+  const loadError = !coverage.arithmeticOk || !tier1.arithmeticOk;
 
   return (
     <main
@@ -252,6 +281,182 @@ export default function CaliforniaDevelopmentDirectoryPage() {
           }}
         >
           <h2 style={{ marginTop: 0 }}>
+            Tier 1 development directory (fixtures)
+          </h2>
+          <p style={{ color: C.muted, lineHeight: 1.6 }}>
+            {tier1.search.scopeNote} Search by name or exact license number.
+            Detail pages stay under /development/california. Not a public
+            directory.
+          </p>
+          <form
+            method="get"
+            action={californiaTier1DevListingPath()}
+            style={{
+              display: "grid",
+              gap: 12,
+              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              alignItems: "end",
+              marginBottom: 18,
+            }}
+          >
+            <label style={{ display: "grid", gap: 6 }}>
+              <span style={{ fontWeight: 700, fontSize: 14 }}>Search</span>
+              <input
+                type="search"
+                name="q"
+                defaultValue={tier1.search.query}
+                placeholder="Name or Facility Number"
+                autoComplete="off"
+                style={fieldStyle}
+              />
+            </label>
+            <label style={{ display: "grid", gap: 6 }}>
+              <span style={{ fontWeight: 700, fontSize: 14 }}>Category</span>
+              <select
+                name="category"
+                defaultValue={tier1.search.category}
+                style={fieldStyle}
+              >
+                <option value="">All</option>
+                <option value="RCFE">RCFE</option>
+                <option value="ARF">ARF</option>
+              </select>
+            </label>
+            <button
+              type="submit"
+              style={{
+                minHeight: 48,
+                border: "none",
+                borderRadius: 10,
+                background: C.teal,
+                color: "#fff",
+                fontWeight: 800,
+                fontSize: 16,
+                cursor: "pointer",
+                fontFamily: "inherit",
+              }}
+            >
+              Search fixtures
+            </button>
+          </form>
+          <p
+            role="status"
+            aria-live="polite"
+            style={{ color: C.muted, marginTop: 0 }}
+          >
+            Showing {tier1.search.total} of {tier1.scope.fixtureCount} development
+            fixtures.
+          </p>
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "grid",
+              gap: 14,
+            }}
+          >
+            {tier1.search.results.map((facility) => {
+              const detailPath = californiaTier1DevDetailPath(
+                facility.facilityNumber,
+              );
+              return (
+                <li
+                  key={facility.facilityNumber}
+                  style={{
+                    borderTop: `1px solid ${C.border}`,
+                    paddingTop: 12,
+                  }}
+                >
+                  <h3 style={{ margin: "0 0 6px", fontSize: 17 }}>
+                    {detailPath ? (
+                      <Link
+                        href={detailPath}
+                        style={{ color: C.navy, textDecoration: "none" }}
+                      >
+                        {facility.facilityName}
+                      </Link>
+                    ) : (
+                      facility.facilityName
+                    )}
+                  </h3>
+                  <p
+                    style={{
+                      margin: "0 0 8px",
+                      color: C.muted,
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {facility.category} · {facility.facilityType} · License{" "}
+                    {facility.facilityNumber}
+                    {facility.leadingZero ? " (leading zero preserved)" : ""} ·
+                    Status {facility.apiStatus}
+                    {facility.pendingIncrease
+                      ? " · Pending Increase (approved capacity only)"
+                      : ""}{" "}
+                    · License first date {facility.licenseFirstDate ?? "—"} ·
+                    Approved licensed capacity{" "}
+                    {facility.approvedLicensedCapacity ?? "—"} · Source as-of{" "}
+                    {facility.sourceAsOfIso}
+                  </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      gap: 14,
+                      alignItems: "center",
+                    }}
+                  >
+                    {detailPath ? (
+                      <Link
+                        href={detailPath}
+                        style={{
+                          color: C.teal,
+                          fontWeight: 700,
+                          minHeight: 44,
+                          display: "inline-flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        Development detail
+                      </Link>
+                    ) : null}
+                    <a
+                      href={facility.disclosureUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: C.teal,
+                        fontWeight: 600,
+                        minHeight: 44,
+                        display: "inline-flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      Official CDSS facility detail for {facility.facilityNumber}
+                    </a>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          {tier1.search.total === 0 ? (
+            <p style={{ color: C.muted, marginBottom: 0 }}>
+              No fixtures matched. Invalid, residual-exclusion, and non-fixture
+              identifiers never appear here.
+            </p>
+          ) : null}
+        </section>
+
+        <section
+          style={{
+            background: "#fff",
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 18,
+          }}
+        >
+          <h2 style={{ marginTop: 0 }}>
             Representative facilities (development sample)
           </h2>
           <p style={{ color: C.muted, lineHeight: 1.6 }}>
@@ -306,6 +511,26 @@ export default function CaliforniaDevelopmentDirectoryPage() {
             no disclosure link (
             {CALIFORNIA_COVERAGE_FAIL_CLOSED_DEMO.reason}).
           </p>
+        </section>
+
+        <section
+          style={{
+            background: "#fff",
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 18,
+          }}
+        >
+          <h2 style={{ marginTop: 0 }}>Prepublication integration checklist</h2>
+          <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
+            {tier1.prepublicationChecklist.map((item) => (
+              <li key={item.id}>
+                <strong>{item.id}</strong> —{" "}
+                {item.completeInThisPr ? "done in this PR" : "still required later"}
+                . {item.detail}
+              </li>
+            ))}
+          </ul>
         </section>
 
         {GROUPS.map((group) => (
