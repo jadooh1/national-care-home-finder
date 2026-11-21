@@ -16,24 +16,35 @@ import {
   simulateCaliforniaPendingIncreasePublicationPolicy,
 } from "../../../lib/california-pending-increase-publication-policy.ts";
 
-test("baseline #201; policy not approved; publication STOP", () => {
+test("baseline #201; mapping approved for future eligibility only; publication STOP", () => {
   assert.equal(CALIFORNIA_PENDING_INCREASE_POLICY_BASELINE, "41338bb");
-  assert.equal(CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApproved, false);
+  assert.equal(CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApproved, true);
+  assert.equal(
+    CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApprovedScope,
+    "future-eligibility-consideration-only",
+  );
   assert.equal(
     CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplicationOrDatabase,
+    false,
+  );
+  assert.equal(
+    CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.californiaPublicationAllowed,
     false,
   );
   assert.equal(californiaPendingIncreasePublicationPolicyAllowsPublication(), false);
   assert.equal(californiaPendingIncreasePublicationPolicyDirectoryReady(), false);
 });
 
-test("exact approval decision is documented for human review", () => {
+test("approval decision recorded for future eligibility consideration only", () => {
   const d = CALIFORNIA_PENDING_INCREASE_POLICY_DECISION_REQUIRING_APPROVAL;
   assert.equal(
     d.id,
     "approve-licensed-pending-increase-future-publication-mapping",
   );
-  assert.equal(d.approvalState, "awaiting-human-approval");
+  assert.equal(
+    d.approvalState,
+    "approved-for-future-eligibility-consideration-only",
+  );
   assert.equal(d.appliesToFacilityCount, 66);
   assert.equal(d.doesNotActivateExclusions, true);
   assert.equal(d.doesNotPublishCalifornia, true);
@@ -62,7 +73,7 @@ test("ledger sizes: 66 pending, 14 missing, 5 provisional, 3 prior", () => {
   assert.equal(CALIFORNIA_POLICY_PRIOR_CONFLICT_IDS.length, 3);
 });
 
-test("pending increase without approval stays excluded even when CDSS agrees", () => {
+test("approved mapping + CDSS agree yields future candidate but not publication", () => {
   const result = evaluateCaliforniaPendingIncreasePublicationPolicy({
     facilityNumber: "374604742",
     downloadStatus: "LICENSED",
@@ -72,33 +83,16 @@ test("pending increase without approval stays excluded even when CDSS agrees", (
     downloadLicenseFirstDate: "9/17/2024",
     facilityDetailLicenseFirstDate: "9/17/2024",
     liveFacilityNumber: "374604742",
+    statewidePublicationBlocked: true,
   });
   assert.equal(result.cdssSourcesAgree, true);
   assert.equal(result.existingLicenseRecognized, true);
   assert.equal(result.approvedCapacity, "4");
   assert.equal(result.proposedCapacityIncrease, null);
-  assert.equal(result.futurePublicationCandidateIfPolicyApproved, false);
-  assert.equal(result.publicationApproved, false);
-  assert.ok(result.gateFailures.includes("policy-not-human-approved"));
-  assert.ok(result.gateFailures.includes("statewide-publication-still-blocked"));
-});
-
-test("simulation with policy approved yields future candidate but not publication", () => {
-  const result = evaluateCaliforniaPendingIncreasePublicationPolicy({
-    facilityNumber: "374604742",
-    downloadStatus: "LICENSED",
-    facilityDetailStatus: "Licensed/Pending Increase",
-    downloadCapacity: "4",
-    facilityDetailCapacity: "4",
-    downloadLicenseFirstDate: "9/17/2024",
-    facilityDetailLicenseFirstDate: "9/17/2024",
-    liveFacilityNumber: "374604742",
-    simulatePolicyApproved: true,
-    statewidePublicationBlocked: true,
-  });
   assert.equal(result.futurePublicationCandidateIfPolicyApproved, true);
   assert.equal(result.publicationApproved, false);
   assert.ok(result.gateFailures.includes("statewide-publication-still-blocked"));
+  assert.ok(!result.gateFailures.includes("policy-not-human-approved"));
 });
 
 test("capacity disagreement fails closed", () => {
@@ -193,9 +187,11 @@ test("mismatched identifier and ArcGIS-only status fail closed", () => {
   assert.equal(arcgisOnly.futurePublicationCandidateIfPolicyApproved, false);
 });
 
-test("impact simulation: 88→22 exclusions hypothetical; publicationEligible stays 0", () => {
+test("impact simulation: 88→22 exclusions; publicationEligible stays 0", () => {
   const sim = simulateCaliforniaPendingIncreasePublicationPolicy();
-  assert.equal(sim.policyApproved, false);
+  assert.equal(sim.policyApproved, true);
+  assert.equal(sim.allowsPublication, false);
+  assert.equal(sim.exclusionsActivated, false);
   assert.equal(sim.current.listingExclusionsOffline, 88);
   assert.equal(sim.current.otherwiseClearOffline, 15363);
   assert.equal(
@@ -221,7 +217,7 @@ test("impact simulation: 88→22 exclusions hypothetical; publicationEligible st
   assert.equal(preview.stopGoPublic, "STOP");
   assert.ok(
     preview.remainingBlockers.includes(
-      "awaiting-human-approval-of-pending-increase-publication-mapping",
+      "pending-increase-mapping-approved-future-eligibility-only-not-activated",
     ),
   );
 });
