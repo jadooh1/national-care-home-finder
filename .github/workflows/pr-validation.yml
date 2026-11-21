@@ -154,6 +154,9 @@ jobs:
       - name: Check Florida AHCA source-date verification
         run: node --experimental-strip-types --test supabase/proposals/tests/florida_ahca_source_date.ts
 
+      - name: Check next-state launch readiness (Ohio alternate)
+        run: node --experimental-strip-types --test supabase/proposals/tests/next_state_launch_readiness.ts
+
       - name: Check the Michigan licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/michigan_licensing.ts
 
