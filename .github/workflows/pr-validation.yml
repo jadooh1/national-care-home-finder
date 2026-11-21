@@ -316,6 +316,9 @@ jobs:
       - name: Check the California exclusion activation necessity and sequencing
         run: node --experimental-strip-types --test supabase/proposals/tests/california_exclusion_activation_necessity.ts
 
+      - name: Check the California Tier 1 development-only directory
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_dev_directory.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
