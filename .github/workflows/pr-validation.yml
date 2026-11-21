@@ -301,6 +301,9 @@ jobs:
       - name: Check the California official disclosure-link verification
         run: node --experimental-strip-types --test supabase/proposals/tests/california_disclosure_link_verification.ts
 
+      - name: Check the California disclosure coverage and prelaunch acceptance
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_disclosure_coverage_prelaunch.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
