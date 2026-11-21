@@ -289,6 +289,9 @@ jobs:
       - name: Check the California exclusion and status-conflict verification
         run: node --experimental-strip-types --test supabase/proposals/tests/california_exclusion_status_conflict.ts
 
+      - name: Check the California Pending Increase and missing-date verification
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_pending_increase_missing_date.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
