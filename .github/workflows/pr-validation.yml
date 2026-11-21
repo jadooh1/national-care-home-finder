@@ -304,6 +304,9 @@ jobs:
       - name: Check the California disclosure coverage and prelaunch acceptance
         run: node --experimental-strip-types --test supabase/proposals/tests/california_disclosure_coverage_prelaunch.ts
 
+      - name: Check the California Tier 1 publication-readiness preflight
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_publication_preflight.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
