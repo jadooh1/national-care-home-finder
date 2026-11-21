@@ -277,6 +277,9 @@ jobs:
       - name: Check the California ArcGIS Tier 1 eligibility assessment
         run: node --experimental-strip-types --test supabase/proposals/tests/california_arcgis_tier1_eligibility.ts
 
+      - name: Check the California authoritative data verification
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_authoritative_data_verification.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
