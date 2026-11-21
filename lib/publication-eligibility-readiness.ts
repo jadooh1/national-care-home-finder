@@ -82,13 +82,16 @@ export const PUBLICATION_READINESS_SUMMARIES: readonly StateReadinessSummary[] =
     countsAreFixtureOrSample: false,
     statewideLaunchReadyClaim: false,
     tierCounts: { tier0: 23020, tier1: 0, tier2: 0, tier3: 0 },
-    listingCoverageNote: "Offline Phase 23 may mark some rows listingEligibleOffline; final publication BLOCKED.",
-    mapCoverageNote: "No public CA map; unresolved coords suppress map offline.",
+    listingCoverageNote:
+      "Offline Phase 23 may mark some rows listingEligibleOffline; ArcGIS FeatureServer/0 alone is Tier 1 STOP (undocumented STATUS + incomplete exact IDs). Final publication BLOCKED.",
+    mapCoverageNote:
+      "No public CA map; ArcGIS coords are georeferenced county-intersect, not licensing Tier 2 provenance.",
     enhancedCoverageNote: "Owner claims disabled; exclusions inactive.",
     blockers: [
       "california-publication-blocked",
       "no-authoritative-iso-export-date",
       "exclusion-policy-inactive",
+      "arcgis-rejected-as-tier1-roster",
     ],
     manualReviewQueue: [
       "provisional-license-conflicts",

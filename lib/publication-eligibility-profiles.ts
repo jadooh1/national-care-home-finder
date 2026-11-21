@@ -193,7 +193,8 @@ export const PUBLICATION_STATE_PROFILES: readonly PublicationStateProfile[] = [
     oregonMapDisabled: false,
     ownerClaimsEnabled: false,
     publicationStopGo: "STOP",
-    evaluationNotes: "Statewide publication BLOCKED. Do not activate exclusions.",
+    evaluationNotes:
+      "Statewide publication BLOCKED. ArcGIS CCL layer is not a Tier 1 roster (undocumented STATUS, incomplete exact IDs). Do not activate exclusions.",
   },
   {
     state: "Florida",
