@@ -8,7 +8,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 
 | State | Class | Publication | Rows | License | Address | Status | Disclosure | ISO date | Confidence |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Alabama | C | unpublished | — | no | not verified | not verified | not verified | no | medium |
+| Alabama | B | unpublished | 294 | yes | yes | yes | no | no | high |
 | Alaska | D | unpublished | — | not verified | not verified | not verified | not verified | no | medium |
 | Arizona | B | unpublished | 2047 | yes | yes | yes | no | no | high |
 | Arkansas | C | unpublished | — | no | yes | not verified | not verified | no | medium |
@@ -59,7 +59,7 @@ Class A fits a directory contract that already exists. Class B can fit after a n
 | Wisconsin | C | unpublished | — | not verified | not verified | not verified | not verified | no | high |
 | Wyoming | C | unpublished | — | yes | no | no | no | no | high |
 
-Counts: A 2, B 20, C 14, D 14.
+Counts: A 2, B 21, C 13, D 14.
 
 ## Verified source inventory
 
