@@ -169,16 +169,18 @@ export const PUBLICATION_STATE_PROFILES: readonly PublicationStateProfile[] = [
       note: "Numeric facility number; invalid IDs excluded offline.",
     },
     freshness: {
-      officialExportDateIso: null,
+      officialExportDateIso: "2026-11-15",
       rejectedProxies: [
         "catalog-timestamps",
-        "file-date-values",
+        "chhs-file-date-values",
         "temporal-coverage-text",
         "gis-service-edit-time",
+        "faq-weekly-cadence",
       ],
-      policyDocumented: false,
-      independentEvidence: false,
-      note: "Publication gate BLOCKED; exclusions inactive.",
+      policyDocumented: true,
+      independentEvidence: true,
+      note:
+        "CDSS confirmed Transparency CSV filename/header MMDDYYYY is as-of; live RCFE/ARF concordant 2026-11-15. ArcGIS/CHHS clocks still rejected. Publication gate BLOCKED; exclusions inactive.",
     },
     disclosure: {
       facilitySpecificVerified: true,

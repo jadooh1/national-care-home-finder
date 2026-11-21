@@ -280,6 +280,12 @@ jobs:
       - name: Check the California authoritative data verification
         run: node --experimental-strip-types --test supabase/proposals/tests/california_authoritative_data_verification.ts
 
+      - name: Check the California CDSS authoritative as-of date
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_cdss_authoritative_date.ts
+
+      - name: Check the California Transparency Tier 1 reassessment
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_transparency_tier1_eligibility.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
