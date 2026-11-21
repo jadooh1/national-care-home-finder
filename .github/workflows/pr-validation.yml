@@ -298,6 +298,9 @@ jobs:
       - name: Check the California Tier 1 launch-readiness validation
         run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_launch_readiness.ts
 
+      - name: Check the California official disclosure-link verification
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_disclosure_link_verification.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
