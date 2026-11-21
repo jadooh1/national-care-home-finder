@@ -292,6 +292,9 @@ jobs:
       - name: Check the California Pending Increase and missing-date verification
         run: node --experimental-strip-types --test supabase/proposals/tests/california_pending_increase_missing_date.ts
 
+      - name: Check the California Pending Increase publication-policy proposal
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_pending_increase_publication_policy.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
