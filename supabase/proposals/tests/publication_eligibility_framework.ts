@@ -245,8 +245,8 @@ test("invariants: WA/OR/CA directory, owner claims, exclusions, compatibility co
   assert.deepEqual(ENABLED_OWNER_FACILITY_STATES, ["WA"]);
   assert.equal(OWNER_FACILITY_SOURCE, "wa_dshs_listed_facilities");
 
-  // development @ 02b57b4 (KY merged; Alabama discovery remains on a separate branch)
-  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 20, C: 14, D: 14 });
+  // development after Alabama #188 (Class B, unpublished STOP)
+  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 21, C: 13, D: 14 });
 
   assert.equal(existsSync(join(fixtureDir, "hard-cases.json")), true);
   const meta = JSON.parse(readFileSync(join(fixtureDir, "hard-cases.json"), "utf8")) as {
