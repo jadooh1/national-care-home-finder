@@ -196,6 +196,24 @@ const EXCLUSION_ID_SET: ReadonlySet<string> = new Set(
   CALIFORNIA_EXCLUSION_CONTROL_CASES.map((c) => c.facilityNumber),
 );
 
+/**
+ * CDSS FacilityDetail accepts truncated leading-zero forms (e.g. `19201167`
+ * resolves to canonical `019201167`). Exclusion membership must therefore
+ * match both the exact residual ID and its 9-digit zero-padded canonical form
+ * when the residual ID itself is 9 digits starting with `0`.
+ */
+export function californiaExclusionIdCandidates(
+  facilityNumber: string,
+): string[] {
+  const id = text(facilityNumber);
+  const out = new Set<string>();
+  if (!id) return [];
+  out.add(id);
+  if (/^\d{8}$/.test(id)) out.add(`0${id}`);
+  if (/^\d{9}$/.test(id) && id.startsWith("0")) out.add(id.slice(1));
+  return [...out];
+}
+
 export function isCaliforniaExclusionControlFacilityNumber(
   facilityNumber: string,
 ): boolean {
@@ -205,15 +223,21 @@ export function isCaliforniaExclusionControlFacilityNumber(
 export function californiaIsResidualListingExclusion(
   facilityNumber: string,
 ): boolean {
-  return EXCLUSION_ID_SET.has(text(facilityNumber));
+  return californiaExclusionIdCandidates(facilityNumber).some((c) =>
+    EXCLUSION_ID_SET.has(c),
+  );
 }
 
 export function californiaExclusionControlCaseFor(
   facilityNumber: string,
 ): CaliforniaExclusionControlCase | null {
-  const id = text(facilityNumber);
-  return CALIFORNIA_EXCLUSION_CONTROL_CASES.find((c) => c.facilityNumber === id)
-    ?? null;
+  for (const candidate of californiaExclusionIdCandidates(facilityNumber)) {
+    const found = CALIFORNIA_EXCLUSION_CONTROL_CASES.find(
+      (c) => c.facilityNumber === candidate,
+    );
+    if (found) return found;
+  }
+  return null;
 }
 
 export type CaliforniaListingSurface =
@@ -243,9 +267,14 @@ export function californiaExclusionControlListingGate(input: {
   const reasons: string[] = [];
   const id = text(input.facilityNumber);
   const exclusionCase = californiaExclusionControlCaseFor(id);
+  const matchedViaTruncationAlias =
+    exclusionCase != null && exclusionCase.facilityNumber !== id;
 
   if (!FACILITY_NUMBER.test(id)) reasons.push("invalid-facility-number");
   if (exclusionCase) reasons.push(`residual-exclusion:${exclusionCase.bucket}`);
+  if (matchedViaTruncationAlias) {
+    reasons.push("leading-zero-truncation-alias");
+  }
   if (input.sourceAmbiguousOrUnverified) {
     reasons.push("source-ambiguous-or-unverified");
   }
@@ -294,13 +323,13 @@ export const CALIFORNIA_EXCLUSION_CONTROL_ACTIVATION_PLAN = {
       id: "load-ledger",
       title: "Load the 22 residual exclusion IDs into the offline ledger",
       detail:
-        "Exact Facility Number strings (leading zeros preserved). Buckets: 14 missing-first-date, 5 provisional, 3 status-conflict.",
+        "Exact Facility Number strings (leading zeros preserved). Buckets: 14 missing-first-date, 5 provisional, 3 status-conflict. Also block truncated leading-zero aliases that CDSS FacilityDetail canonicalizes.",
     },
     {
       id: "enforce-listing-gates",
       title: "Enforce fail-closed listing gates on search / detail / API",
       detail:
-        "californiaExclusionControlListingGate must return allowed=false for every residual exclusion ID on every public surface.",
+        "californiaExclusionControlListingGate must return allowed=false for every residual exclusion ID and truncation alias on every public surface. Cache keys must use canonical Facility Number strings.",
     },
     {
       id: "audit-record",
@@ -441,7 +470,7 @@ export const CALIFORNIA_EXCLUSION_CONTROL_MATRIX: readonly CaliforniaExclusionCo
       title: "Fail-closed search / detail / API gates for excluded IDs",
       status: "GO",
       evidence:
-        "californiaExclusionControlListingGate returns allowed=false for every residual exclusion on search, detail-page, and api surfaces; also blocks invalid and ambiguous sources.",
+        "californiaExclusionControlListingGate returns allowed=false for every residual exclusion on search, detail-page, and api surfaces; also blocks invalid and ambiguous sources. Truncated leading-zero aliases (e.g. 19201167 → 019201167) match residual membership and add leading-zero-truncation-alias.",
       genuineApprovalDecision: false,
     },
     {
@@ -489,6 +518,7 @@ export const CALIFORNIA_EXCLUSION_CONTROL_RESOLVED = [
   "residual-22-deterministic-spec-complete",
   "missing-first-date-14-provisional-5-status-conflict-3",
   "listing-gates-fail-closed-search-detail-api",
+  "leading-zero-truncation-aliases-blocked",
   "activation-plan-reversible-not-executed",
   "three-decisions-kept-separate",
   "live-spot-checks-reconfirmed-2026-11-21",
@@ -549,7 +579,14 @@ export function buildCaliforniaExclusionControlReadinessPreview() {
       surface: "api",
     }).reasons.includes("invalid-facility-number")
     && !californiaIsResidualListingExclusion("015601083")
-    && californiaIsResidualListingExclusion("019201133");
+    && californiaIsResidualListingExclusion("019201133")
+    && californiaIsResidualListingExclusion("19201167")
+    && californiaIsResidualListingExclusion("19201133")
+    && californiaIsResidualListingExclusion("79201725")
+    && californiaExclusionControlListingGate({
+      facilityNumber: "19201167",
+      surface: "detail-page",
+    }).reasons.includes("leading-zero-truncation-alias");
 
   const separationOk =
     !sep.exclusionActivation.activated

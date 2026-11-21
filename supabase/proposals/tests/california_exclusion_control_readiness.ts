@@ -74,6 +74,21 @@ test("excluded facilities blocked from search, detail, and API", () => {
   assert.equal(californiaIsResidualListingExclusion("015601083"), false);
   assert.equal(californiaIsResidualListingExclusion("019201133"), true);
 
+  // CDSS FacilityDetail canonicalizes truncated leading-zero forms; gates must
+  // treat them as residual exclusions too.
+  assert.equal(californiaIsResidualListingExclusion("19201167"), true);
+  assert.equal(californiaIsResidualListingExclusion("19201133"), true);
+  assert.equal(californiaIsResidualListingExclusion("79201725"), true);
+  const truncGate = californiaExclusionControlListingGate({
+    facilityNumber: "19201167",
+    surface: "detail-page",
+  });
+  assert.equal(truncGate.allowed, false);
+  assert.ok(truncGate.reasons.includes("leading-zero-truncation-alias"));
+  assert.ok(
+    truncGate.reasons.some((r) => r.startsWith("residual-exclusion:")),
+  );
+
   const ambiguous = californiaExclusionControlListingGate({
     facilityNumber: "100400070",
     surface: "search",
