@@ -53,21 +53,38 @@ test("California directory counts stay separated and unpublished", () => {
   assert.equal(directoryContract("Oregon")?.mapPath, null);
 });
 
-test("the development review does not list facilities or invent a profile link", () => {
+test("the development review stays unpublished and does not invent profile links", () => {
   const page = readFileSync("app/development/california/page.tsx", "utf8");
   const source = readFileSync("lib/california-directory.ts", "utf8");
-  assert.equal(page.includes("not an active home"), true);
+  const coverage = readFileSync(
+    "lib/california-disclosure-coverage-prelaunch.ts",
+    "utf8",
+  );
+  assert.equal(page.includes("an active home"), true);
   assert.equal(page.includes("not an available placement"), true);
   assert.equal(page.includes("California is unpublished"), true);
+  assert.equal(page.includes("does not publish California"), true);
+  assert.equal(page.includes("development-only"), true);
+  assert.equal(page.includes("Not a public"), true);
+  assert.equal(page.includes("Approved disclosure policy"), true);
+  assert.equal(page.includes("Representative facilities (development sample)"), true);
+  assert.equal(page.includes("Official CDSS facility detail"), true);
+  assert.equal(page.includes("CALIFORNIA_COVERAGE_DIRECTORY_SAMPLES"), true);
+  assert.equal(page.includes("CALIFORNIA_COVERAGE_FAIL_CLOSED_DEMO"), true);
+  // Official FacDetail rewrite links come from coverage module; invented profiles do not.
+  assert.equal(coverage.includes("Rewrite=FacDetail/"), true);
+  assert.equal(coverage.includes("carefacilitysearch"), true);
+  assert.equal(coverage.includes("95354"), true);
+  assert.equal(page.includes("href={`/california"), false);
+  assert.equal(page.includes("href=\"/california"), false);
   assert.equal(page.includes("supabase"), false);
   assert.equal(page.includes("fetch("), false);
   assert.equal(page.includes("latitude"), false);
   assert.equal(page.includes("/washington/map"), false);
-  assert.equal(page.includes("carefacilitysearch"), false);
-  assert.equal(page.includes("does not list facilities or profile links"), true);
-  assert.equal(page.includes("live status text was not the open-data status"), true);
   assert.equal(source.includes("fetch("), false);
   assert.equal(source.includes("2025-05-25"), false);
+  assert.equal(californiaDirectoryReady(), false);
+  assert.equal(californiaProfileUrl(), null);
   assert.equal(readFileSync("app/page.tsx", "utf8").includes("/development/california"), false);
   assert.equal(readFileSync("app/page.tsx", "utf8").includes("/california"), false);
 });
