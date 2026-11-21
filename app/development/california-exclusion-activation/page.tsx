@@ -52,6 +52,12 @@ export default function CaliforniaExclusionActivationDecisionPage() {
               ← Exclusion-control readiness
             </Link>
             <Link
+              href="/development/california-exclusion-necessity"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Activation necessity →
+            </Link>
+            <Link
               href="/development/california"
               style={{ color: C.teal, fontWeight: 600 }}
             >

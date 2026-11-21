@@ -108,7 +108,13 @@ export default function CaliforniaDevelopmentDirectoryPage() {
               href="/development/california-exclusion-activation"
               style={{ color: C.teal, fontWeight: 600 }}
             >
-              Exclusion activation →
+              Exclusion activation
+            </Link>
+            <Link
+              href="/development/california-exclusion-necessity"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Activation necessity →
             </Link>
           </nav>
         </div>
