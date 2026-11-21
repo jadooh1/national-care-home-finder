@@ -1,0 +1,21 @@
+{
+  "observedOn": "2026-11-21",
+  "baseCommit": "4869fbf3e66e76c1a15a776ca4b048073d8ce8f1",
+  "selectedState": "Ohio",
+  "ohioTier1OfflineEligible": 801,
+  "ohioDenominatorL12": 1152,
+  "publicationEligible": 0,
+  "rankingByTier1Structural": [
+    "Ohio",
+    "Alabama",
+    "Tennessee",
+    "Virginia",
+    "Georgia",
+    "South Carolina",
+    "New Jersey",
+    "Maryland"
+  ],
+  "targetedOhioDisclosureStillSessionBound": true,
+  "targetedOhioIsoStillAbsent": true,
+  "decision": "STOP"
+}
