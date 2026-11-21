@@ -305,6 +305,7 @@ export default function WashingtonPage() {
               recordStatus: facility.record_status,
             });
             const selected = candidate ? shortlist.some(item => item.license === candidate.license) : false;
+            const disclosure = washingtonDisclosureUrl(facility.license_number ?? "");
             return (
               <article key={facility.id} style={{ border: `1px solid ${C.border}`, borderTop: `4px solid ${C.navy}`, borderRadius: 14, background: "#fff", padding: 22, boxShadow: "0 3px 12px rgba(18,60,89,.035)", minWidth: 0, overflowWrap: "anywhere" }}>
                 <p style={{ margin: "0 0 8px", color: C.teal, fontSize: 12, fontWeight: 800, letterSpacing: 0.4 }}>{t.homeLabel}</p>
@@ -320,7 +321,9 @@ export default function WashingtonPage() {
                   {candidate && <button type="button" aria-pressed={selected} aria-label={`${selected ? t.removeFromCompare : t.addToCompare}: ${displayName(facility.canonical_name)}`} disabled={!selected && shortlist.length >= 3} onClick={() => persistShortlist(selected ? removeWashingtonShortlist(shortlist, candidate.license) : addWashingtonShortlist(shortlist, candidate).items)} style={{ background: selected ? C.navy : "white", color: selected ? "white" : C.teal, border: `1px solid ${selected ? C.navy : C.teal}`, borderRadius: 8, minHeight: 44, padding: "10px 13px", fontWeight: 700, cursor: !selected && shortlist.length >= 3 ? "not-allowed" : "pointer" }}>{selected ? t.removeFromCompare : shortlist.length >= 3 ? t.compareFull : t.addToCompare}</button>}
                   {facilityProfilePath(facility.license_number) && <Link href={washingtonFacilityLink(facilityProfilePath(facility.license_number) as string, directoryPath)} style={{ display: "inline-flex", alignItems: "center", minHeight: 44, color: "white", background: C.teal, borderRadius: 8, padding: "10px 13px", textDecoration: "none", fontWeight: 700 }}>{t.viewDetails}</Link>}
                   {address && <a href={mapLink} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.viewMap}</a>}
-                  <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.checkDshs}</a>
+                  {disclosure
+                    ? <a href={disclosure} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.officialDisclosure}</a>
+                    : <a href={WASHINGTON_DSHS_LOCATOR} target="_blank" rel="noopener noreferrer" style={{ color: C.teal, fontWeight: 700 }}>{t.checkDshs}</a>}
                 </div>
               </article>
             );

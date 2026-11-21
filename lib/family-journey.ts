@@ -37,9 +37,33 @@ const NINE_DIGIT_ZIP = /^\d{9}$/;
 export const WASHINGTON_MAP_DEFAULT_ZIP = "98056";
 export const WASHINGTON_DEMOGRAPHICS_DEFAULT_ZIP = "98038";
 
+/** Normalize a query/search ZIP to five digits. Accepts ZIP or ZIP+4 (with or without hyphen). */
 export function washingtonZipFromSearch(value: string | null | undefined, fallback: string): string {
   const candidate = value?.trim() ?? "";
-  return FIVE_DIGIT_ZIP.test(candidate) ? candidate : fallback;
+  if (FIVE_DIGIT_ZIP.test(candidate)) return candidate;
+  const digits = candidate.replace(/\D/g, "");
+  if (digits.length === 5 || digits.length === 9) {
+    const zip = digits.slice(0, 5);
+    if (FIVE_DIGIT_ZIP.test(zip)) return zip;
+  }
+  return fallback;
+}
+
+/** Caption under known licensed beds once map data is ready. Empty while loading or on error. */
+export function mappedCapacityNote(input: {
+  ready: boolean;
+  missing: number;
+  missingLabel: (count: number) => string;
+  completeLabel: string;
+}): string {
+  if (!input.ready) return "";
+  if (input.missing > 0) return input.missingLabel(input.missing);
+  return input.completeLabel;
+}
+
+/** Recorded licensed capacity as a plain bed count — not current residents. */
+export function recordedCapacityText(capacity: number | null, notAvailable = "Not available"): string {
+  return capacity === null ? notAvailable : String(capacity);
 }
 
 export function washingtonSearchText(value: string | null | undefined): string {
