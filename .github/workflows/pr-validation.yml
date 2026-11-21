@@ -307,6 +307,9 @@ jobs:
       - name: Check the California Tier 1 publication-readiness preflight
         run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_publication_preflight.ts
 
+      - name: Check the California exclusion-control readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_exclusion_control_readiness.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
