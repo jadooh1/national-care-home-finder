@@ -286,6 +286,9 @@ jobs:
       - name: Check the California Transparency Tier 1 reassessment
         run: node --experimental-strip-types --test supabase/proposals/tests/california_transparency_tier1_eligibility.ts
 
+      - name: Check the California exclusion and status-conflict verification
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_exclusion_status_conflict.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 
