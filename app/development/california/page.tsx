@@ -90,7 +90,13 @@ export default function CaliforniaDevelopmentDirectoryPage() {
               href="/development/california-disclosure-coverage"
               style={{ color: C.teal, fontWeight: 600 }}
             >
-              Disclosure coverage →
+              Disclosure coverage
+            </Link>
+            <Link
+              href="/development/california-publication-preflight"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Publication preflight →
             </Link>
           </nav>
         </div>
