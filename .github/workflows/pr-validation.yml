@@ -145,6 +145,9 @@ jobs:
       - name: Check the nationwide tiered publication eligibility framework
         run: node --experimental-strip-types --test supabase/proposals/tests/publication_eligibility_framework.ts
 
+      - name: Check publication eligibility acceptance for Oregon and Florida
+        run: node --experimental-strip-types --test supabase/proposals/tests/publication_eligibility_acceptance.ts
+
       - name: Check the Michigan licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/michigan_licensing.ts
 
