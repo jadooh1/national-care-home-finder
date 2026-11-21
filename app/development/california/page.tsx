@@ -96,7 +96,13 @@ export default function CaliforniaDevelopmentDirectoryPage() {
               href="/development/california-publication-preflight"
               style={{ color: C.teal, fontWeight: 600 }}
             >
-              Publication preflight →
+              Publication preflight
+            </Link>
+            <Link
+              href="/development/california-exclusion-control"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Exclusion control →
             </Link>
           </nav>
         </div>
