@@ -136,6 +136,13 @@ test("schema fit stays separate from publication and from missing coordinates", 
     assert.equal(compatibilityAssessment(state)?.compatibility, "B");
     assert.equal(compatibilityAssessment(state)?.publicationReady, false);
   }
+  assert.equal(compatibilityAssessment("Kentucky")?.observedRows, 247);
+  assert.equal(compatibilityAssessment("Kentucky")?.licenseIdentifier, true);
+  assert.equal(compatibilityAssessment("Kentucky")?.physicalAddress, true);
+  assert.equal(compatibilityAssessment("Kentucky")?.perRowStatus, false);
+  assert.equal(compatibilityAssessment("Kentucky")?.disclosureLink, false);
+  assert.equal(compatibilityAssessment("Kentucky")?.isoExportDate, false);
+  assert.equal(compatibilityAssessment("Kentucky")?.coordinateColumns, false);
 });
 
 test("unverified states do not receive invented counts or directory routes", () => {
