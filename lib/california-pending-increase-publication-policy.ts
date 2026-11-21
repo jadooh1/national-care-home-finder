@@ -14,16 +14,21 @@ export const CALIFORNIA_PENDING_INCREASE_POLICY_OBSERVED_ON = "2026-11-21";
 export const CALIFORNIA_PENDING_INCREASE_POLICY_BASELINE = "41338bb" as const;
 
 export const CALIFORNIA_PENDING_INCREASE_POLICY_STATUS = {
-  /** Proposal only — not human-approved, not activated. */
-  humanApproved: false as const,
+  /**
+   * Approved for future eligibility consideration only (human direction
+   * after #202 / recorded in Tier 1 launch-readiness). Not activated;
+   * does not publish California.
+   */
+  humanApproved: true as const,
+  humanApprovedScope: "future-eligibility-consideration-only" as const,
   activatedInApplicationOrDatabase: false as const,
   californiaPublicationAllowed: false as const,
   altersAuthoritativeGovernmentRecords: false as const,
 } as const;
 
 /**
- * THE exact policy decision requiring human (Amjad) approval before any
- * future publication consideration of Licensed/Pending Increase facilities.
+ * Policy decision record. Approved for future eligibility consideration only.
+ * Does not activate exclusions or publish California.
  */
 export const CALIFORNIA_PENDING_INCREASE_POLICY_DECISION_REQUIRING_APPROVAL = {
   id: "approve-licensed-pending-increase-future-publication-mapping",
@@ -33,12 +38,12 @@ export const CALIFORNIA_PENDING_INCREASE_POLICY_DECISION_REQUIRING_APPROVAL = {
     "Approve treating CDSS FacilityDetail status \"Licensed/Pending Increase\" (with Download LICENSED) as a recognized existing licensed facility for *future* California publication consideration, publishing only the currently approved capacity when Download Facility Capacity exactly equals FacilityDetail CAPACITY, never inventing or displaying a proposed capacity increase (not published in Transparency APIs), and only after all CDSS source-agreement gates pass — while California statewide publication remains STOP, exclusions remain inactive in app/DB until separately activated, and the 14 missing License First Date facilities plus all other documented conflicts remain excluded.",
   alternatives:
     "Reject and keep all 66 Pending Increase facilities permanently offline listing-excluded until FacilityDetail clears to exact \"Licensed\".",
-  scope: "development-proposal-only" as const,
+  scope: "future-eligibility-consideration-only" as const,
   appliesToFacilityCount: 66,
   doesNotActivateExclusions: true as const,
   doesNotPublishCalifornia: true as const,
   requiresSeparateStatewidePublicationApproval: true as const,
-  approvalState: "awaiting-human-approval" as const,
+  approvalState: "approved-for-future-eligibility-consideration-only" as const,
 } as const;
 
 /** Proposed rules (inactive until humanApproved). */
@@ -380,7 +385,8 @@ export function evaluateCaliforniaPendingIncreasePublicationPolicy(
 export type CaliforniaPendingIncreasePolicySimulation = {
   observedOn: string;
   baseline: string;
-  policyApproved: false;
+  /** Approved for future eligibility consideration only — not activated. */
+  policyApproved: true;
   exclusionsActivated: false;
   allowsPublication: false;
   current: {
@@ -416,7 +422,7 @@ export function simulateCaliforniaPendingIncreasePublicationPolicy(): California
   return {
     observedOn: CALIFORNIA_PENDING_INCREASE_POLICY_OBSERVED_ON,
     baseline: CALIFORNIA_PENDING_INCREASE_POLICY_BASELINE,
-    policyApproved: false,
+    policyApproved: true,
     exclusionsActivated: false,
     allowsPublication: false,
     current: {
@@ -443,7 +449,7 @@ export function simulateCaliforniaPendingIncreasePublicationPolicy(): California
       CALIFORNIA_PENDING_INCREASE_POLICY_DECISION_REQUIRING_APPROVAL,
     proposedRules: CALIFORNIA_PENDING_INCREASE_PROPOSED_RULES,
     remainingBlockers: [
-      "awaiting-human-approval-of-pending-increase-publication-mapping",
+      "pending-increase-mapping-approved-future-eligibility-only-not-activated",
       "california-publication-blocked",
       "state-authorization-unpublished",
       "exclusion-policy-inactive",
@@ -476,8 +482,11 @@ export function buildCaliforniaPendingIncreasePublicationPolicyPreview() {
     && CALIFORNIA_POLICY_MISSING_FIRST_DATE_IDS.length === 14
     && CALIFORNIA_POLICY_PROVISIONAL_IDS.length === 5
     && CALIFORNIA_POLICY_PRIOR_CONFLICT_IDS.length === 3
-    && !CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApproved
-    && !CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplicationOrDatabase;
+    && CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApproved
+    && CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApprovedScope
+      === "future-eligibility-consideration-only"
+    && !CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplicationOrDatabase
+    && !CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.californiaPublicationAllowed;
 
   return {
     ...sim,

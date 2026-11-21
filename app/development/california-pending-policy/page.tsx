@@ -20,9 +20,14 @@ export default function CaliforniaPendingPolicyPage() {
       <header style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "16px 5%" }}>
         <div style={{ maxWidth: 1100, margin: "auto", display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
           <strong style={{ fontSize: 19 }}>National Care Home Finder</strong>
-          <Link href="/development/california-pending-missing" style={{ color: C.teal, fontWeight: 600 }}>
-            ← Pending / missing dates
-          </Link>
+          <nav style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <Link href="/development/california-pending-missing" style={{ color: C.teal, fontWeight: 600 }}>
+              ← Pending / missing dates
+            </Link>
+            <Link href="/development/california-tier1-launch" style={{ color: C.teal, fontWeight: 600 }}>
+              Tier 1 launch →
+            </Link>
+          </nav>
         </div>
       </header>
 
