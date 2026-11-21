@@ -10,7 +10,7 @@ type MapCopy = {
   mappedAfhs: string;
   knownBeds: string;
   missingCapacity: (count: number) => string;
-  notAvailableBeds: string;
+  capacityComplete: string;
   highDensityHomes: string;
   highDensityDetail: string;
   mapSectionAria: string;
@@ -25,6 +25,7 @@ type MapCopy = {
   listAria: string;
   facilitiesInZip: (zip: string) => string;
   licenseLabel: (license: string) => string;
+  disclosureLink: string;
   disclaimer: string;
   unavailable: string;
   tooMany: string;
@@ -284,7 +285,7 @@ export const copy: Record<Locale, {
       mappedAfhs: "Mapped AFHs",
       knownBeds: "Known licensed beds",
       missingCapacity: (count) => `${count} home(s) missing capacity`,
-      notAvailableBeds: "Not available beds",
+      capacityComplete: "Recorded for every mapped home",
       highDensityHomes: "Homes in high-density clusters",
       highDensityDetail: "20+ AFHs within 1 mile",
       mapSectionAria: "Interactive AFH facility map",
@@ -299,6 +300,7 @@ export const copy: Record<Locale, {
       listAria: "Facilities in this ZIP",
       facilitiesInZip: (zip) => `Facilities in ZIP ${zip}`,
       licenseLabel: (license) => `License ${license}`,
+      disclosureLink: "Official Disclosure of Services",
       disclaimer: "Facility information is from a Washington DSHS locator download matched to state GIS data. Recorded capacity is not vacancy availability. Map coordinates, licensing information and care suitability should be independently confirmed. This directory does not recommend or certify providers. Base map © OpenStreetMap contributors.",
       unavailable: "Unable to retrieve facility map data. Check access to the wa_afh_map_facilities view.",
       tooMany: "Too many results to display completely. Please contact the site administrator.",
@@ -506,7 +508,7 @@ export const copy: Record<Locale, {
         : "DSHS license-number match — not independently verified",
       notAvailable: "Not available",
       countyValue: (name) => `${name} County`,
-      capacityValue: (count) => `${count} residents`,
+      capacityValue: (count) => `${count}`,
       googleMaps: "View location in Google Maps ↗",
       dshsSource: "Name, address, license number, and capacity come from the Washington DSHS locator download.",
       claimTitle: "Own or represent this home?",
@@ -554,7 +556,7 @@ export const copy: Record<Locale, {
       mappedAfhs: "Hogares AFH en el mapa",
       knownBeds: "Camas licenciadas conocidas",
       missingCapacity: (count) => count === 1 ? `${count} hogar sin capacidad registrada` : `${count} hogares sin capacidad registrada`,
-      notAvailableBeds: "Camas no disponibles",
+      capacityComplete: "Registrada para cada hogar en el mapa",
       highDensityHomes: "Hogares en grupos de alta densidad",
       highDensityDetail: "20+ hogares AFH en un radio de 1 milla",
       mapSectionAria: "Mapa interactivo de establecimientos AFH",
@@ -569,6 +571,7 @@ export const copy: Record<Locale, {
       listAria: "Establecimientos en este ZIP",
       facilitiesInZip: (zip) => `Establecimientos en el ZIP ${zip}`,
       licenseLabel: (license) => `Licencia ${license}`,
+      disclosureLink: "Divulgación oficial de servicios",
       disclaimer: "La información de los establecimientos proviene de una descarga del localizador de DSHS de Washington emparejada con datos GIS del estado. La capacidad registrada no es disponibilidad de vacantes. Las coordenadas del mapa, la información de licencia y la idoneidad del cuidado deben confirmarse de forma independiente. Este directorio no recomienda ni certifica proveedores. Mapa base © colaboradores de OpenStreetMap.",
       unavailable: "No se pudieron obtener los datos del mapa de establecimientos. Verifique el acceso a la vista wa_afh_map_facilities.",
       tooMany: "Hay demasiados resultados para mostrarlos por completo. Comuníquese con el administrador del sitio.",
@@ -776,7 +779,7 @@ export const copy: Record<Locale, {
         : "Coincidencia del número de licencia de DSHS — no verificado de forma independiente",
       notAvailable: "No disponible",
       countyValue: (name) => `Condado de ${name}`,
-      capacityValue: (count) => `${count} residentes`,
+      capacityValue: (count) => `${count}`,
       googleMaps: "Ver la ubicación en Google Maps ↗",
       dshsSource: "El nombre, la dirección, el número de licencia y la capacidad provienen de la descarga del localizador de DSHS de Washington.",
       claimTitle: "¿Es propietario o representante de este hogar?",

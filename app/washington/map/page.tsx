@@ -8,7 +8,8 @@ import type * as Leaflet from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
-import { DENSITY_BANDS, WASHINGTON_MAP_DEFAULT_ZIP, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary, washingtonLocationMatches, washingtonMapPostalOrFilter, washingtonZipFromSearch, washingtonZipSearchPath } from "../../../lib/family-journey";
+import { DENSITY_BANDS, WASHINGTON_MAP_DEFAULT_ZIP, densityColor, facilityProfilePath, invalidZipMessage, mapResultSummary, mappedCapacityNote, washingtonLocationMatches, washingtonMapPostalOrFilter, washingtonZipFromSearch, washingtonZipSearchPath } from "../../../lib/family-journey";
+import { washingtonDisclosureUrl } from "../../../lib/state-directory";
 import { localizedInvalidZip, localizedMapSummary, type Locale } from "../../../lib/locale";
 
 type Home = {
@@ -212,6 +213,12 @@ export default function WashingtonMarketMapPage() {
 
   const statBox: React.CSSProperties = { flex: "1 1 180px", background: "#fff", border: `1px solid ${border}`, borderRadius: 12, padding: 18 };
   const formatCount = (value: number) => locale === "es" ? value.toLocaleString("es") : value.toLocaleString();
+  const bedsCaption = mappedCapacityNote({
+    ready: !loading && !error,
+    missing: missingCapacity,
+    missingLabel: text.missingCapacity,
+    completeLabel: text.capacityComplete,
+  });
   const summary = zip
     ? (locale === "en"
       ? mapResultSummary({ zip, loading, error, count: homes.length })
@@ -242,7 +249,7 @@ export default function WashingtonMarketMapPage() {
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 13, marginBottom: 20 }}>
           <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>{text.mappedAfhs}</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : formatCount(homes.length)}</div></div>
-          <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>{text.knownBeds}</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : formatCount(knownCapacity)}</div><small>{!loading && !error && missingCapacity > 0 ? text.missingCapacity(missingCapacity) : text.notAvailableBeds}</small></div>
+          <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>{text.knownBeds}</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : formatCount(knownCapacity)}</div>{bedsCaption ? <small>{bedsCaption}</small> : null}</div>
           <div style={statBox}><span style={{ color: "#536b7c", fontSize: 13 }}>{text.highDensityHomes}</span><div style={{ fontSize: 29, fontWeight: 800 }}>{loading || error ? "—" : formatCount(highConcentration)}</div><small>{text.highDensityDetail}</small></div>
         </div>
         <section aria-label={text.mapSectionAria} style={{ border: `1px solid ${border}`, borderRadius: 14, overflow: "hidden", background: "white" }}>
@@ -266,7 +273,8 @@ export default function WashingtonMarketMapPage() {
             {homes.map(home => {
               const profile = facilityProfilePath(home.license_number);
               const label = prettyName(home.canonical_name);
-              return <li key={home.id}>{profile ? <Link href={profile} style={{ color: teal, fontWeight: 700 }}>{label}</Link> : label}{[home.city, home.license_number].filter(Boolean).length > 0 ? ` — ${[home.city, home.license_number ? text.licenseLabel(home.license_number) : ""].filter(Boolean).join(", ")}` : ""}</li>;
+              const disclosure = washingtonDisclosureUrl(home.license_number ?? "");
+              return <li key={home.id}>{profile ? <Link href={profile} style={{ color: teal, fontWeight: 700 }}>{label}</Link> : label}{[home.city, home.license_number].filter(Boolean).length > 0 ? ` — ${[home.city, home.license_number ? text.licenseLabel(home.license_number) : ""].filter(Boolean).join(", ")}` : ""}{disclosure ? <>{" · "}<a href={disclosure} target="_blank" rel="noopener noreferrer" style={{ color: teal, fontWeight: 700 }}>{text.disclosureLink}</a></> : null}</li>;
             })}
           </ul>
         </section>}
