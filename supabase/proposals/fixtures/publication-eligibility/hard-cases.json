@@ -1,0 +1,20 @@
+{
+  "observedOn": "2026-11-21",
+  "specVersion": "1.0.0",
+  "caseCount": 12,
+  "statesCovered": [
+    "Washington",
+    "Oregon",
+    "California",
+    "Florida",
+    "North Carolina",
+    "South Carolina",
+    "Kentucky",
+    "Tennessee",
+    "Massachusetts"
+  ],
+  "notes": [
+    "Fixture hard-cases only. Do not extrapolate statewide launch-ready counts from these cases.",
+    "Full-dataset roster labels live in publication-eligibility-readiness summaries and are not public authorizations."
+  ]
+}
