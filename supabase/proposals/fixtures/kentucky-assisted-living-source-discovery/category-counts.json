@@ -1,0 +1,10 @@
+{
+  "ALC": 88,
+  "ALC-BH": 74,
+  "ALC-DC": 85,
+  "directoryTypeRows": 247,
+  "PendingRenewal": 75,
+  "PCH_note": "Separate Personal Care Home Directory (47 rows); not merged.",
+  "FCH_note": "Separate Family Care Home Directory (24 rows); not merged.",
+  "LTC_note": "Separate Long Term Care Directory (313 rows); not merged."
+}

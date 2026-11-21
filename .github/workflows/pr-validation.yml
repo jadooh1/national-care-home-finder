@@ -193,6 +193,9 @@ jobs:
       - name: Check the South Carolina CRCF source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/south_carolina_crcf_source_discovery.ts
 
+      - name: Check the Kentucky assisted-living source discovery
+        run: node --experimental-strip-types --test supabase/proposals/tests/kentucky_assisted_living_source_discovery.ts
+
       - name: Check the Pennsylvania licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/pennsylvania_licensing.ts
 
