@@ -42,6 +42,7 @@ type WashingtonDirectoryCopy = {
   viewDetails: string;
   viewMap: string;
   checkDshs: string;
+  officialDisclosure: string;
   pagesLabel: string;
   previous: string;
   pageStatus: (page: number, pages: number) => string;
@@ -116,6 +117,7 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
     viewDetails: "View details →",
     viewMap: "View location in Google Maps ↗",
     checkDshs: "Check DSHS ↗",
+    officialDisclosure: "Official Disclosure of Services ↗",
     pagesLabel: "Listing pages",
     previous: "← Previous",
     pageStatus(page, pages) {
@@ -193,6 +195,7 @@ export const copy: Record<Locale, WashingtonDirectoryCopy> = {
     viewDetails: "Ver detalles →",
     viewMap: "Ver la ubicación en Google Maps ↗",
     checkDshs: "Consultar DSHS ↗",
+    officialDisclosure: "Divulgación oficial de servicios ↗",
     pagesLabel: "Páginas de listados",
     previous: "← Anterior",
     pageStatus(page, pages) {

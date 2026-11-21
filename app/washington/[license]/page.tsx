@@ -11,7 +11,7 @@ import { publicOwnerContentView } from "../../../lib/premium-option-a";
 import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../../lib/state-directory";
 import { supabase } from "../../../lib/supabase";
 import { copy } from "../../../lib/copy/washington-detail";
-import { washingtonDirectoryReturnPath } from "../../../lib/family-journey";
+import { recordedCapacityText, washingtonDirectoryReturnPath } from "../../../lib/family-journey";
 import { scrollToVisitChecklist, visitChecklistPrintCss } from "../../../lib/washington-visit-checklist";
 import type { Locale } from "../../../lib/locale";
 
@@ -144,7 +144,7 @@ export default function WashingtonFacilityProfile() {
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.address}</dt><dd style={{ margin: "0 0 7px" }}>{address || text.notAvailable}</dd>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.county}</dt><dd style={{ margin: "0 0 7px" }}>{facility.county ? text.countyValue(facility.county) : text.notAvailable}</dd>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.licenseNumber}</dt><dd style={{ margin: "0 0 7px" }}>{facility.license_number ?? text.notAvailable}</dd>
-                <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.recordedCapacity}</dt><dd style={{ margin: "0 0 7px" }}>{facility.licensed_capacity === null ? text.notAvailable : text.capacityValue(facility.licensed_capacity)}</dd>
+                <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.recordedCapacity}</dt><dd style={{ margin: "0 0 7px" }}>{facility.licensed_capacity === null ? text.notAvailable : recordedCapacityText(facility.licensed_capacity, text.notAvailable)}</dd>
                 <dt style={{ fontWeight: 700, marginTop: 12 }}>{text.recordStatus}</dt><dd style={{ margin: "0 0 7px" }}>{text.recordStatusValue(facility.record_status)}</dd>
               </dl>
               {address && <p style={{ marginTop: 20 }}><a href={mapUrl} target="_blank" rel="noopener noreferrer" style={linkStyle}>{text.googleMaps}</a></p>}
