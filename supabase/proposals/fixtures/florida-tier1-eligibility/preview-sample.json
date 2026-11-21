@@ -1,0 +1,86 @@
+{
+  "evaluationScope": "full-dataset",
+  "datasetLabel": "FloridaHealthFinder ALF comparison embed ClientCode 11",
+  "tier1EligibleCount": 2251,
+  "denominatorRows": 3025,
+  "notExtrapolatedFromSample": true,
+  "exclusions": [
+    {
+      "Name": "ELEVATED ESTATES OF BROOKSVILLE, LLC",
+      "LicenseID": "979",
+      "FileNumber": "11910431",
+      "LicenseNumber": "7622",
+      "LicenseStatus": "LICENSED",
+      "City": "BROOKSVILLE"
+    },
+    {
+      "Name": "KIVA AT CANTERBURY",
+      "LicenseID": "1005",
+      "FileNumber": "11910496",
+      "LicenseNumber": "7622",
+      "LicenseStatus": "PROVISIONAL",
+      "City": "BONITA SPRINGS"
+    },
+    {
+      "Name": "HARMONIOUS HOMES RESIDENTIAL ASSISTED LIVING FACILITY LLC",
+      "LicenseID": "524833",
+      "LicenseNumber": "13809",
+      "LicenseStatus": "LICENSED",
+      "City": "SUNRISE",
+      "State": "",
+      "Address": "4838 NW 93RD TER"
+    }
+  ],
+  "samplePreviewRows": [
+    {
+      "Name": "1 KIND HOME LLC",
+      "LicenseID": "313782",
+      "FileNumber": "11968002",
+      "LicenseNumber": "11973",
+      "LicenseStatus": "LICENSED",
+      "Address": "911 SW 12TH AVE # 913",
+      "City": "MIAMI",
+      "Zip": "33130-3627"
+    },
+    {
+      "Name": "81 OAKS SENIOR LIVING",
+      "LicenseID": "528652",
+      "FileNumber": "11970223",
+      "LicenseNumber": "13817",
+      "LicenseStatus": "LICENSED",
+      "Address": "7850 HAWKINS RD",
+      "City": "SARASOTA",
+      "Zip": "34241-9379"
+    },
+    {
+      "Name": "A & G MARVELOUS ALF, LLC",
+      "LicenseID": "541862",
+      "FileNumber": "11970363",
+      "LicenseNumber": "13865",
+      "LicenseStatus": "LICENSED",
+      "Address": "6706 INWOOD",
+      "City": "NORTH LAUDERDALE",
+      "Zip": "33068"
+    },
+    {
+      "Name": "A & J ALF OF FLORIDA INC, II",
+      "LicenseID": "350152",
+      "FileNumber": "11968530",
+      "LicenseNumber": "12391",
+      "LicenseStatus": "LICENSED",
+      "Address": "808 GILLEN AVE NW",
+      "City": "PALM BAY",
+      "Zip": "32907"
+    },
+    {
+      "Name": "A & L HEALTH CARE CORP NO. 2",
+      "LicenseID": "238910",
+      "FileNumber": "11966997",
+      "LicenseNumber": "11141",
+      "LicenseStatus": "LICENSED",
+      "Address": "8208 NW 14TH STREET",
+      "City": "CORAL SPRINGS",
+      "Zip": "33071"
+    }
+  ]
+}
