@@ -148,6 +148,9 @@ jobs:
       - name: Check publication eligibility acceptance for Oregon and Florida
         run: node --experimental-strip-types --test supabase/proposals/tests/publication_eligibility_acceptance.ts
 
+      - name: Check Florida Tier 1 eligibility verification
+        run: node --experimental-strip-types --test supabase/proposals/tests/florida_tier1_eligibility.ts
+
       - name: Check the Michigan licensing validation
         run: node --experimental-strip-types --test supabase/proposals/tests/michigan_licensing.ts
 

@@ -1,0 +1,43 @@
+{
+  "duplicateLicenseNumber7622": [
+    {
+      "Name": "ELEVATED ESTATES OF BROOKSVILLE, LLC",
+      "LicenseID": "979",
+      "FileNumber": "11910431",
+      "LicenseNumber": "7622",
+      "LicenseStatus": "LICENSED",
+      "City": "BROOKSVILLE"
+    },
+    {
+      "Name": "KIVA AT CANTERBURY",
+      "LicenseID": "1005",
+      "FileNumber": "11910496",
+      "LicenseNumber": "7622",
+      "LicenseStatus": "PROVISIONAL",
+      "City": "BONITA SPRINGS"
+    }
+  ],
+  "blankStateRows": [
+    {
+      "Name": "HARMONIOUS HOMES RESIDENTIAL ASSISTED LIVING FACILITY LLC",
+      "LicenseID": "524833",
+      "LicenseNumber": "13809",
+      "LicenseStatus": "LICENSED",
+      "City": "SUNRISE",
+      "State": "",
+      "Address": "4838 NW 93RD TER"
+    }
+  ],
+  "statusCounts": {
+    "LICENSED": 2253,
+    "PROVISIONAL": 86,
+    "IN REVIEW": 645,
+    "IN LITIGATION": 33,
+    "PROV LITIGATION": 4,
+    "PENDING DENIED RENEWAL": 1,
+    "SUSPENDED": 1,
+    "INACTIVE": 2
+  },
+  "tier1EligibleCount": 2251,
+  "licensedMinusDupLicenseNumber": 2252
+}
