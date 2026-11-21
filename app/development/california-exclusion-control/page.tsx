@@ -52,6 +52,12 @@ export default function CaliforniaExclusionControlPage() {
               ← Publication preflight
             </Link>
             <Link
+              href="/development/california-exclusion-activation"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Activation decision →
+            </Link>
+            <Link
               href="/development/california"
               style={{ color: C.teal, fontWeight: 600 }}
             >
