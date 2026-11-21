@@ -18,7 +18,7 @@ test("every state is classified once and only Washington is publication-ready", 
   assert.equal(assessments.length, 50);
   assert.deepEqual(assessments.map(item => item.state), [...STATE_NAMES]);
   assert.equal(new Set(assessments.map(item => item.state)).size, 50);
-  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 20, C: 14, D: 14 });
+  assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 21, C: 13, D: 14 });
   assert.deepEqual(
     assessments.filter(item => item.publicationReady).map(item => item.state),
     ["Washington"],
@@ -165,6 +165,14 @@ test("unverified states do not receive invented counts or directory routes", () 
   assert.equal(ONBOARDING_SEQUENCE.indexOf("Massachusetts") < ONBOARDING_SEQUENCE.indexOf("Tennessee"), true);
   assert.equal(ONBOARDING_SEQUENCE.indexOf("Tennessee") < ONBOARDING_SEQUENCE.indexOf("South Carolina"), true);
   assert.equal(ONBOARDING_SEQUENCE.indexOf("South Carolina") < ONBOARDING_SEQUENCE.indexOf("Alabama"), true);
+  assert.equal(compatibilityAssessment("Alabama")?.compatibility, "B");
+  assert.equal(compatibilityAssessment("Alabama")?.observedRows, 294);
+  assert.equal(compatibilityAssessment("Alabama")?.licenseIdentifier, true);
+  assert.equal(compatibilityAssessment("Alabama")?.physicalAddress, true);
+  assert.equal(compatibilityAssessment("Alabama")?.perRowStatus, true);
+  assert.equal(compatibilityAssessment("Alabama")?.disclosureLink, false);
+  assert.equal(compatibilityAssessment("Alabama")?.isoExportDate, false);
+  assert.equal(compatibilityAssessment("Alabama")?.coordinateColumns, false);
   const source = readFileSync(new URL("../../../lib/nationwide-compatibility.ts", import.meta.url), "utf8");
   const page = readFileSync(new URL("../../../app/development/onboarding/page.tsx", import.meta.url), "utf8");
   const proposal = readFileSync(new URL("../20261110080000_nationwide_compatibility_audit.md", import.meta.url), "utf8");

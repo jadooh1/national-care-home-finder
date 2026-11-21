@@ -66,7 +66,7 @@ export const SCHEMA_UPGRADE = {
 } as const;
 
 const ASSESSMENTS = [
-  row("Alabama", "C", "unpublished", "Alabama Department of Public Health facility directory", "https://www.alabamapublichealth.gov/providerstandards/directory.html", null, false, null, null, null, null, "medium", "The directory is a search by facility type. A license identifier was not observed."),
+  row("Alabama", "B", "unpublished", "ADPH FacilitiesDirectory Excel exports (ALF + SCALF)", "https://dph1.adph.state.al.us/FacilitiesDirectory/", 294, true, true, true, false, false, "high", "Verified 2026-11-20: FacilitiesDirectory Excel export type D (Assisted Living Facility) has 188 unique Fac ID (D####) with complete address, License Status Regular on all, and Licensed Beds 8–160. Type P (Specialty Care / SCALF) has 106 unique Fac ID (P####), Regular 105 / Probational 1, beds 12–104. Combined 294 unique Fac IDs (overlap 0). No ISO export; page last updated June 23, 2026 and Excel filename generation timestamps rejected. Fac ID disclosure prefix not verified. No coordinates. Nursing Homes (232) are a separate type. ALF (420-5-4) and SCALF (420-5-20) stay separate and are not Washington AFH. Alabama stays unpublished."),
   row("Alaska", "D", "unpublished", null, null, null, null, null, null, null, null, "medium", "Official licensing fields were not verified."),
   row("Arizona", "B", "unpublished", "ADHS Assisted Living Home and Center FeatureServers", "https://services1.arcgis.com/mpVYz37anSdrK4d8/ArcGIS/rest/services/Assisted_Living_Home_Feb_2025/FeatureServer/18", 2047, true, true, true, false, true, "high", "Assisted Living Home 1,719 rows (capacity ≤10) and Center 328 rows (capacity ≥13) with unique FACID/LICENSE_NUMBER, ADDRESS, ACTIVE status, and geocoded N_LAT/N_LON. ARS §36-401 keeps Home and Center separate; neither is Washington AFH. RUN_DATE 2025-02-03 and Feb_2025 service stamps are not an ISO export date. AZ Care Check is a Salesforce search SPA; Facility.aspx?id={FACID} returns an empty shell. Arizona stays unpublished."),
   row("Arkansas", "C", "unpublished", "Arkansas long-term care, rehabilitation, nursing, and assisted living list", "https://healthy.arkansas.gov/wp-content/uploads/Arkansas_LTC_Rehab_Nursing_Assisted_Living_Facility_List.pdf", null, false, true, null, null, null, "medium", "The list mixes facility types. The identifier was not verified as a state license number."),
@@ -593,7 +593,27 @@ FIELD_EVIDENCE.Georgia = {
   "coordinate-accuracy": fact("present", "medium", "Accuracy ROOFTOP"),
 };
 
-for (const state of ["Alabama", "Nebraska", "Nevada", "New Mexico", "Rhode Island"]) {
+FIELD_EVIDENCE.Alabama = {
+  "regulatory-identifier": fact("present", "high", "Fac ID"),
+  "identifier-type": fact("present", "high", "facility-id / license"),
+  "issuing-authority": fact("present", "high", "Alabama DPH"),
+  "physical-address": fact("present", "high", "Address Line 1 / City / ZIP"),
+  "official-export-date": fact("rejected", "high"),
+  "source-publication-date": fact("rejected", "high", "page last updated / excel filename generation timestamp"),
+  "retrieval-timestamp": fact("present", "high", "2026-11-20"),
+  "freshness-verification": fact("absent", "high"),
+  "facility-disclosure": fact("absent", "high"),
+  "generic-search": fact("present", "high", "FacilitiesDirectory"),
+  "unverified-url-pattern": fact("rejected", "high", "Fac ID query-string guesses"),
+  "original-category": fact("present", "high", "ALF / SCALF"),
+  "original-status": fact("present", "high", "License Status"),
+  "normalized-category": fact("rejected", "high"),
+  "normalized-status": fact("absent", "high"),
+  "coordinates": fact("absent", "high"),
+  "coordinate-source": fact("absent", "high"),
+};
+
+for (const state of ["Nebraska", "Nevada", "New Mexico", "Rhode Island"]) {
   FIELD_EVIDENCE[state] = {
     "generic-search": fact("present", "medium", "generic-search"),
     "facility-disclosure": fact("not-verified", "low"),
