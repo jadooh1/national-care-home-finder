@@ -1,0 +1,13 @@
+{
+  "ALF": 188,
+  "SCALF": 106,
+  "combined": 294,
+  "Regular": 293,
+  "Probational": 1,
+  "NH_note": "Separate Nursing Homes export (232); not merged.",
+  "Class1_ALF": {
+    "Congregate": 120,
+    "Group": 67,
+    "Family": 1
+  }
+}
