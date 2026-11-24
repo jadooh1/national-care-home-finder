@@ -322,6 +322,9 @@ jobs:
       - name: Check the California Tier 1 full-roster development directory
         run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_full_roster.ts
 
+      - name: Check the California Tier 1 full-roster acceptance
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_full_roster_acceptance.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 

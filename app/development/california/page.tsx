@@ -227,11 +227,13 @@ export default async function CaliforniaDevelopmentDirectoryPage({
             color: C.warn,
           }}
         >
-          <strong>Public: {coverage.stopGoPublic}.</strong> {publication} Offline
-          Tier 1 candidates:{" "}
-          {coverage.counts.offlineTier1Candidates.toLocaleString()}. Publication
-          eligible: {coverage.counts.publicationEligible}. This page is
-          development-only and does not publish California.
+          <strong>Public: {coverage.stopGoPublic}.</strong> {publication} Prior
+          offline Tier 1 candidates:{" "}
+          {coverage.counts.offlineTier1Candidates.toLocaleString()}. Current
+          listable development roster:{" "}
+          {roster.search.listableCount.toLocaleString()}. Publication eligible:{" "}
+          {coverage.counts.publicationEligible}. This page is development-only
+          and does not publish California.
         </section>
 
         <section
@@ -304,6 +306,8 @@ export default async function CaliforniaDevelopmentDirectoryPage({
           </p>
           <form
             method="get"
+            role="search"
+            aria-label="California development roster search"
             action={californiaTier1FullRosterListingPath()}
             style={{
               display: "grid",
