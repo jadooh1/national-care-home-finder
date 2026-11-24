@@ -29,7 +29,15 @@ export default function CaliforniaDevelopmentDirectoryPage() {
       <header style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "16px 5%" }}>
         <div style={{ maxWidth: 1100, margin: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
           <strong style={{ fontSize: 19 }}>National Care Home Finder</strong>
-          <Link href="/" style={{ color: C.teal, fontWeight: 600 }}>← All states</Link>
+          <nav style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+            <Link href="/development/california/map" style={{ color: C.teal, fontWeight: 600 }}>
+              Tier 2 map (protected)
+            </Link>
+            <Link href="/california" style={{ color: C.teal, fontWeight: 600 }}>
+              Public directory
+            </Link>
+            <Link href="/" style={{ color: C.teal, fontWeight: 600 }}>← All states</Link>
+          </nav>
         </div>
       </header>
       <section style={{ background: `linear-gradient(125deg, ${C.navy}, ${C.teal})`, color: "white", padding: "48px 5%" }}>
