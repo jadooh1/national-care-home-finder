@@ -37,7 +37,7 @@ test("Tier 2 map stays development-only; public CA map and owner off", () => {
   assert.ok(paths.includes("/washington/map"));
 });
 
-test("coverage fixture matches Phase 8 exact-ID accounting against 15435", () => {
+test("coverage fixture matches Phase 9–verified accounting against 15435", () => {
   const coverage = loadCaliforniaTier2MapCoverage();
   const summary = californiaTier2MapCoverageSummary();
   const roster = loadCaliforniaTier1FullRosterCompact();
@@ -45,8 +45,10 @@ test("coverage fixture matches Phase 8 exact-ID accounting against 15435", () =>
   assert.equal(coverage.roster.listableCount, 15435);
   assert.equal(coverage.matching.eligibleCount, 15435);
   assert.equal(coverage.matching.exactMatchWithValidCoords, 14058);
-  assert.equal(coverage.matching.leadingZeroCollapsedUniqueWithValidCoords, 1361);
-  assert.equal(coverage.matching.usableOfficialCoords, 15419);
+  assert.equal(coverage.matching.leadingZeroCollapsedUniqueWithValidCoords, 1360);
+  assert.equal(coverage.matching.leadingZeroIdentityVerified, 1360);
+  assert.equal(coverage.matching.leadingZeroIdentityRejected, 1);
+  assert.equal(coverage.matching.usableOfficialCoords, 15418);
   assert.equal(coverage.matching.unmatched, 16);
   assert.equal(coverage.matching.ambiguousRejected, 0);
   assert.equal(coverage.matching.gisCoordsMissingOrInvalid, 0);
@@ -55,11 +57,15 @@ test("coverage fixture matches Phase 8 exact-ID accounting against 15435", () =>
   assert.equal(coverage.source.cdssAuthoritative, true);
   assert.equal(coverage.mapPoints.publicMapEnabled, false);
   assert.equal(coverage.mapPoints.publicMapPath, null);
+  assert.equal(coverage.mapPoints.count, 15418);
   assert.equal(summary.exact, 14058);
-  assert.equal(summary.usable, 15419);
+  assert.equal(summary.usable, 15418);
   assert.equal(summary.unmatched, 16);
+  assert.equal(summary.leadingZeroIdentityRejected, 1);
   assert.ok(Math.abs(summary.exactRate - 14058 / 15435) < 1e-12);
-  assert.ok(Math.abs(summary.usableRate - 15419 / 15435) < 1e-12);
+  assert.ok(Math.abs(summary.usableRate - 15418 / 15435) < 1e-12);
+  assert.equal(coverage.validation?.baselineCommit, "6a04300");
+  assert.deepEqual(coverage.validation?.rejectedIds, ["011405838"]);
 
   const points = JSON.parse(readFileSync(`${FIXTURE}/points.json`, "utf8")) as Array<{
     n: string;
@@ -67,9 +73,10 @@ test("coverage fixture matches Phase 8 exact-ID accounting against 15435", () =>
     lon: number;
     kind: "e" | "z";
   }>;
-  assert.equal(points.length, 15419);
+  assert.equal(points.length, 15418);
   assert.equal(points.filter((p) => p.kind === "e").length, 14058);
-  assert.equal(points.filter((p) => p.kind === "z").length, 1361);
+  assert.equal(points.filter((p) => p.kind === "z").length, 1360);
+  assert.equal(points.some((p) => p.n === "011405838"), false);
   assert.ok(points.every((p) => /^\d{8,9}$/.test(p.n)));
   assert.ok(
     points.every(
@@ -94,13 +101,19 @@ test("coverage fixture matches Phase 8 exact-ID accounting against 15435", () =>
     readFileSync(`${FIXTURE}/ambiguous-ids.json`, "utf8"),
   ) as string[];
   assert.equal(ambiguous.length, 0);
+
+  const rejected = JSON.parse(
+    readFileSync(`${FIXTURE}/leading-zero-identity-rejected.json`, "utf8"),
+  ) as Array<{ facilityNumber: string }>;
+  assert.equal(rejected.length, 1);
+  assert.equal(rejected[0]?.facilityNumber, "011405838");
 });
 
 test("search requires a filter; zip and category return verified profiles + CDSS links", () => {
   const empty = searchCaliforniaTier2MapPoints({});
   assert.equal(empty.filterActive, false);
   assert.equal(empty.points.length, 0);
-  assert.equal(empty.coverage.mapPoints.count, 15419);
+  assert.equal(empty.coverage.mapPoints.count, 15418);
 
   const byZip = searchCaliforniaTier2MapPoints({ zip: "92691" });
   assert.equal(byZip.filterActive, true);
@@ -118,6 +131,9 @@ test("search requires a filter; zip and category return verified profiles + CDSS
   assert.equal(exactSample.totalMatched, 1);
   assert.equal(exactSample.points[0]?.facilityNumber, "306006899");
   assert.equal(exactSample.points[0]?.matchKind, "exact");
+
+  const rejectedGone = searchCaliforniaTier2MapPoints({ q: "011405838" });
+  assert.equal(rejectedGone.totalMatched, 0);
 });
 
 test("Washington public map and sitemap remain intact", () => {
