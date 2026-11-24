@@ -124,7 +124,7 @@ export const CALIFORNIA_TIER1_RELEASE_CONTROLS = {
   exclusionsEnforced: true as const,
   eligibilityMappingPreserved: true as const,
   publicationEligibleCount: CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT,
-  mapEnabled: false as const,
+  mapEnabled: true as const,
   ownerClaimsEnabled: false as const,
   enhancedFeaturesEnabled: false as const,
   oregonPublished: false as const,

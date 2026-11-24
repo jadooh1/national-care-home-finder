@@ -122,6 +122,9 @@ jobs:
       - name: Check the Washington public index
         run: node --experimental-strip-types --test supabase/proposals/tests/washington_public_indexing.ts
 
+      - name: Check the Supabase client fails soft without public env
+        run: node --experimental-strip-types --test supabase/proposals/tests/supabase_client_init.ts
+
       - name: Check the language selector
         run: node --experimental-strip-types --test supabase/proposals/tests/bilingual_language.ts
 
@@ -211,6 +214,15 @@ jobs:
 
       - name: Check the California Tier 1 statewide release candidate
         run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_release.ts
+
+      - name: Check the California Tier 2 development map
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier2_map.ts
+
+      - name: Check the California Tier 2 final validation evidence
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier2_final_validation.ts
+
+      - name: Check the California Tier 2 production release candidate
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier2_release.ts
 
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"

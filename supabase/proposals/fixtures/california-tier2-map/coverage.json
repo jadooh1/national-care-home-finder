@@ -1,0 +1,68 @@
+{
+  "observedOn": "2026-11-24",
+  "matchEngine": "lib/california-phase8-coordinates.ts#reconcileCaliforniaPhase8Coordinates",
+  "source": {
+    "pathway": "cdss-ccl-arcgis-featureserver-0",
+    "layerUrl": "https://services.arcgis.com/XLPEppdz2H9dOiqp/arcgis/rest/services/CDSS_CCL_Facilities/FeatureServer/0",
+    "gisRowsFetched": 37861,
+    "uniqueGisIds": 37861,
+    "duplicateGisIds": 0,
+    "invalidGisIdentifiers": 0,
+    "matchRule": "exact-FAC_NBR-string-equality; unique-leading-zero-collapse-reported-separately",
+    "mapPointPolicy": "exact + phase9-identity-verified unique-leading-zero-collapsed with valid ArcGIS coords only",
+    "fabricatedCoordinates": 0,
+    "geocoded": false,
+    "cdssAuthoritative": true
+  },
+  "roster": {
+    "listableCount": 15435,
+    "californiaPublished": false,
+    "sourceAsOfIso": "2026-11-22"
+  },
+  "matching": {
+    "eligibleCount": 15435,
+    "exactMatchWithValidCoords": 14058,
+    "leadingZeroCollapsedUniqueWithValidCoords": 1360,
+    "usableOfficialCoords": 15418,
+    "unmatched": 16,
+    "ambiguousRejected": 0,
+    "gisCoordsMissingOrInvalid": 0,
+    "invalidDownloadIds": 0,
+    "exactValidCoverageRate": 0.9107871720116618,
+    "usableOfficialCoordsRate": 0.9988986070618724,
+    "leadingZeroIdentityRejected": 1,
+    "leadingZeroIdentityVerified": 1360
+  },
+  "mapPoints": {
+    "count": 15418,
+    "exact": 14058,
+    "leadingZeroCollapsedUnique": 1360,
+    "developmentOnlyPath": "/development/california/map",
+    "publicMapPath": "/california/map",
+    "publicMapEnabled": true,
+    "leadingZeroIdentityVerified": 1360,
+    "leadingZeroIdentityRejected": 1
+  },
+  "remainingBlockers": [
+    "arcgis-status-domain-still-undocumented",
+    "coordinates-are-gis-enhancement-cdss-downloadstatedata-roster-remains-authoritative",
+    "unmatched-facilities-have-no-verified-coordinates-do-not-invent",
+    "owner-claims-and-enhanced-features-remain-disabled"
+  ],
+  "validation": {
+    "observedOn": "2026-11-24",
+    "baselineCommit": "6a04300",
+    "method": "phase9-identity-corroboration",
+    "rejectedIds": [
+      "011405838"
+    ],
+    "rejectedReason": "identity-not-corroborated (name incompatible; zip mismatch; address alone insufficient without zip)",
+    "stratifiedExactSamplePass": 150,
+    "stratifiedExactSampleFail": 0,
+    "unmatchedDocumented": 16,
+    "verifiedOfficialCoords": 15418,
+    "verifiedOfficialCoordsRate": 0.9988986070618724,
+    "publicMapEnabled": true,
+    "activationBaseline": "30c508c"
+  }
+}

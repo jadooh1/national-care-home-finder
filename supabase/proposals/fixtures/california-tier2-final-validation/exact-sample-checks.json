@@ -1,0 +1,1052 @@
+[
+  {
+    "id": "197608408",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90019",
+    "city": "LOS ANGELES"
+  },
+  {
+    "id": "198320080",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90247",
+    "city": "GARDENA"
+  },
+  {
+    "id": "198600778",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90305",
+    "city": "INGLEWOOD"
+  },
+  {
+    "id": "191603749",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90405",
+    "city": "SANTA MONICA"
+  },
+  {
+    "id": "198202438",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90501",
+    "city": "TORRANCE"
+  },
+  {
+    "id": "306005399",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90620",
+    "city": "BUENA PARK"
+  },
+  {
+    "id": "198320206",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90745",
+    "city": "CARSON"
+  },
+  {
+    "id": "197803050",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90808",
+    "city": "LONG BEACH"
+  },
+  {
+    "id": "191290263",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91001",
+    "city": "ALTADENA"
+  },
+  {
+    "id": "198603681",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91103",
+    "city": "Pasadena"
+  },
+  {
+    "id": "197600960",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91207",
+    "city": "GLENDALE"
+  },
+  {
+    "id": "197610335",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91307",
+    "city": "WEST HILLS"
+  },
+  {
+    "id": "198600369",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91405",
+    "city": "VAN NUYS"
+  },
+  {
+    "id": "197610491",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91505",
+    "city": "BURBANK"
+  },
+  {
+    "id": "197610018",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91605",
+    "city": "NORTH HOLLYWOOD"
+  },
+  {
+    "id": "198603954",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91768",
+    "city": "POMONA"
+  },
+  {
+    "id": "198601894",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91801",
+    "city": "ALHAMBRA"
+  },
+  {
+    "id": "374604686",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91977",
+    "city": "Spring Valley"
+  },
+  {
+    "id": "371881529",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92026",
+    "city": "ESCONDIDO"
+  },
+  {
+    "id": "374604787",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92154",
+    "city": "San Diego"
+  },
+  {
+    "id": "134604934",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92273",
+    "city": "SEELEY"
+  },
+  {
+    "id": "361800222",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92301",
+    "city": "ADELANTO"
+  },
+  {
+    "id": "365530533",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92404",
+    "city": "SAN BERNARDINO"
+  },
+  {
+    "id": "336424483",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92501",
+    "city": "RIVERSIDE"
+  },
+  {
+    "id": "306006170",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92653",
+    "city": "LANGUNA HILLS"
+  },
+  {
+    "id": "300606039",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92704",
+    "city": "SANTA ANA"
+  },
+  {
+    "id": "331880906",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92882",
+    "city": "CORONA"
+  },
+  {
+    "id": "565850624",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93063",
+    "city": "SIMI VALLEY"
+  },
+  {
+    "id": "425801008",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93117",
+    "city": "GOLETA"
+  },
+  {
+    "id": "547204082",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93291",
+    "city": "Visalia"
+  },
+  {
+    "id": "157208931",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93308",
+    "city": "BAKERSFIELD"
+  },
+  {
+    "id": "425850568",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93454",
+    "city": "Santa Maria"
+  },
+  {
+    "id": "197609293",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93534",
+    "city": "LANCASTER"
+  },
+  {
+    "id": "107209202",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93611",
+    "city": "CLOVIS"
+  },
+  {
+    "id": "107209482",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93706",
+    "city": "FRESNO"
+  },
+  {
+    "id": "275200248",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93906",
+    "city": "SALINAS"
+  },
+  {
+    "id": "415601219",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94080",
+    "city": "SOUTH SAN FRANCISCO"
+  },
+  {
+    "id": "380503541",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94112",
+    "city": "SAN FRANCISCO"
+  },
+  {
+    "id": "415203044",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94303",
+    "city": "EAST PALO ALTO"
+  },
+  {
+    "id": "415600103",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94401",
+    "city": "SAN MATEO"
+  },
+  {
+    "id": "486804246",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94585",
+    "city": "SUISUN CITY"
+  },
+  {
+    "id": "216803943",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94949",
+    "city": "NOVATO"
+  },
+  {
+    "id": "435201833",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95020",
+    "city": "GILROY"
+  },
+  {
+    "id": "435201082",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95132",
+    "city": "SAN JOSE"
+  },
+  {
+    "id": "392700424",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95206",
+    "city": "STOCKTON"
+  },
+  {
+    "id": "392701569",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95336",
+    "city": "MANTECA"
+  },
+  {
+    "id": "496804404",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95407",
+    "city": "SANTA ROSA"
+  },
+  {
+    "id": "125001012",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95540",
+    "city": "Fortuna"
+  },
+  {
+    "id": "486801876",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95687",
+    "city": "VACAVILLE"
+  },
+  {
+    "id": "342700407",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95757",
+    "city": "ELK GROVE"
+  },
+  {
+    "id": "345920158",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95843",
+    "city": "ANTELOPE"
+  },
+  {
+    "id": "585002631",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95901",
+    "city": "MARYSVILLE"
+  },
+  {
+    "id": "455002407",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "96003",
+    "city": "Redding"
+  },
+  {
+    "id": "181300554",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "96114",
+    "city": "Janesville"
+  },
+  {
+    "id": "198320392",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90062",
+    "city": "LOS ANGELES"
+  },
+  {
+    "id": "197607735",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90260",
+    "city": "LAWNDALE"
+  },
+  {
+    "id": "198602406",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90305",
+    "city": "INGLEWOOD"
+  },
+  {
+    "id": "198320082",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90405",
+    "city": "SANTA MONICA"
+  },
+  {
+    "id": "198320019",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90502",
+    "city": "TORRANCE"
+  },
+  {
+    "id": "198602557",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90650",
+    "city": "Norwalk"
+  },
+  {
+    "id": "198602923",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90703",
+    "city": "CERRITOS"
+  },
+  {
+    "id": "198320655",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "90805",
+    "city": "LONG BEACH"
+  },
+  {
+    "id": "197610693",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91040",
+    "city": "Sunland"
+  },
+  {
+    "id": "197607681",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91104",
+    "city": "PASADENA"
+  },
+  {
+    "id": "197610715",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91208",
+    "city": "GLENDALE"
+  },
+  {
+    "id": "565850189",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91360",
+    "city": "THOUSAND OAKS"
+  },
+  {
+    "id": "195850826",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91405",
+    "city": "VAN NUYS"
+  },
+  {
+    "id": "197607871",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91504",
+    "city": "BURBANK"
+  },
+  {
+    "id": "195850563",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91606",
+    "city": "NORTH HOLLYWOOD"
+  },
+  {
+    "id": "361800099",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91786",
+    "city": "UPLAND"
+  },
+  {
+    "id": "198603790",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91801",
+    "city": "ALHAMBRA"
+  },
+  {
+    "id": "374603888",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "91910",
+    "city": "Chula Vista"
+  },
+  {
+    "id": "374605178",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92071",
+    "city": "SANTEE"
+  },
+  {
+    "id": "374604546",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92115",
+    "city": "San Diego"
+  },
+  {
+    "id": "336427431",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92234",
+    "city": "CATHEDRAL CITY"
+  },
+  {
+    "id": "365530454",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92346",
+    "city": "HIGHLAND"
+  },
+  {
+    "id": "366425270",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92404",
+    "city": "SAN BERNARDINO"
+  },
+  {
+    "id": "336427416",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92563",
+    "city": "MURRIETA"
+  },
+  {
+    "id": "306006899",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92691",
+    "city": "MISSION VIEJO"
+  },
+  {
+    "id": "306006413",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92780",
+    "city": "TUSTIN"
+  },
+  {
+    "id": "306005962",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "92804",
+    "city": "ANAHEIM"
+  },
+  {
+    "id": "565801788",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93065",
+    "city": "SIMI VALLEY"
+  },
+  {
+    "id": "425850481",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93110",
+    "city": "SANTA BARBARA"
+  },
+  {
+    "id": "547204240",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93257",
+    "city": "PORTERVILLE"
+  },
+  {
+    "id": "157209498",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93314",
+    "city": "BAKERSFIELD"
+  },
+  {
+    "id": "425850230",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93454",
+    "city": "Santa Maria"
+  },
+  {
+    "id": "197610295",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93551",
+    "city": "Palmdale"
+  },
+  {
+    "id": "107206601",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93611",
+    "city": "CLOVIS"
+  },
+  {
+    "id": "107209366",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93720",
+    "city": "FRESNO"
+  },
+  {
+    "id": "277209330",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "93955",
+    "city": "SEASIDE"
+  },
+  {
+    "id": "415600833",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "94080",
+    "city": "SOUTH SAN FRANCISCO"
+  },
+  {
+    "id": "385600167",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "94122",
+    "city": "SAN FRANCISCO"
+  },
+  {
+    "id": "430700136",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "94301",
+    "city": "PALO ALTO"
+  },
+  {
+    "id": "415601202",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "94403",
+    "city": "SAN MATEO"
+  },
+  {
+    "id": "286804062",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "94558",
+    "city": "NAPA"
+  },
+  {
+    "id": "216803246",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "94925",
+    "city": "CORTE MADERA"
+  },
+  {
+    "id": "445202706",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95003",
+    "city": "APTOS"
+  },
+  {
+    "id": "435294219",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95128",
+    "city": "SAN JOSE"
+  },
+  {
+    "id": "392701304",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95209",
+    "city": "STOCKTON"
+  },
+  {
+    "id": "392701427",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95337",
+    "city": "MANTECA"
+  },
+  {
+    "id": "175001941",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95464",
+    "city": "NICE"
+  },
+  {
+    "id": "126803254",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95531",
+    "city": "CRESCENT CITY"
+  },
+  {
+    "id": "347004083",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95608",
+    "city": "Carmichael"
+  },
+  {
+    "id": "315920367",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95747",
+    "city": "ROSEVILLE"
+  },
+  {
+    "id": "345920272",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95835",
+    "city": "Sacramento"
+  },
+  {
+    "id": "297005250",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "95945",
+    "city": "Grass Valley"
+  },
+  {
+    "id": "455002885",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "96007",
+    "city": "Anderson"
+  },
+  {
+    "id": "185002877",
+    "ok": true,
+    "cat": "RCFE",
+    "zip": "96130",
+    "city": "Susanville"
+  },
+  {
+    "id": "198603741",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90033",
+    "city": "LOS ANGELES"
+  },
+  {
+    "id": "198320267",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90248",
+    "city": "GARDENA"
+  },
+  {
+    "id": "198320555",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90304",
+    "city": "INGLEWOOD"
+  },
+  {
+    "id": "306004099",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90638",
+    "city": "LA MIRADA"
+  },
+  {
+    "id": "198601621",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90745",
+    "city": "CARSON"
+  },
+  {
+    "id": "306003782",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "90815",
+    "city": "LONG BEACH"
+  },
+  {
+    "id": "198603901",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91024",
+    "city": "SIERRA MADRE"
+  },
+  {
+    "id": "198603779",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91103",
+    "city": "PASADENA"
+  },
+  {
+    "id": "197603456",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91204",
+    "city": "GLENDALE"
+  },
+  {
+    "id": "197610690",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91354",
+    "city": "Santa Clarita"
+  },
+  {
+    "id": "198600370",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91406",
+    "city": "VAN NUYS"
+  },
+  {
+    "id": "197608761",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91505",
+    "city": "BURBANK"
+  },
+  {
+    "id": "195850495",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91606",
+    "city": "NORTH HOLLYWOOD"
+  },
+  {
+    "id": "198603734",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91711",
+    "city": "CLAREMONT"
+  },
+  {
+    "id": "198601246",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91803",
+    "city": "ALHAMBRA"
+  },
+  {
+    "id": "374602881",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "91945",
+    "city": "Lemon Grove"
+  },
+  {
+    "id": "371881417",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92029",
+    "city": "ESCONDIDO"
+  },
+  {
+    "id": "374605007",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92114",
+    "city": "San Diego"
+  },
+  {
+    "id": "336412351",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92234",
+    "city": "CATHEDRAL CITY"
+  },
+  {
+    "id": "361800089",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92392",
+    "city": "VICTORVILLE"
+  },
+  {
+    "id": "366403453",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92408",
+    "city": "SAN BERNARDINO"
+  },
+  {
+    "id": "336401599",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92508",
+    "city": "RIVERSIDE"
+  },
+  {
+    "id": "306006171",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92691",
+    "city": "MISSION VIEJO"
+  },
+  {
+    "id": "300607257",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92704",
+    "city": "SANTA ANA"
+  },
+  {
+    "id": "306006733",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "92805",
+    "city": "ANAHEIM"
+  },
+  {
+    "id": "565801923",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93033",
+    "city": "OXNARD"
+  },
+  {
+    "id": "425801990",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93111",
+    "city": "SANTA BARBARA"
+  },
+  {
+    "id": "547209494",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93274",
+    "city": "TULARE"
+  },
+  {
+    "id": "157206653",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93306",
+    "city": "BAKERSFIELD"
+  },
+  {
+    "id": "405800830",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93422",
+    "city": "ATASCADERO"
+  },
+  {
+    "id": "197610232",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93535",
+    "city": "LANCASTER"
+  },
+  {
+    "id": "107209200",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93612",
+    "city": "CLOVIS"
+  },
+  {
+    "id": "107209496",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93722",
+    "city": "FRESNO"
+  },
+  {
+    "id": "270707264",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "93906",
+    "city": "SALINAS"
+  },
+  {
+    "id": "419200005",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94080",
+    "city": "SOUTH SAN FRANCISCO"
+  },
+  {
+    "id": "380503052",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94124",
+    "city": "SAN FRANCISCO"
+  },
+  {
+    "id": "486804264",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94585",
+    "city": "SUISUN CITY"
+  },
+  {
+    "id": "210108757",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "94903",
+    "city": "SAN RAFAEL"
+  },
+  {
+    "id": "435202830",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95020",
+    "city": "GILROY"
+  },
+  {
+    "id": "435202770",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95120",
+    "city": "SAN JOSE"
+  },
+  {
+    "id": "392701454",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95206",
+    "city": "STOCKTON"
+  },
+  {
+    "id": "392701829",
+    "ok": true,
+    "cat": "ARF",
+    "zip": "95376",
+    "city": "TRACY"
+  }
+]

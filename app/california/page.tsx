@@ -13,6 +13,7 @@ import {
   CALIFORNIA_LISTED_COUNT,
   CALIFORNIA_SOURCE_LABEL,
 } from "../../lib/state-directory";
+import { CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE } from "../../lib/california-tier2-release";
 
 /** Request-level gate must run on every request (no static prerender bypass). */
 export const dynamic = "force-dynamic";
@@ -104,8 +105,14 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
             <Link href="/washington" style={{ color: C.teal, fontWeight: 600 }}>
               Washington
             </Link>
+            <Link href="/washington/map" style={{ color: C.teal, fontWeight: 600 }}>
+              Washington map
+            </Link>
             <Link href="/california" style={{ color: C.teal, fontWeight: 600 }} aria-current="page">
               California
+            </Link>
+            <Link href="/california/map" style={{ color: C.teal, fontWeight: 600 }}>
+              California map
             </Link>
           </nav>
         </div>
@@ -162,6 +169,28 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
             <strong>Directory arithmetic failed.</strong> Fail closed.
           </section>
         ) : null}
+
+        <section
+          aria-label="California map coverage disclosure"
+          style={{
+            background: "#fff",
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 18,
+          }}
+        >
+          <h2 style={{ marginTop: 0, fontSize: 20 }}>
+            {CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE.title}
+          </h2>
+          <p style={{ color: C.muted, lineHeight: 1.7 }}>
+            {CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE.summary}
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            <Link href="/california/map" style={{ color: C.teal, fontWeight: 700 }}>
+              Open the California map →
+            </Link>
+          </p>
+        </section>
 
         <section
           style={{

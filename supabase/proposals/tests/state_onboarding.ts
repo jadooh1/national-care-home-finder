@@ -58,7 +58,7 @@ test("California stays unpublished and has no coordinate or disclosure adoption"
   assert.equal(decision.recordedExportDate, null);
   assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
-  assert.equal(mapHref("California"), null);
+  assert.equal(mapHref("California"), "/california/map");
   assert.equal(CALIFORNIA_OPEN_DATA_FIELDS.includes("facility_address"), true);
   assert.equal(CALIFORNIA_OPEN_DATA_FIELDS.some(field => /lat|lon/i.test(field)), false);
   assert.deepEqual(withheldCaliforniaFields(CALIFORNIA_OPEN_DATA_FIELDS), [

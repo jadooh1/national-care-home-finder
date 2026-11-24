@@ -79,8 +79,8 @@ function buildReleasePreview() {
   const safeguardsOk =
     ca?.publication === "public"
     && ca.directoryPath === "/california"
-    && ca.mapPath === null
-    && mapHref("California") === null
+    && ca.mapPath === "/california/map"
+    && mapHref("California") === "/california/map"
     && directoryHref("California", DEVELOPMENT_URL) === "/california"
     && directoryHref("California", PRODUCTION_URL) === "/california"
     && californiaPublicSitemapAuthorized()
@@ -93,7 +93,7 @@ function buildReleasePreview() {
     && directoryHref("Oregon", PRODUCTION_URL) === null
     && ENABLED_OWNER_FACILITY_STATES.length === 1
     && ENABLED_OWNER_FACILITY_STATES[0] === "WA"
-    && !CALIFORNIA_TIER1_RELEASE_CONTROLS.mapEnabled
+    && CALIFORNIA_TIER1_RELEASE_CONTROLS.mapEnabled
     && !CALIFORNIA_TIER1_RELEASE_CONTROLS.ownerClaimsEnabled
     && !CALIFORNIA_TIER1_RELEASE_CONTROLS.enhancedFeaturesEnabled
     && !CALIFORNIA_TIER1_RELEASE_CONTROLS.oregonPublished
@@ -145,7 +145,7 @@ test("release baseline PR #215 @ deafabb; eligible 15435; public authorized", ()
   assert.equal(californiaTier1PublicPublicationAuthorized(), true);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.publicationEligibleCount, 15435);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.protectedPreviewPublication, "public");
-  assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.mapEnabled, false);
+  assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.mapEnabled, true);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.ownerClaimsEnabled, false);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.enhancedFeaturesEnabled, false);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.oregonPublished, false);
@@ -172,8 +172,8 @@ test("residual-22 and PI mapping preserved on the release roster", () => {
 test("publication safeguards: public CA directory; OR unpublished; WA intact", () => {
   assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
-  assert.equal(directoryContract("California")?.mapPath, null);
-  assert.equal(mapHref("California"), null);
+  assert.equal(directoryContract("California")?.mapPath, "/california/map");
+  assert.equal(mapHref("California"), "/california/map");
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
   assert.equal(directoryHref("California", PRODUCTION_URL), "/california");
   assert.equal(directoryContract("Oregon")?.publication, "development");
@@ -183,8 +183,9 @@ test("publication safeguards: public CA directory; OR unpublished; WA intact", (
   assert.deepEqual([...ENABLED_OWNER_FACILITY_STATES], ["WA"]);
   assert.equal(sitemapPaths(true, []).includes("/california"), true);
   assert.equal(californiaPublicSitemapAuthorized(), true);
-  assert.equal(CALIFORNIA_PUBLIC_PAGES.length, 1);
+  assert.equal(CALIFORNIA_PUBLIC_PAGES.length, 2);
   assert.equal(CALIFORNIA_PUBLIC_PAGES[0]?.path, "/california");
+  assert.equal(CALIFORNIA_PUBLIC_PAGES[1]?.path, "/california/map");
   assert.equal(PRIVATE_INDEX_PREFIXES.includes("/california"), false);
 });
 
