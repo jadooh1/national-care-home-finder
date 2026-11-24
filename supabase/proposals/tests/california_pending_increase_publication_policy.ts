@@ -24,8 +24,16 @@ test("baseline #201; mapping approved for future eligibility only; publication S
     "future-eligibility-consideration-only",
   );
   assert.equal(
-    CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplicationOrDatabase,
+    CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplication,
+    true,
+  );
+  assert.equal(
+    CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInDatabase,
     false,
+  );
+  assert.equal(
+    CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplicationOrDatabase,
+    true,
   );
   assert.equal(
     CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.californiaPublicationAllowed,
@@ -217,7 +225,7 @@ test("impact simulation: 88→22 exclusions; publicationEligible stays 0", () =>
   assert.equal(preview.stopGoPublic, "STOP");
   assert.ok(
     preview.remainingBlockers.includes(
-      "pending-increase-mapping-approved-future-eligibility-only-not-activated",
+      "pending-increase-mapping-activated-development-application-only",
     ),
   );
 });

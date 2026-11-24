@@ -160,6 +160,12 @@ export default async function CaliforniaDevelopmentDirectoryPage({
               Prepublication cutover
             </Link>
             <Link
+              href="/development/california-eligibility-mapping"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Eligibility mapping
+            </Link>
+            <Link
               href="/development/california-exclusion-ledger"
               style={{ color: C.teal, fontWeight: 600 }}
             >
