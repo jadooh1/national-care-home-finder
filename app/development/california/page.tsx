@@ -151,7 +151,13 @@ export default async function CaliforniaDevelopmentDirectoryPage({
               href="/development/california-exclusion-necessity"
               style={{ color: C.teal, fontWeight: 600 }}
             >
-              Activation necessity →
+              Activation necessity
+            </Link>
+            <Link
+              href="/development/california-prepublication-cutover"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Prepublication cutover →
             </Link>
           </nav>
         </div>
