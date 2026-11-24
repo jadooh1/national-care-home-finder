@@ -10,11 +10,13 @@ import {
   CALIFORNIA_TIER1_RELEASE_OUT_OF_SCOPE_PENDING_INCREASE_IDS,
   CALIFORNIA_TIER1_RELEASE_SOURCE,
   CALIFORNIA_TIER1_RELEASE_VERIFIED_PR,
+  CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE,
   californiaTier1PublicPublicationAuthorized,
   californiaTier1ReleaseCandidateReady,
   californiaTier1ReleaseEligibleCount,
   californiaTier1ReleasePublished,
   californiaTier1ReleaseRollback,
+  californiaTier1SurfaceAccess,
 } from "../../../lib/california-tier1-release.ts";
 import {
   CALIFORNIA_TIER1_FULL_ROSTER_RESIDUAL_IDS,
@@ -219,5 +221,52 @@ test("release preview arithmetic: protected RC GO / public STOP", () => {
   assert.ok(preview.recommendation.includes("STOP for public production publication"));
   assert.ok(
     preview.preservedRestrictions.includes("california-public-publication-unauthorized"),
+  );
+});
+
+
+test("request-level surface gate: production hosts fail closed until authorized", () => {
+  const prodDenied = californiaTier1SurfaceAccess({
+    vercelEnv: "production",
+    requestHost: "www.nationalcarehomefinder.com",
+  });
+  assert.equal(prodDenied.allowed, false);
+  assert.ok(prodDenied.reasons.includes("production-host-fail-closed") || prodDenied.reasons.includes("vercel-production-env-fail-closed"));
+
+  const kkfaDenied = californiaTier1SurfaceAccess({
+    requestHost: "national-care-home-finder-kkfa.vercel.app",
+  });
+  assert.equal(kkfaDenied.allowed, false);
+
+  const previewOk = californiaTier1SurfaceAccess({
+    vercelEnv: "preview",
+    requestHost: "national-care-home-finder-kkfa-git-cursor-4b77e4-amrasjad-6298.vercel.app",
+  });
+  assert.equal(previewOk.allowed, true);
+
+  const localOk = californiaTier1SurfaceAccess({
+    requestHost: "127.0.0.1:3010",
+  });
+  assert.equal(localOk.allowed, true);
+
+  const authorizedProd = californiaTier1SurfaceAccess({
+    vercelEnv: "production",
+    requestHost: "www.nationalcarehomefinder.com",
+    publicPublicationAuthorized: true,
+    californiaPublished: true,
+  });
+  assert.equal(authorizedProd.allowed, true);
+});
+
+test("activation sequence is explicit and remains unauthorized today", () => {
+  assert.equal(californiaTier1PublicPublicationAuthorized(), false);
+  assert.equal(californiaTier1ReleasePublished(), false);
+  assert.ok(CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE.length >= 6);
+  assert.equal(CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE[0]?.id, "confirm-freshness-and-eligible-count");
+  assert.equal(CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE.at(-1)?.id, "ship-activation-pr-and-deploy-only-after-approval");
+  assert.ok(
+    CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE.some((s) =>
+      ("diff" in s ? s.diff : []).some((line) => line.includes("publicPublicationAuthorized: false → true")),
+    ),
   );
 });

@@ -274,3 +274,143 @@ export function californiaTier1PublicPublicationAuthorized(): boolean {
 export function californiaTier1ReleaseCandidateReady(): boolean {
   return CALIFORNIA_TIER1_RELEASE_CONTROLS.releaseCandidateReady;
 }
+
+/** Production hosts that must fail closed until public publication is authorized. */
+export const CALIFORNIA_TIER1_PRODUCTION_HOSTS = [
+  "www.nationalcarehomefinder.com",
+  "nationalcarehomefinder.com",
+  "national-care-home-finder-kkfa.vercel.app",
+] as const;
+
+function normalizeAccessHost(value: string | undefined): string {
+  const trimmed = (value ?? "").split(",")[0].trim();
+  if (!trimmed) return "";
+  try {
+    const withProtocol = trimmed.includes("://") ? trimmed : `https://${trimmed}`;
+    return new URL(withProtocol).hostname.toLowerCase();
+  } catch {
+    return "";
+  }
+}
+
+export type CaliforniaTier1SurfaceAccessInput = {
+  vercelEnv?: string | null;
+  requestHost?: string | null;
+  publicPublicationAuthorized?: boolean;
+  californiaPublished?: boolean;
+};
+
+/**
+ * Request-level surface gate. Protected RC allows isolated preview /
+ * development hosts only. Production hosts fail closed (not merely unlinked)
+ * until separate public-publication authorization.
+ */
+export function californiaTier1SurfaceAccess(
+  input: CaliforniaTier1SurfaceAccessInput = {},
+): { allowed: boolean; reasons: string[] } {
+  const authorized =
+    input.publicPublicationAuthorized
+    ?? CALIFORNIA_TIER1_RELEASE_CONTROLS.publicPublicationAuthorized;
+  const published =
+    input.californiaPublished
+    ?? CALIFORNIA_TIER1_RELEASE_CONTROLS.californiaPublished;
+  const host = normalizeAccessHost(input.requestHost ?? undefined);
+  const vercelEnv = (input.vercelEnv ?? "").trim().toLowerCase();
+  const reasons: string[] = [];
+
+  if (authorized && published) {
+    return { allowed: true, reasons: ["public-publication-authorized"] };
+  }
+
+  reasons.push("public-publication-unauthorized");
+
+  if (
+    host
+    && (CALIFORNIA_TIER1_PRODUCTION_HOSTS as readonly string[]).includes(host)
+  ) {
+    reasons.push("production-host-fail-closed");
+    return { allowed: false, reasons: [...new Set(reasons)] };
+  }
+
+  if (vercelEnv === "production") {
+    reasons.push("vercel-production-env-fail-closed");
+    return { allowed: false, reasons: [...new Set(reasons)] };
+  }
+
+  if (vercelEnv === "preview" || vercelEnv === "development") {
+    reasons.push("protected-preview-or-development-allowed");
+    return { allowed: true, reasons: [...new Set(reasons)] };
+  }
+
+  if (!host || host === "localhost" || host === "127.0.0.1") {
+    reasons.push("local-protected-preview-allowed");
+    return { allowed: true, reasons: [...new Set(reasons)] };
+  }
+
+  if (host.endsWith(".vercel.app") && host.includes("-git-")) {
+    reasons.push("vercel-git-preview-allowed");
+    return { allowed: true, reasons: [...new Set(reasons)] };
+  }
+
+  reasons.push("unknown-host-fail-closed");
+  return { allowed: false, reasons: [...new Set(reasons)] };
+}
+
+/**
+ * Exact activation sequence after separate public-publication approval.
+ * Do not execute without that approval. No database writes required.
+ */
+export const CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE = [
+  {
+    step: 1,
+    id: "confirm-freshness-and-eligible-count",
+    detail:
+      "Confirm CDSS as-of still matches fixture (or refresh roster). Eligible count must remain exact before flip.",
+  },
+  {
+    step: 2,
+    id: "set-release-authorization-flags",
+    file: "lib/california-tier1-release.ts",
+    diff: [
+      "publicPublicationAuthorized: false → true",
+      "californiaPublished: false → true",
+      "Keep publicationEligibleCount = 15435 (or refreshed exact count)",
+      "Keep mapEnabled/ownerClaimsEnabled/enhancedFeaturesEnabled/oregonPublished = false",
+    ],
+  },
+  {
+    step: 3,
+    id: "flip-directory-contract-to-public",
+    file: "lib/state-directory.ts",
+    diff: [
+      'California publication: "development" → "public"',
+      "directoryPath remains /california",
+      "mapPath remains null",
+    ],
+  },
+  {
+    step: 4,
+    id: "enable-public-sitemap",
+    file: "lib/public-indexing.ts",
+    diff: [
+      "Populate CALIFORNIA_PUBLIC_PAGES with /california",
+      "Remove /california from PRIVATE_INDEX_PREFIXES",
+      "Allow california facility profiles in sitemap.ts when authorized",
+    ],
+  },
+  {
+    step: 5,
+    id: "update-manifest-and-gates",
+    file: "supabase/proposals/fixtures/california-tier1-full-roster/manifest.json + lib/california-tier1-full-roster.ts",
+    diff: [
+      "californiaPublished: true",
+      "Listing gate: allow sitemap for listable IDs; keep map/owner/api blocked",
+    ],
+  },
+  {
+    step: 6,
+    id: "ship-activation-pr-and-deploy-only-after-approval",
+    detail:
+      "Open a separate activation PR against main. Merge/deploy only after explicit production approval. No Supabase schema/data writes for Tier 1 app publication.",
+  },
+] as const;

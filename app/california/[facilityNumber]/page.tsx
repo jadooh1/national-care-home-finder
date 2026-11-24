@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import {
   californiaTier1FullRosterListingPath,
   californiaTier1FullRosterLookup,
   loadCaliforniaTier1FullRosterManifest,
 } from "../../../lib/california-tier1-full-roster";
+import { californiaTier1SurfaceAccess } from "../../../lib/california-tier1-release";
+
+/** Request-level gate must run on every request (no static prerender bypass). */
+export const dynamic = "force-dynamic";
 
 const C = {
   navy: "#123c59",
@@ -20,6 +25,15 @@ type PageProps = {
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const h = await headers();
+  const requestHost = h.get("x-forwarded-host") ?? h.get("host") ?? "";
+  const access = californiaTier1SurfaceAccess({
+    vercelEnv: process.env.VERCEL_ENV,
+    requestHost,
+  });
+  if (!access.allowed) {
+    return { title: "Not found" };
+  }
   const { facilityNumber } = await params;
   const lookup = californiaTier1FullRosterLookup(facilityNumber);
   if (!lookup.ok) {
@@ -32,6 +46,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function CaliforniaFacilityDetailPage({ params }: PageProps) {
+  const h = await headers();
+  const requestHost = h.get("x-forwarded-host") ?? h.get("host") ?? "";
+  const access = californiaTier1SurfaceAccess({
+    vercelEnv: process.env.VERCEL_ENV,
+    requestHost,
+  });
+  if (!access.allowed) notFound();
+
   const { facilityNumber } = await params;
   const lookup = californiaTier1FullRosterLookup(facilityNumber);
   const manifest = loadCaliforniaTier1FullRosterManifest();

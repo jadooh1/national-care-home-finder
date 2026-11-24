@@ -1,15 +1,21 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { notFound } from "next/navigation";
 import {
   californiaTier1FullRosterDetailPath,
   californiaTier1FullRosterListingPath,
   buildCaliforniaTier1FullRosterPreview,
 } from "../../lib/california-tier1-full-roster";
+import { californiaTier1SurfaceAccess } from "../../lib/california-tier1-release";
 import {
   CALIFORNIA_LISTED_COUNT,
   CALIFORNIA_SOURCE_LABEL,
 } from "../../lib/state-directory";
+
+/** Request-level gate must run on every request (no static prerender bypass). */
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "California RCFE and ARF directory",
@@ -47,6 +53,14 @@ type PageProps = {
 };
 
 export default async function CaliforniaDirectoryPage({ searchParams }: PageProps) {
+  const h = await headers();
+  const requestHost = h.get("x-forwarded-host") ?? h.get("host") ?? "";
+  const access = californiaTier1SurfaceAccess({
+    vercelEnv: process.env.VERCEL_ENV,
+    requestHost,
+  });
+  if (!access.allowed) notFound();
+
   const params = await searchParams;
   const pageNumber = Number(params.page) || 1;
   const roster = buildCaliforniaTier1FullRosterPreview({
