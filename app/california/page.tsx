@@ -105,8 +105,14 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
             <Link href="/washington" style={{ color: C.teal, fontWeight: 600 }}>
               Washington
             </Link>
+            <Link href="/washington/map" style={{ color: C.teal, fontWeight: 600 }}>
+              Washington map
+            </Link>
             <Link href="/california" style={{ color: C.teal, fontWeight: 600 }} aria-current="page">
               California
+            </Link>
+            <Link href="/california/map" style={{ color: C.teal, fontWeight: 600 }}>
+              California map
             </Link>
           </nav>
         </div>
@@ -176,8 +182,13 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
           <h2 style={{ marginTop: 0, fontSize: 20 }}>
             {CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE.title}
           </h2>
-          <p style={{ color: C.muted, lineHeight: 1.7, marginBottom: 0 }}>
+          <p style={{ color: C.muted, lineHeight: 1.7 }}>
             {CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE.summary}
+          </p>
+          <p style={{ marginBottom: 0 }}>
+            <Link href="/california/map" style={{ color: C.teal, fontWeight: 700 }}>
+              Open the California map →
+            </Link>
           </p>
         </section>
 

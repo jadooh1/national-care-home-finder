@@ -66,7 +66,7 @@ test("California Tier 1 directory is public while legacy onboarding profile stay
   // Activated Tier 1 directory contract is public with production href; map stays off.
   assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
-  assert.equal(directoryContract("California")?.mapPath, null);
+  assert.equal(directoryContract("California")?.mapPath, "/california/map");
   assert.equal(directoryHref("California", "https://yiehgstweswxjakbcdzc.supabase.co"), "/california");
   assert.deepEqual(california.categories.map(category => category.code), ["RCFE", "ARF"]);
 });

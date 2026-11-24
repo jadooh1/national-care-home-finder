@@ -190,7 +190,7 @@ test("California public surfaces; map/owner/api stay blocked; sitemap allowed", 
   assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
   assert.equal(directoryHref("California", PRODUCTION_URL), "/california");
-  assert.equal(mapHref("California"), null);
+  assert.equal(mapHref("California"), "/california/map");
   assert.deepEqual([...ENABLED_OWNER_FACILITY_STATES], ["WA"]);
   assert.equal(DIRECTORY_VIEW, "wa_dshs_listed_facilities");
   assert.ok(PRIVATE_INDEX_PREFIXES.includes("/development"));

@@ -38,18 +38,16 @@
     "exact": 14058,
     "leadingZeroCollapsedUnique": 1360,
     "developmentOnlyPath": "/development/california/map",
-    "publicMapPath": null,
-    "publicMapEnabled": false,
+    "publicMapPath": "/california/map",
+    "publicMapEnabled": true,
     "leadingZeroIdentityVerified": 1360,
     "leadingZeroIdentityRejected": 1
   },
   "remainingBlockers": [
-    "exact-id-gaps-and-gis-integer-FAC_NBR-leading-zero-representation",
     "arcgis-status-domain-still-undocumented",
-    "public-california-map-remains-disabled-mapPath-null",
     "coordinates-are-gis-enhancement-cdss-downloadstatedata-roster-remains-authoritative",
     "unmatched-facilities-have-no-verified-coordinates-do-not-invent",
-    "one-leading-zero-collapse-rejected-after-phase9-identity-check"
+    "owner-claims-and-enhanced-features-remain-disabled"
   ],
   "validation": {
     "observedOn": "2026-11-24",
@@ -64,6 +62,7 @@
     "unmatchedDocumented": 16,
     "verifiedOfficialCoords": 15418,
     "verifiedOfficialCoordsRate": 0.9988986070618724,
-    "publicMapEnabled": false
+    "publicMapEnabled": true,
+    "activationBaseline": "30c508c"
   }
 }

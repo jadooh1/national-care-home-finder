@@ -5,7 +5,8 @@
  * coordinates via Phase 8 exact licensing-ID matching (plus unique
  * leading-zero-collapsed GIS integer FAC_NBR representation). Never fabricates
  * or geocodes coordinates. CDSS DownloadStateData remains authoritative for
- * facility identity and attributes. Public California mapPath stays null.
+ * facility identity and attributes. Public California mapPath is /california/map
+ * when Tier 2 activation is authorized.
  */
 
 import { readFileSync } from "node:fs";
@@ -19,13 +20,11 @@ const FACILITY_DETAIL_PREFIX =
 export const CALIFORNIA_TIER2_MAP_OBSERVED_ON = "2026-11-24";
 
 export const CALIFORNIA_TIER2_MAP_SCOPE = {
-  kind: "statewide-development-map" as const,
-  /** Public interactive map remains unauthorized on this RC. */
-  californiaMapPublished: false as const,
-  publicMapEnabled: false as const,
-  publicMapPath: null,
+  kind: "statewide-public-map" as const,
+  californiaMapPublished: true as const,
+  publicMapEnabled: true as const,
+  publicMapPath: "/california/map" as const,
   developmentMapPath: "/development/california/map" as const,
-  /** Live Tier 1 profiles (public directory remains authorized separately). */
   publicListingPath: "/california" as const,
   publicDetailPrefix: "/california/" as const,
   fixtureDir: "supabase/proposals/fixtures/california-tier2-map" as const,
@@ -38,11 +37,10 @@ export const CALIFORNIA_TIER2_MAP_SCOPE = {
   fabricatedCoordinates: 0 as const,
   geocoded: false as const,
   ownerFeaturesEnabled: false as const,
-  /** After Phase 9 identity filter (validated development baseline 056b35f). */
   verifiedMapPointCount: 15418 as const,
   leadingZeroIdentityRejected: 1 as const,
   unverifiedExcluded: 17 as const,
-  validationBaseline: "056b35f" as const,
+  validationBaseline: "30c508c" as const,
 } as const;
 
 export type CaliforniaTier2MatchKind = "exact" | "leading-zero-collapsed-unique";
@@ -102,8 +100,8 @@ export type CaliforniaTier2MapCoverage = {
     exact: number;
     leadingZeroCollapsedUnique: number;
     developmentOnlyPath: string;
-    publicMapPath: null;
-    publicMapEnabled: false;
+    publicMapPath: string | null;
+    publicMapEnabled: boolean;
     leadingZeroIdentityVerified?: number;
     leadingZeroIdentityRejected?: number;
   };
@@ -118,7 +116,7 @@ export type CaliforniaTier2MapCoverage = {
     unmatchedDocumented: number;
     verifiedOfficialCoords: number;
     verifiedOfficialCoordsRate: number;
-    publicMapEnabled: false;
+    publicMapEnabled: boolean;
   };
   remainingBlockers: readonly string[];
 };
@@ -187,12 +185,12 @@ function loadCompactPoints(): CompactPoint[] {
   return cachedPoints;
 }
 
-export function californiaTier2MapPath(): typeof CALIFORNIA_TIER2_MAP_SCOPE.developmentMapPath {
-  return CALIFORNIA_TIER2_MAP_SCOPE.developmentMapPath;
+export function californiaTier2MapPath(): typeof CALIFORNIA_TIER2_MAP_SCOPE.publicMapPath {
+  return CALIFORNIA_TIER2_MAP_SCOPE.publicMapPath;
 }
 
-export function californiaTier2PublicMapEnabled(): false {
-  return false;
+export function californiaTier2PublicMapEnabled(): true {
+  return true;
 }
 
 function disclosureUrlFor(facilityNumber: string): string | null {
@@ -325,7 +323,7 @@ export function californiaTier2MapCoverageSummary(): {
   usableRate: number;
   leadingZeroIdentityVerified: number;
   leadingZeroIdentityRejected: number;
-  publicMapEnabled: false;
+  publicMapEnabled: boolean;
 } {
   const coverage = loadCaliforniaTier2MapCoverage();
   const c = coverage.matching;
@@ -340,6 +338,6 @@ export function californiaTier2MapCoverageSummary(): {
     usableRate: c.usableOfficialCoordsRate,
     leadingZeroIdentityVerified: c.leadingZeroIdentityVerified ?? 0,
     leadingZeroIdentityRejected: c.leadingZeroIdentityRejected ?? 0,
-    publicMapEnabled: false,
+    publicMapEnabled: CALIFORNIA_TIER2_MAP_SCOPE.publicMapEnabled,
   };
 }

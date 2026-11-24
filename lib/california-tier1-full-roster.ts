@@ -347,7 +347,7 @@ export function californiaTier1FullRosterSearch(
     sourceAsOfIso: manifest.sourceAsOfIso,
     listableCount: manifest.listableCount,
     scopeNote:
-      `California Tier 1 directory from CDSS DownloadStateData as-of ${manifest.sourceAsOfIso} (${manifest.listableCount.toLocaleString()} eligible). Maps, owner claims, and enhanced features are not available.`,
+      `California Tier 1 directory from CDSS DownloadStateData as-of ${manifest.sourceAsOfIso} (${manifest.listableCount.toLocaleString()} eligible). Owner claims and enhanced features are not available.`,
   };
 }
 

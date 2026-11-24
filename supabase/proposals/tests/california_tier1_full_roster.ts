@@ -123,10 +123,10 @@ test("public search+sitemap allowed; map/owner/api blocked", () => {
 test("public CA contracts; WA/OR safeguards", () => {
   assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
-  assert.equal(directoryContract("California")?.mapPath, null);
+  assert.equal(directoryContract("California")?.mapPath, "/california/map");
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
   assert.equal(directoryHref("California", PRODUCTION_URL), "/california");
-  assert.equal(mapHref("California"), null);
+  assert.equal(mapHref("California"), "/california/map");
   assert.deepEqual([...ENABLED_OWNER_FACILITY_STATES], ["WA"]);
   assert.equal(DIRECTORY_VIEW, "wa_dshs_listed_facilities");
   assert.ok(PRIVATE_INDEX_PREFIXES.includes("/development"));
@@ -140,7 +140,7 @@ test("public CA contracts; WA/OR safeguards", () => {
   assert.ok(page.includes('aria-label="California facility search"'));
   assert.ok(page.includes("Official CDSS disclosure"));
   assert.equal(page.includes("supabase.from"), false);
-  assert.equal(page.includes("/washington/map"), false);
+  assert.ok(page.includes("/california/map"));
 
   const home = readFileSync("app/page.tsx", "utf8");
   assert.equal(home.includes("/development/california"), false);

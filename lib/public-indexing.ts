@@ -74,6 +74,12 @@ export const CALIFORNIA_PUBLIC_PAGES: readonly PublicPage[] = [
     description:
       "Search California Residential Care Facilities for the Elderly and Adult Residential Facilities. Approved licensed capacity is not a vacancy.",
   },
+  {
+    path: "/california/map",
+    title: "California RCFE and ARF map",
+    description:
+      "Map California RCFE and ARF facilities with verified official coordinates. Approved licensed capacity is not a vacancy.",
+  },
 ];
 
 export const CALIFORNIA_PROTECTED_PREVIEW_PAGES: readonly PublicPage[] = [

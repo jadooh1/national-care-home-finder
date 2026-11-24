@@ -36,7 +36,7 @@ export type DirectoryContract = {
   name: StateName;
   publication: DirectoryPublication;
   directoryPath: "/washington" | "/oregon" | "/california" | null;
-  mapPath: "/washington/map" | null;
+  mapPath: "/washington/map" | "/california/map" | null;
   searchFields: readonly string[];
   locatorUrl: string | null;
   retrievedOn: string | null;
@@ -91,12 +91,12 @@ export function directoryContract(name: string): DirectoryContract | null {
     };
   }
   if (state === "California") {
-    // California Tier 1 public directory (authorized activation). Map stays off.
+    // California Tier 1 directory + Tier 2 public map (authorized activation).
     return {
       name: state,
       publication: "public",
       directoryPath: "/california",
-      mapPath: null,
+      mapPath: "/california/map",
       searchFields: CALIFORNIA_SEARCH,
       locatorUrl: CALIFORNIA_CDSS_FACILITY_SEARCH,
       retrievedOn: CALIFORNIA_SOURCE_RETRIEVED_ON,
@@ -128,7 +128,7 @@ export function directoryHref(
   return null;
 }
 
-export function mapHref(name: string): "/washington/map" | null {
+export function mapHref(name: string): "/washington/map" | "/california/map" | null {
   const contract = directoryContract(name);
   if (contract?.publication !== "public") return null;
   return contract.mapPath;

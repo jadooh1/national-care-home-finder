@@ -82,7 +82,7 @@ test("unverified states do not receive invented counts or directory routes", () 
     assert.equal(directoryContract(item.state)?.directoryPath ?? null, expectedPath);
     if (item.state === "California") {
       assert.equal(directoryContract(item.state)?.publication, "public");
-      assert.equal(directoryContract(item.state)?.mapPath, null);
+      assert.equal(directoryContract(item.state)?.mapPath, "/california/map");
       assert.equal(item.publicationReady, true);
       assert.equal(item.publication, "public");
     }

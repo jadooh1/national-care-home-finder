@@ -50,14 +50,14 @@ test("production opens Washington and California; development also opens Oregon"
   assert.equal(directoryHref("Oregon", `${developmentUrl}.example`), null);
   assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("California")?.publication, "public");
-  assert.equal(directoryContract("California")?.mapPath, null);
+  assert.equal(directoryContract("California")?.mapPath, "/california/map");
   assert.ok(directoryContract("California")?.locatorUrl);
 });
 
 test("maps stay on Washington and Oregon search does not ask for an address", () => {
   assert.equal(mapHref("Washington"), "/washington/map");
   assert.equal(mapHref("Oregon"), null);
-  assert.equal(mapHref("California"), null);
+  assert.equal(mapHref("California"), "/california/map");
   assert.deepEqual(directoryContract("Washington")?.searchFields, ["name", "city", "zip", "license"]);
   assert.deepEqual(directoryContract("Oregon")?.searchFields, ["name", "city", "county"]);
   assert.equal(directoryContract("Oregon")?.searchFields.includes("license"), false);
