@@ -325,6 +325,9 @@ jobs:
       - name: Check the California Tier 1 full-roster acceptance
         run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_full_roster_acceptance.ts
 
+      - name: Check the California Tier 2 development map
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier2_map.ts
+
       - name: Check the California prepublication cutover controls
         run: node --experimental-strip-types --test supabase/proposals/tests/california_prepublication_cutover.ts
 
