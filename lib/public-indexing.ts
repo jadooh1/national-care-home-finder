@@ -57,6 +57,15 @@ export const WASHINGTON_PUBLIC_PAGES: readonly PublicPage[] = [
   },
 ];
 
+export const CALIFORNIA_PUBLIC_PAGES: readonly PublicPage[] = [
+  {
+    path: "/california",
+    title: "California RCFE and ARF directory",
+    description:
+      "Search California Residential Care Facilities for the Elderly and Adult Residential Facilities from the CDSS DownloadStateData roster. Approved licensed capacity is not a vacancy.",
+  },
+];
+
 export type SiteEnv = {
   vercelEnv?: string;
   productionHost?: string;
@@ -135,9 +144,32 @@ export function profileSitemapPaths(licenses: readonly string[]): string[] {
   return [...paths].sort();
 }
 
+export function californiaEligibleProfilePath(
+  facilityNumber: string | null | undefined,
+): string | null {
+  const value = facilityNumber?.trim() ?? "";
+  if (!/^\d{8,9}$/.test(value)) return null;
+  return `/california/${value}`;
+}
+
+export function californiaProfileSitemapPaths(
+  facilityNumbers: readonly string[],
+): string[] {
+  const paths = new Set<string>();
+  for (const facilityNumber of facilityNumbers) {
+    const path = californiaEligibleProfilePath(facilityNumber);
+    if (path) paths.add(path);
+  }
+  return [...paths].sort();
+}
+
 export function sitemapPaths(allowed: boolean, licenses: readonly string[]): string[] {
   if (!allowed) return [];
-  return [...WASHINGTON_PUBLIC_PAGES.map(page => page.path), ...profileSitemapPaths(licenses)];
+  return [
+    ...WASHINGTON_PUBLIC_PAGES.map(page => page.path),
+    ...CALIFORNIA_PUBLIC_PAGES.map(page => page.path),
+    ...profileSitemapPaths(licenses),
+  ];
 }
 
 export function sitemapUrls(allowed: boolean, licenses: readonly string[]): string[] {

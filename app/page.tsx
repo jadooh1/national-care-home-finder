@@ -72,7 +72,7 @@ export default function Home() {
                 return <article key={state}>
                   {featured.includes(state) && <img src={`/home/${state.toLowerCase()}.webp`} alt="" width="201" height="112" />}
                   <div><h3>{state}</h3>
-                    {href ? <Link href={href}>{es ? "Buscar" : "Search"} {state === "Washington" ? "WA" : "OR"} →</Link> : <small>{es ? "Sin publicar" : "Unpublished"}</small>}
+                    {href ? <Link href={href}>{es ? "Buscar" : "Search"} {state === "Washington" ? "WA" : state === "California" ? "CA" : "OR"} →</Link> : <small>{es ? "Sin publicar" : "Unpublished"}</small>}
                   </div>
                 </article>;
               })}

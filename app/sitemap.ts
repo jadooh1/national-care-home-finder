@@ -1,6 +1,14 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
-import { listIndexableLicenses, readSiteEnv, responseIndexingAllowed, sitemapUrls } from "../lib/public-indexing";
+import { loadCaliforniaTier1FullRosterCompact } from "../lib/california-tier1-full-roster";
+import {
+  absolutePublicUrl,
+  californiaProfileSitemapPaths,
+  listIndexableLicenses,
+  readSiteEnv,
+  responseIndexingAllowed,
+  sitemapUrls,
+} from "../lib/public-indexing";
 
 export const dynamic = "force-dynamic";
 
@@ -12,5 +20,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
     publishableKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "",
   });
-  return sitemapUrls(true, listed.ok ? listed.licenses : []).map(url => ({ url }));
+  const base = sitemapUrls(true, listed.ok ? listed.licenses : []);
+  const californiaProfiles = californiaProfileSitemapPaths(
+    loadCaliforniaTier1FullRosterCompact().map((row) => row.n),
+  ).map((path) => absolutePublicUrl(path));
+  return [...base, ...californiaProfiles].map((url) => ({ url }));
 }

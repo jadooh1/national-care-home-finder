@@ -62,7 +62,7 @@ test("California remains unpublished inside the shared framework", () => {
   assert.equal(california.recordedExportDate, null);
   assert.equal(publicPublicationPermitted(california), false);
   assert.deepEqual(california.blockers, onboardingDecision("California").blockers);
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.deepEqual(california.categories.map(category => category.code), ["RCFE", "ARF"]);
 });
 

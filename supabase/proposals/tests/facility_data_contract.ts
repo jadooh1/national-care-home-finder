@@ -160,9 +160,9 @@ test("California and Oregon gaps stay explicit and both states stay ineligible",
   assert.equal(washingtonRow().ownerClaimEligible, ENABLED_OWNER_FACILITY_STATES.includes("WA"));
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.publication, "development");
-  assert.equal(directoryContract("California")?.publication, "unpublished");
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.mapPath, null);
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
 });
 
 test("the contract does not change Design 2 or add a migration", () => {

@@ -8,6 +8,7 @@ import {
   PUBLIC_CANONICAL_HOST,
   PUBLIC_CANONICAL_ORIGIN,
   PUBLIC_PRODUCTION_HOSTS,
+  CALIFORNIA_PUBLIC_PAGES,
   WASHINGTON_PUBLIC_PAGES,
   absolutePublicUrl,
   eligibleProfilePath,
@@ -93,14 +94,18 @@ test("public robots allow Washington and exclude private sections", () => {
   assert.equal(policy.disallow.includes("/washington"), false);
 });
 
-test("the public sitemap lists real Washington pages and eligible profiles only", () => {
+test("the public sitemap lists real Washington pages, California directory, and eligible profiles only", () => {
   for (const page of WASHINGTON_PUBLIC_PAGES) {
     const file = page.path === "/" ? "app/page.tsx" : `app${page.path}/page.tsx`;
     assert.equal(existsSync(file), true, file);
     assert.equal(absolutePublicUrl(page.path).startsWith(`${PUBLIC_CANONICAL_ORIGIN}/`), true);
   }
+  for (const page of CALIFORNIA_PUBLIC_PAGES) {
+    assert.equal(existsSync(`app${page.path}/page.tsx`), true, page.path);
+  }
   const urls = sitemapUrls(true, [" 100001 ", "100001", "ABC109", "", "42"]);
   assert.deepEqual(urls.slice(0, WASHINGTON_PUBLIC_PAGES.length), WASHINGTON_PUBLIC_PAGES.map(page => absolutePublicUrl(page.path)));
+  assert.equal(urls.includes(`${PUBLIC_CANONICAL_ORIGIN}/california`), true);
   assert.equal(urls.includes(`${PUBLIC_CANONICAL_ORIGIN}/washington/100001`), true);
   assert.equal(urls.includes(`${PUBLIC_CANONICAL_ORIGIN}/washington/42`), true);
   assert.equal(urls.filter(url => url.endsWith("/washington/100001")).length, 1);
@@ -160,7 +165,13 @@ test("a license read uses the public directory and fails closed", async () => {
     fetchImpl: async () => new Response("no", { status: 401 }),
   });
   assert.equal(denied.ok, false);
-  assert.deepEqual(sitemapPaths(true, []), WASHINGTON_PUBLIC_PAGES.map(page => page.path));
+  assert.deepEqual(
+    sitemapPaths(true, []),
+    [
+      ...WASHINGTON_PUBLIC_PAGES.map(page => page.path),
+      ...CALIFORNIA_PUBLIC_PAGES.map(page => page.path),
+    ],
+  );
 
   const placeholder = await listIndexableLicenses({
     supabaseUrl: "https://ci.invalid",
