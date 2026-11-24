@@ -113,16 +113,25 @@ test("print media keeps a long comparison address without blank directory pages"
     const attached = await cdp(socket, "Target.attachToTarget", { targetId: target.targetId, flatten: true });
     const sessionId = String(attached.sessionId);
     await cdp(socket, "Runtime.enable", {}, sessionId);
+    await cdp(socket, "Page.enable", {}, sessionId);
+    await waitForDocumentReady(socket, sessionId);
     const screenHeight = await evaluate(socket, sessionId, "document.documentElement.scrollHeight");
     await cdp(socket, "Emulation.setEmulatedMedia", { media: "print" }, sessionId);
+    // Give Chromium a beat to recompute print styles before measuring.
+    await new Promise(resolve => setTimeout(resolve, 100));
     const printed = await evaluate(socket, sessionId, `(() => {
       const address = document.getElementById("address");
       const sheet = document.querySelector(".nchf-print-sheet");
+      const omit = document.querySelector(".nchf-print-omit");
+      if (!address || !sheet || !omit) {
+        return { shown: false, address: null, height: document.documentElement.scrollHeight, sheetDisplay: null, omitDisplay: null, missing: true };
+      }
       let shown = true;
       let node = address;
       while (node) { if (getComputedStyle(node).display === "none") shown = false; node = node.parentElement; }
-      return { shown, address: address.textContent, height: document.documentElement.scrollHeight, sheetDisplay: getComputedStyle(sheet).display, omitDisplay: getComputedStyle(document.querySelector(".nchf-print-omit")).display };
+      return { shown, address: address.textContent, height: document.documentElement.scrollHeight, sheetDisplay: getComputedStyle(sheet).display, omitDisplay: getComputedStyle(omit).display, missing: false };
     })()`);
+    assert.equal(printed.missing, false, "print fixture nodes were not ready");
     assert.equal(printed.shown, true);
     assert.equal(printed.address, `${longStreet}, Seattle, WA, 98101`);
     assert.equal(printed.sheetDisplay, "block");
@@ -190,9 +199,33 @@ function cdp(socket: WebSocket, method: string, params: Record<string, unknown>,
   });
 }
 
+async function waitForDocumentReady(socket: WebSocket, sessionId: string): Promise<void> {
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    const ready = await evaluate(socket, sessionId, "document.readyState");
+    if (ready === "complete" || ready === "interactive") {
+      const hasAddress = await evaluate(socket, sessionId, "Boolean(document.getElementById('address'))");
+      if (hasAddress) return;
+    }
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  throw new Error("print fixture document did not become ready");
+}
+
 async function evaluate(socket: WebSocket, sessionId: string, expression: string): Promise<any> {
-  const result = await cdp(socket, "Runtime.evaluate", { expression, returnByValue: true, awaitPromise: true }, sessionId);
-  const details = result.exceptionDetails as { text?: string } | undefined;
-  if (details) throw new Error(details.text ?? "browser evaluation failed");
-  return (result.result as { value?: unknown }).value;
+  let lastError: Error | undefined;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const result = await cdp(socket, "Runtime.evaluate", { expression, returnByValue: true, awaitPromise: true }, sessionId);
+    const details = result.exceptionDetails as {
+      text?: string;
+      exception?: { description?: string; value?: unknown };
+    } | undefined;
+    if (!details) return (result.result as { value?: unknown }).value;
+    const message = details.exception?.description
+      ?? (typeof details.exception?.value === "string" ? details.exception.value : undefined)
+      ?? details.text
+      ?? "browser evaluation failed";
+    lastError = new Error(message);
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  throw lastError ?? new Error("browser evaluation failed");
 }
