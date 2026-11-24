@@ -120,6 +120,9 @@ export default async function CaliforniaDevelopmentDirectoryPage({
             aria-label="Development navigation"
             style={{ display: "flex", gap: 16, flexWrap: "wrap" }}
           >
+            <Link href="/development/california/map" style={{ color: C.teal, fontWeight: 600 }}>
+              Tier 2 map
+            </Link>
             <Link href="/" style={{ color: C.teal, fontWeight: 600 }}>
               ← All states
             </Link>
