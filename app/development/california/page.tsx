@@ -157,7 +157,13 @@ export default async function CaliforniaDevelopmentDirectoryPage({
               href="/development/california-prepublication-cutover"
               style={{ color: C.teal, fontWeight: 600 }}
             >
-              Prepublication cutover →
+              Prepublication cutover
+            </Link>
+            <Link
+              href="/development/california-exclusion-ledger"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Exclusion ledger →
             </Link>
           </nav>
         </div>

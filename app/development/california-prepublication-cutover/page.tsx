@@ -63,6 +63,12 @@ export default function CaliforniaPrepublicationCutoverPage() {
             >
               Exclusion control
             </Link>
+            <Link
+              href="/development/california-exclusion-ledger"
+              style={{ color: C.teal, fontWeight: 600 }}
+            >
+              Exclusion ledger →
+            </Link>
           </nav>
         </div>
       </header>
@@ -131,8 +137,10 @@ export default function CaliforniaPrepublicationCutoverPage() {
           }}
         >
           <strong>Public: {preview.stopGoPublic}.</strong> Runtime exclusions:{" "}
-          {preview.defaults.exclusionsActivated ? "ON" : "OFF"}. Eligibility
-          mapping:{" "}
+          {preview.defaults.exclusionsActivated
+            ? "ON (development)"
+            : "OFF"}
+          . Eligibility mapping:{" "}
           {preview.defaults.eligibilityMappingActivated ? "ON" : "OFF"}.
           Publication eligible: {preview.defaults.publicationEligibleCount}.
           Residual ledger size: {preview.residualCount}. Source as-of{" "}
