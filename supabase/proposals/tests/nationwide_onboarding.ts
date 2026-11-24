@@ -62,7 +62,13 @@ test("California remains unpublished inside the shared framework", () => {
   assert.equal(california.recordedExportDate, null);
   assert.equal(publicPublicationPermitted(california), false);
   assert.deepEqual(california.blockers, onboardingDecision("California").blockers);
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  // Protected Tier 1 RC: directory path exists for development preview only.
+  // Shared onboarding framework still treats California as unpublished / not
+  // publicPublicationPermitted until a separate public-publication approval.
+  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
+  assert.equal(directoryContract("California")?.mapPath, null);
+  assert.equal(directoryHref("California", "https://yiehgstweswxjakbcdzc.supabase.co"), null);
   assert.deepEqual(california.categories.map(category => category.code), ["RCFE", "ARF"]);
 });
 

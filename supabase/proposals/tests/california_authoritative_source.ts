@@ -83,8 +83,8 @@ test("the recheck records the completed adult-residential conflict and the faile
   assert.equal(CALIFORNIA_LIVE_RECHECK.rcfe, "datastore-http-500");
   assert.equal(CALIFORNIA_LIVE_RECHECK.repeatedAfterFailure, false);
   assert.equal(californiaDirectoryReady(), false);
-  assert.equal(directoryContract("California")?.publication, "unpublished");
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("Washington")?.publication, "public");
   const home = readFileSync(new URL("../../../lib/copy/home.ts", import.meta.url), "utf8");
   const proposal = readFileSync(new URL("../20261114020000_california_authoritative_source.md", import.meta.url), "utf8");

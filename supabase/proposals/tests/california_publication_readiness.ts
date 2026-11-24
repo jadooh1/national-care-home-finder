@@ -77,7 +77,7 @@ test("California stays unpublished while Washington and Oregon keep their contra
   assert.ok(decision.blockers.includes("accrual-periodicity-other-is-not-an-update-frequency"));
   assert.ok(decision.blockers.includes("gis-service-edit-time-is-not-an-export-date"));
   assert.ok(decision.blockers.includes("gis-status-code-has-no-published-domain"));
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.publication, "development");
 });

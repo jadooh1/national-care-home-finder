@@ -48,7 +48,7 @@ test("Oregon is the recommended next list and none of the five is publishable", 
   assert.equal(directoryContract("Oregon")?.publication, "development");
   assert.equal(directoryContract("Oregon")?.directoryPath, "/oregon");
   assert.equal(directoryContract("Washington")?.publication, "public");
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("North Carolina")?.directoryPath, null);
 });
 

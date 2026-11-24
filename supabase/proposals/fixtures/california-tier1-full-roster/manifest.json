@@ -1,0 +1,39 @@
+{
+  "observedOn": "2026-11-24",
+  "sourceAsOfIso": "2026-11-22",
+  "pathway": "downloadstatedata-transparency-csv",
+  "californiaPublished": false,
+  "publicationEligible": 15435,
+  "exclusionsActivated": true,
+  "eligibilityMappingActivated": true,
+  "statewideRosterForDevelopment": true,
+  "priorOfflineTier1": 15429,
+  "residualExclusions": 22,
+  "residualPresentInDownload": 22,
+  "listableCount": 15435,
+  "pendingIncreaseIdsHistorical": 66,
+  "pendingIncreasePresentInDownload": 66,
+  "pendingIncreaseFlaggedInRoster": 58,
+  "deltaVsPrior15429": 6,
+  "rcfe": {
+    "contentDisposition": "attachment; filename=ResidentialElderCareFacility11222026.csv",
+    "sha256": "07166e7ee6870f8229624203f011087732cbcab30590473deefce1b82869af8d",
+    "bytes": 8661150,
+    "rawRows": 13354
+  },
+  "arf": {
+    "contentDisposition": "attachment; filename=AdultResidentialFacilities11222026.csv",
+    "sha256": "25267a8f6bcdc8f2d28ebacff72a8ce3288fd52d735056a8ddde67bcf846da2b",
+    "bytes": 5446913,
+    "rawRows": 11050
+  },
+  "listableRule": "eligible RCFE/ARF types + LICENSED|ON PROBATION + non-empty License First Date + not residual-22",
+  "notes": [
+    "Protected Tier 1 release candidate. californiaPublished=false; publicationEligible=15435.",
+    "Residual-22 exclusions and truncation aliases enforced.",
+    "Pending Increase mapping preserved: 58 listable PI IDs flagged; 8 historical OOS PI IDs omitted.",
+    "Source as-of 2026-11-22 (Content-Disposition *11222026.csv); listable 15435 vs prior offline 15429 (delta +6).",
+    "California maps, owner claims, and enhanced features remain disabled.",
+    "Public production publication unauthorized until separate approval."
+  ]
+}
