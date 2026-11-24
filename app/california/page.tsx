@@ -120,7 +120,7 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
       >
         <div style={{ maxWidth: 1100, margin: "auto" }}>
           <p style={{ fontSize: 12, letterSpacing: 2, fontWeight: 700, margin: 0 }}>
-            CALIFORNIA PROTECTED RELEASE CANDIDATE
+            CALIFORNIA
           </p>
           <h1
             style={{
@@ -135,8 +135,6 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
             Search {CALIFORNIA_LISTED_COUNT.toLocaleString()} licensed RCFE and ARF
             facilities from the official CDSS DownloadStateData roster (source as-of{" "}
             {CALIFORNIA_SOURCE_LABEL}). Approved licensed capacity is not a vacancy.
-            This directory is a protected Tier 1 release candidate and is not authorized
-            for public production publication without separate approval.
           </p>
         </div>
       </section>
@@ -364,10 +362,9 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
         </section>
 
         <p style={{ color: C.muted, lineHeight: 1.6, margin: 0 }}>
-          Independent informational directory for protected preview. Verify all
-          facility details with official CDSS sources. California maps and
-          owner-claim features are not available. Public production publication
-          remains unauthorized until separate approval.
+          Independent informational directory. Verify all facility details with
+          official CDSS sources. California maps and owner-claim features are not
+          available.
         </p>
       </div>
     </main>

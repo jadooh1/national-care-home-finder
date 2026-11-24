@@ -29,17 +29,17 @@ test("the state list stays fifty names; only Washington is public; OR+CA are dev
   assert.equal(new Set(STATE_NAMES).size, 50);
   assert.equal(directoryContract("Guam"), null);
   const publications = STATE_NAMES.map(name => directoryContract(name)?.publication);
-  assert.equal(publications.filter(status => status === "public").length, 1);
-  assert.equal(publications.filter(status => status === "development").length, 2);
+  assert.equal(publications.filter(status => status === "public").length, 2);
+  assert.equal(publications.filter(status => status === "development").length, 1);
   assert.equal(publications.filter(status => status === "unpublished").length, 47);
-  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.publication, "development");
 });
 
-test("production opens Washington only; development also opens Oregon and California RC", () => {
+test("production opens Washington and California; development also opens Oregon", () => {
   for (const url of [productionUrl, "not a url"]) {
     assert.equal(directoryHref("Washington", url), "/washington");
-    assert.equal(directoryHref("California", url), null);
+    assert.equal(directoryHref("California", url), "/california");
     assert.equal(directoryHref("Oregon", url), null);
     assert.equal(directoryHref("Texas", url), null);
     assert.equal(directoryHref("Florida", url), null);
@@ -49,7 +49,7 @@ test("production opens Washington only; development also opens Oregon and Califo
   assert.equal(directoryHref("Oregon", developmentUrl), "/oregon");
   assert.equal(directoryHref("Oregon", `${developmentUrl}.example`), null);
   assert.equal(directoryContract("California")?.directoryPath, "/california");
-  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.mapPath, null);
   assert.ok(directoryContract("California")?.locatorUrl);
 });

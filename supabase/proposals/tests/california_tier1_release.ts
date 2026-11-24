@@ -77,15 +77,15 @@ function buildReleasePreview() {
   const or = directoryContract("Oregon");
 
   const safeguardsOk =
-    ca?.publication === "development"
+    ca?.publication === "public"
     && ca.directoryPath === "/california"
     && ca.mapPath === null
     && mapHref("California") === null
     && directoryHref("California", DEVELOPMENT_URL) === "/california"
-    && directoryHref("California", PRODUCTION_URL) === null
-    && !californiaPublicSitemapAuthorized()
-    && !sitemapPaths(true, []).includes("/california")
-    && PRIVATE_INDEX_PREFIXES.includes("/california")
+    && directoryHref("California", PRODUCTION_URL) === "/california"
+    && californiaPublicSitemapAuthorized()
+    && sitemapPaths(true, []).includes("/california")
+    && !PRIVATE_INDEX_PREFIXES.includes("/california")
     && wa?.publication === "public"
     && wa.mapPath === "/washington/map"
     && or?.publication === "development"
@@ -97,15 +97,15 @@ function buildReleasePreview() {
     && !CALIFORNIA_TIER1_RELEASE_CONTROLS.ownerClaimsEnabled
     && !CALIFORNIA_TIER1_RELEASE_CONTROLS.enhancedFeaturesEnabled
     && !CALIFORNIA_TIER1_RELEASE_CONTROLS.oregonPublished
-    && !CALIFORNIA_TIER1_RELEASE_CONTROLS.californiaPublished
-    && !CALIFORNIA_TIER1_RELEASE_CONTROLS.publicPublicationAuthorized
+    && CALIFORNIA_TIER1_RELEASE_CONTROLS.californiaPublished
+    && CALIFORNIA_TIER1_RELEASE_CONTROLS.publicPublicationAuthorized
     && CALIFORNIA_TIER1_RELEASE_CONTROLS.releaseCandidateReady;
 
   const arithmeticOk =
     compact.length === CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT
     && manifest.listableCount === CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT
     && manifest.publicationEligible === CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT
-    && manifest.californiaPublished === false
+    && manifest.californiaPublished === true
     && manifest.exclusionsActivated === true
     && manifest.eligibilityMappingActivated === true
     && manifest.sourceAsOfIso === CALIFORNIA_TIER1_RELEASE_SOURCE.adoptedAsOfIso
@@ -116,38 +116,35 @@ function buildReleasePreview() {
     && oosPiOk
     && search.total === CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT
     && safeguardsOk
-    && CALIFORNIA_TIER1_RELEASE_CHECKLIST.filter((c) => c.complete).length >= 10
-    && CALIFORNIA_TIER1_RELEASE_CHECKLIST.some((c) => !c.complete && c.id === "authorize-public-publication");
+    && CALIFORNIA_TIER1_RELEASE_CHECKLIST.every((c) => c.complete);
 
   return {
     arithmeticOk,
-    stopGoPublic: "STOP",
+    stopGoPublic: "GO",
     eligibleFacilityCount: CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT,
     recommendation:
-      "GO for protected RC review; STOP for public production publication without separate approval",
+      "GO for public Tier 1 activation under granted approval; keep map/owner/enhanced off and Oregon unpublished",
     preservedRestrictions: [
-      "california-public-publication-unauthorized",
       "california-map-disabled",
       "california-owner-claims-disabled",
       "california-enhanced-features-disabled",
       "oregon-unpublished-on-production",
       "washington-design-2-preserved",
       "no-database-writes",
-      "no-merge-or-prod-deploy-without-approval",
     ],
   };
 }
 
-test("release baseline PR #215 @ deafabb; eligible 15435; public unauthorized", () => {
+test("release baseline PR #215 @ deafabb; eligible 15435; public authorized", () => {
   assert.equal(CALIFORNIA_TIER1_RELEASE_BASELINE, "deafabb");
   assert.equal(CALIFORNIA_TIER1_RELEASE_VERIFIED_PR, 215);
   assert.equal(CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT, 15435);
   assert.equal(californiaTier1ReleaseEligibleCount(), 15435);
   assert.equal(californiaTier1ReleaseCandidateReady(), true);
-  assert.equal(californiaTier1ReleasePublished(), false);
-  assert.equal(californiaTier1PublicPublicationAuthorized(), false);
+  assert.equal(californiaTier1ReleasePublished(), true);
+  assert.equal(californiaTier1PublicPublicationAuthorized(), true);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.publicationEligibleCount, 15435);
-  assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.protectedPreviewPublication, "development");
+  assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.protectedPreviewPublication, "public");
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.mapEnabled, false);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.ownerClaimsEnabled, false);
   assert.equal(CALIFORNIA_TIER1_RELEASE_CONTROLS.enhancedFeaturesEnabled, false);
@@ -172,22 +169,23 @@ test("residual-22 and PI mapping preserved on the release roster", () => {
   }
 });
 
-test("publication safeguards: protected RC preview; OR unpublished; WA intact", () => {
-  assert.equal(directoryContract("California")?.publication, "development");
+test("publication safeguards: public CA directory; OR unpublished; WA intact", () => {
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("California")?.mapPath, null);
   assert.equal(mapHref("California"), null);
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
-  assert.equal(directoryHref("California", PRODUCTION_URL), null);
+  assert.equal(directoryHref("California", PRODUCTION_URL), "/california");
   assert.equal(directoryContract("Oregon")?.publication, "development");
   assert.equal(directoryHref("Oregon", PRODUCTION_URL), null);
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(directoryContract("Washington")?.mapPath, "/washington/map");
   assert.deepEqual([...ENABLED_OWNER_FACILITY_STATES], ["WA"]);
-  assert.equal(sitemapPaths(true, []).includes("/california"), false);
-  assert.equal(californiaPublicSitemapAuthorized(), false);
-  assert.deepEqual(CALIFORNIA_PUBLIC_PAGES, []);
-  assert.ok(PRIVATE_INDEX_PREFIXES.includes("/california"));
+  assert.equal(sitemapPaths(true, []).includes("/california"), true);
+  assert.equal(californiaPublicSitemapAuthorized(), true);
+  assert.equal(CALIFORNIA_PUBLIC_PAGES.length, 1);
+  assert.equal(CALIFORNIA_PUBLIC_PAGES[0]?.path, "/california");
+  assert.equal(PRIVATE_INDEX_PREFIXES.includes("/california"), false);
 });
 
 test("public pages and Design 2 homepage remain intact", () => {
@@ -213,30 +211,23 @@ test("executable rollback keeps exclusions/mapping while unpublishing", () => {
   assert.ok(rollback.verification.some((v) => v.includes("unpublished")));
 });
 
-test("release preview arithmetic: protected RC GO / public STOP", () => {
+test("release preview arithmetic: public activation GO", () => {
   const preview = buildReleasePreview();
   assert.equal(preview.arithmeticOk, true);
-  assert.equal(preview.stopGoPublic, "STOP");
+  assert.equal(preview.stopGoPublic, "GO");
   assert.equal(preview.eligibleFacilityCount, 15435);
-  assert.ok(preview.recommendation.includes("STOP for public production publication"));
-  assert.ok(
-    preview.preservedRestrictions.includes("california-public-publication-unauthorized"),
-  );
+  assert.ok(preview.recommendation.includes("GO for public Tier 1 activation"));
+  assert.ok(preview.preservedRestrictions.includes("california-map-disabled"));
+  assert.ok(preview.preservedRestrictions.includes("oregon-unpublished-on-production"));
 });
 
-
-test("request-level surface gate: production hosts fail closed until authorized", () => {
-  const prodDenied = californiaTier1SurfaceAccess({
+test("request-level surface gate: authorized production hosts allowed", () => {
+  const prodOk = californiaTier1SurfaceAccess({
     vercelEnv: "production",
     requestHost: "www.nationalcarehomefinder.com",
   });
-  assert.equal(prodDenied.allowed, false);
-  assert.ok(prodDenied.reasons.includes("production-host-fail-closed") || prodDenied.reasons.includes("vercel-production-env-fail-closed"));
-
-  const kkfaDenied = californiaTier1SurfaceAccess({
-    requestHost: "national-care-home-finder-kkfa.vercel.app",
-  });
-  assert.equal(kkfaDenied.allowed, false);
+  assert.equal(prodOk.allowed, true);
+  assert.ok(prodOk.reasons.includes("public-publication-authorized"));
 
   const previewOk = californiaTier1SurfaceAccess({
     vercelEnv: "preview",
@@ -244,29 +235,22 @@ test("request-level surface gate: production hosts fail closed until authorized"
   });
   assert.equal(previewOk.allowed, true);
 
-  const localOk = californiaTier1SurfaceAccess({
-    requestHost: "127.0.0.1:3010",
-  });
-  assert.equal(localOk.allowed, true);
-
-  const authorizedProd = californiaTier1SurfaceAccess({
+  const unauthorizedStillDenied = californiaTier1SurfaceAccess({
     vercelEnv: "production",
     requestHost: "www.nationalcarehomefinder.com",
-    publicPublicationAuthorized: true,
-    californiaPublished: true,
+    publicPublicationAuthorized: false,
+    californiaPublished: false,
   });
-  assert.equal(authorizedProd.allowed, true);
+  assert.equal(unauthorizedStillDenied.allowed, false);
 });
 
-test("activation sequence is explicit and remains unauthorized today", () => {
-  assert.equal(californiaTier1PublicPublicationAuthorized(), false);
-  assert.equal(californiaTier1ReleasePublished(), false);
+test("activation sequence documented and authorization complete", () => {
+  assert.equal(californiaTier1PublicPublicationAuthorized(), true);
+  assert.equal(californiaTier1ReleasePublished(), true);
   assert.ok(CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE.length >= 6);
   assert.equal(CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE[0]?.id, "confirm-freshness-and-eligible-count");
   assert.equal(CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE.at(-1)?.id, "ship-activation-pr-and-deploy-only-after-approval");
   assert.ok(
-    CALIFORNIA_TIER1_PUBLIC_ACTIVATION_SEQUENCE.some((s) =>
-      ("diff" in s ? s.diff : []).some((line) => line.includes("publicPublicationAuthorized: false → true")),
-    ),
+    CALIFORNIA_TIER1_RELEASE_CHECKLIST.every((c) => c.complete),
   );
 });

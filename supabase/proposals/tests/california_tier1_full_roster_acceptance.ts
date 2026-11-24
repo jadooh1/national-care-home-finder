@@ -50,11 +50,11 @@ function timeMs(fn: () => void, n = 20): { p50: number; p95: number } {
   return { p50: percentile(samples, 50), p95: percentile(samples, 95) };
 }
 
-test("acceptance baseline deafabb/#215; protected RC; public STOP", () => {
+test("acceptance baseline deafabb/#215; public Tier 1 activated", () => {
   assert.equal(ACCEPTANCE_BASELINE, "deafabb");
-  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
-  assert.equal(directoryHref("California", PRODUCTION_URL), null);
+  assert.equal(directoryHref("California", PRODUCTION_URL), "/california");
   assert.equal(californiaTier1FullRosterListingGate({
     facilityNumber: "092700093",
     surface: "search",
@@ -186,18 +186,18 @@ test("all 22 residual exclusions and truncation aliases fail closed", () => {
   }
 });
 
-test("California protected preview surfaces; map/owner/api/sitemap stay blocked", () => {
-  assert.equal(directoryContract("California")?.publication, "development");
+test("California public surfaces; map/owner/api stay blocked; sitemap allowed", () => {
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
-  assert.equal(directoryHref("California", PRODUCTION_URL), null);
+  assert.equal(directoryHref("California", PRODUCTION_URL), "/california");
   assert.equal(mapHref("California"), null);
   assert.deepEqual([...ENABLED_OWNER_FACILITY_STATES], ["WA"]);
   assert.equal(DIRECTORY_VIEW, "wa_dshs_listed_facilities");
   assert.ok(PRIVATE_INDEX_PREFIXES.includes("/development"));
-  assert.ok(PRIVATE_INDEX_PREFIXES.includes("/california"));
-  assert.equal(sitemapPaths(true, ["123"]).includes("/california"), false);
+  assert.equal(PRIVATE_INDEX_PREFIXES.includes("/california"), false);
+  assert.equal(sitemapPaths(true, ["123"]).includes("/california"), true);
 
-  for (const surface of ["map", "owner-claim", "api", "sitemap"] as const) {
+  for (const surface of ["map", "owner-claim", "api"] as const) {
     assert.equal(
       californiaTier1FullRosterListingGate({
         facilityNumber: "092700093",
@@ -207,6 +207,13 @@ test("California protected preview surfaces; map/owner/api/sitemap stay blocked"
       surface,
     );
   }
+  assert.equal(
+    californiaTier1FullRosterListingGate({
+      facilityNumber: "092700093",
+      surface: "sitemap",
+    }).allowed,
+    true,
+  );
 
   assert.equal(existsSync("app/california/page.tsx"), true);
   assert.equal(existsSync("app/california/[facilityNumber]/page.tsx"), true);
@@ -260,21 +267,18 @@ test("search/lookup performance stays within acceptance budgets", () => {
   assert.ok(preview.p95 <= BUDGETS.previewP95Ms, `preview ${preview.p95}`);
 });
 
-test("acceptance preview remains arithmetic-green for release candidate", () => {
+test("acceptance preview remains arithmetic-green for public activation", () => {
   const preview = buildCaliforniaTier1FullRosterPreview();
   assert.equal(preview.arithmeticOk, true);
-  assert.equal(preview.stopGoPublic, "STOP");
+  assert.equal(preview.stopGoPublic, "GO");
   assert.equal(preview.reconciliation.currentListable, 15435);
   assert.equal(preview.reconciliation.delta, 6);
   assert.equal(preview.reconciliation.residualStillPresent, 22);
-  assert.equal(preview.checklistPending, 1);
-  assert.ok(
-    preview.preservedRestrictions.includes("no-merge-or-prod-deploy-without-approval"),
-  );
+  assert.equal(preview.checklistPending, 0);
   assert.ok(
     preview.preservedRestrictions.includes("california-map-disabled"),
   );
   assert.ok(
-    preview.preservedRestrictions.includes("california-public-publication-unauthorized"),
+    preview.preservedRestrictions.includes("oregon-unpublished-on-production"),
   );
 });

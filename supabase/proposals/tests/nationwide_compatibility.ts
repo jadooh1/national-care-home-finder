@@ -13,7 +13,7 @@ import {
 import { publicPublicationAllowed, rosterViolations, type ProposedRosterRecord } from "../../../lib/nationwide-roster.ts";
 import { STATE_NAMES, directoryContract, directoryHref } from "../../../lib/state-directory.ts";
 
-test("every state is classified once and only Washington is publication-ready", () => {
+test("every state is classified once; Washington and California are publication-ready", () => {
   const assessments = compatibilityAssessments();
   assert.equal(assessments.length, 50);
   assert.deepEqual(assessments.map(item => item.state), [...STATE_NAMES]);
@@ -21,7 +21,7 @@ test("every state is classified once and only Washington is publication-ready", 
   assert.deepEqual(compatibilityClassCounts(), { A: 2, B: 8, C: 21, D: 19 });
   assert.deepEqual(
     assessments.filter(item => item.publicationReady).map(item => item.state),
-    ["Washington"],
+    ["California", "Washington"],
   );
   assert.equal(DIRECTORY_REQUIRES_COORDINATES, false);
   assert.equal(SCHEMA_UPGRADE.applied, false);
@@ -42,7 +42,9 @@ test("schema fit stays separate from publication and from missing coordinates", 
   assert.equal(oregon?.coordinateColumns, false);
   assert.equal(oregon?.observedRows, 1584);
   assert.equal(california?.compatibility, "B");
-  assert.equal(california?.observedRows, 23020);
+  assert.equal(california?.publication, "public");
+  assert.equal(california?.publicationReady, true);
+  assert.equal(california?.observedRows, 15435);
   assert.equal(michigan?.compatibility, "C");
   assert.equal(michigan?.observedRows, 4480);
   assert.equal(pennsylvania?.compatibility, "C");
@@ -68,9 +70,7 @@ test("unverified states do not receive invented counts or directory routes", () 
       assert.equal(item.licenseIdentifier, null);
       assert.equal(item.publicationReady, false);
     }
-    // Shared contracts: WA public; OR + CA protected development preview paths;
-    // all other states remain without directory routes. California stays
-    // publicationReady=false in the nationwide compatibility assessment.
+    // Shared contracts: WA + CA public; OR development preview; others unpublished.
     const expectedPath =
       item.state === "Washington"
         ? "/washington"
@@ -81,15 +81,17 @@ test("unverified states do not receive invented counts or directory routes", () 
         : null;
     assert.equal(directoryContract(item.state)?.directoryPath ?? null, expectedPath);
     if (item.state === "California") {
-      assert.equal(directoryContract(item.state)?.publication, "development");
+      assert.equal(directoryContract(item.state)?.publication, "public");
       assert.equal(directoryContract(item.state)?.mapPath, null);
-      assert.equal(item.publicationReady, false);
-      assert.equal(item.publication, "unpublished");
+      assert.equal(item.publicationReady, true);
+      assert.equal(item.publication, "public");
     }
     assert.equal(directoryHref(item.state, developmentUrl), expectedPath);
     assert.equal(
       directoryHref(item.state, productionUrl),
-      item.state === "Washington" ? "/washington" : null,
+      item.state === "Washington" || item.state === "California"
+        ? expectedPath
+        : null,
     );
   }
   assert.deepEqual([...ONBOARDING_SEQUENCE].slice(0, 2), ["Washington", "Oregon"]);

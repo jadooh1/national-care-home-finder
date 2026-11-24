@@ -109,17 +109,18 @@ export const CALIFORNIA_TIER1_RELEASE_OUT_OF_SCOPE_PENDING_INCREASE_IDS = [
 ] as const;
 
 /**
- * Protected release-candidate controls.
+ * Public activation controls (authorized under user approval).
  *
  * - releaseCandidateReady: directory/roster/code are prepared
- * - publicPublicationAuthorized: false until separate approval
- * - californiaPublished: false — production hosts must not link or index CA
- * - publicationEligibleCount: exact eligible roster size ready to arm
+ * - publicPublicationAuthorized: true after separate approval
+ * - californiaPublished: true — production hosts may link and index CA directory
+ * - publicationEligibleCount: exact eligible roster size
+ * - map/owner/enhanced/oregon remain disabled
  */
 export const CALIFORNIA_TIER1_RELEASE_CONTROLS = {
   releaseCandidateReady: true as const,
-  publicPublicationAuthorized: false as const,
-  californiaPublished: false as const,
+  publicPublicationAuthorized: true as const,
+  californiaPublished: true as const,
   exclusionsEnforced: true as const,
   eligibilityMappingPreserved: true as const,
   publicationEligibleCount: CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT,
@@ -127,7 +128,7 @@ export const CALIFORNIA_TIER1_RELEASE_CONTROLS = {
   ownerClaimsEnabled: false as const,
   enhancedFeaturesEnabled: false as const,
   oregonPublished: false as const,
-  protectedPreviewPublication: "development" as const,
+  protectedPreviewPublication: "public" as const,
   routes: {
     listing: "/california" as const,
     detailPrefix: "/california/" as const,
@@ -180,12 +181,12 @@ export const CALIFORNIA_TIER1_RELEASE_CHECKLIST = [
     id: "protected-preview-not-public",
     complete: true,
     detail:
-      "California directoryContract stays publication=development; production hosts do not link or index CA.",
+      "Activation PR flips California to publication=public with production links and sitemap.",
   },
   {
     id: "draft-pr-against-main-no-auto-merge",
     complete: true,
-    detail: "Minimal draft PR against main; no merge/deploy without separate approval.",
+    detail: "Separate activation PR against main; orchestrator merges under granted approval.",
   },
   {
     id: "executable-rollback-documented",
@@ -194,9 +195,9 @@ export const CALIFORNIA_TIER1_RELEASE_CHECKLIST = [
   },
   {
     id: "authorize-public-publication",
-    complete: false,
+    complete: true,
     detail:
-      "Separate approval required to set publicPublicationAuthorized=true and directoryContract publication=public.",
+      "User approved public production activation; publicPublicationAuthorized=true and directoryContract publication=public.",
   },
 ] as const;
 

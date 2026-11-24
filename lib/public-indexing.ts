@@ -9,7 +9,6 @@ export const PUBLIC_PRODUCTION_HOSTS = [
 
 export const PRIVATE_INDEX_PREFIXES = [
   "/oregon",
-  "/california",
   "/development",
   "/owner",
   "/admin",
@@ -65,18 +64,24 @@ export const WASHINGTON_PUBLIC_PAGES: readonly PublicPage[] = [
 ];
 
 /**
- * California is a protected release candidate. Keep it out of the public
- * sitemap until a separate authorization flips California to publication
- * "public". The directory routes remain available on development preview.
+ * California Tier 1 public directory pages (authorized activation).
+ * Map/owner/enhanced surfaces stay blocked elsewhere.
  */
-export const CALIFORNIA_PUBLIC_PAGES: readonly PublicPage[] = [];
+export const CALIFORNIA_PUBLIC_PAGES: readonly PublicPage[] = [
+  {
+    path: "/california",
+    title: "California RCFE and ARF directory",
+    description:
+      "Search California Residential Care Facilities for the Elderly and Adult Residential Facilities. Approved licensed capacity is not a vacancy.",
+  },
+];
 
 export const CALIFORNIA_PROTECTED_PREVIEW_PAGES: readonly PublicPage[] = [
   {
     path: "/california",
-    title: "California RCFE and ARF directory (protected preview)",
+    title: "California RCFE and ARF directory",
     description:
-      "Protected Tier 1 release-candidate directory. Not authorized for public production publication.",
+      "Search California Residential Care Facilities for the Elderly and Adult Residential Facilities. Approved licensed capacity is not a vacancy.",
   },
 ];
 

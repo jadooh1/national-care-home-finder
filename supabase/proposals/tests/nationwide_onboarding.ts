@@ -54,21 +54,20 @@ test("Washington is the only public reference and Oregon stays on its developmen
   assert.equal(mapHref("Oregon"), null);
 });
 
-test("California remains unpublished inside the shared framework", () => {
+test("California Tier 1 directory is public while legacy onboarding profile stays reference-only", () => {
   const california = onboardingProfile("California");
+  // Legacy open-data onboarding profile remains unpublished (separate from Tier 1 directory).
   assert.equal(california.publication, "unpublished");
   assert.equal(california.disclosurePrefix, "https://www.ccld.dss.ca.gov/carefacilitysearch/?Rewrite=FacDetail/");
   assert.equal(california.disclosureVerified, true);
   assert.equal(california.recordedExportDate, null);
   assert.equal(publicPublicationPermitted(california), false);
   assert.deepEqual(california.blockers, onboardingDecision("California").blockers);
-  // Protected Tier 1 RC: directory path exists for development preview only.
-  // Shared onboarding framework still treats California as unpublished / not
-  // publicPublicationPermitted until a separate public-publication approval.
-  assert.equal(directoryContract("California")?.publication, "development");
+  // Activated Tier 1 directory contract is public with production href; map stays off.
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("California")?.mapPath, null);
-  assert.equal(directoryHref("California", "https://yiehgstweswxjakbcdzc.supabase.co"), null);
+  assert.equal(directoryHref("California", "https://yiehgstweswxjakbcdzc.supabase.co"), "/california");
   assert.deepEqual(california.categories.map(category => category.code), ["RCFE", "ARF"]);
 });
 

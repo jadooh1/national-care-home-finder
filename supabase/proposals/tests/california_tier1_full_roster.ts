@@ -23,12 +23,12 @@ import { DIRECTORY_VIEW, PRIVATE_INDEX_PREFIXES } from "../../../lib/public-inde
 const DEVELOPMENT_URL = "https://ajjsyloyihcqdomywhik.supabase.co";
 const PRODUCTION_URL = "https://yiehgstweswxjakbcdzc.supabase.co";
 
-test("baseline deafabb; protected RC roster; public publication STOP", () => {
+test("baseline deafabb; public Tier 1 roster activated", () => {
   assert.equal(CALIFORNIA_TIER1_FULL_ROSTER_BASELINE, "deafabb");
   assert.equal(californiaTier1FullRosterActivated(), true);
-  assert.equal(californiaTier1FullRosterAllowsPublication(), false);
+  assert.equal(californiaTier1FullRosterAllowsPublication(), true);
   const manifest = loadCaliforniaTier1FullRosterManifest();
-  assert.equal(manifest.californiaPublished, false);
+  assert.equal(manifest.californiaPublished, true);
   assert.equal(manifest.publicationEligible, 15435);
   assert.equal(manifest.exclusionsActivated, true);
   assert.equal(manifest.eligibilityMappingActivated, true);
@@ -93,8 +93,8 @@ test("detail lookup fail-closed for exclusions, aliases, invalid", () => {
   );
 });
 
-test("protected preview search allowed; map/owner/api/sitemap blocked", () => {
-  for (const surface of ["map", "owner-claim", "api", "sitemap"] as const) {
+test("public search+sitemap allowed; map/owner/api blocked", () => {
+  for (const surface of ["map", "owner-claim", "api"] as const) {
     assert.equal(
       californiaTier1FullRosterListingGate({
         facilityNumber: "092700093",
@@ -111,19 +111,26 @@ test("protected preview search allowed; map/owner/api/sitemap blocked", () => {
     }).allowed,
     true,
   );
+  assert.equal(
+    californiaTier1FullRosterListingGate({
+      facilityNumber: "092700093",
+      surface: "sitemap",
+    }).allowed,
+    true,
+  );
 });
 
-test("protected RC contracts: development preview only; WA/OR safeguards", () => {
-  assert.equal(directoryContract("California")?.publication, "development");
+test("public CA contracts; WA/OR safeguards", () => {
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("California")?.mapPath, null);
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
-  assert.equal(directoryHref("California", PRODUCTION_URL), null);
+  assert.equal(directoryHref("California", PRODUCTION_URL), "/california");
   assert.equal(mapHref("California"), null);
   assert.deepEqual([...ENABLED_OWNER_FACILITY_STATES], ["WA"]);
   assert.equal(DIRECTORY_VIEW, "wa_dshs_listed_facilities");
   assert.ok(PRIVATE_INDEX_PREFIXES.includes("/development"));
-  assert.ok(PRIVATE_INDEX_PREFIXES.includes("/california"));
+  assert.equal(PRIVATE_INDEX_PREFIXES.includes("/california"), false);
   assert.equal(directoryContract("Oregon")?.publication, "development");
   assert.equal(directoryHref("Oregon", PRODUCTION_URL), null);
 
@@ -140,16 +147,15 @@ test("protected RC contracts: development preview only; WA/OR safeguards", () =>
   assert.ok(home.includes('state === "California" ? "CA"'));
 });
 
-test("preview arithmetic green with public STOP", () => {
+test("preview arithmetic green with public GO", () => {
   const preview = buildCaliforniaTier1FullRosterPreview();
   assert.equal(preview.arithmeticOk, true);
-  assert.equal(preview.stopGoPublic, "STOP");
+  assert.equal(preview.stopGoPublic, "GO");
   assert.equal(preview.reconciliation.currentListable, 15435);
   assert.equal(preview.reconciliation.delta, 6);
   assert.equal(preview.reconciliation.residualStillPresent, 22);
-  assert.ok(preview.checklistComplete >= 9);
-  assert.equal(preview.checklistPending, 1);
-  assert.ok(
-    preview.preservedRestrictions.includes("california-public-publication-unauthorized"),
-  );
+  assert.ok(preview.checklistComplete >= 10);
+  assert.equal(preview.checklistPending, 0);
+  assert.ok(preview.preservedRestrictions.includes("california-map-disabled"));
+  assert.ok(preview.preservedRestrictions.includes("oregon-unpublished-on-production"));
 });

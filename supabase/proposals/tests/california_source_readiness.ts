@@ -204,7 +204,7 @@ test("the readiness report separates verified blockers from optional coordinates
   assert.equal(readiness.ownerClaimEligible, false);
   assert.equal(readiness.persistsRecords, false);
   assert.equal(californiaDirectoryReady(), false);
-  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryContract("California")?.publication, "public");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("Washington")?.publication, "public");
   const home = readFileSync(new URL("../../../lib/copy/home.ts", import.meta.url), "utf8");
