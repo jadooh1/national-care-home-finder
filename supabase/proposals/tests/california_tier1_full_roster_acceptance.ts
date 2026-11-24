@@ -15,11 +15,13 @@ import {
 import { directoryContract, directoryHref, mapHref } from "../../../lib/state-directory.ts";
 import { ENABLED_OWNER_FACILITY_STATES } from "../../../lib/owner-facility-read.ts";
 import {
-  CALIFORNIA_PUBLIC_PAGES,
   DIRECTORY_VIEW,
   PRIVATE_INDEX_PREFIXES,
   sitemapPaths,
 } from "../../../lib/public-indexing.ts";
+
+const DEVELOPMENT_URL = "https://ajjsyloyihcqdomywhik.supabase.co";
+const PRODUCTION_URL = "https://yiehgstweswxjakbcdzc.supabase.co";
 
 const ACCEPTANCE_BASELINE = "deafabb";
 const BUDGETS = {
@@ -48,9 +50,11 @@ function timeMs(fn: () => void, n = 20): { p50: number; p95: number } {
   return { p50: percentile(samples, 50), p95: percentile(samples, 95) };
 }
 
-test("acceptance baseline deafabb/#215; public directory GO candidate", () => {
+test("acceptance baseline deafabb/#215; protected RC; public STOP", () => {
   assert.equal(ACCEPTANCE_BASELINE, "deafabb");
-  assert.equal(directoryContract("California")?.publication, "public");
+  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
+  assert.equal(directoryHref("California", PRODUCTION_URL), null);
   assert.equal(californiaTier1FullRosterListingGate({
     facilityNumber: "092700093",
     surface: "search",
@@ -182,23 +186,18 @@ test("all 22 residual exclusions and truncation aliases fail closed", () => {
   }
 });
 
-test("California public directory surfaces; map/owner/api stay blocked", () => {
-  assert.equal(directoryContract("California")?.publication, "public");
-  assert.equal(
-    directoryHref("California", "https://example.supabase.co"),
-    "/california",
-  );
+test("California protected preview surfaces; map/owner/api/sitemap stay blocked", () => {
+  assert.equal(directoryContract("California")?.publication, "development");
+  assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
+  assert.equal(directoryHref("California", PRODUCTION_URL), null);
   assert.equal(mapHref("California"), null);
   assert.deepEqual([...ENABLED_OWNER_FACILITY_STATES], ["WA"]);
   assert.equal(DIRECTORY_VIEW, "wa_dshs_listed_facilities");
   assert.ok(PRIVATE_INDEX_PREFIXES.includes("/development"));
-  assert.ok(sitemapPaths(true, ["123"]).includes("/california"));
-  assert.equal(
-    CALIFORNIA_PUBLIC_PAGES.some((p) => p.path === "/california"),
-    true,
-  );
+  assert.ok(PRIVATE_INDEX_PREFIXES.includes("/california"));
+  assert.equal(sitemapPaths(true, ["123"]).includes("/california"), false);
 
-  for (const surface of ["map", "owner-claim", "api"] as const) {
+  for (const surface of ["map", "owner-claim", "api", "sitemap"] as const) {
     assert.equal(
       californiaTier1FullRosterListingGate({
         facilityNumber: "092700093",
@@ -208,13 +207,6 @@ test("California public directory surfaces; map/owner/api stay blocked", () => {
       surface,
     );
   }
-  assert.equal(
-    californiaTier1FullRosterListingGate({
-      facilityNumber: "092700093",
-      surface: "sitemap",
-    }).allowed,
-    true,
-  );
 
   assert.equal(existsSync("app/california/page.tsx"), true);
   assert.equal(existsSync("app/california/[facilityNumber]/page.tsx"), true);
@@ -271,7 +263,7 @@ test("search/lookup performance stays within acceptance budgets", () => {
 test("acceptance preview remains arithmetic-green for release candidate", () => {
   const preview = buildCaliforniaTier1FullRosterPreview();
   assert.equal(preview.arithmeticOk, true);
-  assert.equal(preview.stopGoPublic, "GO");
+  assert.equal(preview.stopGoPublic, "STOP");
   assert.equal(preview.reconciliation.currentListable, 15435);
   assert.equal(preview.reconciliation.delta, 6);
   assert.equal(preview.reconciliation.residualStillPresent, 22);
@@ -281,5 +273,8 @@ test("acceptance preview remains arithmetic-green for release candidate", () => 
   );
   assert.ok(
     preview.preservedRestrictions.includes("california-map-disabled"),
+  );
+  assert.ok(
+    preview.preservedRestrictions.includes("california-public-publication-unauthorized"),
   );
 });

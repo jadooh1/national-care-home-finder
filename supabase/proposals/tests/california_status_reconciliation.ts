@@ -135,7 +135,7 @@ test("a response for a different identifier is missing rather than closed", () =
   assert.equal(missing.confirmedClosure, false);
   assert.equal(missing.liveStatus, "Closed, Unlicensed Facility");
   assert.equal(californiaDirectoryReady(), false);
-  assert.equal(directoryContract("California")?.publication, "public");
+  assert.equal(directoryContract("California")?.publication, "development");
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.publication, "development");
 });

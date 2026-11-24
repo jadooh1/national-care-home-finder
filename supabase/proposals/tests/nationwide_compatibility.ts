@@ -60,14 +60,37 @@ test("schema fit stays separate from publication and from missing coordinates", 
 });
 
 test("unverified states do not receive invented counts or directory routes", () => {
+  const developmentUrl = "https://ajjsyloyihcqdomywhik.supabase.co";
+  const productionUrl = "https://yiehgstweswxjakbcdzc.supabase.co";
   for (const item of compatibilityAssessments()) {
     if (item.compatibility === "D") {
       assert.equal(item.observedRows, null);
       assert.equal(item.licenseIdentifier, null);
       assert.equal(item.publicationReady, false);
     }
-    assert.equal(directoryContract(item.state)?.directoryPath ?? null, item.state === "Washington" ? "/washington" : item.state === "Oregon" ? "/oregon" : null);
-    assert.equal(directoryHref(item.state, "https://ajjsyloyihcqdomywhik.supabase.co"), item.state === "Washington" ? "/washington" : item.state === "Oregon" ? "/oregon" : null);
+    // Shared contracts: WA public; OR + CA protected development preview paths;
+    // all other states remain without directory routes. California stays
+    // publicationReady=false in the nationwide compatibility assessment.
+    const expectedPath =
+      item.state === "Washington"
+        ? "/washington"
+        : item.state === "Oregon"
+        ? "/oregon"
+        : item.state === "California"
+        ? "/california"
+        : null;
+    assert.equal(directoryContract(item.state)?.directoryPath ?? null, expectedPath);
+    if (item.state === "California") {
+      assert.equal(directoryContract(item.state)?.publication, "development");
+      assert.equal(directoryContract(item.state)?.mapPath, null);
+      assert.equal(item.publicationReady, false);
+      assert.equal(item.publication, "unpublished");
+    }
+    assert.equal(directoryHref(item.state, developmentUrl), expectedPath);
+    assert.equal(
+      directoryHref(item.state, productionUrl),
+      item.state === "Washington" ? "/washington" : null,
+    );
   }
   assert.deepEqual([...ONBOARDING_SEQUENCE].slice(0, 2), ["Washington", "Oregon"]);
   assert.equal(ONBOARDING_SEQUENCE.length, 50);

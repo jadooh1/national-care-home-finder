@@ -108,8 +108,18 @@ export const CALIFORNIA_TIER1_RELEASE_OUT_OF_SCOPE_PENDING_INCREASE_IDS = [
   "374604710",
 ] as const;
 
+/**
+ * Protected release-candidate controls.
+ *
+ * - releaseCandidateReady: directory/roster/code are prepared
+ * - publicPublicationAuthorized: false until separate approval
+ * - californiaPublished: false — production hosts must not link or index CA
+ * - publicationEligibleCount: exact eligible roster size ready to arm
+ */
 export const CALIFORNIA_TIER1_RELEASE_CONTROLS = {
-  californiaPublished: true as const,
+  releaseCandidateReady: true as const,
+  publicPublicationAuthorized: false as const,
+  californiaPublished: false as const,
   exclusionsEnforced: true as const,
   eligibilityMappingPreserved: true as const,
   publicationEligibleCount: CALIFORNIA_TIER1_RELEASE_ELIGIBLE_COUNT,
@@ -117,6 +127,7 @@ export const CALIFORNIA_TIER1_RELEASE_CONTROLS = {
   ownerClaimsEnabled: false as const,
   enhancedFeaturesEnabled: false as const,
   oregonPublished: false as const,
+  protectedPreviewPublication: "development" as const,
   routes: {
     listing: "/california" as const,
     detailPrefix: "/california/" as const,
@@ -166,6 +177,12 @@ export const CALIFORNIA_TIER1_RELEASE_CHECKLIST = [
     detail: "Oregon remains development-only; Washington public + Design 2 intact.",
   },
   {
+    id: "protected-preview-not-public",
+    complete: true,
+    detail:
+      "California directoryContract stays publication=development; production hosts do not link or index CA.",
+  },
+  {
     id: "draft-pr-against-main-no-auto-merge",
     complete: true,
     detail: "Minimal draft PR against main; no merge/deploy without separate approval.",
@@ -173,7 +190,13 @@ export const CALIFORNIA_TIER1_RELEASE_CHECKLIST = [
   {
     id: "executable-rollback-documented",
     complete: true,
-    detail: "Rollback reverts publication controls and removes public CA routes.",
+    detail: "Rollback keeps CA unpublished/development and removes public indexing/links.",
+  },
+  {
+    id: "authorize-public-publication",
+    complete: false,
+    detail:
+      "Separate approval required to set publicPublicationAuthorized=true and directoryContract publication=public.",
   },
 ] as const;
 
@@ -242,4 +265,12 @@ export function californiaTier1ReleaseEligibleCount(): number {
 
 export function californiaTier1ReleasePublished(): boolean {
   return CALIFORNIA_TIER1_RELEASE_CONTROLS.californiaPublished;
+}
+
+export function californiaTier1PublicPublicationAuthorized(): boolean {
+  return CALIFORNIA_TIER1_RELEASE_CONTROLS.publicPublicationAuthorized;
+}
+
+export function californiaTier1ReleaseCandidateReady(): boolean {
+  return CALIFORNIA_TIER1_RELEASE_CONTROLS.releaseCandidateReady;
 }

@@ -91,9 +91,12 @@ export function directoryContract(name: string): DirectoryContract | null {
     };
   }
   if (state === "California") {
+    // Protected Tier 1 release candidate: directory exists for development-host
+    // preview only. Public production publication stays unauthorized until a
+    // separate approval flips this contract to "public".
     return {
       name: state,
-      publication: "public",
+      publication: "development",
       directoryPath: "/california",
       mapPath: null,
       searchFields: CALIFORNIA_SEARCH,

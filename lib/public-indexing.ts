@@ -7,7 +7,14 @@ export const PUBLIC_PRODUCTION_HOSTS = [
   "national-care-home-finder-kkfa.vercel.app",
 ] as const;
 
-export const PRIVATE_INDEX_PREFIXES = ["/oregon", "/development", "/owner", "/admin", "/auth"] as const;
+export const PRIVATE_INDEX_PREFIXES = [
+  "/oregon",
+  "/california",
+  "/development",
+  "/owner",
+  "/admin",
+  "/auth",
+] as const;
 
 export const DIRECTORY_VIEW = "wa_dshs_listed_facilities";
 const LICENSE_PAGE_SIZE = 1000;
@@ -57,12 +64,19 @@ export const WASHINGTON_PUBLIC_PAGES: readonly PublicPage[] = [
   },
 ];
 
-export const CALIFORNIA_PUBLIC_PAGES: readonly PublicPage[] = [
+/**
+ * California is a protected release candidate. Keep it out of the public
+ * sitemap until a separate authorization flips California to publication
+ * "public". The directory routes remain available on development preview.
+ */
+export const CALIFORNIA_PUBLIC_PAGES: readonly PublicPage[] = [];
+
+export const CALIFORNIA_PROTECTED_PREVIEW_PAGES: readonly PublicPage[] = [
   {
     path: "/california",
-    title: "California RCFE and ARF directory",
+    title: "California RCFE and ARF directory (protected preview)",
     description:
-      "Search California Residential Care Facilities for the Elderly and Adult Residential Facilities from the CDSS DownloadStateData roster. Approved licensed capacity is not a vacancy.",
+      "Protected Tier 1 release-candidate directory. Not authorized for public production publication.",
   },
 ];
 
@@ -170,6 +184,10 @@ export function sitemapPaths(allowed: boolean, licenses: readonly string[]): str
     ...CALIFORNIA_PUBLIC_PAGES.map(page => page.path),
     ...profileSitemapPaths(licenses),
   ];
+}
+
+export function californiaPublicSitemapAuthorized(): boolean {
+  return CALIFORNIA_PUBLIC_PAGES.length > 0;
 }
 
 export function sitemapUrls(allowed: boolean, licenses: readonly string[]): string[] {

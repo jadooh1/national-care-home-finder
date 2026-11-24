@@ -16,8 +16,8 @@ export const CALIFORNIA_TIER1_FULL_ROSTER_OBSERVED_ON = "2026-11-24";
 export const CALIFORNIA_TIER1_FULL_ROSTER_BASELINE = "deafabb" as const;
 
 export const CALIFORNIA_TIER1_FULL_ROSTER_SCOPE = {
-  kind: "statewide-public-roster" as const,
-  californiaPublished: true as const,
+  kind: "statewide-protected-release-candidate" as const,
+  californiaPublished: false as const,
   exclusionsActivated: true as const,
   eligibilityMappingActivated: true as const,
   publicationEligible: 15435 as const,
@@ -31,7 +31,7 @@ export const CALIFORNIA_TIER1_FULL_ROSTER_SCOPE = {
     "https://www.ccld.dss.ca.gov/carefacilitysearch/?Rewrite=FacDetail/",
   fixtureDir:
     "supabase/proposals/fixtures/california-tier1-full-roster" as const,
-  publicRoutes: ["/california", "/california/[facilityNumber]"] as const,
+  protectedPreviewRoutes: ["/california", "/california/[facilityNumber]"] as const,
 } as const;
 
 /** Residual-22 exclusion IDs — never listable. */
@@ -347,7 +347,7 @@ export function californiaTier1FullRosterSearch(
     sourceAsOfIso: manifest.sourceAsOfIso,
     listableCount: manifest.listableCount,
     scopeNote:
-      `Statewide California Tier 1 directory from CDSS DownloadStateData as-of ${manifest.sourceAsOfIso} (${manifest.listableCount.toLocaleString()} eligible). Maps, owner claims, and enhanced features stay off.`,
+      `Protected California Tier 1 release candidate from CDSS DownloadStateData as-of ${manifest.sourceAsOfIso} (${manifest.listableCount.toLocaleString()} eligible). Not authorized for public production publication. Maps, owner claims, and enhanced features stay off.`,
   };
 }
 
@@ -366,8 +366,10 @@ export function californiaTier1FullRosterListingGate(input: {
     input.surface === "api"
     || input.surface === "map"
     || input.surface === "owner-claim"
+    || input.surface === "sitemap"
   ) {
     reasons.push(`blocked-from-public-${input.surface}`);
+    reasons.push("california-public-publication-unauthorized");
     return { allowed: false, reasons: [...new Set(reasons)] };
   }
 
@@ -376,23 +378,16 @@ export function californiaTier1FullRosterListingGate(input: {
     && FACILITY_NUMBER.test(id)
     && !californiaTier1FullRosterIsResidual(id);
 
-  if (
-    listableOk
-    && (
-      input.surface === "search"
-      || input.surface === "detail-page"
-      || input.surface === "sitemap"
-    )
-  ) {
+  if (listableOk && (input.surface === "search" || input.surface === "detail-page")) {
     return {
       allowed: true,
-      reasons: ["public-roster-allowed", "california-published"],
+      reasons: [
+        "protected-preview-roster-allowed",
+        "california-public-publication-unauthorized",
+      ],
     };
   }
 
-  if (!listableOk && input.surface === "sitemap") {
-    reasons.push("blocked-from-public-sitemap");
-  }
   return { allowed: false, reasons: [...new Set(reasons)] };
 }
 
@@ -435,9 +430,10 @@ export const CALIFORNIA_TIER1_FULL_ROSTER_PREPUBLICATION_CHECKLIST = [
     detail: "Approved Pending Increase mapping preserved (58 listable + 8 OOS).",
   },
   {
-    id: "public-california-routes",
+    id: "protected-california-preview-routes",
     completeInThisPr: true,
-    detail: "Public /california listing and facility profiles wired.",
+    detail:
+      "/california listing and profiles wired for protected development preview.",
   },
   {
     id: "maps-owner-enhanced-remain-off",
@@ -445,9 +441,16 @@ export const CALIFORNIA_TIER1_FULL_ROSTER_PREPUBLICATION_CHECKLIST = [
     detail: "California map, owner claims, and enhanced features stay disabled.",
   },
   {
-    id: "merge-deploy-requires-separate-approval",
+    id: "public-publication-unauthorized",
+    completeInThisPr: true,
+    detail:
+      "directoryContract publication=development; sitemap/index/production links blocked.",
+  },
+  {
+    id: "authorize-public-publication",
     completeInThisPr: false,
-    detail: "Draft PR only; merge/deploy/public publish needs separate approval.",
+    detail:
+      "Separate approval required before flipping California to public production publication.",
   },
 ] as const;
 
@@ -478,11 +481,11 @@ export function buildCaliforniaTier1FullRosterPreview(input?: {
     facilityNumber: "092700093",
     surface: "api",
   });
-  const publicSitemapAllowed = californiaTier1FullRosterListingGate({
+  const publicSitemapBlocked = californiaTier1FullRosterListingGate({
     facilityNumber: "092700093",
     surface: "sitemap",
   });
-  const publicSearchAllowed = californiaTier1FullRosterListingGate({
+  const protectedSearchAllowed = californiaTier1FullRosterListingGate({
     facilityNumber: "092700093",
     surface: "search",
   });
@@ -510,7 +513,7 @@ export function buildCaliforniaTier1FullRosterPreview(input?: {
     && manifest.residualExclusions === 22
     && manifest.residualPresentInDownload === 22
     && manifest.publicationEligible === 15435
-    && manifest.californiaPublished === true
+    && manifest.californiaPublished === false
     && manifest.exclusionsActivated === true
     && manifest.eligibilityMappingActivated === true
     && manifest.sourceAsOfIso === "2026-11-22"
@@ -521,8 +524,8 @@ export function buildCaliforniaTier1FullRosterPreview(input?: {
     && !publicMapBlocked.allowed
     && !publicOwnerBlocked.allowed
     && !publicApiBlocked.allowed
-    && publicSitemapAllowed.allowed
-    && publicSearchAllowed.allowed
+    && !publicSitemapBlocked.allowed
+    && protectedSearchAllowed.allowed
     && checklistComplete >= 9
     && checklistPending === 1;
 
@@ -537,7 +540,7 @@ export function buildCaliforniaTier1FullRosterPreview(input?: {
     checklistComplete,
     checklistPending,
     arithmeticOk,
-    stopGoPublic: arithmeticOk ? ("GO" as const) : ("STOP" as const),
+    stopGoPublic: "STOP" as const,
     reconciliation: {
       priorOfflineTier1: manifest.priorOfflineTier1,
       currentListable: manifest.listableCount,
@@ -548,10 +551,11 @@ export function buildCaliforniaTier1FullRosterPreview(input?: {
       priorSourceAsOfIso: "2026-11-15",
     },
     mostActionableNextStep:
-      "Draft PR against main is the release candidate. Do not merge, deploy to production, or publicly publish without separate approval. Rollback: set californiaPublished false and remove public /california routes.",
+      "Protected RC is ready on development hosts. Keep publicPublicationAuthorized=false until separate approval. Do not merge/deploy/publish without that approval.",
     preservedRestrictions: [
       "washington-design-2-preserved",
       "oregon-unpublished-on-production",
+      "california-public-publication-unauthorized",
       "california-map-disabled",
       "california-owner-claims-disabled",
       "california-enhanced-features-disabled",
@@ -563,8 +567,8 @@ export function buildCaliforniaTier1FullRosterPreview(input?: {
   };
 }
 
-export function californiaTier1FullRosterAllowsPublication(): true {
-  return true;
+export function californiaTier1FullRosterAllowsPublication(): false {
+  return false;
 }
 
 export function californiaTier1FullRosterActivated(): true {

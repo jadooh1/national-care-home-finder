@@ -2,11 +2,11 @@
   "observedOn": "2026-11-24",
   "sourceAsOfIso": "2026-11-22",
   "pathway": "downloadstatedata-transparency-csv",
-  "californiaPublished": true,
+  "californiaPublished": false,
   "publicationEligible": 15435,
   "exclusionsActivated": true,
   "eligibilityMappingActivated": true,
-  "statewideRosterForDevelopment": false,
+  "statewideRosterForDevelopment": true,
   "priorOfflineTier1": 15429,
   "residualExclusions": 22,
   "residualPresentInDownload": 22,
@@ -29,10 +29,11 @@
   },
   "listableRule": "eligible RCFE/ARF types + LICENSED|ON PROBATION + non-empty License First Date + not residual-22",
   "notes": [
-    "Tier 1 statewide release candidate. publicationEligible=15435.",
+    "Protected Tier 1 release candidate. californiaPublished=false; publicationEligible=15435.",
     "Residual-22 exclusions and truncation aliases enforced.",
     "Pending Increase mapping preserved: 58 listable PI IDs flagged; 8 historical OOS PI IDs omitted.",
     "Source as-of 2026-11-22 (Content-Disposition *11222026.csv); listable 15435 vs prior offline 15429 (delta +6).",
-    "California maps, owner claims, and enhanced features remain disabled."
+    "California maps, owner claims, and enhanced features remain disabled.",
+    "Public production publication unauthorized until separate approval."
   ]
 }

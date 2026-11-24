@@ -45,7 +45,7 @@ test("California directory counts stay separated and unpublished", () => {
   assert.equal(CALIFORNIA_FACILITY_SEARCH_LAST_OBSERVED.status, 200);
   assert.equal(CALIFORNIA_FACILITY_SEARCH_LAST_OBSERVED.observedOn, "2026-11-13");
   assert.equal(CALIFORNIA_FACILITY_SEARCH_LAST_OBSERVED.rechecked, true);
-  assert.equal(directoryContract("California")?.publication, "public");
+  assert.equal(directoryContract("California")?.publication, "development");
   assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
   assert.equal(mapHref("California"), null);
