@@ -1,10 +1,6 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
-import { loadCaliforniaTier1FullRosterCompact } from "../lib/california-tier1-full-roster";
 import {
-  absolutePublicUrl,
-  californiaProfileSitemapPaths,
-  californiaPublicSitemapAuthorized,
   listIndexableLicenses,
   readSiteEnv,
   responseIndexingAllowed,
@@ -13,6 +9,12 @@ import {
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Public sitemap lists Washington pages/profiles plus the California Tier 1
+ * directory listing when authorized. Do not expand all California facility
+ * profiles here — loading ~15k fixture rows on every sitemap request caused
+ * production HTTP 500. Facility profiles remain linked from /california.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const h = await headers();
   const requestHost = h.get("x-forwarded-host") ?? h.get("host") ?? "";
@@ -21,12 +23,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
     publishableKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "",
   });
-  const base = sitemapUrls(true, listed.ok ? listed.licenses : []);
-  if (!californiaPublicSitemapAuthorized()) {
-    return base.map((url) => ({ url }));
-  }
-  const californiaProfiles = californiaProfileSitemapPaths(
-    loadCaliforniaTier1FullRosterCompact().map((row) => row.n),
-  ).map((path) => absolutePublicUrl(path));
-  return [...base, ...californiaProfiles].map((url) => ({ url }));
+  return sitemapUrls(true, listed.ok ? listed.licenses : []).map((url) => ({ url }));
 }

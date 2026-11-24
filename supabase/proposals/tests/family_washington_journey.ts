@@ -45,6 +45,7 @@ test("the homepage empty state is announced and Washington listings are not desc
   assert.equal(stateFilterStatus(1), "");
   assert.equal(HOMEPAGE_DIRECTORY_NOTE.includes("not yet displayed"), false);
   assert.equal(HOMEPAGE_DIRECTORY_NOTE.includes("Washington"), true);
+  assert.equal(HOMEPAGE_DIRECTORY_NOTE.includes("California"), true);
   assert.equal(HOMEPAGE_DIRECTORY_NOTE.includes("labels only"), true);
 });
 

@@ -1,4 +1,4 @@
-export const HOMEPAGE_DIRECTORY_NOTE = "Washington adult family home names, addresses, and license numbers can be opened from the Washington link. Vacancies, prices, and current license standing are not displayed. Other state names are labels only.";
+export const HOMEPAGE_DIRECTORY_NOTE = "Washington adult family home names, addresses, and license numbers can be opened from the Washington link. California RCFE and ARF names, cities, and license numbers can be opened from the California link. Vacancies, prices, and current license standing are not displayed. Other state names are labels only.";
 
 export const DENSITY_BANDS = [
   { label: "20+", min: 20, color: "#dc2626" },

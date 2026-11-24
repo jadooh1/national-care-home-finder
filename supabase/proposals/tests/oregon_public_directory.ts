@@ -45,16 +45,20 @@ test("the public directory is allowlisted to the development project only", () =
   assert.equal(oregonPublicDirectoryAvailable("not a url"), false);
 });
 
-test("the homepage note stays Washington-only until the Oregon directory is available", () => {
+test("the homepage note covers Washington and California; Oregon only when development-available", () => {
   assert.equal(homepageDirectoryNote(false), null);
+  assert.equal(HOMEPAGE_DIRECTORY_NOTE.includes("Washington"), true);
+  assert.equal(HOMEPAGE_DIRECTORY_NOTE.includes("California"), true);
   assert.equal(HOMEPAGE_DIRECTORY_NOTE.includes("labels only"), true);
   assert.equal(homepageDirectoryNote(true), OREGON_PUBLIC_HOMEPAGE_NOTE);
   assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("Oregon adult foster home"), true);
+  assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("California"), true);
   assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("adult family home"), true);
   assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("labels only"), true);
   assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("Licensed beds are not vacancies."), true);
   assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("0 licensed beds"), true);
   assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("Oregon listings do not include street addresses"), true);
+  assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("development hosts only"), true);
   assert.equal(OREGON_PUBLIC_HOMEPAGE_NOTE.includes("live"), false);
 });
 
@@ -169,11 +173,18 @@ test("the proposal exposes select on the view only and leaves Washington untouch
   assert.equal(sql.includes("drop table"), false);
 });
 
-test("public pages use the view copy and do not call the administrator function", () => {
+test("production oregon layout fail-closes and does not call the administrator function", () => {
+  const layout = readFileSync("app/oregon/layout.tsx", "utf8");
+  assert.equal(layout.includes("notFound"), true);
+  assert.equal(layout.includes("VERCEL_ENV"), true);
+  assert.equal(layout.includes("PUBLIC_PRODUCTION_HOSTS"), true);
+  assert.equal(layout.includes("force-dynamic"), true);
+
   const pages = [
     "app/page.tsx",
     "app/oregon/page.tsx",
     "app/oregon/[sourceId]/page.tsx",
+    "app/oregon/layout.tsx",
   ].map(path => readFileSync(path, "utf8")).join("\n");
   assert.equal(pages.includes(OREGON_DIRECTORY_RPC), false);
   assert.equal(pages.includes("oregon_odhs_afh_public"), false);
