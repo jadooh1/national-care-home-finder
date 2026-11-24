@@ -7,6 +7,7 @@ import {
   CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS,
   buildCaliforniaPrepublicationCutoverPreview,
   californiaCutoverActivated,
+  californiaCutoverExclusionsActivated,
   californiaCutoverAllowsPublication,
   californiaCutoverActivationSequence,
   californiaCutoverEnforceAllResiduals,
@@ -19,13 +20,14 @@ import { directoryContract, directoryHref, mapHref } from "../../../lib/state-di
 import { ENABLED_OWNER_FACILITY_STATES } from "../../../lib/owner-facility-read.ts";
 import { DIRECTORY_VIEW } from "../../../lib/public-indexing.ts";
 
-test("baseline #212; runtime cutover controls inactive; publication STOP", () => {
-  assert.equal(CALIFORNIA_PREPUBLICATION_CUTOVER_BASELINE, "d94276a");
+test("baseline #213; exclusion ledger ON in development; publication STOP", () => {
+  assert.equal(CALIFORNIA_PREPUBLICATION_CUTOVER_BASELINE, "22e522c");
+  assert.equal(californiaCutoverExclusionsActivated(), true);
   assert.equal(californiaCutoverActivated(), false);
   assert.equal(californiaCutoverAllowsPublication(), false);
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.exclusionsActivated,
-    false,
+    true,
   );
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS
@@ -203,7 +205,7 @@ test("fail-closed for stale data, invalid IDs, conflicts, unverified disclosure"
   );
 });
 
-test("activation and rollback rehearsals do not activate runtime controls", () => {
+test("activation and rollback rehearsals do not mutate live defaults incorrectly", () => {
   const activation = californiaCutoverActivationSequence({
     approveExclusionActivation: true,
     approveEligibilityMappingActivation: true,
@@ -219,10 +221,10 @@ test("activation and rollback rehearsals do not activate runtime controls", () =
   assert.equal(activation.selectedUnderRehearsal, 0);
   assert.equal(activation.independencePreserved, true);
 
-  // Defaults remain inactive after rehearsal.
+  // Live defaults keep exclusion ON and mapping/publication OFF after rehearsal.
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.exclusionsActivated,
-    false,
+    true,
   );
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS
@@ -284,7 +286,8 @@ test("preview arithmetic and development page present", () => {
   assert.equal(preview.arithmeticOk, true);
   assert.equal(preview.stopGoPublic, "STOP");
   assert.equal(preview.residualCount, 22);
-  assert.equal(preview.baseline, "d94276a");
+  assert.equal(preview.baseline, "22e522c");
+  assert.equal(preview.defaults.exclusionsActivated, true);
 
   assert.equal(
     existsSync("app/development/california-prepublication-cutover/page.tsx"),
@@ -295,7 +298,7 @@ test("preview arithmetic and development page present", () => {
     "utf8",
   );
   assert.ok(page.includes("buildCaliforniaPrepublicationCutoverPreview"));
-  assert.ok(page.includes("STOP"));
+  assert.ok(page.includes("stopGoPublic"));
   assert.equal(page.includes("href=\"/california"), false);
   assert.equal(page.includes("supabase.from"), false);
 });

@@ -1,18 +1,18 @@
 /**
- * California prepublication integration and cutover controls (post-#212).
+ * California prepublication integration and cutover controls (post-#212 / #213).
  *
- * Functional publication-selection pipeline with independent inactive
- * controls for (1) residual exclusion ledger, (2) Pending Increase
- * eligibility mapping, and (3) statewide public publication.
+ * Functional publication-selection pipeline with independent controls for
+ * (1) residual exclusion ledger, (2) Pending Increase eligibility mapping,
+ * and (3) statewide public publication.
  *
- * Runtime defaults keep every control OFF. Activation/rollback are dry-run
- * rehearsals that accept hypothetical overrides and never mutate defaults,
- * write Supabase, or publish California. Intentionally free of sibling
- * runtime imports.
+ * Development-only exclusion ledger activation is APPROVED: exclusionsActivated
+ * defaults to true. Eligibility mapping and California publication remain OFF.
+ * Dry-run rehearsals never write Supabase or publish California. Intentionally
+ * free of sibling runtime imports.
  */
 
 export const CALIFORNIA_PREPUBLICATION_CUTOVER_OBSERVED_ON = "2026-11-24";
-export const CALIFORNIA_PREPUBLICATION_CUTOVER_BASELINE = "d94276a" as const;
+export const CALIFORNIA_PREPUBLICATION_CUTOVER_BASELINE = "22e522c" as const;
 
 export const CALIFORNIA_PREPUBLICATION_CUTOVER_SOURCE = {
   pathway: "downloadstatedata-transparency-csv" as const,
@@ -30,7 +30,20 @@ export type CaliforniaPrepublicationCutoverControls = {
   publicationEligibleCount: number;
 };
 
+/**
+ * Live application defaults after approved development-only exclusion activation.
+ * Mapping and publication stay OFF.
+ */
 export const CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS: CaliforniaPrepublicationCutoverControls =
+  {
+    exclusionsActivated: true,
+    eligibilityMappingActivated: false,
+    californiaPublished: false,
+    publicationEligibleCount: 0,
+  };
+
+/** Pre-activation snapshot retained for before/after evidence. */
+export const CALIFORNIA_PREPUBLICATION_CUTOVER_CONTROLS_BEFORE_ACTIVATION: CaliforniaPrepublicationCutoverControls =
   {
     exclusionsActivated: false,
     eligibilityMappingActivated: false,
@@ -41,7 +54,8 @@ export const CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS: CaliforniaPrepu
 export const CALIFORNIA_PREPUBLICATION_CUTOVER_DECISIONS = {
   exclusionActivation: {
     id: "activate-california-exclusion-ledger-in-app-db",
-    activated: false as const,
+    activated: true as const,
+    scope: "development-only" as const,
     publishesCalifornia: false as const,
   },
   eligibilityMappingActivation: {
@@ -508,7 +522,7 @@ export function californiaCutoverActivationSequence(input?: {
     controls.eligibilityMappingActivated === approveMapping
     && !controls.californiaPublished
     && controls.publicationEligibleCount === 0
-    && !CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.exclusionsActivated
+    && CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.exclusionsActivated
     && !CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS
       .eligibilityMappingActivated
     && !CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.californiaPublished;
@@ -548,14 +562,19 @@ export function californiaCutoverRollbackSequence(input?: {
     californiaPublished: false,
     publicationEligibleCount: 0,
   });
-  const after = { ...CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS };
+  // Rollback rehearsal restores the pre-activation snapshot (exclusions off)
+  // without mutating live DEFAULT_CONTROLS.
+  const after = {
+    ...CALIFORNIA_PREPUBLICATION_CUTOVER_CONTROLS_BEFORE_ACTIVATION,
+  };
 
   const steps: CaliforniaCutoverSequenceStep[] = [
     {
       id: "disable-exclusion-flag",
       title: "Flip exclusionsActivated → false",
       status: "rehearsed",
-      detail: "Immediate fail-closed; selection pipeline blocks without ledger.",
+      detail:
+        "Rollback rehearsal restores pre-activation snapshot; live defaults are not mutated by the rehearsal itself.",
     },
     {
       id: "disable-mapping-flag",
@@ -596,7 +615,7 @@ export function californiaCutoverRollbackSequence(input?: {
   );
 
   const defaultsUnchanged =
-    !CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.exclusionsActivated
+    CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.exclusionsActivated
     && !CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS
       .eligibilityMappingActivated
     && !CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.californiaPublished
@@ -660,6 +679,15 @@ export function californiaCutoverEnforceAllResiduals(
   };
 }
 
+/** True when the residual exclusion ledger is activated (development-only). */
+export function californiaCutoverExclusionsActivated(): true {
+  return true;
+}
+
+/**
+ * Full cutover (mapping + publication) remains inactive. Exclusion-only
+ * activation does not count as a full cutover activation.
+ */
 export function californiaCutoverActivated(): false {
   return false;
 }
@@ -812,15 +840,23 @@ export function buildCaliforniaPrepublicationCutoverPreview() {
   const arithmeticOk =
     residualCount === 22
     && CALIFORNIA_CUTOVER_RESIDUAL_IDS.length === 22
-    && !defaults.exclusionsActivated
+    && defaults.exclusionsActivated
     && !defaults.eligibilityMappingActivated
     && !defaults.californiaPublished
     && defaults.publicationEligibleCount === 0
+    && californiaCutoverExclusionsActivated()
     && !californiaCutoverActivated()
     && !californiaCutoverAllowsPublication()
+    && CALIFORNIA_PREPUBLICATION_CUTOVER_DECISIONS.exclusionActivation.activated
+    && !CALIFORNIA_PREPUBLICATION_CUTOVER_DECISIONS.eligibilityMappingActivation
+      .activated
+    && !CALIFORNIA_PREPUBLICATION_CUTOVER_DECISIONS.californiaPublicPublication
+      .activated
     && residualsDefault.allBlocked
     && residualsActivated.allBlocked
     && !clearDefault.selected
+    && clearDefault.reasons.includes("california-unpublished")
+    && !clearDefault.reasons.includes("exclusion-ledger-not-activated")
     && !clearFullyArmed.selected
     && clearFullyArmed.reasons.includes("publication-eligible-zero")
     && !staleBlocked.selected
@@ -848,13 +884,15 @@ export function buildCaliforniaPrepublicationCutoverPreview() {
     && activationAll.independencePreserved
     && rollback.surfacesFailClosed
     && rollback.defaultsUnchanged
-    && rollback.activatedRuntime === false;
+    && rollback.activatedRuntime === false
+    && !rollback.after.exclusionsActivated;
 
   return {
     observedOn: CALIFORNIA_PREPUBLICATION_CUTOVER_OBSERVED_ON,
     baseline: CALIFORNIA_PREPUBLICATION_CUTOVER_BASELINE,
     source: CALIFORNIA_PREPUBLICATION_CUTOVER_SOURCE,
     defaults,
+    beforeActivation: CALIFORNIA_PREPUBLICATION_CUTOVER_CONTROLS_BEFORE_ACTIVATION,
     decisions: CALIFORNIA_PREPUBLICATION_CUTOVER_DECISIONS,
     residualCount,
     residualBuckets: {
@@ -879,12 +917,11 @@ export function buildCaliforniaPrepublicationCutoverPreview() {
     arithmeticOk,
     stopGoPublic: "STOP" as const,
     mostActionableNextStep:
-      "Keep runtime controls inactive. Use dry-run activation/rollback rehearsals until humans approve exclusion ledger activation, then mapping, then publication — as separate decisions.",
+      "Exclusion ledger is activated for development only. Keep eligibility mapping inactive and California unpublished until separate approvals.",
     preservedRestrictions: [
-      "runtime-controls-inactive",
+      "exclusion-ledger-activated-development-only",
       "california-unpublished",
       "publication-eligible-zero",
-      "exclusions-not-activated",
       "eligibility-mapping-not-activated",
       "no-database-writes",
       "no-production-changes",
