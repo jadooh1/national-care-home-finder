@@ -145,8 +145,8 @@ test("bad identifiers, categories, dates, and links fail without using coordinat
 test("accepted categories match the recorded lists and California stays unpublished", () => {
   assert.deepEqual(CALIFORNIA_RCFE_PUBLICATION_CATEGORIES, CALIFORNIA_RCFE_ACCEPTED_CATEGORIES);
   assert.deepEqual(CALIFORNIA_ARF_PUBLICATION_CATEGORIES, CALIFORNIA_ARF_ACCEPTED_CATEGORIES);
-  assert.equal(directoryContract("California")?.publication, "unpublished");
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.publication, "public");
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("Washington")?.publication, "public");
   const home = readFileSync(new URL("../../../lib/copy/home.ts", import.meta.url), "utf8");
   const proposal = readFileSync(new URL("../20261114023000_california_publication_acceptance.md", import.meta.url), "utf8");

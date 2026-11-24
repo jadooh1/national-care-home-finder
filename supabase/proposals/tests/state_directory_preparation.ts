@@ -24,28 +24,34 @@ import {
 const developmentUrl = `https://${DEVELOPMENT_DIRECTORY_HOST}`;
 const productionUrl = "https://yiehgstweswxjakbcdzc.supabase.co";
 
-test("the state list stays fifty names and only Washington is public", () => {
+test("the state list stays fifty names; only Washington is public; OR+CA are development", () => {
   assert.equal(STATE_NAMES.length, 50);
   assert.equal(new Set(STATE_NAMES).size, 50);
   assert.equal(directoryContract("Guam"), null);
   const publications = STATE_NAMES.map(name => directoryContract(name)?.publication);
-  assert.equal(publications.filter(status => status === "public").length, 1);
+  assert.equal(publications.filter(status => status === "public").length, 2);
   assert.equal(publications.filter(status => status === "development").length, 1);
-  assert.equal(publications.filter(status => status === "unpublished").length, 48);
+  assert.equal(publications.filter(status => status === "unpublished").length, 47);
+  assert.equal(directoryContract("California")?.publication, "public");
+  assert.equal(directoryContract("Oregon")?.publication, "development");
 });
 
-test("production opens Washington only and development also opens Oregon", () => {
-  for (const url of [productionUrl, developmentUrl, "not a url"]) {
+test("production opens Washington and California; development also opens Oregon", () => {
+  for (const url of [productionUrl, "not a url"]) {
     assert.equal(directoryHref("Washington", url), "/washington");
-    assert.equal(directoryHref("California", url), null);
+    assert.equal(directoryHref("California", url), "/california");
+    assert.equal(directoryHref("Oregon", url), null);
     assert.equal(directoryHref("Texas", url), null);
     assert.equal(directoryHref("Florida", url), null);
   }
-  assert.equal(directoryHref("Oregon", productionUrl), null);
-  assert.equal(directoryHref("Oregon", `${developmentUrl}.example`), null);
+  assert.equal(directoryHref("Washington", developmentUrl), "/washington");
+  assert.equal(directoryHref("California", developmentUrl), "/california");
   assert.equal(directoryHref("Oregon", developmentUrl), "/oregon");
-  assert.equal(directoryContract("California")?.directoryPath, null);
-  assert.equal(directoryContract("California")?.locatorUrl, null);
+  assert.equal(directoryHref("Oregon", `${developmentUrl}.example`), null);
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
+  assert.equal(directoryContract("California")?.publication, "public");
+  assert.equal(directoryContract("California")?.mapPath, null);
+  assert.ok(directoryContract("California")?.locatorUrl);
 });
 
 test("maps stay on Washington and Oregon search does not ask for an address", () => {

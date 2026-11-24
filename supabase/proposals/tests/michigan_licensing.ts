@@ -133,7 +133,7 @@ test("Michigan stays unpublished and the existing states keep their contracts", 
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(mapHref("Washington"), "/washington/map");
   assert.equal(directoryContract("Oregon")?.publication, "development");
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
   const page = readFileSync(new URL("../../../app/development/michigan/page.tsx", import.meta.url), "utf8");
   const home = readFileSync(new URL("../../../app/page.tsx", import.meta.url), "utf8");
   const source = readFileSync(new URL("../../../lib/michigan-licensing.ts", import.meta.url), "utf8");

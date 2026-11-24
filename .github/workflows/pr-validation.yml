@@ -203,6 +203,15 @@ jobs:
       - name: Check the California evidence resolution
         run: node --experimental-strip-types --test supabase/proposals/tests/california_evidence_resolution.ts
 
+      - name: Check the California Tier 1 full roster
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_full_roster.ts
+
+      - name: Check the California Tier 1 full roster acceptance
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_full_roster_acceptance.ts
+
+      - name: Check the California Tier 1 statewide release candidate
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier1_release.ts
+
       - name: Check the Washington DSHS reconciliation
         run: python -m unittest discover -s scripts/dshs -p "test_*.py"
 

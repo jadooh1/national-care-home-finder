@@ -20,7 +20,19 @@ import {
   sitemapUrls,
 } from "../../../lib/public-indexing.ts";
 
-const privatePaths = ["/oregon", "/oregon/529480", "/development/oregon", "/owner", "/owner/dashboard", "/owner/listing-edits", "/owner/reset-password", "/admin/claims", "/admin/listing-edits", "/admin/feedback", "/auth/callback"];
+const privatePaths = [
+  "/oregon",
+  "/oregon/529480",
+  "/development/oregon",
+  "/owner",
+  "/owner/dashboard",
+  "/owner/listing-edits",
+  "/owner/reset-password",
+  "/admin/claims",
+  "/admin/listing-edits",
+  "/admin/feedback",
+  "/auth/callback",
+];
 
 test("indexing follows the verified public domain and stays off elsewhere", () => {
   assert.equal(PUBLIC_CANONICAL_HOST, "www.nationalcarehomefinder.com");
@@ -101,6 +113,7 @@ test("the public sitemap lists real Washington pages and eligible profiles only"
   }
   const urls = sitemapUrls(true, [" 100001 ", "100001", "ABC109", "", "42"]);
   assert.deepEqual(urls.slice(0, WASHINGTON_PUBLIC_PAGES.length), WASHINGTON_PUBLIC_PAGES.map(page => absolutePublicUrl(page.path)));
+  assert.equal(urls.includes(`${PUBLIC_CANONICAL_ORIGIN}/california`), true);
   assert.equal(urls.includes(`${PUBLIC_CANONICAL_ORIGIN}/washington/100001`), true);
   assert.equal(urls.includes(`${PUBLIC_CANONICAL_ORIGIN}/washington/42`), true);
   assert.equal(urls.filter(url => url.endsWith("/washington/100001")).length, 1);
@@ -110,6 +123,7 @@ test("the public sitemap lists real Washington pages and eligible profiles only"
       assert.equal(url.includes(`${PUBLIC_CANONICAL_ORIGIN}${prefix}`), false, url);
     }
   }
+  assert.equal(PRIVATE_INDEX_PREFIXES.includes("/california"), false);
   assert.deepEqual(profileSitemapPaths(["ABC109", "100001"]), ["/washington/100001"]);
   assert.equal(eligibleProfilePath("100001"), facilityProfilePath("100001"));
   assert.equal(eligibleProfilePath("ABC109"), facilityProfilePath("ABC109"));
@@ -160,7 +174,10 @@ test("a license read uses the public directory and fails closed", async () => {
     fetchImpl: async () => new Response("no", { status: 401 }),
   });
   assert.equal(denied.ok, false);
-  assert.deepEqual(sitemapPaths(true, []), WASHINGTON_PUBLIC_PAGES.map(page => page.path));
+  assert.deepEqual(
+    sitemapPaths(true, []),
+    [...WASHINGTON_PUBLIC_PAGES.map(page => page.path), "/california"],
+  );
 
   const placeholder = await listIndexableLicenses({
     supabaseUrl: "https://ci.invalid",

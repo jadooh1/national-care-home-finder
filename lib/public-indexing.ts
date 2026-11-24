@@ -7,7 +7,13 @@ export const PUBLIC_PRODUCTION_HOSTS = [
   "national-care-home-finder-kkfa.vercel.app",
 ] as const;
 
-export const PRIVATE_INDEX_PREFIXES = ["/oregon", "/development", "/owner", "/admin", "/auth"] as const;
+export const PRIVATE_INDEX_PREFIXES = [
+  "/oregon",
+  "/development",
+  "/owner",
+  "/admin",
+  "/auth",
+] as const;
 
 export const DIRECTORY_VIEW = "wa_dshs_listed_facilities";
 const LICENSE_PAGE_SIZE = 1000;
@@ -54,6 +60,28 @@ export const WASHINGTON_PUBLIC_PAGES: readonly PublicPage[] = [
     path: "/washington/opportunity",
     title: "Washington adult family home market indicators",
     description: "Compare ZIP-code indicators for Washington adult family home supply and recorded licensed beds.",
+  },
+];
+
+/**
+ * California Tier 1 public directory pages (authorized activation).
+ * Map/owner/enhanced surfaces stay blocked elsewhere.
+ */
+export const CALIFORNIA_PUBLIC_PAGES: readonly PublicPage[] = [
+  {
+    path: "/california",
+    title: "California RCFE and ARF directory",
+    description:
+      "Search California Residential Care Facilities for the Elderly and Adult Residential Facilities. Approved licensed capacity is not a vacancy.",
+  },
+];
+
+export const CALIFORNIA_PROTECTED_PREVIEW_PAGES: readonly PublicPage[] = [
+  {
+    path: "/california",
+    title: "California RCFE and ARF directory",
+    description:
+      "Search California Residential Care Facilities for the Elderly and Adult Residential Facilities. Approved licensed capacity is not a vacancy.",
   },
 ];
 
@@ -135,9 +163,36 @@ export function profileSitemapPaths(licenses: readonly string[]): string[] {
   return [...paths].sort();
 }
 
+export function californiaEligibleProfilePath(
+  facilityNumber: string | null | undefined,
+): string | null {
+  const value = facilityNumber?.trim() ?? "";
+  if (!/^\d{8,9}$/.test(value)) return null;
+  return `/california/${value}`;
+}
+
+export function californiaProfileSitemapPaths(
+  facilityNumbers: readonly string[],
+): string[] {
+  const paths = new Set<string>();
+  for (const facilityNumber of facilityNumbers) {
+    const path = californiaEligibleProfilePath(facilityNumber);
+    if (path) paths.add(path);
+  }
+  return [...paths].sort();
+}
+
 export function sitemapPaths(allowed: boolean, licenses: readonly string[]): string[] {
   if (!allowed) return [];
-  return [...WASHINGTON_PUBLIC_PAGES.map(page => page.path), ...profileSitemapPaths(licenses)];
+  return [
+    ...WASHINGTON_PUBLIC_PAGES.map(page => page.path),
+    ...CALIFORNIA_PUBLIC_PAGES.map(page => page.path),
+    ...profileSitemapPaths(licenses),
+  ];
+}
+
+export function californiaPublicSitemapAuthorized(): boolean {
+  return CALIFORNIA_PUBLIC_PAGES.length > 0;
 }
 
 export function sitemapUrls(allowed: boolean, licenses: readonly string[]): string[] {

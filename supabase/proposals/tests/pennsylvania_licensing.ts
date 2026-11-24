@@ -82,7 +82,7 @@ test("Pennsylvania stays unpublished and the earlier states keep their contracts
   assert.equal(mapHref("Pennsylvania"), null);
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.publication, "development");
-  assert.equal(directoryContract("California")?.directoryPath, null);
+  assert.equal(directoryContract("California")?.directoryPath, "/california");
   assert.equal(directoryContract("Michigan")?.publication, "unpublished");
   const page = readFileSync(new URL("../../../app/development/pennsylvania/page.tsx", import.meta.url), "utf8");
   const home = readFileSync(new URL("../../../app/page.tsx", import.meta.url), "utf8");

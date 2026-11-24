@@ -149,8 +149,8 @@ test("publication safeguards reject an invented export date and disclosure link"
   assert.equal(CALIFORNIA_DETAIL_VERIFICATION.openDataStatusConfirmed, false);
   assert.equal(CALIFORNIA_DETAIL_VERIFICATION.invalidZeroReturnsFacility, false);
   assert.equal(californiaDirectoryReady(), false);
-  assert.equal(directoryContract("California")?.publication, "unpublished");
-  assert.equal(directoryHref("California", DEVELOPMENT_URL), null);
+  assert.equal(directoryContract("California")?.publication, "public");
+  assert.equal(directoryHref("California", DEVELOPMENT_URL), "/california");
   assert.equal(mapHref("California"), null);
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.publication, "development");
