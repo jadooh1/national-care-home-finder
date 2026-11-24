@@ -152,11 +152,15 @@ export function californiaExclusionLedgerIsResidual(
   );
 }
 
-/** Active development controls after approved ledger activation. */
+/**
+ * Active development controls after approved ledger activation.
+ * Eligibility mapping may be activated by a separate decision; live defaults
+ * are owned by the cutover / mapping-activation packages.
+ */
 export function californiaExclusionLedgerActiveControls() {
   return {
     exclusionsActivated: true as const,
-    eligibilityMappingActivated: false as const,
+    eligibilityMappingActivated: true as const,
     californiaPublished: false as const,
     publicationEligibleCount: 0 as const,
     environment: "development-only" as const,
@@ -172,8 +176,9 @@ export function californiaExclusionLedgerAllowsPublication(): false {
   return false;
 }
 
-export function californiaExclusionLedgerAllowsEligibilityMapping(): false {
-  return false;
+/** Separate mapping activation is approved; exclusion activation alone did not enable it. */
+export function californiaExclusionLedgerAllowsEligibilityMapping(): true {
+  return true;
 }
 
 /**
@@ -349,11 +354,11 @@ export function buildCaliforniaExclusionLedgerActivationPreview() {
     && !CALIFORNIA_EXCLUSION_LEDGER_AFTER.eligibilityMappingActivated
     && !CALIFORNIA_EXCLUSION_LEDGER_AFTER.californiaPublished
     && controls.exclusionsActivated
-    && !controls.eligibilityMappingActivated
+    && controls.eligibilityMappingActivated
     && !controls.californiaPublished
     && californiaExclusionLedgerActivated()
     && !californiaExclusionLedgerAllowsPublication()
-    && !californiaExclusionLedgerAllowsEligibilityMapping()
+    && californiaExclusionLedgerAllowsEligibilityMapping()
     && residualBlocked
     && truncBlocked
     && validAllowed
@@ -385,10 +390,9 @@ export function buildCaliforniaExclusionLedgerActivationPreview() {
     arithmeticOk,
     stopGoPublic: "STOP" as const,
     mostActionableNextStep:
-      "Exclusion ledger is ON for development only. Keep eligibility mapping inactive and California unpublished until separate approvals.",
+      "Exclusion ledger remains ON. Eligibility mapping is activated separately for development only; California stays unpublished.",
     preservedRestrictions: [
       "development-only-activation",
-      "eligibility-mapping-inactive",
       "california-unpublished",
       "publication-eligible-zero",
       "no-database-writes",

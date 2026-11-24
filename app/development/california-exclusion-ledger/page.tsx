@@ -125,11 +125,13 @@ export default function CaliforniaExclusionLedgerActivationPage() {
           }}
         >
           <strong>Public: {preview.stopGoPublic}.</strong> Exclusions:{" "}
-          {preview.after.exclusionsActivated ? "ON (development)" : "OFF"}.
+          {preview.controls.exclusionsActivated ? "ON (development)" : "OFF"}.
           Eligibility mapping:{" "}
-          {preview.after.eligibilityMappingActivated ? "ON" : "OFF"}.
-          Publication eligible: {preview.after.publicationEligibleCount}. Cache:{" "}
-          {preview.after.cacheGeneration}. Live reconcile:{" "}
+          {preview.controls.eligibilityMappingActivated
+            ? "ON (development)"
+            : "OFF"}
+          . Publication eligible: {preview.controls.publicationEligibleCount}.
+          Cache: {preview.controls.cacheGeneration}. Live reconcile:{" "}
           {preview.source.liveExactMatches}/22 exact.
         </section>
 

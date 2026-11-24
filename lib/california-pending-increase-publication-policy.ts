@@ -15,13 +15,16 @@ export const CALIFORNIA_PENDING_INCREASE_POLICY_BASELINE = "41338bb" as const;
 
 export const CALIFORNIA_PENDING_INCREASE_POLICY_STATUS = {
   /**
-   * Approved for future eligibility consideration only (human direction
-   * after #202 / recorded in Tier 1 launch-readiness). Not activated;
-   * does not publish California.
+   * Approved for future eligibility consideration, then activated in the
+   * development application controls only (post-#214). Does not write the
+   * database and does not publish California.
    */
   humanApproved: true as const,
   humanApprovedScope: "future-eligibility-consideration-only" as const,
-  activatedInApplicationOrDatabase: false as const,
+  activatedInApplication: true as const,
+  activatedInDatabase: false as const,
+  /** @deprecated Prefer activatedInApplication / activatedInDatabase. */
+  activatedInApplicationOrDatabase: true as const,
   californiaPublicationAllowed: false as const,
   altersAuthoritativeGovernmentRecords: false as const,
 } as const;
@@ -449,13 +452,13 @@ export function simulateCaliforniaPendingIncreasePublicationPolicy(): California
       CALIFORNIA_PENDING_INCREASE_POLICY_DECISION_REQUIRING_APPROVAL,
     proposedRules: CALIFORNIA_PENDING_INCREASE_PROPOSED_RULES,
     remainingBlockers: [
-      "pending-increase-mapping-approved-future-eligibility-only-not-activated",
+      "pending-increase-mapping-activated-development-application-only",
       "california-publication-blocked",
       "state-authorization-unpublished",
-      "exclusion-policy-inactive",
       "missing-first-date-facilities-remain-excluded",
       "provisional-and-prior-conflicts-remain-excluded",
       "publication-approval-required",
+      "no-database-activation",
     ],
   };
 }
@@ -485,7 +488,9 @@ export function buildCaliforniaPendingIncreasePublicationPolicyPreview() {
     && CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApproved
     && CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.humanApprovedScope
       === "future-eligibility-consideration-only"
-    && !CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplicationOrDatabase
+    && CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplication
+    && !CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInDatabase
+    && CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.activatedInApplicationOrDatabase
     && !CALIFORNIA_PENDING_INCREASE_POLICY_STATUS.californiaPublicationAllowed;
 
   return {
@@ -494,13 +499,15 @@ export function buildCaliforniaPendingIncreasePublicationPolicyPreview() {
     stopGoPublic: "STOP" as const,
     stopGoDevelopmentPreview: "GO" as const,
     mostActionableNextStep:
-      CALIFORNIA_PENDING_INCREASE_POLICY_DECISION_REQUIRING_APPROVAL.decisionText,
+      "Pending Increase mapping is activated in the development application only. Keep California unpublished and publicationEligible=0 until a separate publication approval.",
     preservedRestrictions: [
       "washington-oregon-florida-ohio-unchanged",
-      "exclusions-remain-inactive",
+      "california-unpublished",
+      "publication-eligible-zero",
       "missing-first-dates-never-use-effective-date",
       "proposed-capacity-never-invented",
       "offline-candidates-not-publication-approved",
+      "no-database-writes",
     ] as const,
   };
 }

@@ -94,10 +94,10 @@ export default function CaliforniaPrepublicationCutoverPage() {
             California prepublication cutover controls
           </h1>
           <p style={{ maxWidth: 820, lineHeight: 1.7, opacity: 0.95 }}>
-            Observed {preview.observedOn}. Baseline {preview.baseline} (#212).
-            Functional publication-selection pipeline with inactive runtime
-            controls. Dry-run activation and rollback only. California stays
-            unpublished.
+            Observed {preview.observedOn}. Baseline {preview.baseline} (#214).
+            Functional publication-selection pipeline. Exclusion ledger and
+            eligibility mapping are ON for development; California stays
+            unpublished with publication-eligible count zero.
           </p>
         </div>
       </section>
@@ -197,8 +197,8 @@ export default function CaliforniaPrepublicationCutoverPage() {
             {String(preview.activationAll.activatedRuntime)}. Residual blocked{" "}
             {preview.activationAll.residualEnforced.blocked}/
             {preview.activationAll.residualEnforced.total}. Selected under
-            rehearsal: {preview.activationAll.selectedUnderRehearsal}. Defaults
-            remain inactive after rehearsal.
+            rehearsal: {preview.activationAll.selectedUnderRehearsal}. Rehearsal
+            does not mutate live defaults or publish California.
           </p>
           <ol style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
             {preview.activationAll.steps.map((step) => (

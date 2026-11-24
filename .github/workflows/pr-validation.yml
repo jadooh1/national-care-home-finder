@@ -331,6 +331,9 @@ jobs:
       - name: Check the California exclusion ledger activation
         run: node --experimental-strip-types --test supabase/proposals/tests/california_exclusion_ledger_activation.ts
 
+      - name: Check the California eligibility mapping activation
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_eligibility_mapping_activation.ts
+
       - name: Check the California status verification sample
         run: node --experimental-strip-types --test supabase/proposals/tests/california_status_verification.ts
 

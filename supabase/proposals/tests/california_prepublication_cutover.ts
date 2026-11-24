@@ -20,8 +20,8 @@ import { directoryContract, directoryHref, mapHref } from "../../../lib/state-di
 import { ENABLED_OWNER_FACILITY_STATES } from "../../../lib/owner-facility-read.ts";
 import { DIRECTORY_VIEW } from "../../../lib/public-indexing.ts";
 
-test("baseline #213; exclusion ledger ON in development; publication STOP", () => {
-  assert.equal(CALIFORNIA_PREPUBLICATION_CUTOVER_BASELINE, "22e522c");
+test("baseline #214; exclusion ledger + mapping ON in development; publication STOP", () => {
+  assert.equal(CALIFORNIA_PREPUBLICATION_CUTOVER_BASELINE, "b7fb8d8");
   assert.equal(californiaCutoverExclusionsActivated(), true);
   assert.equal(californiaCutoverActivated(), false);
   assert.equal(californiaCutoverAllowsPublication(), false);
@@ -32,7 +32,7 @@ test("baseline #213; exclusion ledger ON in development; publication STOP", () =
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS
       .eligibilityMappingActivated,
-    false,
+    true,
   );
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.californiaPublished,
@@ -73,7 +73,7 @@ test("exclusion ledger wired into publication-selection; all 22 residuals blocke
   );
 });
 
-test("eligibility mapping is independent and inactive by default", () => {
+test("eligibility mapping is independent; ON by default; still unpublished", () => {
   const without = californiaPrepublicationSelectFacility(
     {
       facilityNumber: "392701427",
@@ -109,16 +109,11 @@ test("eligibility mapping is independent and inactive by default", () => {
       sourceAsOfIso: "2026-11-22",
       disclosureVerified: true,
     },
-    {
-      exclusionsActivated: true,
-      eligibilityMappingActivated: true,
-      californiaPublished: false,
-      publicationEligibleCount: 0,
-    },
   );
   assert.equal(withMapping.selected, false);
   assert.equal(withMapping.eligibilityMappingApplied, true);
   assert.ok(withMapping.reasons.includes("california-unpublished"));
+  assert.ok(withMapping.reasons.includes("publication-eligible-zero"));
 });
 
 test("fail-closed for stale data, invalid IDs, conflicts, unverified disclosure", () => {
@@ -221,7 +216,7 @@ test("activation and rollback rehearsals do not mutate live defaults incorrectly
   assert.equal(activation.selectedUnderRehearsal, 0);
   assert.equal(activation.independencePreserved, true);
 
-  // Live defaults keep exclusion ON and mapping/publication OFF after rehearsal.
+  // Live defaults keep exclusion + mapping ON and publication OFF after rehearsal.
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.exclusionsActivated,
     true,
@@ -229,7 +224,7 @@ test("activation and rollback rehearsals do not mutate live defaults incorrectly
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS
       .eligibilityMappingActivated,
-    false,
+    true,
   );
 
   const rollback = californiaCutoverRollbackSequence({
@@ -286,8 +281,9 @@ test("preview arithmetic and development page present", () => {
   assert.equal(preview.arithmeticOk, true);
   assert.equal(preview.stopGoPublic, "STOP");
   assert.equal(preview.residualCount, 22);
-  assert.equal(preview.baseline, "22e522c");
+  assert.equal(preview.baseline, "b7fb8d8");
   assert.equal(preview.defaults.exclusionsActivated, true);
+  assert.equal(preview.defaults.eligibilityMappingActivated, true);
 
   assert.equal(
     existsSync("app/development/california-prepublication-cutover/page.tsx"),

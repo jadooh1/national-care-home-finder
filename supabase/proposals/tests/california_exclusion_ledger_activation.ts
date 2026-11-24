@@ -51,14 +51,14 @@ test("baseline #213; development-only exclusion ledger activated", () => {
   );
 });
 
-test("eligibility mapping inactive; California publication blocked", () => {
-  assert.equal(californiaExclusionLedgerAllowsEligibilityMapping(), false);
+test("eligibility mapping may be ON separately; California publication blocked", () => {
+  assert.equal(californiaExclusionLedgerAllowsEligibilityMapping(), true);
   assert.equal(californiaExclusionLedgerAllowsPublication(), false);
   assert.equal(californiaCutoverAllowsPublication(), false);
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS
       .eligibilityMappingActivated,
-    false,
+    true,
   );
   assert.equal(
     CALIFORNIA_PREPUBLICATION_CUTOVER_DEFAULT_CONTROLS.californiaPublished,
@@ -69,6 +69,10 @@ test("eligibility mapping inactive; California publication blocked", () => {
     0,
   );
   assert.equal(directoryContract("California")?.publication, "unpublished");
+  assert.equal(
+    CALIFORNIA_EXCLUSION_LEDGER_AFTER.eligibilityMappingActivated,
+    false,
+  );
 });
 
 test("all 22 residuals and truncation aliases remain blocked", () => {
