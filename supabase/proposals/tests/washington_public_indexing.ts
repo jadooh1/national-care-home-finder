@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import test from "node:test";
 import { facilityProfilePath } from "../../../lib/family-journey.ts";
 import {
+  CALIFORNIA_PUBLIC_PAGES,
   DIRECTORY_VIEW,
   PRIVATE_INDEX_PREFIXES,
   PUBLIC_CANONICAL_HOST,
@@ -176,7 +177,10 @@ test("a license read uses the public directory and fails closed", async () => {
   assert.equal(denied.ok, false);
   assert.deepEqual(
     sitemapPaths(true, []),
-    [...WASHINGTON_PUBLIC_PAGES.map(page => page.path), "/california"],
+    [
+      ...WASHINGTON_PUBLIC_PAGES.map(page => page.path),
+      ...CALIFORNIA_PUBLIC_PAGES.map(page => page.path),
+    ],
   );
 
   const placeholder = await listIndexableLicenses({
