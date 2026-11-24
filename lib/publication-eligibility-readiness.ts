@@ -235,6 +235,36 @@ export const PUBLICATION_READINESS_SUMMARIES: readonly StateReadinessSummary[] =
     oregonMapDisabled: false,
     ownerClaimsEnabled: false,
   },
+  {
+    state: "Texas",
+    stateAuthorization: "unpublished",
+    evaluationScope: "full-dataset",
+    countsAreFixtureOrSample: false,
+    statewideLaunchReadyClaim: false,
+    tierCounts: { tier0: 2019, tier1: 0, tier2: 0, tier3: 0 },
+    listingCoverageNote:
+      "HHSC al.xlsx ALF_Directory inventory (2,019 rows; Type A/B/C). Strong Facility ID/License/address/capacity; publicationEligible=0 until ISO + status + TULIP disclosure + taxonomy clear.",
+    mapCoverageNote:
+      "Geo Location pairs undescribed; 82 comma-only cells are not coordinates. Map stays off.",
+    enhancedCoverageNote: "Not enabled.",
+    blockers: [
+      "no-authoritative-iso-export-date",
+      "facility-licensed-yes-not-operating-status",
+      "no-verified-tulip-disclosure-url-prefix",
+      "type-a-b-c-taxonomy-unapproved",
+      "map-geo-source-undescribed",
+      "state-authorization-unpublished",
+    ],
+    manualReviewQueue: [
+      "hhsc-iso-export-stamp",
+      "tulip-disclosure-prefix-or-search-only-policy",
+      "type-a-b-c-product-taxonomy",
+    ],
+    stopGo: "STOP",
+    californiaPublicationBlocked: false,
+    oregonMapDisabled: false,
+    ownerClaimsEnabled: false,
+  },
 ] as const;
 
 export function buildPublicationReadinessReport(
