@@ -19,7 +19,7 @@ export const OREGON_BEDS_NOTE = "Licensed beds are the licensed size of the home
 export const OREGON_ZERO_BED_NOTE = "20 open Oregon adult foster homes recorded with 0 licensed beds are left out of this directory.";
 export const OREGON_LOCATION_NOTE = "This directory has no street address or map location. The official ODHS profile is where to confirm the location.";
 export const OREGON_FRESHNESS_NOTE = "These listings come from an ODHS provider export. This directory is not a live vacancy or licensing check.";
-export const OREGON_PUBLIC_HOMEPAGE_NOTE = "Washington adult family home names, addresses, and license numbers can be opened from the Washington link. Oregon adult foster home names, cities, and counties can be opened from the Oregon link. Oregon listings do not include street addresses or license numbers. Licensed beds are not vacancies. 20 open Oregon adult foster homes recorded with 0 licensed beds are left out. Vacancies, prices, and current license standing are not displayed. Other state names are labels only.";
+export const OREGON_PUBLIC_HOMEPAGE_NOTE = "Washington adult family home names, addresses, and license numbers can be opened from the Washington link. California RCFE and ARF names, cities, and license numbers can be opened from the California link. Oregon adult foster home names, cities, and counties can be opened from the Oregon link on development hosts only. Oregon listings do not include street addresses or license numbers. Licensed beds are not vacancies. 20 open Oregon adult foster homes recorded with 0 licensed beds are left out. Vacancies, prices, and current license standing are not displayed. Other state names are labels only.";
 
 const SOURCE_ID_PATTERN = /^[A-Za-z0-9]{1,32}$/;
 
