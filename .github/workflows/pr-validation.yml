@@ -328,6 +328,9 @@ jobs:
       - name: Check the California Tier 2 development map
         run: node --experimental-strip-types --test supabase/proposals/tests/california_tier2_map.ts
 
+      - name: Check the California Tier 2 final development validation
+        run: node --experimental-strip-types --test supabase/proposals/tests/california_tier2_final_validation.ts
+
       - name: Check the California prepublication cutover controls
         run: node --experimental-strip-types --test supabase/proposals/tests/california_prepublication_cutover.ts
 

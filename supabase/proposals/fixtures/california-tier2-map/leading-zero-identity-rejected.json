@@ -1,0 +1,21 @@
+[
+  {
+    "facilityNumber": "011405838",
+    "reason": "identity-not-corroborated",
+    "roster": {
+      "name": "ABLELIGHT, INC - MOWRY",
+      "addr": "1335 Mowry Ave",
+      "city": "Fremont",
+      "zip": "94538",
+      "type": "ADULT RESIDENTIAL",
+      "cat": "ARF"
+    },
+    "gis": {
+      "name": "BETHESDA LUTHERAN COMMUNITIES-MOWRY",
+      "addr": "1335 MOWRY AVE",
+      "city": "FREMONT",
+      "zip": 94536,
+      "type": "ADULT RESIDENTIAL"
+    }
+  }
+]

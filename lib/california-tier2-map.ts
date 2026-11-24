@@ -30,9 +30,14 @@ export const CALIFORNIA_TIER2_MAP_SCOPE = {
     "https://services.arcgis.com/XLPEppdz2H9dOiqp/arcgis/rest/services/CDSS_CCL_Facilities/FeatureServer/0",
   matchEngine:
     "lib/california-phase8-coordinates.ts#reconcileCaliforniaPhase8Coordinates",
+  identityValidation:
+    "lib/california-phase9-coordinates.ts#assessCaliforniaPhase9IdentityCorroboration",
   fabricatedCoordinates: 0 as const,
   geocoded: false as const,
   ownerFeaturesEnabled: false as const,
+  /** After Phase 9 identity filter on leading-zero collapses (baseline 6a04300). */
+  verifiedMapPointCount: 15418 as const,
+  leadingZeroIdentityRejected: 1 as const,
 } as const;
 
 export type CaliforniaTier2MatchKind = "exact" | "leading-zero-collapsed-unique";
@@ -84,6 +89,8 @@ export type CaliforniaTier2MapCoverage = {
     invalidDownloadIds: number;
     exactValidCoverageRate: number;
     usableOfficialCoordsRate: number;
+    leadingZeroIdentityVerified?: number;
+    leadingZeroIdentityRejected?: number;
   };
   mapPoints: {
     count: number;
@@ -91,6 +98,21 @@ export type CaliforniaTier2MapCoverage = {
     leadingZeroCollapsedUnique: number;
     developmentOnlyPath: string;
     publicMapPath: null;
+    publicMapEnabled: false;
+    leadingZeroIdentityVerified?: number;
+    leadingZeroIdentityRejected?: number;
+  };
+  validation?: {
+    observedOn: string;
+    baselineCommit: string;
+    method: string;
+    rejectedIds: readonly string[];
+    rejectedReason: string;
+    stratifiedExactSamplePass: number;
+    stratifiedExactSampleFail: number;
+    unmatchedDocumented: number;
+    verifiedOfficialCoords: number;
+    verifiedOfficialCoordsRate: number;
     publicMapEnabled: false;
   };
   remainingBlockers: readonly string[];
@@ -296,9 +318,12 @@ export function californiaTier2MapCoverageSummary(): {
   invalidOrMissing: number;
   exactRate: number;
   usableRate: number;
+  leadingZeroIdentityVerified: number;
+  leadingZeroIdentityRejected: number;
   publicMapEnabled: false;
 } {
-  const c = loadCaliforniaTier2MapCoverage().matching;
+  const coverage = loadCaliforniaTier2MapCoverage();
+  const c = coverage.matching;
   return {
     eligible: c.eligibleCount,
     exact: c.exactMatchWithValidCoords,
@@ -308,6 +333,8 @@ export function californiaTier2MapCoverageSummary(): {
     invalidOrMissing: c.gisCoordsMissingOrInvalid,
     exactRate: c.exactValidCoverageRate,
     usableRate: c.usableOfficialCoordsRate,
+    leadingZeroIdentityVerified: c.leadingZeroIdentityVerified ?? 0,
+    leadingZeroIdentityRejected: c.leadingZeroIdentityRejected ?? 0,
     publicMapEnabled: false,
   };
 }

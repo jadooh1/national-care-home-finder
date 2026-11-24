@@ -83,9 +83,10 @@ export default async function CaliforniaTier2DevelopmentMapPage({
           <p style={{ maxWidth: 820, lineHeight: 1.65 }}>
             Interactive development map for the {m.eligibleCount.toLocaleString()}{" "}
             eligible CDSS Tier 1 facilities. Coordinates come only from exact
-            license-ID matches to the official CDSS CCL ArcGIS layer (plus unique
-            leading-zero GIS integer representations). CDSS DownloadStateData
-            remains authoritative. Public California maps stay disabled.
+            license-ID matches to the official CDSS CCL ArcGIS layer, plus
+            leading-zero GIS collapses independently corroborated by Phase 9
+            identity checks. CDSS DownloadStateData remains authoritative.
+            Public California maps stay disabled.
           </p>
           <p style={{ marginTop: 14 }}>
             <Link href="/development/california" style={{ color: "white", fontWeight: 700 }}>
@@ -124,8 +125,9 @@ export default async function CaliforniaTier2DevelopmentMapPage({
             {[
               ["Eligible roster", m.eligibleCount],
               ["Exact ID + valid coords", m.exactMatchWithValidCoords],
-              ["Leading-zero unique + valid", m.leadingZeroCollapsedUniqueWithValidCoords],
-              ["Usable official coords", m.usableOfficialCoords],
+              ["Leading-zero identity verified", m.leadingZeroIdentityVerified ?? m.leadingZeroCollapsedUniqueWithValidCoords],
+              ["Leading-zero identity rejected", m.leadingZeroIdentityRejected ?? 0],
+              ["Verified official coords", m.usableOfficialCoords],
               ["Unmatched", m.unmatched],
               ["Ambiguous rejected", m.ambiguousRejected],
               ["Invalid / missing coords", m.gisCoordsMissingOrInvalid],
@@ -148,9 +150,9 @@ export default async function CaliforniaTier2DevelopmentMapPage({
             ))}
           </div>
           <p style={{ marginBottom: 0, lineHeight: 1.7 }}>
-            Exact coverage {pct(m.exactValidCoverageRate)}. Usable official
-            coverage {pct(m.usableOfficialCoordsRate)} (exact + unique
-            leading-zero collapse). Unmatched facilities are omitted from the map
+            Exact coverage {pct(m.exactValidCoverageRate)}. Verified official
+            coverage {pct(m.usableOfficialCoordsRate)} (exact + Phase-9-verified
+            leading-zero). Unmatched and identity-rejected facilities are omitted
             — coordinates are never invented.
           </p>
         </section>
