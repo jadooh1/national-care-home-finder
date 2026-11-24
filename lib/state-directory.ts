@@ -35,7 +35,7 @@ export type DirectoryPublication = "public" | "development" | "unpublished";
 export type DirectoryContract = {
   name: StateName;
   publication: DirectoryPublication;
-  directoryPath: "/washington" | "/oregon" | null;
+  directoryPath: "/washington" | "/oregon" | "/california" | null;
   mapPath: "/washington/map" | null;
   searchFields: readonly string[];
   locatorUrl: string | null;
@@ -45,8 +45,15 @@ export type DirectoryContract = {
 
 const WASHINGTON_SEARCH = ["name", "city", "zip", "license"] as const;
 const OREGON_SEARCH = ["name", "city", "county"] as const;
+const CALIFORNIA_SEARCH = ["name", "city", "zip", "license", "category"] as const;
 const LICENSE_PATTERN = /^\d{1,20}$/;
 const OREGON_SOURCE_PATTERN = /^[A-Za-z0-9]{1,32}$/;
+
+export const CALIFORNIA_CDSS_FACILITY_SEARCH =
+  "https://www.ccld.dss.ca.gov/carefacilitysearch/";
+export const CALIFORNIA_SOURCE_RETRIEVED_ON = "2026-11-22";
+export const CALIFORNIA_SOURCE_LABEL = "November 22, 2026";
+export const CALIFORNIA_LISTED_COUNT = 15435;
 
 function directoryHost(supabaseUrl: string): string {
   try {
@@ -83,6 +90,21 @@ export function directoryContract(name: string): DirectoryContract | null {
       liveCheck: false,
     };
   }
+  if (state === "California") {
+    // Protected Tier 1 release candidate: directory exists for development-host
+    // preview only. Public production publication stays unauthorized until a
+    // separate approval flips this contract to "public".
+    return {
+      name: state,
+      publication: "development",
+      directoryPath: "/california",
+      mapPath: null,
+      searchFields: CALIFORNIA_SEARCH,
+      locatorUrl: CALIFORNIA_CDSS_FACILITY_SEARCH,
+      retrievedOn: CALIFORNIA_SOURCE_RETRIEVED_ON,
+      liveCheck: false,
+    };
+  }
   return {
     name: state,
     publication: "unpublished",
@@ -95,7 +117,10 @@ export function directoryContract(name: string): DirectoryContract | null {
   };
 }
 
-export function directoryHref(name: string, supabaseUrl: string): "/washington" | "/oregon" | null {
+export function directoryHref(
+  name: string,
+  supabaseUrl: string,
+): "/washington" | "/oregon" | "/california" | null {
   const contract = directoryContract(name);
   if (!contract?.directoryPath) return null;
   if (contract.publication === "public") return contract.directoryPath;

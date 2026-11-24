@@ -124,7 +124,7 @@ test("California stays unpublished when the table is clean", () => {
   assert.equal(report.refresh_activated, false);
   assert.equal(report.persists_records, false);
   assert.equal(report.disclosure_url, null);
-  assert.equal(directoryContract("California")?.publication, "unpublished");
+  assert.equal(directoryContract("California")?.publication, "development");
   assert.equal(directoryContract("Washington")?.mapPath, "/washington/map");
   assert.equal(directoryContract("Oregon")?.mapPath, null);
 });

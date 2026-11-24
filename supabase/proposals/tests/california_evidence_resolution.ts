@@ -34,7 +34,7 @@ test("names and streets stay insufficient, and the same requests stay stopped", 
   assert.equal(CALIFORNIA_EVIDENCE_STOP.repeatDatastoreHttp500, false);
   assert.equal(CALIFORNIA_EVIDENCE_STOP.repeatTimedOutRequests, false);
   assert.equal(CALIFORNIA_EVIDENCE_STOP.repeatOpenDataDownload, false);
-  assert.equal(directoryContract("California")?.publication, "unpublished");
+  assert.equal(directoryContract("California")?.publication, "development");
   assert.equal(directoryContract("Washington")?.publication, "public");
   const home = readFileSync(new URL("../../../lib/copy/home.ts", import.meta.url), "utf8");
   const proposal = readFileSync(new URL("../20261114030000_california_evidence_resolution.md", import.meta.url), "utf8");
