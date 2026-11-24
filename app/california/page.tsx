@@ -13,6 +13,7 @@ import {
   CALIFORNIA_LISTED_COUNT,
   CALIFORNIA_SOURCE_LABEL,
 } from "../../lib/state-directory";
+import { CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE } from "../../lib/california-tier2-release";
 
 /** Request-level gate must run on every request (no static prerender bypass). */
 export const dynamic = "force-dynamic";
@@ -162,6 +163,23 @@ export default async function CaliforniaDirectoryPage({ searchParams }: PageProp
             <strong>Directory arithmetic failed.</strong> Fail closed.
           </section>
         ) : null}
+
+        <section
+          aria-label="California map coverage disclosure"
+          style={{
+            background: "#fff",
+            border: `1px solid ${C.border}`,
+            borderRadius: 12,
+            padding: 18,
+          }}
+        >
+          <h2 style={{ marginTop: 0, fontSize: 20 }}>
+            {CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE.title}
+          </h2>
+          <p style={{ color: C.muted, lineHeight: 1.7, marginBottom: 0 }}>
+            {CALIFORNIA_TIER2_PUBLIC_COVERAGE_DISCLOSURE.summary}
+          </p>
+        </section>
 
         <section
           style={{
