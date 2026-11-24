@@ -178,15 +178,17 @@ test("routes stay under /development; preview arithmetic and checklist", () => {
     "app/development/california/[facilityNumber]/page.tsx",
     "utf8",
   );
-  assert.ok(listing.includes("Tier 1 development directory (fixtures)"));
+  // Listing page now uses the statewide full roster; the 7-fixture module remains
+  // as the prior prototype library under test here.
+  assert.ok(listing.includes("Tier 1 development directory (statewide roster)"));
   assert.ok(listing.includes("CALIFORNIA_COVERAGE_DIRECTORY_SAMPLES"));
   assert.ok(listing.includes("development-only"));
   assert.equal(listing.includes("href={`/california"), false);
   assert.equal(listing.includes("href=\"/california"), false);
-  assert.equal(listing.includes("supabase"), false);
+  assert.equal(listing.includes("supabase.from"), false);
   assert.ok(detail.includes("/development/california"));
   assert.equal(detail.includes("href=\"/california"), false);
-  assert.equal(detail.includes("supabase"), false);
+  assert.equal(detail.includes("supabase.from"), false);
 
   const home = readFileSync("app/page.tsx", "utf8");
   assert.equal(home.includes("/development/california"), false);

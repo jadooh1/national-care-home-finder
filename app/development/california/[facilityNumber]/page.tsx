@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  CALIFORNIA_TIER1_DEV_DIRECTORY_SCOPE,
-  californiaTier1DevListingPath,
-  californiaTier1DevLookupFacility,
-} from "../../../../lib/california-tier1-dev-directory";
+  californiaTier1FullRosterListingPath,
+  californiaTier1FullRosterLookup,
+  loadCaliforniaTier1FullRosterManifest,
+} from "../../../../lib/california-tier1-full-roster";
 
 const C = {
   navy: "#123c59",
@@ -19,11 +19,12 @@ type PageProps = {
   params: Promise<{ facilityNumber: string }>;
 };
 
-export default async function CaliforniaTier1DevFacilityDetailPage({
+export default async function CaliforniaTier1FullRosterFacilityDetailPage({
   params,
 }: PageProps) {
   const { facilityNumber } = await params;
-  const lookup = californiaTier1DevLookupFacility(facilityNumber);
+  const lookup = californiaTier1FullRosterLookup(facilityNumber);
+  const manifest = loadCaliforniaTier1FullRosterManifest();
 
   if (!lookup.ok) {
     return (
@@ -54,7 +55,7 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
           >
             <strong style={{ fontSize: 19 }}>National Care Home Finder</strong>
             <Link
-              href={californiaTier1DevListingPath()}
+              href={californiaTier1FullRosterListingPath()}
               style={{ color: C.teal, fontWeight: 600 }}
             >
               ← California development directory
@@ -103,9 +104,10 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
             <strong>Blocked.</strong> Reasons: {lookup.reasons.join(", ")}.
           </section>
           <p style={{ color: C.muted, marginTop: 18, lineHeight: 1.6 }}>
-            Development fixtures only ({CALIFORNIA_TIER1_DEV_DIRECTORY_SCOPE.fixtureCount}{" "}
-            records). Residual exclusions, invalid identifiers, and IDs outside the
-            fixture set never resolve. This is not a public California directory.
+            Development roster only ({manifest.listableCount.toLocaleString()}{" "}
+            listable as-of {manifest.sourceAsOfIso}). Residual exclusions,
+            invalid identifiers, and IDs outside the listable roster never
+            resolve. This is not a public California directory.
           </p>
         </div>
       </main>
@@ -113,8 +115,6 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
   }
 
   const facility = lookup.facility;
-
-  // Defense in depth: never render a public /california path.
   if (!facility.facilityNumber || facility.facilityNumber.includes("/")) {
     notFound();
   }
@@ -151,7 +151,7 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
             style={{ display: "flex", gap: 16, flexWrap: "wrap" }}
           >
             <Link
-              href={californiaTier1DevListingPath()}
+              href={californiaTier1FullRosterListingPath()}
               style={{ color: C.teal, fontWeight: 600 }}
             >
               ← California development directory
@@ -182,8 +182,8 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
           </h1>
           <p style={{ maxWidth: 720, lineHeight: 1.7, opacity: 0.95 }}>
             License {facility.facilityNumber}
-            {facility.leadingZero ? " (leading zero preserved)" : ""}. Development
-            fixture only — not a public California listing.
+            {facility.leadingZero ? " (leading zero preserved)" : ""}.
+            Development roster only — not a public California listing.
           </p>
         </div>
       </section>
@@ -221,14 +221,7 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
           }}
         >
           <h2 style={{ marginTop: 0 }}>Official facility information</h2>
-          <dl
-            style={{
-              display: "grid",
-              gap: 12,
-              margin: 0,
-              lineHeight: 1.6,
-            }}
-          >
+          <dl style={{ display: "grid", gap: 12, margin: 0, lineHeight: 1.6 }}>
             <div>
               <dt style={{ color: C.muted, fontSize: 13 }}>Facility Number</dt>
               <dd style={{ margin: "2px 0 0", fontWeight: 700 }}>
@@ -242,15 +235,25 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
               </dd>
             </div>
             <div>
-              <dt style={{ color: C.muted, fontSize: 13 }}>CDSS status</dt>
-              <dd style={{ margin: "2px 0 0" }}>{facility.apiStatus}</dd>
+              <dt style={{ color: C.muted, fontSize: 13 }}>
+                Download status
+              </dt>
+              <dd style={{ margin: "2px 0 0" }}>{facility.downloadStatus}</dd>
+            </div>
+            <div>
+              <dt style={{ color: C.muted, fontSize: 13 }}>Address</dt>
+              <dd style={{ margin: "2px 0 0" }}>
+                {[facility.addressLine1, facility.city, facility.postalCode]
+                  .filter(Boolean)
+                  .join(", ") || "—"}
+              </dd>
             </div>
             <div>
               <dt style={{ color: C.muted, fontSize: 13 }}>
                 License first date
               </dt>
               <dd style={{ margin: "2px 0 0" }}>
-                {facility.licenseFirstDate ?? "—"}
+                {facility.licenseFirstDate || "—"}
               </dd>
             </div>
             <div>
@@ -266,11 +269,11 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
             </div>
             <div>
               <dt style={{ color: C.muted, fontSize: 13 }}>
-                Pending Increase
+                Pending Increase flag
               </dt>
               <dd style={{ margin: "2px 0 0" }}>
                 {facility.pendingIncrease
-                  ? "Yes — status is informational; eligibility mapping remains inactive; proposed increase is not shown as capacity."
+                  ? "Yes — informational only; eligibility mapping remains inactive."
                   : "No"}
               </dd>
             </div>
@@ -279,9 +282,6 @@ export default async function CaliforniaTier1DevFacilityDetailPage({
               <dd style={{ margin: "2px 0 0" }}>{facility.sourceAsOfIso}</dd>
             </div>
           </dl>
-          <p style={{ color: C.muted, marginTop: 16, marginBottom: 0, lineHeight: 1.6 }}>
-            {facility.fixtureNote}
-          </p>
         </section>
 
         <section

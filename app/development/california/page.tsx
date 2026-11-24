@@ -23,10 +23,10 @@ import {
   buildCaliforniaDisclosureCoveragePrelaunchPreview,
 } from "../../../lib/california-disclosure-coverage-prelaunch";
 import {
-  buildCaliforniaTier1DevDirectoryPreview,
-  californiaTier1DevDetailPath,
-  californiaTier1DevListingPath,
-} from "../../../lib/california-tier1-dev-directory";
+  buildCaliforniaTier1FullRosterPreview,
+  californiaTier1FullRosterDetailPath,
+  californiaTier1FullRosterListingPath,
+} from "../../../lib/california-tier1-full-roster";
 
 const C = {
   navy: "#123c59",
@@ -63,7 +63,12 @@ const fieldStyle: CSSProperties = {
 };
 
 type PageProps = {
-  searchParams: Promise<{ q?: string; category?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    category?: string;
+    city?: string;
+    page?: string;
+  }>;
 };
 
 export default async function CaliforniaDevelopmentDirectoryPage({
@@ -74,11 +79,14 @@ export default async function CaliforniaDevelopmentDirectoryPage({
     ? "California is published."
     : "California is unpublished.";
   const coverage = buildCaliforniaDisclosureCoveragePrelaunchPreview();
-  const tier1 = buildCaliforniaTier1DevDirectoryPreview({
+  const pageNumber = Number(params.page) || 1;
+  const roster = buildCaliforniaTier1FullRosterPreview({
     q: params.q,
     category: params.category,
+    city: params.city,
+    page: pageNumber,
   });
-  const loadError = !coverage.arithmeticOk || !tier1.arithmeticOk;
+  const loadError = !coverage.arithmeticOk || !roster.arithmeticOk;
 
   return (
     <main
@@ -281,20 +289,26 @@ export default async function CaliforniaDevelopmentDirectoryPage({
           }}
         >
           <h2 style={{ marginTop: 0 }}>
-            Tier 1 development directory (fixtures)
+            Tier 1 development directory (statewide roster)
           </h2>
           <p style={{ color: C.muted, lineHeight: 1.6 }}>
-            {tier1.search.scopeNote} Search by name or exact license number.
-            Detail pages stay under /development/california. Not a public
-            directory.
+            {roster.search.scopeNote} Prior offline accounting was{" "}
+            {roster.reconciliation.priorOfflineTier1.toLocaleString()} at as-of{" "}
+            {roster.reconciliation.priorSourceAsOfIso}; current listable count is{" "}
+            {roster.reconciliation.currentListable.toLocaleString()} (delta{" "}
+            {roster.reconciliation.delta >= 0 ? "+" : ""}
+            {roster.reconciliation.delta}) at as-of{" "}
+            {roster.reconciliation.sourceAsOfIso}. Residual exclusions still
+            blocked: {roster.reconciliation.residualStillPresent}. Detail pages
+            stay under /development/california. Not a public directory.
           </p>
           <form
             method="get"
-            action={californiaTier1DevListingPath()}
+            action={californiaTier1FullRosterListingPath()}
             style={{
               display: "grid",
               gap: 12,
-              gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
               alignItems: "end",
               marginBottom: 18,
             }}
@@ -304,8 +318,19 @@ export default async function CaliforniaDevelopmentDirectoryPage({
               <input
                 type="search"
                 name="q"
-                defaultValue={tier1.search.query}
-                placeholder="Name or Facility Number"
+                defaultValue={roster.search.query}
+                placeholder="Name, license, city, or ZIP"
+                autoComplete="off"
+                style={fieldStyle}
+              />
+            </label>
+            <label style={{ display: "grid", gap: 6 }}>
+              <span style={{ fontWeight: 700, fontSize: 14 }}>City</span>
+              <input
+                type="search"
+                name="city"
+                defaultValue={roster.search.city}
+                placeholder="City"
                 autoComplete="off"
                 style={fieldStyle}
               />
@@ -314,7 +339,7 @@ export default async function CaliforniaDevelopmentDirectoryPage({
               <span style={{ fontWeight: 700, fontSize: 14 }}>Category</span>
               <select
                 name="category"
-                defaultValue={tier1.search.category}
+                defaultValue={roster.search.category}
                 style={fieldStyle}
               >
                 <option value="">All</option>
@@ -336,7 +361,7 @@ export default async function CaliforniaDevelopmentDirectoryPage({
                 fontFamily: "inherit",
               }}
             >
-              Search fixtures
+              Search roster
             </button>
           </form>
           <p
@@ -344,8 +369,10 @@ export default async function CaliforniaDevelopmentDirectoryPage({
             aria-live="polite"
             style={{ color: C.muted, marginTop: 0 }}
           >
-            Showing {tier1.search.total} of {tier1.scope.fixtureCount} development
-            fixtures.
+            Showing page {roster.search.page} of {roster.search.pageCount} (
+            {roster.search.results.length} on this page;{" "}
+            {roster.search.total.toLocaleString()} matches of{" "}
+            {roster.search.listableCount.toLocaleString()} listable).
           </p>
           <ul
             style={{
@@ -356,8 +383,8 @@ export default async function CaliforniaDevelopmentDirectoryPage({
               gap: 14,
             }}
           >
-            {tier1.search.results.map((facility) => {
-              const detailPath = californiaTier1DevDetailPath(
+            {roster.search.results.map((facility) => {
+              const detailPath = californiaTier1FullRosterDetailPath(
                 facility.facilityNumber,
               );
               return (
@@ -390,12 +417,13 @@ export default async function CaliforniaDevelopmentDirectoryPage({
                     {facility.category} · {facility.facilityType} · License{" "}
                     {facility.facilityNumber}
                     {facility.leadingZero ? " (leading zero preserved)" : ""} ·
-                    Status {facility.apiStatus}
+                    Status {facility.downloadStatus}
                     {facility.pendingIncrease
-                      ? " · Pending Increase (approved capacity only)"
+                      ? " · Pending Increase flag (approved capacity only; mapping inactive)"
                       : ""}{" "}
-                    · License first date {facility.licenseFirstDate ?? "—"} ·
-                    Approved licensed capacity{" "}
+                    · {facility.city ?? "—"}, {facility.postalCode ?? "—"} · License
+                    first date {facility.licenseFirstDate || "—"} · Approved
+                    licensed capacity{" "}
                     {facility.approvedLicensedCapacity ?? "—"} · Source as-of{" "}
                     {facility.sourceAsOfIso}
                   </p>
@@ -440,11 +468,62 @@ export default async function CaliforniaDevelopmentDirectoryPage({
               );
             })}
           </ul>
-          {tier1.search.total === 0 ? (
+          {roster.search.total === 0 ? (
             <p style={{ color: C.muted, marginBottom: 0 }}>
-              No fixtures matched. Invalid, residual-exclusion, and non-fixture
+              No roster matches. Invalid, residual-exclusion, and non-listable
               identifiers never appear here.
             </p>
+          ) : null}
+          {roster.search.pageCount > 1 ? (
+            <nav
+              aria-label="Roster pagination"
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 12,
+                marginTop: 18,
+                alignItems: "center",
+              }}
+            >
+              {roster.search.page > 1 ? (
+                <Link
+                  href={californiaTier1FullRosterListingPath({
+                    q: roster.search.query,
+                    category: roster.search.category,
+                    city: roster.search.city,
+                    page: roster.search.page - 1,
+                  })}
+                  style={{
+                    color: C.teal,
+                    fontWeight: 700,
+                    minHeight: 44,
+                    display: "inline-flex",
+                    alignItems: "center",
+                  }}
+                >
+                  ← Previous
+                </Link>
+              ) : null}
+              {roster.search.page < roster.search.pageCount ? (
+                <Link
+                  href={californiaTier1FullRosterListingPath({
+                    q: roster.search.query,
+                    category: roster.search.category,
+                    city: roster.search.city,
+                    page: roster.search.page + 1,
+                  })}
+                  style={{
+                    color: C.teal,
+                    fontWeight: 700,
+                    minHeight: 44,
+                    display: "inline-flex",
+                    alignItems: "center",
+                  }}
+                >
+                  Next →
+                </Link>
+              ) : null}
+            </nav>
           ) : null}
         </section>
 
@@ -523,7 +602,7 @@ export default async function CaliforniaDevelopmentDirectoryPage({
         >
           <h2 style={{ marginTop: 0 }}>Prepublication integration checklist</h2>
           <ul style={{ margin: 0, paddingLeft: 18, lineHeight: 1.7 }}>
-            {tier1.prepublicationChecklist.map((item) => (
+            {roster.prepublicationChecklist.map((item) => (
               <li key={item.id}>
                 <strong>{item.id}</strong> —{" "}
                 {item.completeInThisPr ? "done in this PR" : "still required later"}
