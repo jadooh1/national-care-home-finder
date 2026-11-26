@@ -123,10 +123,12 @@ export const PUBLICATION_STATE_PROFILES: readonly PublicationStateProfile[] = [
         "gis-service-edit-time",
         "download-filename",
         "twenty-four-hour-update-notice",
+        "http-date-header",
       ],
-      policyDocumented: false,
-      independentEvidence: false,
-      note: "No accepted ISO export date; development listing continues under existing host gate.",
+      policyDocumented: true,
+      independentEvidence: true,
+      note:
+        "ODHS confirmed daily website updates (2026-11-26). Dual-format capture audited. Daily confirmation is not adopted as an ISO as-of stamp; recordedExportDate stays null.",
     },
     disclosure: {
       facilitySpecificVerified: true,
@@ -135,14 +137,15 @@ export const PUBLICATION_STATE_PROFILES: readonly PublicationStateProfile[] = [
     coordinates: {
       licensingProvenanceVerified: false,
       mapEnabled: false,
-      note: "Map permanently disabled; street withheld from public columns.",
+      note:
+        "Map permanently disabled. Street present on ODHS Address (100% of qualifying 2026-11-26 capture) but withheld from public columns.",
     },
     californiaPublicationBlocked: false,
     oregonMapDisabled: true,
     ownerClaimsEnabled: false,
     publicationStopGo: "STOP",
     evaluationNotes:
-      "Nearest staged candidate for continued development preview only. Not public-launch ready (no ISO export; street withheld; map off).",
+      "Nearest staged candidate for continued development preview only. Street source gate cleared; public street surfacing and ISO-or-approved-freshness-policy still required before Tier 1 GO. Map off.",
   },
   {
     state: "California",

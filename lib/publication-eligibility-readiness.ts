@@ -60,16 +60,20 @@ export const PUBLICATION_READINESS_SUMMARIES: readonly StateReadinessSummary[] =
     statewideLaunchReadyClaim: false,
     tierCounts: { tier0: 1584, tier1: 0, tier2: 0, tier3: 0 },
     listingCoverageNote:
-      "Development host-gated reduced-field directory exists separately; framework Tier 1 requires street (withheld) + ISO freshness.",
+      "Dev host-gated directory (1,584). 2026-11-26 CSV/Excel capture: 1,579 qualifying AFH with 100% street on Address; street still withheld from public columns. ODHS daily-update confirmation recorded; no ISO stamp.",
     mapCoverageNote: "Map disabled (mapPath null).",
     enhancedCoverageNote: "Not enabled.",
     blockers: [
       "no-authoritative-iso-export-date",
+      "daily-refresh-confirmation-is-not-an-iso-stamp",
       "street-withheld-from-public-columns",
       "map-disabled",
       "state-authorization-development-only",
     ],
-    manualReviewQueue: ["freshness-policy-for-odhs-export"],
+    manualReviewQueue: [
+      "approve-daily-refresh-freshness-policy-or-require-iso",
+      "authorize-street-on-listing-surface",
+    ],
     stopGo: "STOP",
     californiaPublicationBlocked: false,
     oregonMapDisabled: true,

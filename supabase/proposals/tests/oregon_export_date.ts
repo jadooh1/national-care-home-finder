@@ -7,18 +7,24 @@ import {
   OREGON_EXPORT_AFH_OPEN_ACCEPTED_BEDS,
   OREGON_EXPORT_AFH_OPEN_ROWS,
   OREGON_EXPORT_AFH_OPEN_ZERO_BEDS,
+  OREGON_EXPORT_ACCEPTED_STREET_BLANK,
+  OREGON_EXPORT_ACCEPTED_STREET_PRESENT,
   OREGON_EXPORT_CLOSED_ROWS,
   OREGON_EXPORT_FILENAME,
   OREGON_EXPORT_HAS_DATE_COLUMN,
   OREGON_EXPORT_HTTP_DATE,
   OREGON_EXPORT_OPEN_ROWS,
+  OREGON_EXPORT_PRIOR_NOV13,
   OREGON_EXPORT_ROWS,
   OREGON_EXPORT_REPLY_FOUND,
+  OREGON_ODHS_ADDRESS_AVAILABILITY_CONFIRMED,
+  OREGON_ODHS_DAILY_UPDATE_CONFIRMED,
   OREGON_RECORDED_EXPORT_DATE,
   OREGON_UPDATE_NOTICE,
   adoptOregonExportDate,
   oregonExportComparison,
   oregonExportDateReady,
+  oregonFreshnessPolicyReady,
 } from "../../../lib/oregon-export-date.ts";
 import { onboardingProfile } from "../../../lib/nationwide-onboarding.ts";
 import { directoryContract } from "../../../lib/state-directory.ts";
@@ -50,8 +56,12 @@ test("the provider export has no authoritative date column", () => {
   assert.equal(adoptOregonExportDate(OREGON_EXPORT_HTTP_DATE), null);
   assert.equal(adoptOregonExportDate(OREGON_UPDATE_NOTICE), null);
   assert.equal(adoptOregonExportDate("2026-11-13"), null);
+  assert.equal(adoptOregonExportDate("2026-11-26"), null);
   assert.equal(oregonExportDateReady(), false);
+  assert.equal(oregonFreshnessPolicyReady(), false);
   assert.equal(OREGON_EXPORT_REPLY_FOUND, false);
+  assert.equal(OREGON_ODHS_DAILY_UPDATE_CONFIRMED, true);
+  assert.equal(OREGON_ODHS_ADDRESS_AVAILABILITY_CONFIRMED, true);
 });
 
 test("the later count is recorded separately from the development directory", () => {
@@ -59,11 +69,16 @@ test("the later count is recorded separately from the development directory", ()
   assert.equal(OREGON_EXPORT_OPEN_ROWS + OREGON_EXPORT_CLOSED_ROWS, OREGON_EXPORT_ROWS);
   assert.equal(OREGON_EXPORT_AFH_OPEN_ACCEPTED_BEDS + OREGON_EXPORT_AFH_OPEN_ZERO_BEDS, OREGON_EXPORT_AFH_OPEN_ROWS);
   assert.equal(comparison.recordedAcceptedRows, OREGON_DIRECTORY_ACCEPTED_ROWS);
-  assert.equal(comparison.laterAcceptedRows, 1582);
+  assert.equal(comparison.laterAcceptedRows, 1579);
   assert.equal(comparison.recordedZeroBedRows, OREGON_DIRECTORY_ZERO_BED_ROWS);
   assert.equal(comparison.laterZeroBedRows, 24);
   assert.equal(comparison.recordsChanged, false);
   assert.equal(comparison.exportDateAdopted, false);
+  assert.equal(comparison.freshnessPolicyReady, false);
+  assert.equal(comparison.streetCoverageComplete, true);
+  assert.equal(OREGON_EXPORT_ACCEPTED_STREET_BLANK, 0);
+  assert.equal(OREGON_EXPORT_ACCEPTED_STREET_PRESENT, 1579);
+  assert.equal(OREGON_EXPORT_PRIOR_NOV13.afhOpenAcceptedBeds, 1582);
   assert.equal(onboardingProfile("Oregon").recordedExportDate, null);
   assert.equal(onboardingProfile("Oregon").publication, "development");
   assert.deepEqual(onboardingProfile("Oregon").blockers, onboardingDecision("Oregon").blockers);

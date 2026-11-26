@@ -242,10 +242,14 @@ function readXlsxTable(bytes: Uint8Array): string[][] {
   const rows: string[][] = [];
   for (const rowMatch of sheet.matchAll(/<row\b[^>]*>([\s\S]*?)<\/row>/g)) {
     const values = new Map<number, string>();
-    for (const cellMatch of rowMatch[1].matchAll(/<c\b([^>]*)>([\s\S]*?)<\/c>/g)) {
+    // Match self-closing empty cells (`<c r="I2" />`) separately from valued cells.
+    // A single `>(...)</c>` pattern would swallow the next cell after an empty
+    // self-closing marker and shift Licensed beds into Email.
+    for (const cellMatch of rowMatch[1].matchAll(/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g)) {
       const ref = /r="([A-Z]+)\d+"/i.exec(cellMatch[1]);
       if (!ref) continue;
-      values.set(columnIndex(ref[1]), cellText(cellMatch[1], cellMatch[2], shared));
+      const body = cellMatch[2];
+      values.set(columnIndex(ref[1]), body == null ? "" : cellText(cellMatch[1], body, shared));
     }
     if (values.size === 0) continue;
     const width = Math.max(...values.keys()) + 1;

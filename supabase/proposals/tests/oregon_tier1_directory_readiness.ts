@@ -4,14 +4,21 @@ import test from "node:test";
 import {
   OREGON_DIRECTORY_ACCEPTED_ROWS,
   OREGON_DIRECTORY_ZERO_BED_ROWS,
+  OREGON_EXPORT_AFH_OPEN_ACCEPTED_BEDS,
+  OREGON_EXPORT_ACCEPTED_STREET_BLANK,
+  OREGON_EXPORT_ACCEPTED_STREET_PRESENT,
+  OREGON_ODHS_ADDRESS_AVAILABILITY_CONFIRMED,
+  OREGON_ODHS_DAILY_UPDATE_CONFIRMED,
   OREGON_RECORDED_EXPORT_DATE,
   oregonExportDateReady,
+  oregonFreshnessPolicyReady,
 } from "../../../lib/oregon-export-date.ts";
 import {
   OREGON_PUBLIC_FIELDS,
   OREGON_ZERO_BED_NOTE,
 } from "../../../lib/oregon-public-directory.ts";
 import {
+  OREGON_TIER1_CAPTURE,
   OREGON_TIER1_DIRECTORY_ACCEPTED_COUNT,
   OREGON_TIER1_DIRECTORY_BLOCKERS,
   OREGON_TIER1_DIRECTORY_CHECKLIST,
@@ -37,6 +44,8 @@ test("Oregon Tier 1 directory readiness is STOP; development directory stays ope
   assert.equal(verdict.publicPublicationAuthorized, false);
   assert.equal(verdict.mapEnabled, false);
   assert.equal(verdict.directoryAcceptedCount, 1584);
+  assert.equal(verdict.captureQualifyingAccepted, 1579);
+  assert.equal(verdict.streetSourceCoverageComplete, true);
   assert.equal(verdict.zeroBedExclusions, 20);
   assert.deepEqual([...verdict.blockers], [...OREGON_TIER1_DIRECTORY_BLOCKERS]);
   assert.ok(verdict.nextHumanActions.length >= 3);
@@ -51,11 +60,16 @@ test("Oregon Tier 1 directory readiness is STOP; development directory stays ope
   assert.equal(oregonTier1DirectoryChecklistComplete(), false);
 });
 
-test("freshness, identity, eligibility, and disclosure evidence stay aligned with existing audits", () => {
+test("freshness stays undated; ODHS daily confirmation and street source coverage are recorded", () => {
   assert.equal(oregonExportDateReady(), false);
+  assert.equal(oregonFreshnessPolicyReady(), false);
   assert.equal(OREGON_RECORDED_EXPORT_DATE, null);
   assert.equal(OREGON_TIER1_DIRECTORY_SOURCE.recordedExportDateIso, null);
   assert.equal(OREGON_TIER1_DIRECTORY_SOURCE.hasExportDateColumn, false);
+  assert.equal(OREGON_TIER1_DIRECTORY_SOURCE.odhsDailyUpdateConfirmed, true);
+  assert.equal(OREGON_TIER1_DIRECTORY_SOURCE.odhsAddressAvailabilityConfirmed, true);
+  assert.equal(OREGON_ODHS_DAILY_UPDATE_CONFIRMED, true);
+  assert.equal(OREGON_ODHS_ADDRESS_AVAILABILITY_CONFIRMED, true);
   assert.equal(OREGON_TIER1_DIRECTORY_SOURCE.disclosureVerified, true);
   assert.equal(
     OREGON_TIER1_DIRECTORY_SOURCE.disclosurePrefix,
@@ -64,17 +78,29 @@ test("freshness, identity, eligibility, and disclosure evidence stay aligned wit
 
   assert.equal(OREGON_TIER1_DIRECTORY_ACCEPTED_COUNT, OREGON_DIRECTORY_ACCEPTED_ROWS);
   assert.equal(OREGON_TIER1_DIRECTORY_ZERO_BED_EXCLUSIONS, OREGON_DIRECTORY_ZERO_BED_ROWS);
+  assert.equal(OREGON_TIER1_CAPTURE.qualifyingAcceptedBeds, OREGON_EXPORT_AFH_OPEN_ACCEPTED_BEDS);
+  assert.equal(OREGON_TIER1_CAPTURE.qualifyingStreetBlank, OREGON_EXPORT_ACCEPTED_STREET_BLANK);
+  assert.equal(OREGON_TIER1_CAPTURE.qualifyingStreetPresent, OREGON_EXPORT_ACCEPTED_STREET_PRESENT);
+  assert.equal(OREGON_TIER1_CAPTURE.csvExcelAcceptedParity, true);
   assert.deepEqual([...OREGON_TIER1_DIRECTORY_PUBLIC_FIELDS], [...OREGON_PUBLIC_FIELDS]);
   assert.equal(OREGON_TIER1_DIRECTORY_ELIGIBILITY.streetAddressInPublicColumns, false);
+  assert.equal(OREGON_TIER1_DIRECTORY_ELIGIBILITY.streetPresentOnAuthoritativeExport, true);
+  assert.equal(OREGON_TIER1_DIRECTORY_ELIGIBILITY.streetCoverageCompleteOnQualifyingCapture, true);
   assert.equal(OREGON_TIER1_DIRECTORY_ELIGIBILITY.coordinatesInvented, false);
   assert.equal(OREGON_TIER1_DIRECTORY_ELIGIBILITY.zeroBedOpenHomesExcluded, true);
   assert.ok(OREGON_ZERO_BED_NOTE.includes("20 open"));
 
   const freshness = OREGON_TIER1_DIRECTORY_CHECKLIST.find(item => item.id === "freshness-iso-export-date");
+  const dual = OREGON_TIER1_DIRECTORY_CHECKLIST.find(item => item.id === "dual-format-export-capture");
+  const streetSource = OREGON_TIER1_DIRECTORY_CHECKLIST.find(item => item.id === "street-address-source-coverage");
+  const streetPublic = OREGON_TIER1_DIRECTORY_CHECKLIST.find(item => item.id === "street-address-in-public-columns");
   const identity = OREGON_TIER1_DIRECTORY_CHECKLIST.find(item => item.id === "facility-identity-source-id");
   const eligibility = OREGON_TIER1_DIRECTORY_CHECKLIST.find(item => item.id === "licensing-eligibility-open-afh-beds");
   const disclosure = OREGON_TIER1_DIRECTORY_CHECKLIST.find(item => item.id === "disclosure-links-odhs-profile");
   assert.equal(freshness?.complete, false);
+  assert.equal(dual?.complete, true);
+  assert.equal(streetSource?.complete, true);
+  assert.equal(streetPublic?.complete, false);
   assert.equal(identity?.complete, true);
   assert.equal(eligibility?.complete, true);
   assert.equal(disclosure?.complete, true);
@@ -102,12 +128,12 @@ test("directory readiness is separated from map readiness", () => {
   assert.equal(oregon.oregonMapDisabled, true);
   assert.ok(oregon.blockers.includes("no-authoritative-iso-export-date"));
   assert.ok(oregon.blockers.includes("street-withheld-from-public-columns"));
+  assert.ok(oregon.blockers.includes("daily-refresh-confirmation-is-not-an-iso-stamp"));
 });
 
 test("safeguards keep Washington public and Oregon unpublished; production layout stays fail-closed", () => {
   assert.equal(directoryContract("Washington")?.publication, "public");
   assert.equal(directoryContract("Oregon")?.publication, "development");
-  // California may be unpublished/development on this development baseline; do not flip it.
   assert.notEqual(directoryContract("California")?.publication, "public");
 
   const layout = readFileSync("app/oregon/layout.tsx", "utf8");
