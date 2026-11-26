@@ -2,9 +2,13 @@
  * Pennsylvania address-exception ledger (development-only).
  * Preserves official source street / street-additional values.
  * Does not invent or infer house numbers. Intentionally free of sibling imports.
+ *
+ * Re-verified 2026-11-26: Download CSV byte-identical to the 989-row audit
+ * (sha256 c9172269…). All 13 letter-only streets remain present and are
+ * deterministically excluded from publication eligibility.
  */
 
-export const PENNSYLVANIA_ADDRESS_EXCEPTION_OBSERVED_ON = "2026-11-20";
+export const PENNSYLVANIA_ADDRESS_EXCEPTION_OBSERVED_ON = "2026-11-26";
 
 export const PENNSYLVANIA_ADDRESS_SOURCE_CAPTURE = {
   sourceUrl: "https://data.pa.gov/api/views/pqf4-d4xn/rows.csv?accessType=DOWNLOAD",
@@ -18,6 +22,8 @@ export const PENNSYLVANIA_ADDRESS_SOURCE_CAPTURE = {
   sha256: "c91722696b1accbe778f25189fc727e5bd55f5028bac3d529c54d3e8e8192973",
   bytes: 227204,
   originalFieldsRewritten: false as const,
+  /** Content unchanged vs 2026-11-20 investigation capture. */
+  contentUnchangedSincePriorAudit: true as const,
 } as const;
 
 export type PennsylvaniaAddressExceptionClass =
@@ -35,6 +41,8 @@ export type PennsylvaniaAddressException = {
   usableStreet: null;
   rewritten: false;
   publicationEligible: false;
+  /** Deterministic Tier 1 exclusion — not corrected, not published. */
+  deterministicExclusion: true;
   note: string;
 };
 
@@ -54,6 +62,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Spelled-out ONE is not a digit; house number not invented.",
   },
   {
@@ -67,6 +76,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Additional text retained in original column; not copied into Street.",
   },
   {
@@ -80,6 +90,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Spelled-out ONE is not a digit; house number not invented.",
   },
   {
@@ -93,6 +104,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Additional text retained in original column; not copied into Street.",
   },
   {
@@ -106,6 +118,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Spelled-out ONE is not a digit; house number not invented.",
   },
   {
@@ -119,6 +132,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Intersection-style street with no house number digit.",
   },
   {
@@ -132,6 +146,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Additional text retained; Street stays CORSON HALL.",
   },
   {
@@ -145,6 +160,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Additional text retained; Street stays campus labels.",
   },
   {
@@ -158,6 +174,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Spelled-out ONE is not a digit; house number not invented.",
   },
   {
@@ -171,6 +188,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Additional text retained; Street stays building label.",
   },
   {
@@ -184,6 +202,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Spelled-out ONE is not a digit; house number not invented.",
   },
   {
@@ -197,6 +216,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Spelled-out ONE is not a digit; house number not invented.",
   },
   {
@@ -210,6 +230,7 @@ export const PENNSYLVANIA_ADDRESS_EXCEPTIONS: readonly PennsylvaniaAddressExcept
     usableStreet: null,
     rewritten: false,
     publicationEligible: false,
+    deterministicExclusion: true,
     note: "Additional text retained in original column; not copied into Street.",
   },
 ] as const;
@@ -228,6 +249,7 @@ export function summarizePennsylvaniaAddressExceptions(
     uniqueObjectIds: objectIds.size,
     anyRewritten: exceptions.some(e => e.rewritten),
     anyPublicationEligible: exceptions.some(e => e.publicationEligible),
+    allDeterministicallyExcluded: exceptions.every(e => e.deterministicExclusion),
     residualOk:
       PENNSYLVANIA_ADDRESS_SOURCE_CAPTURE.usableStreetRows + exceptions.length
       === PENNSYLVANIA_ADDRESS_SOURCE_CAPTURE.rows,
@@ -235,11 +257,14 @@ export function summarizePennsylvaniaAddressExceptions(
 }
 
 export function evaluatePennsylvaniaAddressExceptions() {
+  const summary = summarizePennsylvaniaAddressExceptions();
   return {
     observedOn: PENNSYLVANIA_ADDRESS_EXCEPTION_OBSERVED_ON,
     capture: PENNSYLVANIA_ADDRESS_SOURCE_CAPTURE,
     exceptions: PENNSYLVANIA_ADDRESS_EXCEPTIONS,
-    summary: summarizePennsylvaniaAddressExceptions(),
+    summary,
+    /** Letter-only streets are resolved by deterministic exclusion, not correction. */
+    addressExceptionsResolvedByExclusion: summary.allDeterministicallyExcluded && summary.total === 13,
     allowsPublication: false as const,
     gate: "blocked" as const,
   };

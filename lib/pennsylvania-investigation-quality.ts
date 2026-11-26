@@ -3,7 +3,7 @@
  * Intentionally free of sibling runtime imports.
  */
 
-export const PENNSYLVANIA_INVESTIGATION_QUALITY_OBSERVED_ON = "2026-11-20";
+export const PENNSYLVANIA_INVESTIGATION_QUALITY_OBSERVED_ON = "2026-11-26";
 
 export function evaluatePennsylvaniaInvestigationQuality(input?: {
   rows?: number;

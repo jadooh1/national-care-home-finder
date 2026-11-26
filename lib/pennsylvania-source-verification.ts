@@ -3,7 +3,7 @@
  * Intentionally free of sibling runtime imports.
  */
 
-export const PENNSYLVANIA_SOURCE_VERIFICATION_OBSERVED_ON = "2026-11-20";
+export const PENNSYLVANIA_SOURCE_VERIFICATION_OBSERVED_ON = "2026-11-26";
 
 export const PENNSYLVANIA_SOURCE_VERIFICATION = {
   sourceUrl: "https://data.pa.gov/api/views/pqf4-d4xn/rows.csv?accessType=DOWNLOAD",
@@ -33,11 +33,16 @@ export const PENNSYLVANIA_SOURCE_VERIFICATION = {
   licenseNumberColumn: false,
   statusColumn: false,
   recordedExportDate: null,
-  catalogRowsUpdatedAt: "2026-11-08T06:09:03Z",
+  /** Portal catalog clock on re-verify; content sha256 unchanged from prior audit. */
+  catalogRowsUpdatedAt: "2026-11-22T06:04:51Z",
+  priorCatalogRowsUpdatedAt: "2026-11-08T06:09:03Z",
   catalogTimestampIsExportDate: false,
+  contentUnchangedSha256Match: true as const,
   sha256: "c91722696b1accbe778f25189fc727e5bd55f5028bac3d529c54d3e8e8192973",
   bytes: 227204,
   publicationEligibleRows: 0,
+  /** Socrata API deprecation notice observed on download (not an export date). */
+  socrataSunsetHeader: "Tue, 22 Dec 2026 00:00:00 GMT",
 } as const;
 
 export function evaluatePennsylvaniaSourceVerification() {

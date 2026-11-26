@@ -3,13 +3,14 @@
  * Intentionally free of sibling runtime imports.
  */
 
-export const PENNSYLVANIA_ELIGIBILITY_OBSERVED_ON = "2026-11-20";
+export const PENNSYLVANIA_ELIGIBILITY_OBSERVED_ON = "2026-11-26";
 
 export const PENNSYLVANIA_ELIGIBILITY_COUNTS = {
   rosterRows: 989,
   structurallyTypedPersonalCareHomes: 989,
   usableStreetRows: 976,
   addressExceptions: 13,
+  addressExceptionsDeterministicallyExcluded: 13,
   otherwiseClearOfflineEstimate: 0,
   publicationEligible: 0,
   ownerClaimEligible: 0,
@@ -41,7 +42,7 @@ export function classifyPennsylvaniaStreetEligibility(input: {
   if (!input.hasStatus) blockers.push("no-per-row-licensing-status");
   if (!input.hasExportDate) blockers.push("no-authoritative-iso-export-date");
   if (!input.hasFacilityDisclosure) blockers.push("no-per-facility-disclosure-link-is-recorded");
-  if (!usableStreet) blockers.push("letter-only-street-values-are-not-corrected");
+  if (!usableStreet) blockers.push("thirteen-letter-only-streets-deterministically-excluded");
   blockers.push("georeferenced-coordinates-are-not-licensing-coordinates");
 
   return {

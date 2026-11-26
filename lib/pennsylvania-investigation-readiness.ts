@@ -3,7 +3,7 @@
  * Intentionally free of sibling runtime imports.
  */
 
-export const PENNSYLVANIA_INVESTIGATION_OBSERVED_ON = "2026-11-20";
+export const PENNSYLVANIA_INVESTIGATION_OBSERVED_ON = "2026-11-26";
 
 export const PENNSYLVANIA_INVESTIGATION_BLOCKERS = [
   "open-data-object-id-is-not-a-license-number",
@@ -12,16 +12,16 @@ export const PENNSYLVANIA_INVESTIGATION_BLOCKERS = [
   "catalog-timestamp-is-not-an-export-date",
   "no-authoritative-iso-export-date",
   "no-per-facility-disclosure-link-is-recorded",
-  "letter-only-street-values-are-not-corrected",
+  "thirteen-letter-only-streets-deterministically-excluded",
   "street-additional-information-is-not-copied-into-the-street",
   "georeferenced-coordinates-are-not-licensing-coordinates",
 ] as const;
 
 export const PENNSYLVANIA_INVESTIGATION_FUTURE_APPROVALS = [
   "Obtain license-number / status channel or confirm none exists for open-data rows.",
-  "Adopt authoritative ISO export / version stamp (catalog timestamp is insufficient).",
-  "Verify facility-specific disclosure permalinks before any public listing.",
-  "Decide remediation policy for letter-only streets (do not invent numbers).",
+  "Adopt authoritative ISO export / version stamp (catalog clock moved while CSV sha256 stayed identical — still not an export date).",
+  "Verify facility-specific disclosure permalinks before any public listing (Object ID ≠ license number).",
+  "Letter-only streets are deterministically excluded; do not invent house numbers.",
   "Separate human approval before Pennsylvania publication or owner-claim enablement.",
 ] as const;
 
@@ -33,7 +33,7 @@ export const PENNSYLVANIA_INVESTIGATION_STOP_GO = {
   ownerClaimEligible: false as const,
   gate: "blocked" as const,
   reason:
-    "Pennsylvania onboarding investigation advanced offline evidence only. License number, status, export date, and facility disclosure remain unresolved. STOP.",
+    "989-row PCH roster re-verified (content unchanged). Thirteen letter-only streets deterministically excluded. License number, status, ISO export date, and facility disclosure remain unresolved. publicationEligible=0. STOP.",
 } as const;
 
 export function evaluatePennsylvaniaInvestigationReadiness(qualityPass = true) {

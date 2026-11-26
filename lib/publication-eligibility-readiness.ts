@@ -265,6 +265,37 @@ export const PUBLICATION_READINESS_SUMMARIES: readonly StateReadinessSummary[] =
     oregonMapDisabled: false,
     ownerClaimsEnabled: false,
   },
+  {
+    state: "Pennsylvania",
+    stateAuthorization: "unpublished",
+    evaluationScope: "full-dataset",
+    countsAreFixtureOrSample: false,
+    statewideLaunchReadyClaim: false,
+    tierCounts: { tier0: 989, tier1: 0, tier2: 0, tier3: 0 },
+    listingCoverageNote:
+      "989 PCH open-data rows re-verified (sha unchanged). 976 usable streets; 13 letter-only deterministically excluded. publicationEligible=0 (no license/status/ISO/disclosure).",
+    mapCoverageNote: "Georeferenced portal points rejected as licensing coordinates. Map off.",
+    enhancedCoverageNote: "Not enabled.",
+    blockers: [
+      "open-data-object-id-is-not-a-license-number",
+      "no-per-row-licensing-status",
+      "no-authoritative-iso-export-date",
+      "catalog-timestamp-is-not-an-export-date",
+      "no-per-facility-disclosure-link-is-recorded",
+      "thirteen-letter-only-streets-deterministically-excluded",
+      "georeferenced-coordinates-are-not-licensing-coordinates",
+      "state-authorization-unpublished",
+    ],
+    manualReviewQueue: [
+      "license-number-status-channel",
+      "iso-export-stamp",
+      "facility-disclosure-permalink",
+    ],
+    stopGo: "STOP",
+    californiaPublicationBlocked: false,
+    oregonMapDisabled: false,
+    ownerClaimsEnabled: false,
+  },
 ] as const;
 
 export function buildPublicationReadinessReport(
