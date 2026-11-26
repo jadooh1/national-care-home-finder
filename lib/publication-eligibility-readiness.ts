@@ -331,6 +331,34 @@ export const PUBLICATION_READINESS_SUMMARIES: readonly StateReadinessSummary[] =
     oregonMapDisabled: false,
     ownerClaimsEnabled: false,
   },
+  {
+    state: "Michigan",
+    stateAuthorization: "unpublished",
+    evaluationScope: "full-dataset",
+    countsAreFixtureOrSample: false,
+    statewideLaunchReadyClaim: false,
+    tierCounts: { tier0: 4476, tier1: 0, tier2: 0, tier3: 0 },
+    listingCoverageNote:
+      "LARA afc_sw.txt inventory 4,476 (AFC + Homes for the Aged AH=351; XH/EXEMPT 234 ineligible). FacilityProfile disclosure verified; 4,419 blank Street unresolved (supplemental not adopted). publicationEligible=0.",
+    mapCoverageNote: "No coordinate columns in afc_sw.txt. Map stays off.",
+    enhancedCoverageNote: "Not enabled.",
+    blockers: [
+      "blank-street-physical-address-unresolved",
+      "supplemental-address-is-not-defined-as-a-physical-or-mailing-address",
+      "no-authoritative-iso-export-date",
+      "xh-type-undescribed-and-exempt-ineligible",
+      "state-authorization-unpublished",
+    ],
+    manualReviewQueue: [
+      "lara-supplemental-address-definition",
+      "afc-sw-iso-export-stamp",
+      "xh-exempt-category-definition",
+    ],
+    stopGo: "STOP",
+    californiaPublicationBlocked: false,
+    oregonMapDisabled: false,
+    ownerClaimsEnabled: false,
+  },
 ] as const;
 
 export function buildPublicationReadinessReport(
