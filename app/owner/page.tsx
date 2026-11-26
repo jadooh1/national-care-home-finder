@@ -38,8 +38,17 @@ export default function OwnerPage() {
 
   useEffect(() => {
     let active = true;
+    const params = new URLSearchParams(window.location.search);
+    const requested = (params.get("mode") || params.get("tab") || "").trim().toLowerCase();
+    if (requested === "login" || requested === "signin" || requested === "sign-in" || requested === "sign_in") {
+      setMode("login");
+    } else if (requested === "recover" || requested === "reset" || requested === "forgot") {
+      setMode("recover");
+    } else if (requested === "register" || requested === "signup" || requested === "sign-up" || requested === "create") {
+      setMode("register");
+    }
     const storage = browserClaimStorage();
-    const license = claimLicenseQuery(new URLSearchParams(window.location.search).get("license"));
+    const license = claimLicenseQuery(params.get("license"));
     if (storage && license) writeClaimLicense(storage, license);
     const destination = ownerClaimHref(license ?? (storage ? readClaimLicense(storage) : null));
     supabase.auth.getUser().then(({ data }) => {

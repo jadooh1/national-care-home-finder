@@ -27,7 +27,8 @@ export function ownerClaimHref(license: string | null | undefined): string {
 
 export function ownerSignInHref(license: string | null | undefined): string {
   const valid = claimLicenseQuery(license);
-  return valid ? `/owner?license=${valid}` : "/owner";
+  // Deep-link to login mode so returning owners are not stranded on Create account.
+  return valid ? `/owner?mode=login&license=${valid}` : "/owner?mode=login";
 }
 
 export function claimStatusKind(status: string): ClaimStatusKind | null {
