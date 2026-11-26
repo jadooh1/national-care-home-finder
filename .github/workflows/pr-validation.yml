@@ -202,6 +202,9 @@ jobs:
       - name: Check the North Carolina care-home source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/north_carolina_care_home_source_discovery.ts
 
+      - name: Check North Carolina Tier 1 directory publication readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/north_carolina_tier1_directory_readiness.ts
+
       - name: Check the Georgia care-home source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/georgia_care_home_source_discovery.ts
 
