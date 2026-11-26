@@ -2,14 +2,24 @@
 
 ## Verdict
 
-**CONDITIONAL** for Washington launch completion.
+**CONDITIONAL** for Washington launch completion (pending production S5/S6
+test-account secrets for agent re-execution).
+
+### Human decisions (2026-11-26)
+
+| Decision | Status |
+| --- | --- |
+| Retain **6,278** as authoritative published roster | **Approved** |
+| Exclude unproven **8,177** from launch acceptance | **Approved** (document only; **no DB deletes**) |
+| Defer live ArcGIS **6,296** refresh | **Approved** until independently validated |
+| Controlled production S5/S6 with authorized test accounts | **Approved** — blocked in-agent until `NCHF_PROD_*` secrets exist |
+| No production deploy / config / billing | **Held** |
 
 Authoritative published roster remains **6,278** unique OP licenses. The reported
 **8,177** total has **no authoritative provenance** and is **not** treated as
 1,899 duplicates. Production directory and map both expose **6,278** with no
 synthetic fixture. Live ArcGIS AF (`GDLArchiveDate IS NULL`) is **6,296**
-(+18 net vs baseline) — a separate approved refresh would be required before
-changing the published catalog.
+(+18 net vs baseline) — refresh deferred.
 
 ## 8,177 reconciliation
 
