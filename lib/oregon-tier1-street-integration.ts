@@ -120,7 +120,7 @@ export const OREGON_TIER1_STREET_INTEGRATION_BLOCKERS = [
   "authoritative-export-freshness-unresolved-pending-odhs-confirmation",
   "street-integration-prepared-but-not-activated",
   "directory-row-replacement-not-authorized",
-  "prior-directory-1584-source-id-dump-unavailable-offline",
+  "exact-id-reconciliation-complete-but-row-replacement-not-authorized",
   "state-authorization-development-only",
   "map-disabled-separate-from-directory",
 ] as const;
@@ -155,9 +155,9 @@ export function oregonTier1StreetIntegrationVerdict(): OregonTier1StreetIntegrat
     blockers: OREGON_TIER1_STREET_INTEGRATION_BLOCKERS,
     nextHumanActions: [
       "Confirm ODHS authoritative export freshness policy (do not invent ISO dates).",
-      "Provide or authorize a development read of the stored 1,584 source_id list for full exact-ID residual reconciliation.",
-      "Authorize streetIntegrationActivated only after freshness + residual ID reconciliation clear.",
-      "Keep directory row replacement and public Oregon publication as separate approvals.",
+      "Authorize streetIntegrationActivated only after freshness clears (exact-ID reconciliation is complete).",
+      "Authorize directory row replacement (1,584 → 1,579) as a separate approval from street activation.",
+      "Keep public Oregon publication as a separate approval after freshness and row replacement.",
     ],
   };
 }
