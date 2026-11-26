@@ -1,31 +1,55 @@
 /**
  * Oregon Tier 1 — directory publication readiness (development-only).
  *
- * Reuses completed Oregon ODHS audits and the nationwide / California Tier 1
- * publication framework. Does NOT invent coordinates, adopt a fabricated
- * export date, flip directoryContract to public, enable maps/owner/enhanced,
- * or change Washington / California / Design 2 / auth / billing.
+ * Updates the #223 STOP package with the 2026-11-26 dual-format ODHS export
+ * capture and ODHS confirmations (daily website updates; addresses in CSV and
+ * Excel). Does NOT invent ISO export dates, flip Oregon to public, enable
+ * maps/owner/enhanced, or change Washington / California / Design 2 / auth /
+ * billing.
  *
- * Intentionally free of sibling runtime imports so Next.js bundling and
- * node --experimental-strip-types tests both load cleanly.
+ * Intentionally free of sibling runtime imports.
  */
 
-export const OREGON_TIER1_DIRECTORY_READINESS_OBSERVED_ON = "2026-11-24" as const;
-export const OREGON_TIER1_DIRECTORY_READINESS_BASELINE = "056b35f" as const;
+export const OREGON_TIER1_DIRECTORY_READINESS_OBSERVED_ON = "2026-11-26" as const;
+export const OREGON_TIER1_DIRECTORY_READINESS_BASELINE = "cc042ef" as const;
 
 /** Recorded development directory size (host-gated reduced-field view). */
 export const OREGON_TIER1_DIRECTORY_ACCEPTED_COUNT = 1584 as const;
 export const OREGON_TIER1_DIRECTORY_ZERO_BED_EXCLUSIONS = 20 as const;
 
+/** Latest dual-format capture (does not replace stored directory rows). */
+export const OREGON_TIER1_CAPTURE = {
+  observedOn: "2026-11-26" as const,
+  csvFilename: "Provider_Export_11-26-2026.csv" as const,
+  excelFilename: "Provider_Export_11-26-2026.xlsx" as const,
+  csvBytes: 686792 as const,
+  csvSha256: "df843f7195242517723f8354bfd53095ec0a8f1baa7f76a19b7eb1010a0d63b2" as const,
+  xlsxBytes: 431323 as const,
+  xlsxSha256: "036885f39e197ac02518dec257744c25664af039d92f85beb6191e0b20389bcd" as const,
+  csvHttpDate: "Thu, 26 Nov 2026 20:59:54 GMT" as const,
+  xlsxHttpDate: "Thu, 26 Nov 2026 20:59:57 GMT" as const,
+  totalRows: 4756 as const,
+  openAfhRows: 1603 as const,
+  qualifyingAcceptedBeds: 1579 as const,
+  openAfhZeroBeds: 24 as const,
+  qualifyingStreetPresent: 1579 as const,
+  qualifyingStreetBlank: 0 as const,
+  csvExcelAcceptedParity: true as const,
+} as const;
+
 export const OREGON_TIER1_DIRECTORY_SOURCE = {
   agency: "Oregon Department of Human Services (ODHS)" as const,
   locatorUrl: "https://ltclicensing.oregon.gov/Providers" as const,
   exportUrl: "https://ltclicensing.oregon.gov/Providers/Export" as const,
-  observedExportFilename: "Provider_Export_11-13-2026.csv" as const,
-  observedOn: "2026-11-13" as const,
-  /** Authoritative ISO export/version stamp — not available from ODHS export. */
+  observedExportFilename: "Provider_Export_11-26-2026.csv" as const,
+  observedExcelFilename: "Provider_Export_11-26-2026.xlsx" as const,
+  observedOn: "2026-11-26" as const,
+  /** Authoritative ISO export/version stamp — still not available. */
   recordedExportDateIso: null,
   hasExportDateColumn: false as const,
+  /** ODHS confirmed daily website updates (policy signal, not an as-of date). */
+  odhsDailyUpdateConfirmed: true as const,
+  odhsAddressAvailabilityConfirmed: true as const,
   identityField: "source_id" as const,
   disclosurePrefix: "https://ltclicensing.oregon.gov/Providers/Details/" as const,
   disclosureVerified: true as const,
@@ -33,7 +57,7 @@ export const OREGON_TIER1_DIRECTORY_SOURCE = {
 
 /**
  * Public columns already enforced by the development directory contract.
- * Street address and license number are intentionally withheld.
+ * Street is present on the authoritative export but still withheld from public columns.
  */
 export const OREGON_TIER1_DIRECTORY_PUBLIC_FIELDS = [
   "source_id",
@@ -52,6 +76,8 @@ export const OREGON_TIER1_DIRECTORY_ELIGIBILITY = {
   licensedBedsMin: 1 as const,
   licensedBedsMax: 5 as const,
   zeroBedOpenHomesExcluded: true as const,
+  streetPresentOnAuthoritativeExport: true as const,
+  streetCoverageCompleteOnQualifyingCapture: true as const,
   streetAddressInPublicColumns: false as const,
   licenseNumberInPublicColumns: false as const,
   coordinatesInvented: false as const,
@@ -77,7 +103,7 @@ export const OREGON_TIER1_SURFACE_SEPARATION = {
 /**
  * Controls for this readiness package.
  * - developmentDirectoryOperational: existing host-gated /oregon works
- * - tier1DirectoryRequirementsMet: framework Tier 1 gates (ISO date + street)
+ * - tier1DirectoryRequirementsMet: framework Tier 1 gates still open
  * - publicPublicationAuthorized: always false here — no Oregon public flip
  * - releaseCandidatePrepared: formal STOP evidence package only
  */
@@ -100,7 +126,14 @@ export const OREGON_TIER1_DIRECTORY_CHECKLIST = [
     complete: false,
     surface: "directory" as const,
     detail:
-      "ODHS provider export has no date column; filename, HTTP Last-Modified, and 24-hour update notice are not adopted as ISO export dates. oregonExportDateReady() remains false; retrievedOn stays null.",
+      "ODHS confirmed daily website updates (2026-11-26). Export still has no date column. Filename Provider_Export_11-26-2026.*, HTTP Date, and the 24-hour notice are not adopted as ISO export dates. recordedExportDateIso=null; oregonExportDateReady() false.",
+  },
+  {
+    id: "dual-format-export-capture",
+    complete: true,
+    surface: "directory" as const,
+    detail:
+      "CSV and Excel downloaded from POST /Providers/Export on 2026-11-26. CSV SHA-256 df843f71…; Excel SHA-256 036885f3…. After fixing self-closing empty-cell parsing, both formats accept 1,579 Open AFH beds 1–5.",
   },
   {
     id: "facility-identity-source-id",
@@ -114,7 +147,7 @@ export const OREGON_TIER1_DIRECTORY_CHECKLIST = [
     complete: true,
     surface: "directory" as const,
     detail:
-      "Eligible rows are Open Oregon adult foster homes with licensed beds 1–5. 20 open homes recorded with 0 beds are excluded from the directory.",
+      "Eligible rows are Open Oregon adult foster homes with licensed beds 1–5. Stored directory keeps 1,584 accepted / 20 zero-bed exclusions; latest capture has 1,579 accepted / 24 zero-bed (not loaded).",
   },
   {
     id: "disclosure-links-odhs-profile",
@@ -124,11 +157,18 @@ export const OREGON_TIER1_DIRECTORY_CHECKLIST = [
       "official_profile_url must equal https://ltclicensing.oregon.gov/Providers/Details/{source_id}; oregonDisclosureUrl mirrors that prefix.",
   },
   {
-    id: "street-address-policy",
+    id: "street-address-source-coverage",
+    complete: true,
+    surface: "directory" as const,
+    detail:
+      "ODHS confirmed addresses in CSV and Excel. Capture: 1,579/1,579 qualifying Open AFH beds 1–5 have non-blank Address (0 blank). Street remains withheld from public columns until a separate surfacing authorization.",
+  },
+  {
+    id: "street-address-in-public-columns",
     complete: false,
     surface: "directory" as const,
     detail:
-      "Street address is not an accepted public field. Framework Tier 1 listing gates require a usable street; reduced-field directory keeps Tier 0 until a list-only policy is explicitly approved.",
+      "Development/public field contract still omits street. Framework Tier 1 listing wants usable street on the published surface; Oregon stays reduced-field and unpublished/development-only.",
   },
   {
     id: "map-coordinates-separate",
@@ -149,12 +189,13 @@ export const OREGON_TIER1_DIRECTORY_CHECKLIST = [
     complete: true,
     surface: "safeguard" as const,
     detail:
-      "This package does not change Washington, California, Design 2, owner claims, authentication, or billing.",
+      "This package does not change Washington, California, Design 2, owner claims, authentication, or billing. Oregon stays unpublished to production hosts.",
   },
 ] as const;
 
 export const OREGON_TIER1_DIRECTORY_BLOCKERS = [
   "no-authoritative-iso-export-date",
+  "daily-refresh-confirmation-is-not-an-iso-stamp",
   "street-withheld-from-public-columns",
   "map-disabled-separate-from-directory",
   "state-authorization-development-only",
@@ -166,7 +207,9 @@ export type OregonTier1DirectoryVerdict = {
   developmentDirectoryOperational: true;
   publicPublicationAuthorized: false;
   directoryAcceptedCount: typeof OREGON_TIER1_DIRECTORY_ACCEPTED_COUNT;
+  captureQualifyingAccepted: typeof OREGON_TIER1_CAPTURE.qualifyingAcceptedBeds;
   zeroBedExclusions: typeof OREGON_TIER1_DIRECTORY_ZERO_BED_EXCLUSIONS;
+  streetSourceCoverageComplete: true;
   mapEnabled: false;
   blockers: typeof OREGON_TIER1_DIRECTORY_BLOCKERS;
   nextHumanActions: readonly string[];
@@ -179,12 +222,14 @@ export function oregonTier1DirectoryVerdict(): OregonTier1DirectoryVerdict {
     developmentDirectoryOperational: true,
     publicPublicationAuthorized: false,
     directoryAcceptedCount: OREGON_TIER1_DIRECTORY_ACCEPTED_COUNT,
+    captureQualifyingAccepted: OREGON_TIER1_CAPTURE.qualifyingAcceptedBeds,
     zeroBedExclusions: OREGON_TIER1_DIRECTORY_ZERO_BED_EXCLUSIONS,
+    streetSourceCoverageComplete: true,
     mapEnabled: false,
     blockers: OREGON_TIER1_DIRECTORY_BLOCKERS,
     nextHumanActions: [
-      "Obtain an authoritative ODHS ISO export/version stamp (or approve a documented freshness policy that does not invent dates).",
-      "Decide whether reduced-field (no street) Oregon listings may count as Tier 1 list-only under explicit policy; until then keep Tier 0.",
+      "Approve whether ODHS-confirmed daily refresh + retrieval audit may satisfy Tier 1 freshness without an ISO stamp (do not invent dates from filenames).",
+      "Authorize whether street from the ODHS Address column may enter the Oregon listing surface (source coverage is complete; public columns still withhold it).",
       "Keep map work separate — do not invent or geocode coordinates for directory readiness.",
       "Do not publish Oregon to production hosts until blockers clear and a separate authorization is granted.",
     ],

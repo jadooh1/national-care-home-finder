@@ -143,6 +143,27 @@ test("the Excel export uses the same header and public field contract", () => {
   assert.equal(bad.accepted.length, 0);
 });
 
+test("Excel self-closing empty email cells do not shift Licensed beds", () => {
+  // Mirrors ODHS rows where Email is an empty self-closing <c ... /> and beds are numeric in column J.
+  const sheetRows = [
+    `<row r="1">${ODHS_EXPORT_HEADER.map((value, columnIndex) => {
+      const ref = `${columnLetters(columnIndex)}1`;
+      return `<c r="${ref}" t="inlineStr"><is><t>${value}</t></is></c>`;
+    }).join("")}</row>`,
+    `<row r="2"><c r="A2" t="inlineStr"><is><t>3003</t></is></c><c r="B2" t="inlineStr"><is><t>EMPTY EMAIL FIXTURE - NOT REAL</t></is></c><c r="C2" t="inlineStr"><is><t>AFH</t></is></c><c r="D2" t="inlineStr"><is><t>1 Test Street</t></is></c><c r="E2" t="inlineStr"><is><t>Bend</t></is></c><c r="F2" t="inlineStr"><is><t>97701</t></is></c><c r="G2" t="inlineStr"><is><t>Deschutes</t></is></c><c r="H2" t="inlineStr"><is><t>555-0100</t></is></c><c r="I2" /><c r="J2"><v>5</v></c><c r="K2" t="inlineStr"><is><t>Yes</t></is></c><c r="L2" t="inlineStr"><is><t>No</t></is></c><c r="M2" t="inlineStr"><is><t>Open</t></is></c></row>`,
+  ].join("");
+  const sheet = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>${sheetRows}</sheetData></worksheet>`;
+  const report = dryRunOdhsXlsx(storedZip([
+    ["[Content_Types].xml", `<?xml version="1.0" encoding="UTF-8"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"></Types>`],
+    ["xl/worksheets/sheet1.xml", sheet],
+  ]));
+  assert.equal(report.header_ok, true);
+  assert.equal(report.accepted.length, 1);
+  assert.equal(report.accepted[0].source_id, "3003");
+  assert.equal(report.accepted[0].licensed_beds, 5);
+  assert.equal(report.rejected.some(row => row.reason === "invalid_capacity"), false);
+});
+
 function fixtureWorkbook(rows: string[][]): Uint8Array {
   const sheetRows = rows.map((values, rowIndex) => {
     const cells = values.map((value, columnIndex) => {
