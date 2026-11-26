@@ -115,6 +115,9 @@ jobs:
       - name: Check Oregon Tier 1 directory publication readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/oregon_tier1_directory_readiness.ts
 
+      - name: Check Oregon Tier 1 street integration and reconciliation
+        run: node --experimental-strip-types --test supabase/proposals/tests/oregon_tier1_street_integration.ts
+
       - name: Check Texas Tier 1 directory publication readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/texas_tier1_directory_readiness.ts
 
