@@ -300,6 +300,37 @@ export const PUBLICATION_READINESS_SUMMARIES: readonly StateReadinessSummary[] =
     oregonMapDisabled: false,
     ownerClaimsEnabled: false,
   },
+  {
+    state: "Wisconsin",
+    stateAuthorization: "unpublished",
+    evaluationScope: "full-dataset",
+    countsAreFixtureOrSample: false,
+    statewideLaunchReadyClaim: false,
+    tierCounts: { tier0: 4373, tier1: 0, tier2: 0, tier3: 0 },
+    listingCoverageNote:
+      "DHS Excel inventory AFH 2,479 (licensed) + CBRF 1,534 (licensed) + RCAC 360 (265 certified / 95 registered). Streets/capacity complete; publicationEligible=0 until ISO + Excel↔GIS + status + disclosure clear.",
+    mapCoverageNote:
+      "GIS layers 2/7/17 exist with LAT/LON but are not the accepted directory; no licensing coordinate provenance. Map stays off.",
+    enhancedCoverageNote: "Not enabled.",
+    blockers: [
+      "no-authoritative-iso-export-date",
+      "excel-gis-identifier-reconciliation-incomplete",
+      "gis-layer-is-not-the-accepted-directory",
+      "no-per-row-licensing-status-column",
+      "no-verified-facility-disclosure-url-prefix",
+      "state-authorization-unpublished",
+    ],
+    manualReviewQueue: [
+      "dhs-iso-export-stamp",
+      "excel-only-vs-gis-reconciliation-policy",
+      "rcac-certified-vs-registered-taxonomy",
+      "provider-search-disclosure-prefix-or-search-only-policy",
+    ],
+    stopGo: "STOP",
+    californiaPublicationBlocked: false,
+    oregonMapDisabled: false,
+    ownerClaimsEnabled: false,
+  },
 ] as const;
 
 export function buildPublicationReadinessReport(

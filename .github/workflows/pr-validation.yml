@@ -175,6 +175,9 @@ jobs:
       - name: Check the Wisconsin AFH source reconciliation
         run: node --experimental-strip-types --test supabase/proposals/tests/wisconsin_afh_source_reconciliation.ts
 
+      - name: Check Wisconsin Tier 1 directory publication readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/wisconsin_tier1_directory_readiness.ts
+
       - name: Check the Minnesota care-home source discovery
         run: node --experimental-strip-types --test supabase/proposals/tests/minnesota_care_home_source_discovery.ts
 
