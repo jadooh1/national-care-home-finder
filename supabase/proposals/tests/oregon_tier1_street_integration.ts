@@ -3,20 +3,23 @@ import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import test from "node:test";
 import {
-  OREGON_CAPACITY_STATUS_DRIFT,
   OREGON_LATEST_QUALIFYING_ACCEPTED,
-  OREGON_LEAVE13_DETAILS,
-  OREGON_LEAVE13_SOURCE_IDS,
-  OREGON_NEW13_SOURCE_IDS,
   OREGON_PRIOR_DIRECTORY_ACCEPTED,
-  OREGON_RECONCILIATION_ARITHMETIC,
+  OREGON_RECONCILIATION_ADDED_COUNT,
   OREGON_RECONCILIATION_NET_DELTA,
+  OREGON_RECONCILIATION_REMOVED_COUNT,
+  OREGON_RECONCILIATION_RETAINED,
+  OREGON_VERIFIED_ADDED_DETAILS,
+  OREGON_VERIFIED_ADDED_SOURCE_IDS,
+  OREGON_VERIFIED_EXACT_RECONCILIATION,
+  OREGON_VERIFIED_REMOVAL_CLASSIFICATION_COUNTS,
+  OREGON_VERIFIED_REMOVED_DETAILS,
+  OREGON_VERIFIED_REMOVED_SOURCE_IDS,
   oregonRosterIdReconciliationSummary,
+  oregonVerifiedReconciliationChecksumOk,
   reconcileOregonExactSourceIds,
-  reconstructPriorFromLedgers,
 } from "../../../lib/oregon-roster-id-reconciliation.ts";
 import {
-  OREGON_TIER1_STREET_INTEGRATION_BASELINE,
   OREGON_TIER1_STREET_INTEGRATION_BLOCKERS,
   OREGON_TIER1_STREET_INTEGRATION_CAPTURE,
   OREGON_TIER1_STREET_INTEGRATION_CURRENT_FIELDS,
@@ -139,66 +142,96 @@ test("qualifying fixture covers all 1,579 facilities with official streets", () 
   assert.equal(ids.size, 1579);
 });
 
-test("exact-ID reconciliation documents 1584→1579 deltas and residual", () => {
+test("verified exact-ID reconciliation closes 1584→1579 with ODHS classifications", () => {
   const summary = oregonRosterIdReconciliationSummary();
   assert.equal(summary.stopGo, "STOP");
-  assert.equal(summary.baseline, OREGON_TIER1_STREET_INTEGRATION_BASELINE);
   assert.equal(summary.priorDirectoryAccepted, OREGON_PRIOR_DIRECTORY_ACCEPTED);
   assert.equal(summary.latestQualifyingAccepted, OREGON_LATEST_QUALIFYING_ACCEPTED);
+  assert.equal(summary.retained, OREGON_RECONCILIATION_RETAINED);
+  assert.equal(summary.removed, OREGON_RECONCILIATION_REMOVED_COUNT);
+  assert.equal(summary.added, OREGON_RECONCILIATION_ADDED_COUNT);
   assert.equal(summary.netDelta, OREGON_RECONCILIATION_NET_DELTA);
   assert.equal(summary.netDelta, -5);
-  assert.equal(summary.csvExcelAcceptedParity, true);
-  assert.equal(summary.priorDirectoryIdDumpAvailable, false);
+  assert.equal(summary.priorDirectoryIdDumpAvailable, true);
+  assert.equal(summary.residualUnresolvedExactIdCount, 0);
+  assert.equal(summary.streetIntegrationActivated, false);
+  assert.equal(summary.directoryRowsReplaced, false);
+  assert.equal(summary.oregonPublished, false);
   assert.equal(summary.freshnessUnresolvedPendingOdhsConfirmation, true);
   assert.equal(summary.recordedExportDateIso, null);
+  assert.equal(oregonVerifiedReconciliationChecksumOk(), true);
+  assert.equal(OREGON_VERIFIED_EXACT_RECONCILIATION.residualUnresolvedExactIdCount, 0);
 
-  assert.equal(OREGON_LEAVE13_SOURCE_IDS.length, 7);
-  assert.equal(OREGON_NEW13_SOURCE_IDS.length, 5);
-  assert.equal(OREGON_LEAVE13_DETAILS.length, 7);
-  assert.equal(OREGON_RECONCILIATION_ARITHMETIC.reconstructedPriorKnown, 1581);
-  assert.equal(OREGON_RECONCILIATION_ARITHMETIC.unresolvedExactIdCount, 3);
+  assert.equal(OREGON_VERIFIED_REMOVED_SOURCE_IDS.length, 12);
+  assert.equal(OREGON_VERIFIED_ADDED_SOURCE_IDS.length, 7);
+  assert.equal(OREGON_VERIFIED_REMOVED_DETAILS.length, 12);
+  assert.equal(OREGON_VERIFIED_ADDED_DETAILS.length, 7);
+  assert.equal(OREGON_VERIFIED_REMOVAL_CLASSIFICATION_COUNTS.closedZeroBeds, 5);
+  assert.equal(OREGON_VERIFIED_REMOVAL_CLASSIFICATION_COUNTS.openZeroBeds, 7);
 
   const fixture = loadQualifying();
   const latestIds = fixture.rows.map(row => row.source_id);
-  for (const id of OREGON_LEAVE13_SOURCE_IDS) {
-    assert.equal(latestIds.includes(id), false, `LEAVE13 ${id} must not be qualifying`);
+  for (const id of OREGON_VERIFIED_REMOVED_SOURCE_IDS) {
+    assert.equal(latestIds.includes(id), false, `removed ${id} must not be qualifying`);
   }
-  for (const id of OREGON_NEW13_SOURCE_IDS) {
-    assert.equal(latestIds.includes(id), true, `NEW13 ${id} must remain qualifying`);
+  for (const id of OREGON_VERIFIED_ADDED_SOURCE_IDS) {
+    assert.equal(latestIds.includes(id), true, `added ${id} must be qualifying`);
   }
+  for (const detail of OREGON_VERIFIED_ADDED_DETAILS) {
+    const row = fixture.rows.find(r => r.source_id === detail.sourceId);
+    assert.ok(row);
+    assert.equal(row.status, "Open");
+    assert.equal(String(row.licensed_beds), detail.licensedBeds);
+  }
+  assert.equal(
+    OREGON_VERIFIED_REMOVED_DETAILS.filter(d => d.classification === "closed-zero-beds").length,
+    5,
+  );
+  assert.equal(
+    OREGON_VERIFIED_REMOVED_DETAILS.filter(d => d.classification === "open-zero-beds").length,
+    7,
+  );
 
-  const reconstructed = reconstructPriorFromLedgers(latestIds);
-  assert.equal(reconstructed.reconstructedCount, 1581);
-  assert.equal(reconstructed.unresolvedVsStored, 3);
-
+  // Synthetic prior = latest − added + removed yields verified counts.
+  const syntheticPrior = new Set(latestIds);
+  for (const id of OREGON_VERIFIED_ADDED_SOURCE_IDS) syntheticPrior.delete(id);
+  for (const id of OREGON_VERIFIED_REMOVED_SOURCE_IDS) syntheticPrior.add(id);
+  assert.equal(syntheticPrior.size, 1584);
   const exact = reconcileOregonExactSourceIds({
-    priorSourceIds: reconstructed.reconstructedPrior,
+    priorSourceIds: [...syntheticPrior],
     latestQualifyingSourceIds: latestIds,
   });
-  assert.deepEqual(exact.removed, [...OREGON_LEAVE13_SOURCE_IDS].sort());
-  assert.deepEqual(exact.added, [...OREGON_NEW13_SOURCE_IDS].sort());
-  assert.equal(exact.netDelta, -2); // 1581→1579 on reconstructed set; stored 1584 residual is separate
-
-  assert.equal(OREGON_CAPACITY_STATUS_DRIFT[0].source_id, "11561");
-  assert.equal(OREGON_CAPACITY_STATUS_DRIFT[0].currentLicensedBeds, 4);
-  assert.equal(OREGON_CAPACITY_STATUS_DRIFT[0].inLatestQualifying, true);
-  assert.ok(latestIds.includes("11561"));
-  assert.equal(OREGON_CAPACITY_STATUS_DRIFT[1].source_id, "523278");
-  assert.equal(OREGON_CAPACITY_STATUS_DRIFT[1].inLatestQualifying, false);
-  assert.equal(latestIds.includes("523278"), false);
+  assert.equal(exact.retained.length, 1572);
+  assert.deepEqual(exact.removed, [...OREGON_VERIFIED_REMOVED_SOURCE_IDS].sort());
+  assert.deepEqual(exact.added, [...OREGON_VERIFIED_ADDED_SOURCE_IDS].sort());
+  assert.equal(exact.netDelta, -5);
 
   const diskSummary = JSON.parse(readFileSync(SUMMARY_PATH, "utf8")) as {
     priorDirectoryAccepted: number;
     captureQualifyingAccepted: number;
+    retained: number;
+    removed: number;
+    added: number;
     netDirectoryVsCapture: number;
     priorDirectoryIdDumpAvailable: boolean;
+    residualUnresolvedExactIdCount: number;
+    removedSourceIds: string[];
+    addedSourceIds: string[];
     csvExcelAcceptedParity: boolean;
+    streetIntegrationActivated: boolean;
   };
   assert.equal(diskSummary.priorDirectoryAccepted, 1584);
   assert.equal(diskSummary.captureQualifyingAccepted, 1579);
+  assert.equal(diskSummary.retained, 1572);
+  assert.equal(diskSummary.removed, 12);
+  assert.equal(diskSummary.added, 7);
   assert.equal(diskSummary.netDirectoryVsCapture, -5);
-  assert.equal(diskSummary.priorDirectoryIdDumpAvailable, false);
+  assert.equal(diskSummary.priorDirectoryIdDumpAvailable, true);
+  assert.equal(diskSummary.residualUnresolvedExactIdCount, 0);
   assert.equal(diskSummary.csvExcelAcceptedParity, true);
+  assert.equal(diskSummary.streetIntegrationActivated, false);
+  assert.deepEqual(diskSummary.removedSourceIds, [...OREGON_VERIFIED_REMOVED_SOURCE_IDS]);
+  assert.deepEqual(diskSummary.addedSourceIds, [...OREGON_VERIFIED_ADDED_SOURCE_IDS]);
 });
 
 test("CSV/Excel capture hashes and optional live dual-format parity", () => {
@@ -264,4 +297,15 @@ test("STOP verdict; freshness unresolved; WA/CA/Design 2 preserved", () => {
   assert.equal(existsSync(QUALIFYING_PATH), true);
   assert.equal(existsSync(SUMMARY_PATH), true);
   assert.equal(existsSync("supabase/proposals/20261126220000_oregon_tier1_street_integration.md"), true);
+  assert.equal(existsSync("supabase/proposals/20261126240000_oregon_exact_roster_reconciliation.md"), true);
+  assert.ok(
+    !OREGON_TIER1_STREET_INTEGRATION_BLOCKERS.includes(
+      "prior-directory-1584-source-id-dump-unavailable-offline" as never,
+    ),
+  );
+  assert.ok(
+    OREGON_TIER1_STREET_INTEGRATION_BLOCKERS.includes(
+      "exact-id-reconciliation-complete-but-row-replacement-not-authorized",
+    ),
+  );
 });

@@ -1,153 +1,60 @@
 {
   "observedOn": "2026-11-26",
-  "baselineCommit": "2d0d037",
+  "baselineCommit": "8b9fe10",
+  "evidence": "authorized-read-only-development-db-comparison",
   "priorDirectoryAccepted": 1584,
-  "priorDirectoryZeroBedExclusions": 20,
   "captureQualifyingAccepted": 1579,
-  "captureOpenAfhZeroBeds": 24,
+  "retained": 1572,
+  "removed": 12,
+  "added": 7,
+  "netDirectoryVsCapture": -5,
+  "priorDirectoryIdDumpAvailable": true,
+  "residualUnresolvedExactIdCount": 0,
   "streetBlankAmongQualifying": 0,
   "csvExcelAcceptedParity": true,
   "csvSha256": "df843f7195242517723f8354bfd53095ec0a8f1baa7f76a19b7eb1010a0d63b2",
   "xlsxSha256": "036885f39e197ac02518dec257744c25664af039d92f85beb6191e0b20389bcd",
-  "netDirectoryVsCapture": -5,
-  "priorDirectoryIdDumpAvailable": false,
-  "leaveSinceDirectoryViaNov13Ledger": [
-    {
-      "sourceId": "0000000196",
-      "reason": "closed-zero-beds",
-      "current": {
-        "sourceId": "0000000196",
-        "status": "Closed",
-        "licensedBeds": "0",
-        "street": "4076 Alana Ave SE"
-      }
-    },
-    {
-      "sourceId": "0000000425",
-      "reason": "open-zero-beds",
-      "current": {
-        "sourceId": "0000000425",
-        "status": "Open",
-        "licensedBeds": "0",
-        "street": "3022 Northeast Linden Avenue"
-      }
-    },
-    {
-      "sourceId": "11419",
-      "reason": "open-zero-beds",
-      "current": {
-        "sourceId": "11419",
-        "status": "Open",
-        "licensedBeds": "0",
-        "street": "717 Northeast 157th Avenue"
-      }
-    },
-    {
-      "sourceId": "11495",
-      "reason": "open-zero-beds",
-      "current": {
-        "sourceId": "11495",
-        "status": "Open",
-        "licensedBeds": "0",
-        "street": "311 Southeast 133rd Avenue"
-      }
-    },
-    {
-      "sourceId": "11569",
-      "reason": "open-zero-beds",
-      "current": {
-        "sourceId": "11569",
-        "status": "Open",
-        "licensedBeds": "0",
-        "street": "14809 SE Mill St, Portland, OR 97233"
-      }
-    },
-    {
-      "sourceId": "528272",
-      "reason": "open-zero-beds",
-      "current": {
-        "sourceId": "528272",
-        "status": "Open",
-        "licensedBeds": "0",
-        "street": "1701 Northeast 137th Avenue"
-      }
-    },
-    {
-      "sourceId": "566448",
-      "reason": "open-zero-beds",
-      "current": {
-        "sourceId": "566448",
-        "status": "Open",
-        "licensedBeds": "0",
-        "street": "1217 Northeast Magda Lane"
-      }
-    }
+  "removedSourceIds": [
+    "0000000196",
+    "0000000199",
+    "0000000425",
+    "11419",
+    "11495",
+    "11569",
+    "515716",
+    "5169225761",
+    "522195",
+    "523278",
+    "528272",
+    "566448"
   ],
-  "newlyQualifyingAtNov13StillPresent": [
-    {
-      "sourceId": "0000000408",
-      "inCaptureQualifying": true,
-      "current": {
-        "sourceId": "0000000408",
-        "status": "Open",
-        "licensedBeds": "4",
-        "street": "2886 NE 22nd Ct."
-      }
-    },
-    {
-      "sourceId": "0000000708",
-      "inCaptureQualifying": true,
-      "current": {
-        "sourceId": "0000000708",
-        "status": "Open",
-        "licensedBeds": "5",
-        "street": "13421 Squire Drive"
-      }
-    },
-    {
-      "sourceId": "0000000731",
-      "inCaptureQualifying": true,
-      "current": {
-        "sourceId": "0000000731",
-        "status": "Open",
-        "licensedBeds": "5",
-        "street": "1232 SE 282nd Ave."
-      }
-    },
-    {
-      "sourceId": "0000000733",
-      "inCaptureQualifying": true,
-      "current": {
-        "sourceId": "0000000733",
-        "status": "Open",
-        "licensedBeds": "4",
-        "street": "2411 SE 157th Ave."
-      }
-    },
-    {
-      "sourceId": "8001946102",
-      "inCaptureQualifying": true,
-      "current": {
-        "sourceId": "8001946102",
-        "status": "Open",
-        "licensedBeds": "5",
-        "street": "7975 SW OLESON ROAD"
-      }
-    }
+  "addedSourceIds": [
+    "0000000408",
+    "0000000708",
+    "0000000713",
+    "0000000731",
+    "0000000733",
+    "11561",
+    "8001946102"
   ],
-  "detectedDriftSinceNov13": {
-    "gainedBedsFromPriorOpenZero": {
-      "sourceId": "11561",
-      "status": "Open",
-      "licensedBeds": "4",
-      "street": "1357 SE 207th Ave."
-    },
-    "newlyOpenZero": {
-      "sourceId": "523278",
-      "status": "Open",
-      "licensedBeds": "0",
-      "street": "2805 NE GREAT HORNED PLACE"
-    }
+  "removalClassifications": {
+    "closedZeroBeds": ["0000000196", "0000000199", "515716", "5169225761", "522195"],
+    "openZeroBeds": ["0000000425", "11419", "11495", "11569", "523278", "528272", "566448"]
   },
-  "note": "Exact 1584 stored source_id list requires a development DB read of oregon_odhs_afh_public; offline package reconciles counts + exact known ledger IDs + full 1579 capture set."
+  "addedClassifications": {
+    "newlyQualifyingOpenAfhBeds1to5": [
+      { "sourceId": "0000000408", "licensedBeds": "4" },
+      { "sourceId": "0000000708", "licensedBeds": "5" },
+      { "sourceId": "0000000713", "licensedBeds": "5" },
+      { "sourceId": "0000000731", "licensedBeds": "5" },
+      { "sourceId": "0000000733", "licensedBeds": "4" },
+      { "sourceId": "11561", "licensedBeds": "4" },
+      { "sourceId": "8001946102", "licensedBeds": "5" }
+    ]
+  },
+  "streetIntegrationActivated": false,
+  "directoryRowsReplaced": false,
+  "oregonPublished": false,
+  "freshnessUnresolvedPendingOdhsConfirmation": true,
+  "note": "Verified exact-ID reconciliation from authorized development DB read. Residual arithmetic (1581/3 unresolved) superseded."
 }

@@ -1,16 +1,17 @@
 /**
  * Oregon Tier 1 — exact source_id reconciliation: prior directory 1,584 vs
- * latest qualifying capture 1,579 (baseline 2d0d037 / 2026-11-26 dual export).
+ * latest qualifying capture 1,579.
  *
- * Uses Nov 13 LEAVE13 / NEW13 ledgers (same IDs as oregon-roster-reconciliation)
- * plus the current 1,579 qualifying fixture. A full residual match of the three
- * unexplained removals requires the stored oregon_odhs_afh_public source_id dump
- * (unavailable offline / no anon read).
+ * Authorized read-only development DB comparison closed the residual:
+ * retained 1,572 / removed 12 / added 7 / net −5. Removals and additions are
+ * classified from the official 2026-11-26 ODHS Provider Export.
  *
- * No Supabase writes. Intentionally free of sibling runtime imports.
+ * No Supabase writes. Street integration and Oregon publication remain off.
+ * Intentionally free of sibling runtime imports.
  */
 
-export const OREGON_ID_RECONCILIATION_BASELINE = "2d0d037" as const;
+export const OREGON_ID_RECONCILIATION_BASELINE = "8b9fe10" as const;
+export const OREGON_ID_RECONCILIATION_OBSERVED_ON = "2026-11-26" as const;
 
 /** Prior published/accepted directory count (development store). */
 export const OREGON_PRIOR_DIRECTORY_ACCEPTED = 1584 as const;
@@ -18,72 +19,214 @@ export const OREGON_PRIOR_DIRECTORY_ACCEPTED = 1584 as const;
 /** Latest dual-format qualifying Open AFH accepted count. */
 export const OREGON_LATEST_QUALIFYING_ACCEPTED = 1579 as const;
 
+export const OREGON_RECONCILIATION_RETAINED = 1572 as const;
+export const OREGON_RECONCILIATION_REMOVED_COUNT = 12 as const;
+export const OREGON_RECONCILIATION_ADDED_COUNT = 7 as const;
 export const OREGON_RECONCILIATION_NET_DELTA = -5 as const;
 
 /**
- * LEAVE13 — facilities that left the qualifying set on the Nov 13 capture
- * relative to the stored directory (still non-qualifying on 2026-11-26).
- * Matches OREGON_RECONCILIATION_STATUS_CHANGES + OPEN_ZERO_FROM_ACCEPTED.
+ * Verified exact removals (prior directory ∩̸ latest qualifying).
+ * Classified from ODHS 2026-11-26 export current Type/Status/Licensed beds.
  */
-export const OREGON_LEAVE13_SOURCE_IDS = [
-  "0000000196", // Closed / 0 beds
-  "0000000425", // Open / 0 beds
-  "11419", // Open / 0 beds
-  "11495", // Open / 0 beds
-  "11569", // Open / 0 beds
-  "528272", // Open / 0 beds
-  "566448", // Open / 0 beds
+export const OREGON_VERIFIED_REMOVED_SOURCE_IDS = [
+  "0000000196",
+  "0000000199",
+  "0000000425",
+  "11419",
+  "11495",
+  "11569",
+  "515716",
+  "5169225761",
+  "522195",
+  "523278",
+  "528272",
+  "566448",
 ] as const;
 
-export const OREGON_LEAVE13_DETAILS = [
+export const OREGON_VERIFIED_REMOVED_DETAILS = [
   {
     sourceId: "0000000196",
-    reason: "closed-zero-beds" as const,
+    classification: "closed-zero-beds" as const,
+    licenseType: "AFH" as const,
+    status: "Closed" as const,
+    licensedBeds: "0" as const,
+  },
+  {
+    sourceId: "0000000199",
+    classification: "closed-zero-beds" as const,
+    licenseType: "AFH" as const,
     status: "Closed" as const,
     licensedBeds: "0" as const,
   },
   {
     sourceId: "0000000425",
-    reason: "open-zero-beds" as const,
+    classification: "open-zero-beds" as const,
+    licenseType: "AFH" as const,
     status: "Open" as const,
     licensedBeds: "0" as const,
   },
   {
     sourceId: "11419",
-    reason: "open-zero-beds" as const,
+    classification: "open-zero-beds" as const,
+    licenseType: "AFH" as const,
     status: "Open" as const,
     licensedBeds: "0" as const,
   },
   {
     sourceId: "11495",
-    reason: "open-zero-beds" as const,
+    classification: "open-zero-beds" as const,
+    licenseType: "AFH" as const,
     status: "Open" as const,
     licensedBeds: "0" as const,
   },
   {
     sourceId: "11569",
-    reason: "open-zero-beds" as const,
+    classification: "open-zero-beds" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "0" as const,
+  },
+  {
+    sourceId: "515716",
+    classification: "closed-zero-beds" as const,
+    licenseType: "AFH" as const,
+    status: "Closed" as const,
+    licensedBeds: "0" as const,
+  },
+  {
+    sourceId: "5169225761",
+    classification: "closed-zero-beds" as const,
+    licenseType: "AFH" as const,
+    status: "Closed" as const,
+    licensedBeds: "0" as const,
+  },
+  {
+    sourceId: "522195",
+    classification: "closed-zero-beds" as const,
+    licenseType: "AFH" as const,
+    status: "Closed" as const,
+    licensedBeds: "0" as const,
+  },
+  {
+    sourceId: "523278",
+    classification: "open-zero-beds" as const,
+    licenseType: "AFH" as const,
     status: "Open" as const,
     licensedBeds: "0" as const,
   },
   {
     sourceId: "528272",
-    reason: "open-zero-beds" as const,
+    classification: "open-zero-beds" as const,
+    licenseType: "AFH" as const,
     status: "Open" as const,
     licensedBeds: "0" as const,
   },
   {
     sourceId: "566448",
-    reason: "open-zero-beds" as const,
+    classification: "open-zero-beds" as const,
+    licenseType: "AFH" as const,
     status: "Open" as const,
     licensedBeds: "0" as const,
   },
 ] as const;
 
+/** Verified exact additions (latest qualifying ∖ prior directory). */
+export const OREGON_VERIFIED_ADDED_SOURCE_IDS = [
+  "0000000408",
+  "0000000708",
+  "0000000713",
+  "0000000731",
+  "0000000733",
+  "11561",
+  "8001946102",
+] as const;
+
+export const OREGON_VERIFIED_ADDED_DETAILS = [
+  {
+    sourceId: "0000000408",
+    classification: "newly-qualifying-open-afh" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "4" as const,
+  },
+  {
+    sourceId: "0000000708",
+    classification: "newly-qualifying-open-afh" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "5" as const,
+  },
+  {
+    sourceId: "0000000713",
+    classification: "newly-qualifying-open-afh" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "5" as const,
+  },
+  {
+    sourceId: "0000000731",
+    classification: "newly-qualifying-open-afh" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "5" as const,
+  },
+  {
+    sourceId: "0000000733",
+    classification: "newly-qualifying-open-afh" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "4" as const,
+  },
+  {
+    sourceId: "11561",
+    classification: "newly-qualifying-open-afh" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "4" as const,
+  },
+  {
+    sourceId: "8001946102",
+    classification: "newly-qualifying-open-afh" as const,
+    licenseType: "AFH" as const,
+    status: "Open" as const,
+    licensedBeds: "5" as const,
+  },
+] as const;
+
+export const OREGON_VERIFIED_REMOVAL_CLASSIFICATION_COUNTS = {
+  closedZeroBeds: 5 as const,
+  openZeroBeds: 7 as const,
+  total: 12 as const,
+} as const;
+
 /**
- * NEW13 — facilities that entered the qualifying set on Nov 13 and remain in
- * the 2026-11-26 qualifying 1,579. Matches OREGON_RECONCILIATION_NEWLY_QUALIFYING.
+ * Verified exact-ID ledger from authorized development DB read + ODHS export.
+ * Replaces prior reconstructed residual arithmetic (1581 / unresolved 3).
  */
+export const OREGON_VERIFIED_EXACT_RECONCILIATION = {
+  priorDirectoryAccepted: 1584 as const,
+  latestQualifyingAccepted: 1579 as const,
+  retained: 1572 as const,
+  removed: 12 as const,
+  added: 7 as const,
+  netDelta: -5 as const,
+  priorDirectoryIdDumpAvailable: true as const,
+  residualUnresolvedExactIdCount: 0 as const,
+  checksumOk: true as const, // 1584 − 12 = 1572; 1572 + 7 = 1579; 1579 − 1584 = −5
+} as const;
+
+/** @deprecated Historical Nov 13 ledger — superseded by OREGON_VERIFIED_* sets. */
+export const OREGON_LEAVE13_SOURCE_IDS = [
+  "0000000196",
+  "0000000425",
+  "11419",
+  "11495",
+  "11569",
+  "528272",
+  "566448",
+] as const;
+
+/** @deprecated Historical Nov 13 ledger — superseded by OREGON_VERIFIED_ADDED_*. */
 export const OREGON_NEW13_SOURCE_IDS = [
   "0000000408",
   "0000000708",
@@ -92,92 +235,68 @@ export const OREGON_NEW13_SOURCE_IDS = [
   "8001946102",
 ] as const;
 
-/**
- * Capacity / licensing drift noted on known overlapping IDs (2026-11-26).
- * 11561: previously open-zero in Nov 13 absent ledger → now Open with 4 beds.
- * 523278: newly present as Open with 0 beds (not in qualifying 1–5 set).
- */
-export const OREGON_CAPACITY_STATUS_DRIFT = [
-  {
-    source_id: "11561",
-    note: "licensed_beds drifted from prior open-zero ledger into qualifying Open / 4 beds",
-    priorLicensedBeds: 0,
-    currentLicensedBeds: 4,
-    currentStatus: "Open",
-    inLatestQualifying: true,
-  },
-  {
-    source_id: "523278",
-    note: "Open with licensed_beds=0 (open-zero; not in qualifying 1–5 set)",
-    priorLicensedBeds: null,
-    currentLicensedBeds: 0,
-    currentStatus: "Open",
-    inLatestQualifying: false,
-  },
-] as const;
-
-/**
- * Arithmetic residual after applying known Nov 13 ledgers to the 1,579 set:
- *   reconstructed_prior ≈ 1579 − |NEW13∩Q26| + |LEAVE13|
- *   = 1579 − 5 + 7 = 1581
- *   residual vs stored 1584 = 3 source_ids unexplained without the dump.
- */
-export const OREGON_RECONCILIATION_ARITHMETIC = {
-  latestQualifying: 1579,
-  leave13Count: 7,
-  new13StillQualifying: 5,
-  reconstructedPriorKnown: 1581,
-  storedPriorDirectory: 1584,
-  unresolvedExactIdCount: 3,
-  priorDirectoryIdDumpAvailable: false,
-} as const;
-
 export type OregonRosterIdReconciliationSummary = {
   observedOn: string;
   baseline: string;
   priorDirectoryAccepted: 1584;
   latestQualifyingAccepted: 1579;
+  retained: 1572;
+  removed: 12;
+  added: 7;
   netDelta: -5;
   csvExcelAcceptedParity: true;
   streetPresent: 1579;
   streetBlank: 0;
-  leave13: readonly string[];
-  leave13Details: typeof OREGON_LEAVE13_DETAILS;
-  new13: readonly string[];
-  capacityStatusDrift: typeof OREGON_CAPACITY_STATUS_DRIFT;
-  arithmetic: typeof OREGON_RECONCILIATION_ARITHMETIC;
-  priorDirectoryIdDumpAvailable: false;
+  removedIds: typeof OREGON_VERIFIED_REMOVED_SOURCE_IDS;
+  removedDetails: typeof OREGON_VERIFIED_REMOVED_DETAILS;
+  addedIds: typeof OREGON_VERIFIED_ADDED_SOURCE_IDS;
+  addedDetails: typeof OREGON_VERIFIED_ADDED_DETAILS;
+  removalClassificationCounts: typeof OREGON_VERIFIED_REMOVAL_CLASSIFICATION_COUNTS;
+  verified: typeof OREGON_VERIFIED_EXACT_RECONCILIATION;
+  priorDirectoryIdDumpAvailable: true;
+  residualUnresolvedExactIdCount: 0;
   freshnessUnresolvedPendingOdhsConfirmation: true;
   recordedExportDateIso: null;
+  streetIntegrationActivated: false;
+  directoryRowsReplaced: false;
+  oregonPublished: false;
   stopGo: "STOP";
 };
 
 export function oregonRosterIdReconciliationSummary(
-  observedOn = "2026-11-26",
+  observedOn = OREGON_ID_RECONCILIATION_OBSERVED_ON,
 ): OregonRosterIdReconciliationSummary {
   return {
     observedOn,
     baseline: OREGON_ID_RECONCILIATION_BASELINE,
     priorDirectoryAccepted: OREGON_PRIOR_DIRECTORY_ACCEPTED,
     latestQualifyingAccepted: OREGON_LATEST_QUALIFYING_ACCEPTED,
+    retained: OREGON_RECONCILIATION_RETAINED,
+    removed: OREGON_RECONCILIATION_REMOVED_COUNT,
+    added: OREGON_RECONCILIATION_ADDED_COUNT,
     netDelta: OREGON_RECONCILIATION_NET_DELTA,
     csvExcelAcceptedParity: true,
     streetPresent: 1579,
     streetBlank: 0,
-    leave13: OREGON_LEAVE13_SOURCE_IDS,
-    leave13Details: OREGON_LEAVE13_DETAILS,
-    new13: OREGON_NEW13_SOURCE_IDS,
-    capacityStatusDrift: OREGON_CAPACITY_STATUS_DRIFT,
-    arithmetic: OREGON_RECONCILIATION_ARITHMETIC,
-    priorDirectoryIdDumpAvailable: false,
+    removedIds: OREGON_VERIFIED_REMOVED_SOURCE_IDS,
+    removedDetails: OREGON_VERIFIED_REMOVED_DETAILS,
+    addedIds: OREGON_VERIFIED_ADDED_SOURCE_IDS,
+    addedDetails: OREGON_VERIFIED_ADDED_DETAILS,
+    removalClassificationCounts: OREGON_VERIFIED_REMOVAL_CLASSIFICATION_COUNTS,
+    verified: OREGON_VERIFIED_EXACT_RECONCILIATION,
+    priorDirectoryIdDumpAvailable: true,
+    residualUnresolvedExactIdCount: 0,
     freshnessUnresolvedPendingOdhsConfirmation: true,
     recordedExportDateIso: null,
+    streetIntegrationActivated: false,
+    directoryRowsReplaced: false,
+    oregonPublished: false,
     stopGo: "STOP",
   };
 }
 
 /**
- * Exact-ID set operations against a provided prior dump (when available).
+ * Exact-ID set operations against a provided prior dump.
  */
 export function reconcileOregonExactSourceIds(args: {
   priorSourceIds: readonly string[];
@@ -215,36 +334,16 @@ export function reconcileOregonExactSourceIds(args: {
   };
 }
 
-/**
- * Offline reconstruction of a synthetic prior set from the 1,579 fixture plus
- * known Nov 13 ledgers. Yields 1,581 IDs; the stored directory has 1,584, so
- * three exact IDs remain unresolved until a dump is authorized.
- */
-export function reconstructPriorFromLedgers(latestQualifyingSourceIds: readonly string[]): {
-  reconstructedPrior: string[];
-  reconstructedCount: 1581;
-  unresolvedVsStored: 3;
-} {
-  const latest = new Set(latestQualifyingSourceIds.map(String));
-  for (const id of OREGON_NEW13_SOURCE_IDS) {
-    if (!latest.has(id)) {
-      throw new Error(`NEW13 id ${id} missing from latest qualifying set`);
-    }
-  }
-  const reconstructed = new Set(latest);
-  for (const id of OREGON_NEW13_SOURCE_IDS) {
-    reconstructed.delete(id);
-  }
-  for (const id of OREGON_LEAVE13_SOURCE_IDS) {
-    reconstructed.add(id);
-  }
-  const sorted = [...reconstructed].sort();
-  if (sorted.length !== 1581) {
-    throw new Error(`expected reconstructed prior 1581, got ${sorted.length}`);
-  }
-  return {
-    reconstructedPrior: sorted,
-    reconstructedCount: 1581,
-    unresolvedVsStored: 3,
-  };
+/** Checksum: prior − removed = retained; retained + added = latest; net = latest − prior. */
+export function oregonVerifiedReconciliationChecksumOk(
+  verified = OREGON_VERIFIED_EXACT_RECONCILIATION,
+): boolean {
+  return (
+    verified.priorDirectoryAccepted - verified.removed === verified.retained
+    && verified.retained + verified.added === verified.latestQualifyingAccepted
+    && verified.latestQualifyingAccepted - verified.priorDirectoryAccepted === verified.netDelta
+    && verified.removed === OREGON_VERIFIED_REMOVED_SOURCE_IDS.length
+    && verified.added === OREGON_VERIFIED_ADDED_SOURCE_IDS.length
+    && verified.residualUnresolvedExactIdCount === 0
+  );
 }
