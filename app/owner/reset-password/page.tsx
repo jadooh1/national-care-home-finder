@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../../components/language";
+import { PasswordField } from "../../../components/password-field";
 import { copy } from "../../../lib/copy/account";
 import { localizedPasswordProblem } from "../../../lib/locale";
 import { supabase } from "../../../lib/supabase";
@@ -127,10 +128,29 @@ export default function ResetPasswordPage() {
       {!ready ? <p role="status">{text.checking}</p> : allowed ? <section style={{ background: "white", padding: 28, borderRadius: 15, border: "1px solid #dbe5eb" }}>
         <p style={{ lineHeight: 1.7 }}>{text.help}</p>
         <form onSubmit={submit}>
-          <label htmlFor="new-password">{text.newPassword}</label>
-          <input id="new-password" type="password" autoComplete="new-password" required minLength={12} maxLength={72} value={password} onChange={event => setPassword(event.target.value)} style={field} />
-          <label htmlFor="confirm-password" style={{ display: "block", marginTop: 20 }}>{text.confirmPassword}</label>
-          <input id="confirm-password" type="password" autoComplete="new-password" required minLength={12} maxLength={72} value={confirmation} onChange={event => setConfirmation(event.target.value)} style={field} />
+          <PasswordField
+            id="new-password"
+            label={text.newPassword}
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+            autoComplete="new-password"
+            minLength={12}
+            maxLength={72}
+            visibility={{ show: text.showPassword, hide: text.hidePassword }}
+            inputStyle={field}
+          />
+          <PasswordField
+            id="confirm-password"
+            label={text.confirmPassword}
+            value={confirmation}
+            onChange={event => setConfirmation(event.target.value)}
+            autoComplete="new-password"
+            minLength={12}
+            maxLength={72}
+            visibility={{ show: text.showPassword, hide: text.hidePassword }}
+            labelStyle={{ display: "block", marginTop: 20 }}
+            inputStyle={field}
+          />
           {errorText && <p role="alert" style={{ color: "#af2424" }}>{errorText}</p>}
           {noticeText && <p role="status" style={{ color: "#176b53" }}>{noticeText}</p>}
           <button disabled={busy} type="submit" style={{ width: "100%", padding: 14, marginTop: 24, border: 0, borderRadius: 9, background: "#176b53", color: "white", fontSize: 16, fontWeight: 700, cursor: "pointer" }}>{busy ? text.pleaseWait : text.update}</button>

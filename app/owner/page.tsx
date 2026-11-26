@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../components/language";
+import { PasswordField } from "../../components/password-field";
 import { copy, localizedAuthServerMessage } from "../../lib/copy/account";
 import { browserClaimStorage, claimLicenseQuery, ownerClaimHref, readClaimLicense, writeClaimLicense } from "../../lib/owner-claim";
 import { localizedPasswordProblem } from "../../lib/locale";
@@ -130,11 +131,21 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
         <form onSubmit={submit}>
           <label htmlFor="owner-email">{text.email}</label>
           <input id="owner-email" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} style={field} />
-          {mode !== "recover" && <>
-            <label htmlFor="owner-password" style={{ display: "block", marginTop: 20 }}>{text.password}</label>
-            <input id="owner-password" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={mode === "register" ? 12 : 6} maxLength={mode === "register" ? 72 : undefined} required value={password} onChange={e => setPassword(e.target.value)} style={field} />
-            {mode === "register" && <p style={{ margin: "8px 0 0", color: "#536b7c", lineHeight: 1.5 }}>{text.passwordHelp}</p>}
-          </>}
+          {mode !== "recover" && (
+            <PasswordField
+              id="owner-password"
+              label={text.password}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              autoComplete={mode === "register" ? "new-password" : "current-password"}
+              minLength={mode === "register" ? 12 : 6}
+              maxLength={mode === "register" ? 72 : undefined}
+              help={mode === "register" ? text.passwordHelp : undefined}
+              visibility={{ show: text.showPassword, hide: text.hidePassword }}
+              labelStyle={{ display: "block", marginTop: 20 }}
+              inputStyle={field}
+            />
+          )}
           {mode === "login" && <button type="button" onClick={() => { setMode("recover"); setPassword(""); clearMessages(); }} style={{ marginTop: 14, border: 0, background: "transparent", color: "#176b53", cursor: "pointer", padding: 0 }}>{text.forgot}</button>}
           {mode === "recover" && <p style={{ lineHeight: 1.6 }}>{text.recoverHelp}</p>}
           {errorText && <p role="alert" style={{ color: "#af2424" }}>{errorText}</p>}
