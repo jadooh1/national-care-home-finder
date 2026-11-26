@@ -15,7 +15,7 @@ export const PENNSYLVANIA_PUBLICATION_BLOCKERS = [
   "catalog-timestamp-is-not-an-export-date",
   "directory-daily-refresh-notice-is-not-an-export-date",
   "no-per-facility-disclosure-link-is-recorded",
-  "letter-only-street-values-are-not-corrected",
+  "thirteen-letter-only-streets-deterministically-excluded",
   "street-additional-information-is-not-copied-into-the-street",
   "georeferenced-coordinates-are-not-licensing-coordinates",
 ] as const;

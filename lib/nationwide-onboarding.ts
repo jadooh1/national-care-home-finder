@@ -81,7 +81,7 @@ const PENNSYLVANIA_BLOCKERS = [
   "no-per-facility-disclosure-link-is-recorded",
   "open-data-object-id-is-not-a-license-number",
   "no-per-row-licensing-status",
-  "letter-only-street-values-are-not-corrected",
+  "thirteen-letter-only-streets-deterministically-excluded",
   "street-additional-information-is-not-copied-into-the-street",
   "phone-and-capacity-fields-are-not-accepted",
 ] as const;
@@ -124,7 +124,7 @@ export const PENNSYLVANIA_SOURCE_URL = "https://data.pa.gov/api/views/pqf4-d4xn/
 export const PENNSYLVANIA_PROVIDER_DIRECTORY =
   "https://www.humanservices.dhs.pa.gov/human_service_provider_directory/";
 export const PENNSYLVANIA_RECORDED_EXPORT_DATE = null;
-export const PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT = "2026-11-08T06:09:03Z";
+export const PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT = "2026-11-22T06:04:51Z";
 export const PENNSYLVANIA_ROWS = 989;
 export const PENNSYLVANIA_USABLE_STREET_ROWS = 976;
 export const PENNSYLVANIA_LETTER_ONLY_STREET_ROWS = 13;

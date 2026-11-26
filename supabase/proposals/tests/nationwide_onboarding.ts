@@ -114,7 +114,7 @@ test("Pennsylvania is the selected unpublished candidate and the other two state
   assert.equal(adoptPennsylvaniaExportDate(PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT), null);
   assert.ok(pennsylvania.blockers.includes("catalog-timestamp-is-not-an-export-date"));
   assert.ok(pennsylvania.blockers.includes("georeferenced-coordinates-are-not-licensing-coordinates"));
-  assert.ok(pennsylvania.blockers.includes("letter-only-street-values-are-not-corrected"));
+  assert.ok(pennsylvania.blockers.includes("thirteen-letter-only-streets-deterministically-excluded"));
   assert.deepEqual(NEXT_STATE_REVIEW.map(candidate => candidate.state), ["Pennsylvania", "Wisconsin", "Minnesota"]);
   assert.deepEqual(NEXT_STATE_REVIEW.map(candidate => candidate.rank), [1, 2, 3]);
   assert.deepEqual(NEXT_STATE_REVIEW.filter(candidate => candidate.selected).map(candidate => candidate.state), ["Pennsylvania"]);

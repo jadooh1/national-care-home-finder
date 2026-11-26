@@ -70,15 +70,18 @@ test("pennsylvania address exception ledger covers all 13 letter-only streets", 
   assert.equal(summary.uniqueObjectIds, 13);
   assert.equal(summary.anyRewritten, false);
   assert.equal(summary.anyPublicationEligible, false);
+  assert.equal(summary.allDeterministicallyExcluded, true);
   assert.equal(summary.residualOk, true);
   assert.equal(summary.byClass["letter-only-with-additional"], 6);
   assert.equal(summary.byClass["letter-only-named-without-number"], 7);
+  assert.equal(evaled.addressExceptionsResolvedByExclusion, true);
   assert.ok(PENNSYLVANIA_ADDRESS_EXCEPTIONS.some(e => e.objectId === "775340"));
   assert.ok(PENNSYLVANIA_ADDRESS_EXCEPTIONS.some(e => e.originalStreet === "ONE EASY LIVING DRIVE"));
   for (const row of PENNSYLVANIA_ADDRESS_EXCEPTIONS) {
     assert.equal(row.usableStreet, null);
     assert.equal(row.rewritten, false);
     assert.equal(row.publicationEligible, false);
+    assert.equal(row.deterministicExclusion, true);
   }
 });
 

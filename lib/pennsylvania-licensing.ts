@@ -10,7 +10,10 @@ export const PENNSYLVANIA_DIRECTORY_SEARCH_RESULT =
 export const PENNSYLVANIA_SPATIAL_SEARCH =
   "https://www.humanservices.dhs.pa.gov/LicensedFacilitiesSpatialSearch/licensedfacilitiesspatialsearch.html";
 export const PENNSYLVANIA_RECORDED_EXPORT_DATE = null;
-export const PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT = "2026-11-08T06:09:03Z";
+/** Current portal catalog rowsUpdatedAt from 2026-11-26 re-verify (not an export date). */
+export const PENNSYLVANIA_CATALOG_ROWS_UPDATED_AT = "2026-11-22T06:04:51Z";
+/** Prior catalog clock retained for delta evidence. */
+export const PENNSYLVANIA_PRIOR_CATALOG_ROWS_UPDATED_AT = "2026-11-08T06:09:03Z";
 export const PENNSYLVANIA_TYPE = "PERSONAL CARE HOMES";
 export const PENNSYLVANIA_PROGRAM_OFFICE = "ADULT RESIDENTIAL FACILITY";
 
