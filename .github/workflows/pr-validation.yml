@@ -91,6 +91,9 @@ jobs:
       - name: Check password visibility toggle
         run: node --experimental-strip-types --test supabase/proposals/tests/password_visibility_toggle.ts
 
+      - name: Check password recovery callback handoff
+        run: node --experimental-strip-types --test supabase/proposals/tests/password_recovery_callback_handoff.ts
+
       - name: Check owner dashboard reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
 

@@ -75,11 +75,11 @@ export default function OwnerPage() {
           setPasswordProblem(problem);
           return;
         }
+        const emailRedirectTo = recoveryRedirectUrl();
+        if (!emailRedirectTo) throw new Error(copy.en.owner.errors.resetUnavailable);
         const { data, error: authError } = await supabase.auth.signUp({
           email: email.trim(), password,
-          options: { 
-emailRedirectTo: `${window.location.origin}/auth/callback`
- },
+          options: { emailRedirectTo },
         });
         if (authError) throw authError;
         if (data.session) {
