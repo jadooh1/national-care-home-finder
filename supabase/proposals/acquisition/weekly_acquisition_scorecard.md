@@ -50,22 +50,30 @@ Sitemap: submitted 2026-11-08; last success read 2026-11-12 — **do not re-subm
 
 ### C. Owner claims (admin ops)
 
-| Metric | This week | Month-to-date | 30-day target |
+**Production baseline (confirmed): 0 legitimate owner claims as of 2026-11-27.**  
+Report weekly deltas against that zero baseline. Detail sheet: `weekly_commercial_report.md`.
+
+| Metric | This week | Since 2026-11-27 | 30-day target |
 | --- | ---: | ---: | ---: |
-| New claims submitted | | | **10** / 30 days |
+| New claims submitted | | 0 start | **10** / 30 days |
 | Approved | | | |
 | Rejected | | | |
 | Pending (end of week) | | | |
 | Approved in Tier A counties | | | Prefer ≥4 of first 10 approvals |
 
-### D. Outreach execution (human)
+### D. Outreach funnel (see `prospect_funnel_tracker_batch1.csv`)
 
-| Metric | This week | Month-to-date | 30-day target |
-| --- | ---: | ---: | ---: |
-| Owner contacts attempted | | | **100** |
-| Family referral intros sent | | | (no fixed target; track) |
-| Social posts published (organic) | | | (batch-approved only) |
-| Batches awaiting approval | | | |
+Stages: **prepared → sent → delivered → responded → converted** (definitions in `prospect_funnel_definitions.md`).
+
+| Stage | This week Δ | Cumulative |
+| --- | ---: | ---: |
+| Prepared | | 100 |
+| Sent | | 0 |
+| Delivered | | 0 |
+| Responded | | 0 |
+| Converted (claims) | | 0 |
+| Family referral intros sent | | 0 |
+| Social posts published | | 0 (A/B1 queued/suspended) |
 
 ### E. Guardrails
 

@@ -1,6 +1,6 @@
-week_ending,owner_letters_sent_cum,owner_responses,owner_claims_started,owner_claims_verified,referral_intros_sent,social_posts_published_fb,social_posts_published_li,gsc_indexed,gsc_not_indexed,gsc_impressions_if_available,gsc_clicks_if_available,spend_usd_cum,notes
-2026-11-29,0,0,,,0,0,0,"277 (baseline 2026-11-22)","6013 (baseline)",,,0,"Phase1 PDFs ready unmailed; social A/B1 queued suspended; sitemap 6287 URLs public OK; GSC+claims ledger need human read — see monitoring_snapshot_2026-11-27.md"
-2026-12-06,,,,,,,,,,,,,
-2026-12-13,,,,,,,,,,,,,
-2026-12-20,,,,,,,,,,,,,
-2026-12-27,,,,,,,,,,,,,
+week_ending,prepared_cum,sent_cum,delivered_cum,responded_cum,converted_cum,owner_claims_submitted_cum,owner_claims_verified_cum,referral_intros_sent,social_posts_published_fb,social_posts_published_li,gsc_indexed,gsc_not_indexed,gsc_impressions_if_available,gsc_clicks_if_available,spend_usd_cum,notes
+2026-11-29,100,0,0,0,0,0,0,0,0,0,"277 (baseline 2026-11-22)","6013 (baseline)",,,0,"Claims baseline 0 as of 2026-11-27; Phase1 prepared unsent; P2/P3 held; social A/B1 suspended; see weekly_commercial_report.md"
+2026-12-06,,,,,,,,,,,,,,,
+2026-12-13,,,,,,,,,,,,,,,
+2026-12-20,,,,,,,,,,,,,,,
+2026-12-27,,,,,,,,,,,,,,,
