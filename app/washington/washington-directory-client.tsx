@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLanguage, usePageTitle } from "../../components/language";
 import { VisitorFeedback } from "../../components/visitor-feedback";
@@ -8,7 +8,20 @@ import { WashingtonPublicHeader } from "../../components/washington-public";
 import { WashingtonPrintComparison } from "../../components/washington-print-comparison";
 import { copy } from "../../lib/copy/washington-directory";
 import { supabase } from "../../lib/supabase";
-import { facilityProfilePath, washingtonCountySearchText, washingtonDirectoryPage, washingtonDirectoryRangeUnsatisfied, washingtonDirectorySearchPath, washingtonFacilityLink, washingtonLocationMatches, washingtonResultsPage, washingtonSearchText, washingtonVisitChecklistLink } from "../../lib/family-journey";
+import {
+  facilityProfilePath,
+  washingtonCountySearchText,
+  washingtonDirectoryHistoryMode,
+  washingtonDirectoryQueryFromLocation,
+  washingtonDirectoryRangeUnsatisfied,
+  washingtonDirectorySearchPath,
+  washingtonFacilityLink,
+  washingtonLocationMatches,
+  washingtonResultsPage,
+  washingtonSearchText,
+  washingtonVisitChecklistLink,
+  type WashingtonDirectoryQuery,
+} from "../../lib/family-journey";
 import { WASHINGTON_DSHS_LOCATOR, washingtonDisclosureUrl } from "../../lib/state-directory";
 import { addWashingtonShortlist, readWashingtonShortlist, removeWashingtonShortlist, washingtonShortlistItem, writeWashingtonShortlist, type WashingtonShortlistItem } from "../../lib/washington-shortlist";
 import {
@@ -59,16 +72,48 @@ export default function WashingtonDirectoryClient({
   const [error, setError] = useState(initialError ? "Unable to load listings. Please try again later." : "");
   const [filtersReady, setFiltersReady] = useState(true);
   const [shortlist, setShortlist] = useState<WashingtonShortlistItem[]>([]);
+  const queryRef = useRef<WashingtonDirectoryQuery>({
+    q: initialSearch,
+    city: initialCity,
+    county: initialCounty,
+    page: initialPage,
+  });
+
+  function applyDirectoryQuery(next: WashingtonDirectoryQuery) {
+    setSearch(next.q);
+    setCity(next.city);
+    setCounty(next.county);
+    setPage(next.page);
+  }
 
   useEffect(() => {
     try { setShortlist(readWashingtonShortlist(window.sessionStorage)); } catch { setShortlist([]); }
   }, []);
 
+  // Browser Back/Forward after page pushState: rehydrate filters from the URL.
+  useEffect(() => {
+    function onPopState() {
+      const next = washingtonDirectoryQueryFromLocation(
+        `${window.location.pathname}${window.location.search}`,
+      );
+      setLoading(true);
+      applyDirectoryQuery(next);
+    }
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
+
   useEffect(() => {
     if (!filtersReady) return;
-    const next = washingtonDirectorySearchPath({ q: search, city, county, page });
+    const nextQuery: WashingtonDirectoryQuery = { q: search, city, county, page };
+    const next = washingtonDirectorySearchPath(nextQuery);
     const current = `${window.location.pathname}${window.location.search}`;
-    if (!washingtonLocationMatches(current, next)) window.history.replaceState(null, "", next);
+    if (!washingtonLocationMatches(current, next)) {
+      const mode = washingtonDirectoryHistoryMode(queryRef.current, nextQuery);
+      if (mode === "push") window.history.pushState(null, "", next);
+      else window.history.replaceState(null, "", next);
+    }
+    queryRef.current = nextQuery;
   }, [filtersReady, search, city, county, page]);
 
   useEffect(() => {
@@ -107,8 +152,16 @@ export default function WashingtonDirectoryClient({
             }
           }
         }
-        setFacilities([]); setTotal(0);
-        setError("Unable to load listings. Please try again later.");
+        // Keep SSR/prior rows visible when a browser refetch fails.
+        setFacilities(prev => {
+          if (prev.length > 0) {
+            setError("");
+            return prev;
+          }
+          setTotal(0);
+          setError("Unable to load listings. Please try again later.");
+          return [];
+        });
         setLoading(false);
         return;
       }
@@ -129,6 +182,14 @@ export default function WashingtonDirectoryClient({
   const end = Math.min((page + 1) * PAGE_SIZE, total);
   const directoryPath = washingtonDirectorySearchPath({ q: search, city, county, page });
   function resetFilters() { setLoading(true); setSearch(""); setCity(""); setCounty(""); setPage(0); }
+  function goToDirectoryPage(nextPage: number, event: { preventDefault: () => void }) {
+    // Keep crawlable href for no-JS/crawlers, but do not let App Router soft-nav
+    // reuse this client with stale page state (loading stuck, no refetch).
+    event.preventDefault();
+    if (nextPage === page) return;
+    setLoading(true);
+    setPage(nextPage);
+  }
   function persistShortlist(next: WashingtonShortlistItem[]) {
     setShortlist(next);
     try { writeWashingtonShortlist(window.sessionStorage, next); } catch { /* The comparison stays on this page when storage is unavailable. */ }
@@ -346,7 +407,7 @@ export default function WashingtonDirectoryClient({
             ) : (
               <Link
                 href={washingtonDirectorySearchPath({ q: search, city, county, page: page - 1 })}
-                onClick={() => setLoading(true)}
+                onClick={event => goToDirectoryPage(page - 1, event)}
                 style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", color: C.navy, textDecoration: "none" }}
               >{t.previous}</Link>
             )}
@@ -356,7 +417,7 @@ export default function WashingtonDirectoryClient({
             ) : (
               <Link
                 href={washingtonDirectorySearchPath({ q: search, city, county, page: page + 1 })}
-                onClick={() => setLoading(true)}
+                onClick={event => goToDirectoryPage(page + 1, event)}
                 style={{ padding: "11px 17px", borderRadius: 9, border: `1px solid ${C.border}`, background: "white", color: C.navy, textDecoration: "none" }}
               >{t.next}</Link>
             )}
