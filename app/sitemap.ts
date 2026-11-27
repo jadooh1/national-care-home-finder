@@ -4,6 +4,18 @@ import { listIndexableLicenses, readSiteEnv, responseIndexingAllowed, sitemapUrl
 
 export const dynamic = "force-dynamic";
 
+function sitemapPriority(url: string): number {
+  try {
+    const path = new URL(url).pathname;
+    if (path === "/") return 1;
+    if (path === "/washington") return 0.9;
+    if (path.startsWith("/washington/") && !/^\/washington\/\d+$/.test(path)) return 0.8;
+    return 0.6;
+  } catch {
+    return 0.5;
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const h = await headers();
   const requestHost = h.get("x-forwarded-host") ?? h.get("host") ?? "";
@@ -12,5 +24,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
     publishableKey: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? "",
   });
-  return sitemapUrls(true, listed.ok ? listed.licenses : []).map(url => ({ url }));
+  return sitemapUrls(true, listed.ok ? listed.licenses : []).map(url => ({
+    url,
+    changeFrequency: "weekly" as const,
+    priority: sitemapPriority(url),
+  }));
 }
