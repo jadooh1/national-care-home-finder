@@ -85,6 +85,12 @@ jobs:
       - name: Check the Washington owner claim entry
         run: node --experimental-strip-types --test supabase/proposals/tests/washington_owner_claim_entry.ts
 
+      - name: Check Washington roster reconciliation evidence
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_roster_reconciliation.ts
+
+      - name: Check password visibility toggle
+        run: node --experimental-strip-types --test supabase/proposals/tests/password_visibility_toggle.ts
+
       - name: Check owner dashboard reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
 
