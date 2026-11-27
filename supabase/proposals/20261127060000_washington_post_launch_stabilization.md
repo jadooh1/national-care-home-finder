@@ -48,6 +48,13 @@ owners and families → marketing readiness (still unpaid / unapproved ads).
 | Error reporting (Sentry etc.) | Needs approval | Not in-repo today; do not add paid SaaS without approval |
 | Regression rule | All | Re-open S5/S6 only with concrete Auth/UI failure evidence |
 
+### 1b. Directory soft-navigation pagination (post-#245)
+
+| Action | Owner | Notes |
+| --- | --- | --- |
+| Fix Next/Prev soft-nav stuck on loading | Agent | Development PR: `20261127190000_washington_directory_softnav_pagination_fix.md` |
+| Production promotion of soft-nav fix | **Human approval** | Do not ship to `main` without separate approval |
+
 ### 2. SEO
 
 | Action | Owner | Notes |
