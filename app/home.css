@@ -51,6 +51,8 @@
 .home aside li::before {content:"✓";margin-right:8px;color:#007a54;font-weight:bold}
 .home aside a {display:block;text-align:center;background:#00794f;border-radius:24px}
 .home footer {justify-content:space-between;gap:20px;background:linear-gradient(160deg,#123f72,#082349);color:white;padding:25px 4%}
+.home footer .owner-cta {color:#b7e4d2;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.home footer .owner-cta:hover {color:white}
 .coverage {margin:0;padding:12px 4%;font-size:13px;color:#435569}
 @media(max-width:1040px){.home-header{flex-wrap:wrap}.home-header nav{order:3;width:100%;flex-wrap:wrap}.home-form{width:90%}.home-explore{grid-template-columns:1fr}.home aside{max-width:none}.state-grid{grid-template-columns:repeat(auto-fit,minmax(min(145px,100%),1fr))}}
 @media(max-width:680px){.home-header{gap:12px}.home-actions{gap:5px}.home .wa-lang button,.home .sign{font-size:13px;padding:8px 6px}.home-header details div{left:0}.home-hero{padding:0 5% 18px}.portrait{position:relative;inset:auto;height:auto;aspect-ratio:805/284;margin:0 -5.6% 18px;mask-image:none}.hero-intro{max-width:100%}.home-form{width:100%;grid-template-columns:1fr}.home-form button{min-height:44px}.home-explore{padding:22px 5%;gap:15px}.state-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.home footer{align-items:flex-start;flex-direction:column;gap:7px}.benefits{padding:0;background:none}.state-heading{align-items:flex-start}}

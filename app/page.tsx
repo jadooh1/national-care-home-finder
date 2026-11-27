@@ -85,7 +85,12 @@ export default function Home() {
           </aside>
         </section>
       </main>
-      <footer><strong>{t.brand}</strong><span>{t.footerLead}</span><small>{t.footerDisclaimer}</small></footer>
+      <footer>
+        <strong>{t.brand}</strong>
+        <span>{t.footerLead}</span>
+        <Link className="owner-cta" href="/owner?mode=login">{t.ownerCta}</Link>
+        <small>{t.footerDisclaimer}</small>
+      </footer>
       <p className="coverage">{es ? (oregonAvailable ? t.noteWithOregon : t.noteWithoutOregon) : (homepageDirectoryNote(oregonAvailable) ?? HOMEPAGE_DIRECTORY_NOTE)}</p>
     </div>
   );
