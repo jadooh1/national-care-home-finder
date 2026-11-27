@@ -86,7 +86,7 @@ test("recovery-session reset form remains gated; live toggle QA is documented as
 
 test("show/hide toggle does not change Design 2 routes or auth redirect surfaces", () => {
   for (const path of [
-    "app/washington/page.tsx",
+    "app/washington/washington-directory-client.tsx",
     "app/washington/map/page.tsx",
     "components/washington-public.tsx",
   ]) {

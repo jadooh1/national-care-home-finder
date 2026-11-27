@@ -105,5 +105,5 @@ test("the refresh module does not persist an audit row or draw a map", () => {
   assert.equal(source.includes("insert"), false);
   assert.equal(source.includes("fetch("), false);
   assert.equal(readFileSync("app/oregon/page.tsx", "utf8").includes("/washington/map"), false);
-  assert.equal(readFileSync("app/washington/page.tsx", "utf8").includes("WASHINGTON_DSHS_LOCATOR"), true);
+  assert.equal(readFileSync("app/washington/washington-directory-client.tsx", "utf8").includes("WASHINGTON_DSHS_LOCATOR"), true);
 });

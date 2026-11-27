@@ -26,7 +26,7 @@ const rollback = readFileSync(
   "utf8",
 );
 const home = readFileSync("lib/copy/home.ts", "utf8");
-const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
 const ownerEdits = readFileSync("app/owner/listing-edits/page.tsx", "utf8");
 const ownerTextGrants = readFileSync(
   "supabase/proposals/20261109140000_development_owner_text_grants.sql",

@@ -27,7 +27,7 @@ test("a facility listing opens the existing owner claim path for that license", 
   assert.equal(ownerSignInHref("1234567"), "/owner?mode=login&license=1234567");
   assert.equal(ownerClaimHref("12A"), "/owner/dashboard");
   assert.equal(ownerSignInHref(""), "/owner?mode=login");
-  const profile = readFileSync(new URL("../../../app/washington/[license]/page.tsx", import.meta.url), "utf8");
+  const profile = readFileSync(new URL("../../../app/washington/[license]/washington-facility-profile-client.tsx", import.meta.url), "utf8");
   assert.match(profile, /ownerClaimHref\(facility\.license_number\)/);
   assert.match(profile, /text\.claimReview/);
   assert.ok(profile.indexOf('id="details-heading"') < profile.indexOf('id="claim-heading"'));

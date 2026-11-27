@@ -97,8 +97,8 @@ test("freshness keeps the Washington download date and does not invent an Oregon
 
 test("pages use the shared directory contract and do not publish another state", () => {
   const home = readFileSync("app/page.tsx", "utf8");
-  const washingtonDirectory = readFileSync("app/washington/page.tsx", "utf8");
-  const washingtonProfile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+  const washingtonDirectory = readFileSync("app/washington/washington-directory-client.tsx", "utf8");
+  const washingtonProfile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
   const oregonDirectory = readFileSync("app/oregon/page.tsx", "utf8");
   const oregonProfile = readFileSync("app/oregon/[sourceId]/page.tsx", "utf8");
   assert.equal(home.includes("directoryHref"), true);

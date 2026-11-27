@@ -85,9 +85,9 @@ test("the selector is shared and washington pages stay free of oregon routes", (
   assert.equal(language.includes('aria-pressed'), true);
   assert.equal(language.includes("Español"), false);
   for (const path of [
-    "app/washington/page.tsx",
+    "app/washington/washington-directory-client.tsx",
     "app/washington/map/page.tsx",
-    "app/washington/[license]/page.tsx",
+    "app/washington/[license]/washington-facility-profile-client.tsx",
     "app/owner/dashboard/page.tsx",
   ]) {
     assert.equal(readFileSync(path, "utf8").includes("/oregon"), false, path);
