@@ -1,7 +1,8 @@
 # Community and referral channels — Washington (no spend)
 
-**Status:** Channel map for human outreach. Do **not** contact from this agent.  
-**Priority geography:** King, Snohomish, Pierce, Spokane, Clark, Thurston.
+**Status:** Batch 1 approved. Ready intros: `family_referral_intros_batch1.md` (≤6). Agent cannot send without mailbox auth.  
+**Priority geography:** King, Snohomish, Pierce, Spokane, Clark, Thurston.  
+**Deferred:** Nextdoor.
 
 ## Family referral channels
 
@@ -29,9 +30,9 @@
 
 | Channel | Content batch | Notes |
 | --- | --- | --- |
-| Facebook Page (organic) | `family_organic_social_batch1.md` Posts A–E | No boosts |
-| LinkedIn Page (organic) | Posts A, C, D | Professional tone |
-| Nextdoor (business, if claimed) | Post B city rotate | Local only; follow Nextdoor rules |
+| Facebook Page (organic) | `family_organic_social_batch1.md` Posts A–E | **Approved** — no boosts; human authenticate + publish |
+| LinkedIn Page (organic) | Posts A–E | **Approved** — no boosts; human authenticate + publish |
+| Nextdoor | — | **Deferred** (Batch 1) |
 | Google Business Profile (if/when created) | Link to `/washington` | Separate approval to create |
 
 ## Hand-off pack per Tier A county

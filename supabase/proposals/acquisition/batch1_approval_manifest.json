@@ -1,0 +1,13 @@
+{
+  "batch": 1,
+  "approved": true,
+  "phases": {
+    "1": 20,
+    "2": 30,
+    "3": 50
+  },
+  "phase1_send_gate": "physical_mail_pending_human_postage_print",
+  "disclaimer": "National Care Home Finder is an independent informational directory. It is not a government agency, is not affiliated with or endorsed by Washington DSHS or any other state agency, and does not place residents.",
+  "max_postage_print_budget_usd": 150,
+  "paid_ads": false
+}

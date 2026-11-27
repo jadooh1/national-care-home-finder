@@ -2,7 +2,9 @@
 
 **Cadence:** Record every Monday (or next business day).  
 **Sources:** Google Search Console (domain property `nationalcarehomefinder.com`); admin owner-claim ledger; outreach batch logs.  
-**Production GA:** remains **disabled** — do not substitute GA for this board.
+**Rollup CSV:** also update `weekly_acquisition_tracker.csv` with the same week’s numbers.  
+**Production GA:** remains **disabled** — do not substitute GA for this board.  
+**Budget:** postage + printing cumulative ≤ $150; no paid ads/boosts.
 
 ## 30-day working targets (subject to baseline validation)
 
