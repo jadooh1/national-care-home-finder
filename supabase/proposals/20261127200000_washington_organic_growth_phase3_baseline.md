@@ -22,32 +22,44 @@
 
 ## Measurable baseline (as of 2026-11-27)
 
-Sources: live production HTML/sitemap; prior GSC readiness docs; verified city/county market tables.
+Sources: live production HTML/sitemap; verified city/county market tables; **human-confirmed GSC** domain property + November 22 indexing snapshot.
 
 ### A. Google indexing
 
 | Metric | Baseline | How to measure | Owner |
 | --- | --- | --- | --- |
-| Sitemap URL count | **6,287** (`sitemap.xml`) | Fetch sitemap | Agent (spot) / GSC |
+| GSC property | **Domain property verified:** `nationalcarehomefinder.com` | GSC settings | Done (human) |
+| Sitemap in GSC | Submitted **2026-11-08**; last successfully read **2026-11-12** | GSC → Sitemaps | Done (human) |
+| Sitemap URL count (live) | **6,287** (`sitemap.xml`) | Fetch sitemap | Agent (spot) |
 | WA facility URLs in sitemap | **6,278** | Count `/washington/{license}` locs | Agent |
 | Public WA hubs in sitemap | `/washington`, `/map`, `/cities`, `/counties`, `/demographics`, `/opportunity` | Sitemap | Agent |
 | `robots.txt` | Allow `/`; disallow `/owner`, `/admin`, `/auth`, `/development`, `/oregon` | Live fetch | Agent |
-| GSC property verified | **Not confirmed in-app** (`google-site-verification` meta **absent**) | GSC UI | **Human** |
-| Sitemap submitted in GSC | Unknown until GSC connected | GSC → Sitemaps | **Human** |
-| Indexed page count | Unknown until GSC | GSC → Pages / Coverage | **Human** |
+| HTML-tag `google-site-verification` meta | May be **absent** | Page source | **Not a blocker** — domain property already verifies ownership |
 
-**Gate:** HTML-tag token → Vercel `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` → redeploy → Verify → submit  
-`https://www.nationalcarehomefinder.com/sitemap.xml` (see `20261127070000_washington_seo_gsc_organic_readiness.md`).
+**Do not** re-request GSC verification or re-submit the sitemap.
+
+#### Indexing progress baseline (GSC Pages — 2026-11-22)
+
+| Status | Count |
+| --- | ---: |
+| Indexed | **277** |
+| Not indexed (total) | **6,013** |
+| — Discovered, not indexed | 4,786 |
+| — Crawled, not indexed | 1,194 |
+| — Duplicate, Google chose different canonical | 30 |
+| — Redirect | 3 |
+
+**P0 measurement (replace setup):** track deltas vs this snapshot weekly in GSC Pages — especially Indexed ↑ and Discovered-not-indexed ↓ — after SEO Phase 2 SSR/crawlability and soft-nav pagination ships. Inspect sample URLs only when diagnosing regressions (hubs, priority city/county filters, one profile).
 
 ### B. Search visibility
 
 | Metric | Baseline | How to measure |
 | --- | --- | --- |
 | Brand / homepage discovery | Domain resolves; homepage titled for national + WA AFH framing | SERP / GSC Performance |
-| Query classes to track (unpaid) | `adult family home {city}`, `AFH {county} WA`, brand `national care home finder`, license lookups | GSC queries (after verify) |
-| Public web snippet check | Homepage appears for brand-adjacent retrieval; **no reliable city-intent ranking evidence yet** | Manual SERP (human) + GSC |
+| Query classes to track (unpaid) | `adult family home {city}`, `AFH {county} WA`, brand `national care home finder`, license lookups | GSC Performance queries |
+| Place-intent evidence | Sparse until more profiles/hubs index; prioritize impressions for priority city/county queries | GSC Performance |
 
-Until GSC is verified, treat visibility as **instrumentation-blocked**, not product-blocked.
+Visibility work is **not** blocked on verification — use the existing domain property.
 
 ### C. Priority city & county landings (existing functionality)
 
@@ -90,7 +102,7 @@ No separate `/washington/cities/{slug}` doorways. Priority landings are **existi
 | Browse / filter | Directory `q` / `city` / `county` / `page` | Soft-nav pagination fixed @ `187d907` |
 | Compare | Shortlist (≤3) on directory | Client session storage |
 | Decide | Profile `/washington/{license}` + DSHS disclosure links | 6,278 profiles in sitemap |
-| Measure | Production GA **off** | Use GSC landing pages after verify; no GA enablement |
+| Measure | Production GA **off** | GSC Performance / landing pages; no GA enablement |
 
 ### E. AFH owner acquisition → verified claims
 
@@ -110,10 +122,12 @@ Target outcome for Phase 3: **increase approved ownership claims** in priority m
 
 Prioritized for **real family users** and **owner → verified claim** conversion. No production code in this assessment.
 
-### P0 — Unblock measurement (human)
+### P0 — Measure indexing progress (human, weekly)
 
-1. Complete GSC verify + sitemap submit + inspect `/`, `/washington`, `/washington/cities`, `/washington/counties`, one priority city filter URL, one profile.
-2. Weekly ops: export GSC clicks/impressions; admin claim status counts by week.
+1. Record GSC Pages counts vs the **2026-11-22** baseline (Indexed / Discovered-not-indexed / Crawled-not-indexed / Duplicate canonical / Redirect).
+2. Export GSC Performance (clicks, impressions, top queries, top landing pages).
+3. Ops: weekly admin claim status counts (pending / approved / rejected), especially priority counties.
+4. **Do not** re-verify the domain property or re-submit the sitemap unless GSC shows a sitemap error.
 
 ### P1 — Attract families with existing place hubs (agent after approval of any copy/SEO change)
 
@@ -143,7 +157,7 @@ Prioritized for **real family users** and **owner → verified claim** conversio
 
 | Goal | Target | Evidence |
 | --- | --- | --- |
-| Indexing instrumentation | GSC verified + sitemap green | GSC screenshots / status |
+| Indexing progress | Indexed **> 277**; Discovered-not-indexed **< 4,786** vs 2026-11-22 | GSC Pages |
 | Place visibility | Impressions on ≥5 priority city/county queries | GSC Performance |
 | Family entry | Rising clicks to `/washington` + cities/counties hubs | GSC |
 | Owner conversion | MoM increase in **approved** claims (ops count) | Admin ledger |
