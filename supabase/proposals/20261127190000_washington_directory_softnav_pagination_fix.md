@@ -2,7 +2,7 @@
 
 ## Status
 
-**Development-only.** Resolves the Next/Prev soft-navigation defect recorded in PR #245
+**CLOSED — shipped & accepted** on production `main` @ `187d907` (PR #247). Originally resolved the Next/Prev soft-navigation defect recorded in PR #245
 (residual after production SEO Phase 2 / PR #244). Production promotion requires
 **separate approval**.
 
@@ -40,5 +40,5 @@ page index**. The fetch effect depends on local `page` and never re-ran, leaving
 
 ## Production
 
-Do **not** merge to `main` or deploy production without explicit human approval of this
+Shipped via PR #247 → `main` @ `187d907`. Historical note — do **not** re-merge; originally: do **not** merge to `main` or deploy production without explicit human approval of this
 correction PR after development validation.

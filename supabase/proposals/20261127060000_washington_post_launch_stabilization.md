@@ -47,7 +47,15 @@ owners and families → marketing readiness (still unpaid / unapproved ads).
 | Error reporting (Sentry etc.) | Needs approval | Not in-repo today; do not add paid SaaS without approval |
 | Regression rule | All | Re-open S5/S6 only with concrete Auth/UI failure evidence |
 
-### 1b. Directory soft-navigation pagination (post-#245)
+### 1b. Directory soft-navigation pagination (post-#245) — CLOSED
+
+Shipped & accepted on production `main` @ `187d907` (PR #247). Clear-filters residual: do not pursue unless reproducible.
+
+### 1c. Organic growth Phase 3 baseline
+
+See `20261127200000_washington_organic_growth_phase3_baseline.md`.
+
+### 1b. Directory soft-navigation pagination (post-#245) (historical)
 
 | Action | Owner | Notes |
 | --- | --- | --- |
