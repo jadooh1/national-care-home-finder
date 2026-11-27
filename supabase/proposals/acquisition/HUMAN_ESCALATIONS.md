@@ -1,33 +1,37 @@
 # Batch 1 — human actions required
 
-Agent materials are ready. These steps need a human (mail, auth, or payment).
+Agent materials for Phase 1 are ready. Remaining blockers are mail, payment, and social authentication.
 
-## 1. Print & mail Phase 1 (20 letters) — do this first
+## 1. Print & mail Phase 1 (20) — print PDFs ready
 
-- Letters: `letters_phase1/WA-OWN-001.txt` … `WA-OWN-020.txt`
-- Addresses: `owner_outreach_phase1_20.csv` columns `to_business_name`, `to_address_line`
-- Budget: include cost toward the **$150** postage + printing ceiling
-- Log actual spend and mail date in `execution_log_batch1.csv`
+- **Letters PDF:** [batch1_phase1_letters_20.pdf](https://github.com/jadooh1/national-care-home-finder/raw/cursor/wa-acquisition-execution-prep-5a8c/supabase/proposals/acquisition/print/batch1_phase1_letters_20.pdf)
+- **Mailing labels (Avery 5160):** [batch1_phase1_mailing_labels.pdf](https://github.com/jadooh1/national-care-home-finder/raw/cursor/wa-acquisition-execution-prep-5a8c/supabase/proposals/acquisition/print/batch1_phase1_mailing_labels.pdf)
+- Details: `print/README.md`
+- Budget: count spend toward **$150** postage + printing ceiling
+- Log spend + mail date in `execution_log_batch1.csv`
 
 **Hold Phase 2 (30) and Phase 3 (50)** until response review of the prior phase is recorded.
 
-## 2. Facebook + LinkedIn (organic only)
+## 2. Facebook + LinkedIn authentication (required to publish)
 
-- Copy: `family_organic_social_batch1.md` — Posts A–E
-- Authenticate Page accounts, then publish Post A (Week 1), then B–E per schedule in `batch1_execution_plan.md`
-- **No** boosts, paid ads, or Nextdoor (deferred)
+No usable Page session or API token is available to this agent. Public lookup did not surface a discoverable National Care Home Finder Facebook/LinkedIn Page URL from this environment.
 
-## 3. Family referral intros (≤6)
+**Please authenticate** (one of):
+1. Log into the existing Facebook Page + LinkedIn Company Page in a session this agent can use, **or**
+2. Add Page access so a human can paste/publish Post A from `family_organic_social_batch1.md` / `social_publish_queue_batch1.md`
 
-- Copy: `family_referral_intros_batch1.md`
-- Send from a real mailbox when ADRC/AAA or similar contacts are available
-- Log each send in `execution_log_batch1.csv`
+Then publish **Post A** (Week 1) organically on both channels — **no boosts**. Nextdoor remains deferred.
+
+## 3. Family referral intros (≤6) — contacts identified
+
+Public org contacts: `family_referral_contacts_batch1.md`  
+Approved copy: `family_referral_intros_batch1.md`  
+Send from a real mailbox; log each send.
 
 ## 4. Weekly tracking
 
-- Fill `weekly_acquisition_scorecard.md` and `weekly_acquisition_tracker.csv`
-- Track: letters sent, responses, legitimate claims, organic GSC indexing/performance, spend
+Fill `weekly_acquisition_scorecard.md` and `weekly_acquisition_tracker.csv`.
 
-## Not in scope for Batch 1
+## Not in scope
 
-Production code, GA enablement, billing, other-state publication, paid advertising, list purchases, Nextdoor.
+Production code, GA, billing, other-state publication, paid advertising, list purchases, Nextdoor, mailing the remaining 80 letters.

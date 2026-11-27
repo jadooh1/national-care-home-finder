@@ -32,6 +32,9 @@
 | `owner_outreach_batch1_preview.md` | Sample letter preview |
 | `family_organic_social_batch1.md` | Posts A–E (Facebook + LinkedIn) |
 | `family_referral_intros_batch1.md` | Up to 6 referral introductions |
+| `family_referral_contacts_batch1.md` | Legitimate public org emails/phones for intros |
+| `social_publish_queue_batch1.md` | Post A ready-to-publish; auth status |
+| `print/` | Phase 1 letters PDF + Avery 5160 labels |
 | `community_referral_channels.md` | Broader channel map (Nextdoor deferred) |
 
 ## Letter compliance

@@ -1,6 +1,7 @@
 # Family referral introductions — Batch 1 (up to 6, APPROVED)
 
 **Status:** Approved for human send (≤6). Agent cannot send without email credentials.  
+**Public org contacts (identified):** `family_referral_contacts_batch1.md`  
 **Tone:** Resource share only. Independent directory disclaimer required.
 
 **Independence line:**  
@@ -10,7 +11,7 @@ National Care Home Finder is an independent informational directory. It is not a
 
 ## Intro 1 — King County ADRC / AAA
 
-**To:** King County Aging and Disability resources / ADRC contact (human selects address)  
+**To:** info@communitylivingconnections.org (primary); aginginfo@seattle.gov (AAA secondary)  
 **Subject:** Free Washington adult family home directory for families
 
 We maintain a free public directory of licensed Washington adult family homes (6,278 listings) that families can filter by city or county, compare on a short shortlist, and open with links to official DSHS resources.
@@ -25,6 +26,7 @@ National Care Home Finder is an independent informational directory. It is not a
 
 ## Intro 2 — Pierce County / Tacoma discharge or senior services
 
+**To:** ADRC@piercecountywa.gov  
 **Subject:** Tacoma / Pierce County adult family home directory (free)
 
 For families researching licensed adult family homes in Tacoma and Pierce County:
@@ -41,6 +43,7 @@ National Care Home Finder is an independent informational directory. It is not a
 
 ## Intro 3 — Snohomish County (Lynnwood / Everett)
 
+**To:** seniorinfo@homage.org (primary); ltca.referrals@snoco.org (AAA secondary)  
 **Subject:** Snohomish County AFH directory links for families
 
 Snohomish County: https://www.nationalcarehomefinder.com/washington?county=Snohomish  
@@ -55,6 +58,7 @@ National Care Home Finder is an independent informational directory. It is not a
 
 ## Intro 4 — Spokane County / Spokane Valley
 
+**To:** action@altcew.org  
 **Subject:** Spokane-area adult family home directory (free)
 
 Spokane: https://www.nationalcarehomefinder.com/washington?city=Spokane&county=Spokane  
@@ -67,6 +71,7 @@ National Care Home Finder is an independent informational directory. It is not a
 
 ## Intro 5 — Clark County / Vancouver
 
+**To:** ClarkADRC@dshs.wa.gov  
 **Subject:** Vancouver / Clark County adult family home directory
 
 Vancouver: https://www.nationalcarehomefinder.com/washington?city=Vancouver&county=Clark  
@@ -79,6 +84,7 @@ National Care Home Finder is an independent informational directory. It is not a
 
 ## Intro 6 — Thurston County (Olympia / Lacey) or statewide caregiver group
 
+**To:** lmtfcspintake@dshs.wa.gov (FCSP intake) or LMTAAA Thurston ADRC 360-664-2168 x992 / https://lmtaaa.org/contact  
 **Subject:** Thurston County / statewide AFH directory resource
 
 Thurston County: https://www.nationalcarehomefinder.com/washington?county=Thurston  
