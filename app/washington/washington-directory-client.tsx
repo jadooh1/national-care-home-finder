@@ -152,7 +152,8 @@ export default function WashingtonDirectoryClient({
             }
           }
         }
-        // Keep SSR/prior rows visible when a browser refetch fails.
+        // Keep SSR/prior rows visible when a browser refetch fails. Clearing them
+        // hid crawlable HTML behind an empty error state after hydration.
         setFacilities(prev => {
           if (prev.length > 0) {
             setError("");

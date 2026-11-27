@@ -53,7 +53,8 @@ test("filter edits reset pagination and in-flight directory requests cannot over
   assert.match(directory, /if \(cancelled\) return/);
   assert.match(directory, /return \(\) => \{ cancelled = true; clearTimeout\(timer\); \}/);
   assert.match(directory, /if \(queryError\)/);
-  // Failed browser refetch must keep prior/SSR rows instead of wiping the list.
+  // Failed browser refetches must keep SSR/prior rows instead of wiping them.
   assert.match(directory, /setFacilities\(prev => \{/);
   assert.match(directory, /if \(prev\.length > 0\)/);
+  assert.match(directory, /setError\("Unable to load listings\. Please try again later\."\)/);
 });
