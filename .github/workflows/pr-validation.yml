@@ -100,6 +100,12 @@ jobs:
       - name: Check Washington SEO GSC organic readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/washington_seo_gsc_organic_readiness.ts
 
+      - name: Check Washington SEO Phase 2 crawlability
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_seo_phase2_crawlability.ts
+
+      - name: Check Washington SEO Phase 2 SSR HTML
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_seo_phase2_ssr_html.ts
+
       - name: Check owner dashboard reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
 

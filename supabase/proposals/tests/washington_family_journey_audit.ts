@@ -9,7 +9,7 @@ import { createContext, runInContext } from "node:vm";
 import type { WashingtonShortlistItem } from "../../../lib/washington-shortlist.ts";
 
 const component = readFileSync(new URL("../../../components/washington-print-comparison.tsx", import.meta.url), "utf8");
-const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
+const directory = readFileSync(new URL("../../../app/washington/washington-directory-client.tsx", import.meta.url), "utf8");
 
 function comparisonAddress(item: WashingtonShortlistItem, t: { missing: string }): string {
   const start = component.indexOf("export function comparisonAddress");

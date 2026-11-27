@@ -105,10 +105,10 @@ test("the directory comparison keeps search context and official links only", ()
   assert.equal(copy.es.vacanciesNotShown, "No se muestran");
   assert.equal(copy.en.verified, "Independently verified listing");
   assert.equal(copy.es.unverified, "Coincidencia del número de licencia de DSHS — no verificado de forma independiente");
-  const directory = readFileSync("app/washington/page.tsx", "utf8");
+  const directory = readFileSync("app/washington/washington-directory-client.tsx", "utf8");
   const shortlist = readFileSync("lib/washington-shortlist.ts", "utf8");
   const home = readFileSync("lib/copy/home.ts", "utf8");
-  const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+  const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
   assert.match(directory, /addWashingtonShortlist/);
   assert.match(directory, /removeWashingtonShortlist/);
   assert.match(directory, /writeWashingtonShortlist\(window\.sessionStorage/);

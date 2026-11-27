@@ -3,10 +3,13 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { directoryContract } from "../../../lib/state-directory.ts";
 
-const cities = readFileSync(new URL("../../../app/washington/cities/page.tsx", import.meta.url), "utf8");
-const counties = readFileSync(new URL("../../../app/washington/counties/page.tsx", import.meta.url), "utf8");
+const cities = readFileSync(new URL("../../../app/washington/cities/washington-cities-client.tsx", import.meta.url), "utf8");
+const citiesPage = readFileSync(new URL("../../../app/washington/cities/page.tsx", import.meta.url), "utf8");
+const counties = readFileSync(new URL("../../../app/washington/counties/washington-counties-client.tsx", import.meta.url), "utf8");
+const countiesPage = readFileSync(new URL("../../../app/washington/counties/page.tsx", import.meta.url), "utf8");
 const demographics = readFileSync(new URL("../../../app/washington/demographics/page.tsx", import.meta.url), "utf8");
-const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
+const directory = readFileSync(new URL("../../../app/washington/washington-directory-client.tsx", import.meta.url), "utf8");
+const directoryPage = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
 const map = readFileSync(new URL("../../../app/washington/map/page.tsx", import.meta.url), "utf8");
 const dashboard = readFileSync(new URL("../../../app/owner/dashboard/page.tsx", import.meta.url), "utf8");
 const detailCopy = readFileSync(new URL("../../../lib/copy/washington-detail.ts", import.meta.url), "utf8");
@@ -62,10 +65,13 @@ test("the county page attributes summaries to stored geographic text", () => {
 });
 
 test("completed search and owner safeguards remain in place", () => {
-  assert.match(directory, /params\.get\("q"\)/);
-  assert.match(directory, /params\.get\("city"\)/);
-  assert.match(directory, /params\.get\("county"\)/);
+  assert.match(directoryPage, /washingtonSearchText\(params\.q\)/);
+  assert.match(directoryPage, /washingtonSearchText\(params\.city\)/);
+  assert.match(directoryPage, /washingtonCountySearchText\(params\.county\)/);
+  assert.match(directoryPage, /loadWashingtonDirectorySlice/);
   assert.match(directory, /\.from\("wa_dshs_listed_facilities"\)/);
+  assert.match(citiesPage, /loadWashingtonCityMarketSummaries/);
+  assert.match(countiesPage, /loadWashingtonCountyMarketSummaries/);
   assert.match(map, /washingtonZipFromSearch/);
   assert.match(dashboard, /reduceFacilitySearch\(/);
   assert.match(dashboard, /claimSubmitGate\(/);

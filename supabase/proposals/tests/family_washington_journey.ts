@@ -109,7 +109,7 @@ test("map and demographics navigation keeps a valid ZIP query", () => {
   assert.equal(map.includes("history.replaceState"), true);
   assert.equal(demographics.includes("washingtonZipSearchPath"), true);
   assert.equal(demographics.includes("history.replaceState"), true);
-  const directory = readFileSync("app/washington/page.tsx", "utf8");
+  const directory = readFileSync("app/washington/washington-directory-client.tsx", "utf8");
   assert.equal(directory.includes("washingtonDirectorySearchPath"), true);
   assert.equal(directory.includes("washingtonDirectoryPage"), true);
   assert.equal(directory.includes("washingtonFacilityLink"), true);
@@ -152,7 +152,7 @@ test("recorded capacity is not labeled as current residents or unavailable beds"
   assert.equal(washingtonDetailCopy.en.map.capacityComplete.includes("Not available beds"), false);
   assert.equal(washingtonDetailCopy.en.profile.capacityValue(6).includes("residents"), false);
   assert.equal(washingtonDetailCopy.es.profile.capacityValue(6).includes("residentes"), false);
-  const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+  const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
   assert.equal(profile.includes("recordedCapacityText"), true);
 });
 
@@ -179,7 +179,7 @@ test("directory and ZIP searches keep the visible query in the address", () => {
   assert.equal(washingtonDirectoryReturnPath("/washington/100001"), null);
   assert.equal(washingtonFacilityLink("/washington/100001", "/washington?city=Seattle&page=2"), "/washington/100001?from=%2Fwashington%3Fcity%3DSeattle%26page%3D2");
   assert.equal(washingtonDirectoryReturnPath(decodeURIComponent("%2Fwashington%3Fcity%3DSeattle%26page%3D2")), "/washington?city=Seattle&page=2");
-  const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+  const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
   assert.equal(profile.includes("washingtonDirectoryReturnPath"), true);
   assert.equal(profile.includes('href="/washington"'), false);
   assert.equal(washingtonLocationMatches("/washington?city=Yakima&county=Yakima", washingtonDirectorySearchPath({ city: "Yakima", county: "Yakima" })), true);
