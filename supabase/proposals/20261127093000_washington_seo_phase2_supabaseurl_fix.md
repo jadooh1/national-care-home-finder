@@ -24,6 +24,7 @@ The same Preview threw `Uncaught Error: supabaseUrl is required` from `lib/supab
 
 1. Harden `lib/supabase.ts` so missing/invalid public env yields a non-routable placeholder client instead of throwing during import.
 2. Add regression tests that use a realistic development URL shape and publishable-key shape (not live credentials), and that prove hardcoded host constants are not treated as env proof.
+3. Keep **direct** `process.env.NEXT_PUBLIC_SUPABASE_URL` / `PUBLISHABLE_KEY` reads at module scope so Next.js can inline them into client bundles. Reading `source.NEXT_PUBLIC_*` from a `process.env` default parameter is not inlined; the browser then saw empty values, used `ci.invalid`, and wiped SSR listings after hydration.
 
 ## Configuration approval still required
 
