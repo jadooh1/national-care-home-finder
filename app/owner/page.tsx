@@ -4,6 +4,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LanguageSelector, useLanguage, usePageTitle } from "../../components/language";
+import { PasswordField } from "../../components/password-field";
 import { copy, localizedAuthServerMessage } from "../../lib/copy/account";
 import { browserClaimStorage, claimLicenseQuery, ownerClaimHref, readClaimLicense, writeClaimLicense } from "../../lib/owner-claim";
 import { localizedPasswordProblem } from "../../lib/locale";
@@ -38,8 +39,17 @@ export default function OwnerPage() {
 
   useEffect(() => {
     let active = true;
+    const params = new URLSearchParams(window.location.search);
+    const requested = (params.get("mode") || params.get("tab") || "").trim().toLowerCase();
+    if (requested === "login" || requested === "signin" || requested === "sign-in" || requested === "sign_in") {
+      setMode("login");
+    } else if (requested === "recover" || requested === "reset" || requested === "forgot") {
+      setMode("recover");
+    } else if (requested === "register" || requested === "signup" || requested === "sign-up" || requested === "create") {
+      setMode("register");
+    }
     const storage = browserClaimStorage();
-    const license = claimLicenseQuery(new URLSearchParams(window.location.search).get("license"));
+    const license = claimLicenseQuery(params.get("license"));
     if (storage && license) writeClaimLicense(storage, license);
     const destination = ownerClaimHref(license ?? (storage ? readClaimLicense(storage) : null));
     supabase.auth.getUser().then(({ data }) => {
@@ -121,11 +131,21 @@ emailRedirectTo: `${window.location.origin}/auth/callback`
         <form onSubmit={submit}>
           <label htmlFor="owner-email">{text.email}</label>
           <input id="owner-email" type="email" autoComplete="email" required value={email} onChange={e => setEmail(e.target.value)} style={field} />
-          {mode !== "recover" && <>
-            <label htmlFor="owner-password" style={{ display: "block", marginTop: 20 }}>{text.password}</label>
-            <input id="owner-password" type="password" autoComplete={mode === "register" ? "new-password" : "current-password"} minLength={mode === "register" ? 12 : 6} maxLength={mode === "register" ? 72 : undefined} required value={password} onChange={e => setPassword(e.target.value)} style={field} />
-            {mode === "register" && <p style={{ margin: "8px 0 0", color: "#536b7c", lineHeight: 1.5 }}>{text.passwordHelp}</p>}
-          </>}
+          {mode !== "recover" && (
+            <PasswordField
+              id="owner-password"
+              label={text.password}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              autoComplete={mode === "register" ? "new-password" : "current-password"}
+              minLength={mode === "register" ? 12 : 6}
+              maxLength={mode === "register" ? 72 : undefined}
+              help={mode === "register" ? text.passwordHelp : undefined}
+              visibility={{ show: text.showPassword, hide: text.hidePassword }}
+              labelStyle={{ display: "block", marginTop: 20 }}
+              inputStyle={field}
+            />
+          )}
           {mode === "login" && <button type="button" onClick={() => { setMode("recover"); setPassword(""); clearMessages(); }} style={{ marginTop: 14, border: 0, background: "transparent", color: "#176b53", cursor: "pointer", padding: 0 }}>{text.forgot}</button>}
           {mode === "recover" && <p style={{ lineHeight: 1.6 }}>{text.recoverHelp}</p>}
           {errorText && <p role="alert" style={{ color: "#af2424" }}>{errorText}</p>}
