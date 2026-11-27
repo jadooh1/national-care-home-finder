@@ -37,3 +37,8 @@ Escalate for human approval (no values in chat):
 - Scope: **Preview** (and **Development** if used for `vercel dev`). Do not change Production values or the production Supabase project.
 
 After those Preview env values are confirmed present, rebuild the corrective Preview and re-run checks 1–10 including initial HTML without JavaScript.
+
+## Post-release follow-up (accepted residual)
+
+Intermittent soft-navigation regression on Washington directory **Previous** pagination:
+after clicking Prev from `?page=2`, the client can remain on “Loading listings…” without issuing a Supabase request until a hard reload. SSR for `/washington` remains correct. Accepted for production ship; schedule a post-release client navigation fix. Do not treat as a launch blocker.

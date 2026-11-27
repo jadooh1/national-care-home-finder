@@ -86,3 +86,23 @@ DNS TXT on `nationalcarehomefinder.com` — also human-only; no app change requi
 - Paid advertising
 - Production GA4 enablement
 - Publishing additional states
+
+## Production verification (2026-11-27)
+
+Shipped via PR #239 squash-merge → `main` @ `07f9c80`. Vercel production status **success**.
+
+| Check | Live result |
+| --- | --- |
+| Favicon | `rel="icon"` → `/home/mark.webp` (HTTP 200, image/webp) |
+| Open Graph / Twitter | Present on `/`, `/washington`, `/washington/100702` with `/home/washington.webp` |
+| Canonical | www host on homepage, directory, and sample profile |
+| Sitemap | 6,287 URLs; weekly changefreq; priorities 1.0 / 0.9 / 0.8 / 0.6; **6,278** WA profiles |
+| Robots | Sitemap line present; private prefixes disallowed |
+| GSC meta hook | Absent until `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` is set (expected) |
+| Owner CTA EN | Footer → `/owner?mode=login` |
+| Owner CTA ES | With `nchf-language=es`: Propietarios — inicie sesión o reclame su listado |
+| Production GA | No gtag / measurement scripts |
+| Design 2 | `home-hero` / brand mark preserved |
+
+Google Search Console ownership and sitemap submission remain **human-only**.
+
