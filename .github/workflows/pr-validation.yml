@@ -104,6 +104,12 @@ jobs:
       - name: Check Washington SEO GSC organic readiness
         run: node --experimental-strip-types --test supabase/proposals/tests/washington_seo_gsc_organic_readiness.ts
 
+      - name: Check Washington post-launch stabilization
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_post_launch_stabilization.ts
+
+      - name: Check Washington organic growth continuation
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_organic_growth_continuation.ts
+
       - name: Check owner dashboard reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
 
