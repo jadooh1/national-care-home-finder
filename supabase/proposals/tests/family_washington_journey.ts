@@ -111,10 +111,12 @@ test("map and demographics navigation keeps a valid ZIP query", () => {
   assert.equal(demographics.includes("history.replaceState"), true);
   const directory = readFileSync("app/washington/washington-directory-client.tsx", "utf8");
   assert.equal(directory.includes("washingtonDirectorySearchPath"), true);
-  assert.equal(directory.includes("washingtonDirectoryPage"), true);
+  assert.equal(directory.includes("washingtonDirectoryQueryFromLocation"), true);
+  assert.equal(directory.includes("washingtonDirectoryHistoryMode"), true);
   assert.equal(directory.includes("washingtonFacilityLink"), true);
   assert.equal(directory.includes("washingtonCountySearchText"), true);
   assert.equal(directory.includes("history.replaceState"), true);
+  assert.equal(directory.includes("history.pushState"), true);
   assert.equal(directory.includes("t.loadingListings"), true);
   assert.equal(directory.includes("t.noMatches"), true);
   assert.equal(directory.includes("t.loadError"), true);

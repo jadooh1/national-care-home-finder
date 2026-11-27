@@ -150,6 +150,43 @@ export function washingtonLocationMatches(currentPathAndSearch: string, nextPath
   return current.pathname === next.pathname && current.searchParams.toString() === next.searchParams.toString();
 }
 
+export type WashingtonDirectoryQuery = {
+  q: string;
+  city: string;
+  county: string;
+  page: number;
+};
+
+/** Parse directory filters/page from a path+search string or querystring. */
+export function washingtonDirectoryQueryFromLocation(pathAndSearch: string): WashingtonDirectoryQuery {
+  const url = new URL(pathAndSearch, "https://example.test");
+  return {
+    q: washingtonSearchText(url.searchParams.get("q")),
+    city: washingtonSearchText(url.searchParams.get("city")),
+    county: washingtonCountySearchText(url.searchParams.get("county")),
+    page: washingtonDirectoryPage(url.searchParams.get("page")),
+  };
+}
+
+/**
+ * Page-only changes push history so browser Back/Forward can restore pages.
+ * Filter/search edits replace so typing does not spam the session history.
+ */
+export function washingtonDirectoryHistoryMode(
+  previous: WashingtonDirectoryQuery,
+  next: WashingtonDirectoryQuery,
+): "push" | "replace" {
+  if (
+    previous.q === next.q &&
+    previous.city === next.city &&
+    previous.county === next.county &&
+    previous.page !== next.page
+  ) {
+    return "push";
+  }
+  return "replace";
+}
+
 export function washingtonMapZipMatch(storedPostalCode: string | null | undefined, searchZip: string): boolean {
   if (!FIVE_DIGIT_ZIP.test(searchZip)) return false;
   const stored = storedPostalCode?.trim() ?? "";
