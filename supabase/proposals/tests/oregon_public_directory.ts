@@ -199,7 +199,7 @@ test("production oregon layout fail-closes and does not call the administrator f
   assert.equal(OREGON_FRESHNESS_NOTE.includes("not a live"), true);
   assert.equal(pages.includes("recorded licensed capacity"), false);
   assert.equal(pages.includes("available beds"), false);
-  for (const path of ["app/washington/page.tsx", "app/washington/map/page.tsx", "app/washington/[license]/page.tsx", "app/owner/dashboard/page.tsx"]) {
+  for (const path of ["app/washington/washington-directory-client.tsx", "app/washington/map/page.tsx", "app/washington/[license]/washington-facility-profile-client.tsx", "app/owner/dashboard/page.tsx"]) {
     const source = readFileSync(path, "utf8");
     assert.equal(source.includes(OREGON_PUBLIC_VIEW), false, path);
     assert.equal(source.includes("/oregon"), false, path);

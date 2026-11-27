@@ -4,7 +4,7 @@ import test from "node:test";
 import { washingtonShortlistItem, addWashingtonShortlist } from "../../../lib/washington-shortlist.ts";
 
 const component = readFileSync(new URL("../../../components/washington-print-comparison.tsx", import.meta.url), "utf8");
-const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
+const directory = readFileSync(new URL("../../../app/washington/washington-directory-client.tsx", import.meta.url), "utf8");
 
 test("print comparison is wired to the existing shortlist, with no separate database access", () => {
   assert.match(directory, /<WashingtonPrintComparison items=\{shortlist\} locale=\{locale\}/);

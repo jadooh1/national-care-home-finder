@@ -38,8 +38,8 @@ test("a comparison opens the same visit checklist and keeps the search", () => {
   assert.match(detailCopy.en.profile.printReminder, /not verified facts/);
   assert.match(detailCopy.es.profile.printReminder, /DSHS de Washington/);
   assert.match(detailCopy.es.profile.printReminder, /no son datos verificados/);
-  const directory = readFileSync("app/washington/page.tsx", "utf8");
-  const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+  const directory = readFileSync("app/washington/washington-directory-client.tsx", "utf8");
+  const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
   const home = readFileSync("lib/copy/home.ts", "utf8");
   assert.match(directory, /washingtonVisitChecklistLink\(profile, directoryPath\)/);
   assert.match(directory, /scroll=\{false\}/);

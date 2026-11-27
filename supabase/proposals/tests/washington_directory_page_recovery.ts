@@ -9,8 +9,8 @@ import {
   washingtonResultsPage,
 } from "../../../lib/family-journey.ts";
 
-const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
-const facility = readFileSync(new URL("../../../app/washington/[license]/page.tsx", import.meta.url), "utf8");
+const directory = readFileSync(new URL("../../../app/washington/washington-directory-client.tsx", import.meta.url), "utf8");
+const facility = readFileSync(new URL("../../../app/washington/[license]/washington-facility-profile-client.tsx", import.meta.url), "utf8");
 const copy = readFileSync(new URL("../../../lib/copy/washington-directory.ts", import.meta.url), "utf8");
 
 test("a page past the last result page keeps the filters and moves to the last real page", () => {

@@ -13,7 +13,7 @@ import {
 import { PREMIUM_OWNER_CONTENT_VIEW } from "../../../lib/premium-owner-content.ts";
 
 const ownerEdits = readFileSync("app/owner/listing-edits/page.tsx", "utf8");
-const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
 const adminEdits = readFileSync("app/admin/listing-edits/page.tsx", "utf8");
 const helper = readFileSync("lib/premium-option-a.ts", "utf8");
 const copy = readFileSync("lib/copy/account.ts", "utf8");

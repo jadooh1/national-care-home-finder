@@ -31,8 +31,8 @@ test("contact opens the official DSHS record and leaves the directory query unch
     washingtonDisclosureUrl("100001"),
     "https://fortress.wa.gov/dshs/adsaapps/lookup/AFHServices.aspx?ref=adv&Lic=100001",
   );
-  const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
-  const directory = readFileSync("app/washington/page.tsx", "utf8");
+  const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
+  const directory = readFileSync("app/washington/washington-directory-client.tsx", "utf8");
   const home = readFileSync("lib/copy/home.ts", "utf8");
   assert.match(profile, /text\.visitQuestions/);
   assert.match(profile, /text\.contactAbsent/);
@@ -42,7 +42,9 @@ test("contact opens the official DSHS record and leaves the directory query unch
   assert.ok(profile.indexOf('id="visit-heading"') < profile.indexOf('id="claim-heading"'));
   assert.match(profile, /PREMIUM_OWNER_CONTENT_VIEW/);
   assert.doesNotMatch(profile, /public_phone|telephone|email_address|website/);
-  assert.match(profile, /canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status/);
+  const roster = readFileSync("lib/washington-public-roster.ts", "utf8");
+  assert.match(roster, /canonical_name,address_line1,city,county,state_code,postal_code,license_number,licensed_capacity,record_status/);
+  assert.match(profile, /initialFacility/);
   assert.match(directory, /addWashingtonShortlist/);
   assert.match(directory, /washingtonFacilityLink/);
   assert.match(home, /Find the right care home for your loved one/);

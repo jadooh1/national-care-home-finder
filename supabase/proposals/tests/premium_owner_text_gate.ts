@@ -11,7 +11,7 @@ const rollback = readFileSync(
   "supabase/proposals/20261113200000_premium_owner_text_gate_ROLLBACK.sql",
   "utf8",
 );
-const profile = readFileSync("app/washington/[license]/page.tsx", "utf8");
+const profile = readFileSync("app/washington/[license]/washington-facility-profile-client.tsx", "utf8");
 
 test("the facility page reads only the premium view and clears a failed read", () => {
   assert.equal(PREMIUM_OWNER_CONTENT_VIEW, "wa_afh_premium_owner_content");

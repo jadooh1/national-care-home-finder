@@ -10,7 +10,7 @@ import {
   washingtonLocationMatches,
 } from "../../../lib/family-journey.ts";
 
-const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
+const directory = readFileSync(new URL("../../../app/washington/washington-directory-client.tsx", import.meta.url), "utf8");
 
 test("search terms strip query syntax before reaching the PostgREST or filter", () => {
   assert.equal(washingtonSearchText("  Seattle, (WA)%_*'  "), "Seattle WA");
@@ -53,5 +53,8 @@ test("filter edits reset pagination and in-flight directory requests cannot over
   assert.match(directory, /if \(cancelled\) return/);
   assert.match(directory, /return \(\) => \{ cancelled = true; clearTimeout\(timer\); \}/);
   assert.match(directory, /if \(queryError\)/);
-  assert.match(directory, /setFacilities\(\[\]\); setTotal\(0\)/);
+  // Failed browser refetches must keep SSR/prior rows instead of wiping them.
+  assert.match(directory, /setFacilities\(prev => \{/);
+  assert.match(directory, /if \(prev\.length > 0\)/);
+  assert.match(directory, /setError\("Unable to load listings\. Please try again later\."\)/);
 });
