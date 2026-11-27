@@ -163,6 +163,11 @@ Prioritized for **real family users** and **owner → verified claim** conversio
 | Owner conversion | MoM increase in **approved** claims (ops count) | Admin ledger |
 | Guardrails | GA/billing/ads/other-state still off; Design 2 + 6,278 intact | Live spot checks |
 
+## Next document
+
+Actionable no-spend family + owner initiatives (outreach drafts, conversion paths,
+targets): `20261127210000_washington_organic_acquisition_initiatives.md`.
+
 ## Non-goals
 
 - Re-running pagination / SSR / hydration acceptance
