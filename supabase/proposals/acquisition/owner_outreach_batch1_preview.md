@@ -1,0 +1,63 @@
+# Owner outreach — APPROVED Batch 1 (phased)
+Approval footers removed. Independence disclaimer included.
+Phase 1 (20): send now after postage/printing. Phases 2–3 held for response review.
+
+## WA-OWN-001 (Phase 1) — "Vancouver Senior Care Home", LLC
+
+```
+Re: "Vancouver Senior Care Home", LLC — Washington Adult Family Home license 755311
+
+Your licensed Adult Family Home is listed in the free public Washington directory:
+
+https://www.nationalcarehomefinder.com/washington/755311
+
+Public listing details shown today (from the DSHS-linked roster):
+- Business name: "Vancouver Senior Care Home", LLC
+- Address: 15703 NE 37TH ST, VANCOUVER, WA, 98682
+- License: 755311
+
+To claim the listing (free):
+1. Open the profile link above
+2. Choose “Claim this facility”
+3. Create or sign in at the owner portal
+4. Submit a short ownership claim for administrator review
+
+Official DSHS licensing data stays authoritative. Claiming does not change the
+DSHS name, address, license number, or capacity. No billing or paid advertising
+is required.
+
+National Care Home Finder is an independent informational directory. It is not a government agency, is not affiliated with or endorsed by Washington DSHS or any other state agency, and does not place residents.
+
+Owner portal: https://www.nationalcarehomefinder.com/owner?mode=login
+Directory: https://www.nationalcarehomefinder.com/washington
+```
+
+## WA-OWN-002 (Phase 1) — #1 Adult Care Home
+
+```
+Re: #1 Adult Care Home — Washington Adult Family Home license 684100
+
+Your licensed Adult Family Home is listed in the free public Washington directory:
+
+https://www.nationalcarehomefinder.com/washington/684100
+
+Public listing details shown today (from the DSHS-linked roster):
+- Business name: #1 Adult Care Home
+- Address: 14316 SE 13TH ST, VANCOUVER, WA, 98683
+- License: 684100
+
+To claim the listing (free):
+1. Open the profile link above
+2. Choose “Claim this facility”
+3. Create or sign in at the owner portal
+4. Submit a short ownership claim for administrator review
+
+Official DSHS licensing data stays authoritative. Claiming does not change the
+DSHS name, address, license number, or capacity. No billing or paid advertising
+is required.
+
+National Care Home Finder is an independent informational directory. It is not a government agency, is not affiliated with or endorsed by Washington DSHS or any other state agency, and does not place residents.
+
+Owner portal: https://www.nationalcarehomefinder.com/owner?mode=login
+Directory: https://www.nationalcarehomefinder.com/washington
+```

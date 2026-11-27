@@ -182,11 +182,16 @@ King, Pierce, Snohomish, Clark, Spokane, Thurston — **human send only**.
 - Clear-filters residual work (unless newly reproducible)
 - Re-running closed technical acceptance suites
 
+## Execution prep pack
+
+Batch materials (prospects, personalized drafts, social, channels, scorecard):
+`supabase/proposals/acquisition/` — see `20261127220000_washington_organic_acquisition_execution_prep.md`.
+
 ## Approval gates
 
 | Action | Required |
 | --- | --- |
-| Send F2 / O2 outreach | **Human approve + human send** |
+| Send F2 / O2 outreach | **Human approve + human send** (prefer batch approval of `acquisition/`) |
 | Copy/SEO code changes (titles, JSON-LD, CTAs) | Explicit approval |
 | Production deploy | Explicit approval |
 | GA / paid ads / billing / new states | Explicit approval |
