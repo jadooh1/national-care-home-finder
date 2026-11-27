@@ -1,8 +1,8 @@
 # Social publish queue — Batch 1 (Facebook + LinkedIn)
 
 **Branding:** National Care Home Finder — *Find. Compare. Choose with Confidence.*  
-**Status:** Content approved. **Publish blocked on Page authentication** (escalate — see `HUMAN_ESCALATIONS.md`).  
-**Auth probe (2026-11-27):** Browser sessions logged out — Facebook “Log into Facebook” wall; LinkedIn signed-out landing. No Page/Company admin session. Evidence: `/opt/cursor/artifacts/social-facebook-login-wall.png`, `/opt/cursor/artifacts/social-linkedin-login-wall.png`.  
+**Status:** Content approved. **Publish blocked — genuine auth blocker** (see `HUMAN_ESCALATIONS.md`).  
+**Auth probes:** 2026-11-27 login walls; re-check after user “auth completed” still logged out in agent Chrome. Cookie jar has only anonymous FB/LI cookies (no `c_user`/`xs`, no `li_at`). Evidence: `/opt/cursor/artifacts/social-linkedin-still-logged-out.png`.  
 **Deferred:** Nextdoor. **Forbidden:** boosts, paid ads, subscriptions.
 
 ## Immediate — Post A (both channels)
