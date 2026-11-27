@@ -101,6 +101,9 @@ jobs:
       - name: Check password recovery callback handoff
         run: node --experimental-strip-types --test supabase/proposals/tests/password_recovery_callback_handoff.ts
 
+      - name: Check Washington SEO GSC organic readiness
+        run: node --experimental-strip-types --test supabase/proposals/tests/washington_seo_gsc_organic_readiness.ts
+
       - name: Check owner dashboard reliability
         run: node --experimental-strip-types --test supabase/proposals/tests/owner_dashboard_reliability.ts
 
