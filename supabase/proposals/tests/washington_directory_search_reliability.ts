@@ -10,7 +10,7 @@ import {
   washingtonLocationMatches,
 } from "../../../lib/family-journey.ts";
 
-const directory = readFileSync(new URL("../../../app/washington/page.tsx", import.meta.url), "utf8");
+const directory = readFileSync(new URL("../../../app/washington/washington-directory-client.tsx", import.meta.url), "utf8");
 
 test("search terms strip query syntax before reaching the PostgREST or filter", () => {
   assert.equal(washingtonSearchText("  Seattle, (WA)%_*'  "), "Seattle WA");

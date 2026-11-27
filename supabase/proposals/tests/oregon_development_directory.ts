@@ -111,7 +111,7 @@ test("the proposal grants execute only to signed-in users and does not expose th
 });
 
 test("public washington pages do not reference the development directory", () => {
-  for (const path of ["app/page.tsx", "app/washington/page.tsx", "app/washington/map/page.tsx", "app/washington/[license]/page.tsx"]) {
+  for (const path of ["app/page.tsx", "app/washington/washington-directory-client.tsx", "app/washington/map/page.tsx", "app/washington/[license]/washington-facility-profile-client.tsx"]) {
     const source = readFileSync(path, "utf8");
     assert.equal(source.includes("development/oregon"), false, path);
     assert.equal(source.includes("oregon_odhs_afh_public"), false, path);
