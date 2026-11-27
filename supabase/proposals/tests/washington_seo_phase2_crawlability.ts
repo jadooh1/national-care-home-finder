@@ -49,8 +49,9 @@ test("roster helper stays on publishable REST and excludes reserved E2E fixture"
 
 test("missing licenses hard-404 and metadata uses roster facts", async () => {
   assert.match(profilePage, /notFound\(\)/);
-  assert.match(profilePage, /loadWashingtonListedFacility/);
+  assert.match(profilePage, /getWashingtonListedFacility/);
   assert.equal(profilePage.includes('"use client"'), false);
+  assert.match(profileLayout, /getWashingtonListedFacility/);
   assert.match(profileLayout, /profileMetadataFacts|profileMetadata/);
   assert.match(profileClient, /initialFacility/);
   assert.match(profileClient, /publicOwnerContentView/);

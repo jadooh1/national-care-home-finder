@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { profileMetadata, requestHost } from "../../../lib/public-metadata";
 import {
-  loadWashingtonListedFacility,
+  getWashingtonListedFacility,
   profileMetadataFacts,
-  washingtonPublicRestConfig,
 } from "../../../lib/washington-public-roster";
 
 export async function generateMetadata({
@@ -13,7 +12,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { license } = await params;
   const host = await requestHost();
-  const lookup = await loadWashingtonListedFacility(license, washingtonPublicRestConfig());
+  const lookup = await getWashingtonListedFacility(license);
   if (lookup.status === "invalid" || lookup.status === "missing") {
     return profileMetadata(license, host, null);
   }

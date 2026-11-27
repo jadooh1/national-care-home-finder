@@ -1,8 +1,5 @@
 import { notFound } from "next/navigation";
-import {
-  loadWashingtonListedFacility,
-  washingtonPublicRestConfig,
-} from "../../../lib/washington-public-roster";
+import { getWashingtonListedFacility } from "../../../lib/washington-public-roster";
 import WashingtonFacilityProfileClient from "./washington-facility-profile-client";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +10,7 @@ type PageProps = {
 
 export default async function WashingtonFacilityProfilePage({ params }: PageProps) {
   const { license } = await params;
-  const lookup = await loadWashingtonListedFacility(license, washingtonPublicRestConfig());
+  const lookup = await getWashingtonListedFacility(license);
   if (lookup.status === "invalid" || lookup.status === "missing") notFound();
 
   return (

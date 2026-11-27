@@ -1,3 +1,4 @@
+import { cache } from "react";
 /**
  * Server-side Washington public roster reads for crawlable HTML and metadata.
  * Uses the same publishable REST path as sitemap license listing — no service role.
@@ -279,3 +280,9 @@ export async function loadWashingtonCountyMarketSummaries(
     config,
   );
 }
+
+
+/** Deduplicate layout metadata + page lookup within one request. */
+export const getWashingtonListedFacility = cache((license: string | undefined) =>
+  loadWashingtonListedFacility(license, washingtonPublicRestConfig()),
+);
