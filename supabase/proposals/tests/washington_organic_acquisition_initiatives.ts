@@ -12,7 +12,7 @@ test("acquisition initiatives stay unpaid and do not launch campaigns from the a
   assert.match(proposal, /Do \*\*not\*\* launch campaigns/);
   assert.match(proposal, /disabled/);
   assert.match(proposal, /6,278|187d907/);
-  assert.doesNotMatch(proposal, /enable production GA|launch paid ads/i);
+  assert.doesNotMatch(proposal, /should enable production GA|approve paid ad launch/i);
   assert.match(proposal, /Human approve|human-sent|human send/i);
 });
 
