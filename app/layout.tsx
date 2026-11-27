@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { AuthCallbackCatcher } from "../components/auth-callback-catcher";
 import { LanguageProvider } from "../components/language";
 import { SiteAnalytics } from "../components/site-analytics";
 import { LANGUAGE_COOKIE, parseLocale } from "../lib/locale";
@@ -28,6 +29,7 @@ export default async function RootLayout({
       <body style={{ margin: 0 }}>
 
         <LanguageProvider initialLocale={locale}>{children}</LanguageProvider>
+        <AuthCallbackCatcher />
         <SiteAnalytics />
 
       </body>
