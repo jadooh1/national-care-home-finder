@@ -40,5 +40,9 @@ After those Preview env values are confirmed present, rebuild the corrective Pre
 
 ## Post-release follow-up (accepted residual)
 
-Intermittent soft-navigation regression on Washington directory **Previous** pagination:
-after clicking Prev from `?page=2`, the client can remain on “Loading listings…” without issuing a Supabase request until a hard reload. SSR for `/washington` remains correct. Accepted for production ship; schedule a post-release client navigation fix. Do not treat as a launch blocker.
+Client soft-navigation pagination on `/washington` can stick on “Loading listings…” / “Cargando listados…” **without issuing a Supabase request** until a hard reload:
+
+- **Next** from page 1 → URL becomes `?page=2`, UI may remain on loading.
+- **Previous** from a hard-loaded `?page=2` → URL returns to `/washington`, UI may remain on loading.
+
+Hard reload of `/washington` and `/washington?page=2` SSR correctly (Design 2, “Showing … of 6,278”). Initial hydration of a full document load keeps SSR rows and reaches production Supabase (`yiehgstweswxjakbcdzc`). Accepted for production ship after PR #244; schedule a post-release client navigation/refetch fix. Do **not** treat as a launch blocker or rollback trigger.
