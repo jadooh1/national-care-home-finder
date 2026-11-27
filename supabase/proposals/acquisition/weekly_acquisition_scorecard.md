@@ -1,0 +1,90 @@
+# Weekly Washington acquisition scorecard
+
+**Cadence:** Record every Monday (or next business day).  
+**Sources:** Google Search Console (domain property `nationalcarehomefinder.com`); admin owner-claim ledger; outreach batch logs.  
+**Production GA:** remains **disabled** — do not substitute GA for this board.
+
+## 30-day working targets (subject to baseline validation)
+
+| Metric | 30-day target | Baseline validation notes |
+| --- | ---: | --- |
+| Owner contacts attempted | **100** | = Batch 1 prospect count; contact = approved send/mail/handoff, not draft creation |
+| Legitimate listing claims submitted | **10** | Admin “pending/submitted” claims attributable to period |
+| Organic search clicks (GSC) | **500** | GSC Performance total clicks for property; validate vs trailing 28-day average before treating as stretch vs floor |
+
+If trailing 28-day GSC clicks are already near/above 500, keep **500** as a floor and add a stretch (+20%). If far below, keep 500 as aspirational and report % of target weekly.
+
+---
+
+## Week of: __________
+
+### A. Indexing (GSC Pages)
+
+Compare to **2026-11-22** baseline.
+
+| Status | Baseline (2026-11-22) | This week | Δ |
+| --- | ---: | ---: | ---: |
+| Indexed | 277 | | |
+| Not indexed (total) | 6,013 | | |
+| Discovered, not indexed | 4,786 | | |
+| Crawled, not indexed | 1,194 | | |
+| Duplicate, different canonical | 30 | | |
+| Redirect | 3 | | |
+
+Sitemap: submitted 2026-11-08; last success read 2026-11-12 — **do not re-submit** unless error.
+
+### B. Search visibility (GSC Performance, last 7 / 28 days)
+
+| Metric | Last 7 days | Last 28 days | Notes |
+| --- | ---: | ---: | --- |
+| Total clicks | | | Toward **500** / 30 days |
+| Total impressions | | | |
+| CTR | | | |
+| Avg position | | | |
+| Clicks to `/washington` | | | |
+| Clicks to `/washington/cities` | | | |
+| Clicks to `/washington/counties` | | | |
+| Top query (1–5) | | | Attach export |
+
+### C. Owner claims (admin ops)
+
+| Metric | This week | Month-to-date | 30-day target |
+| --- | ---: | ---: | ---: |
+| New claims submitted | | | **10** / 30 days |
+| Approved | | | |
+| Rejected | | | |
+| Pending (end of week) | | | |
+| Approved in Tier A counties | | | Prefer ≥4 of first 10 approvals |
+
+### D. Outreach execution (human)
+
+| Metric | This week | Month-to-date | 30-day target |
+| --- | ---: | ---: | ---: |
+| Owner contacts attempted | | | **100** |
+| Family referral intros sent | | | (no fixed target; track) |
+| Social posts published (organic) | | | (batch-approved only) |
+| Batches awaiting approval | | | |
+
+### E. Guardrails
+
+| Check | OK? |
+| --- | --- |
+| No production GA / gtag | |
+| No billing / paid ads enabled | |
+| No other-state publication | |
+| No unapproved sends | |
+
+### F. Decisions / blockers
+
+- 
+- 
+
+---
+
+## Running 30-day rollup
+
+| Target | Progress | % |
+| --- | --- | ---: |
+| 100 owner contacts | ___ / 100 | |
+| 10 listing claims | ___ / 10 | |
+| 500 organic clicks | ___ / 500 | |
