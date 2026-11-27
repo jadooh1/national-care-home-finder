@@ -7,10 +7,10 @@
 
 ## Quick start (human)
 
-1. Print & mail **Phase 1 only** — `letters_phase1/` + addresses in `owner_outreach_phase1_20.csv`
+1. Print & mail **Phase 1 only** — [letters PDF](https://github.com/jadooh1/national-care-home-finder/raw/cursor/wa-acquisition-execution-prep-5a8c/supabase/proposals/acquisition/print/batch1_phase1_letters_20.pdf) · [mailing labels](https://github.com/jadooh1/national-care-home-finder/raw/cursor/wa-acquisition-execution-prep-5a8c/supabase/proposals/acquisition/print/batch1_phase1_mailing_labels.pdf)
 2. Record spend and send dates in `execution_log_batch1.csv`
-3. Publish Post A on Facebook + LinkedIn from `family_organic_social_batch1.md`
-4. Send referral intros from `family_referral_intros_batch1.md` (≤6) when contacts available
+3. Authenticate Facebook + LinkedIn Pages, then publish Post A (`social_publish_queue_batch1.md`)
+4. Send ≤6 intros using `family_referral_contacts_batch1.md` + `family_referral_intros_batch1.md`
 5. Fill `weekly_acquisition_tracker.csv` + `weekly_acquisition_scorecard.md` each week
 6. **Do not** mail Phase 2/3 until prior-phase response review is logged
 
