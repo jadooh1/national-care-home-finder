@@ -14,7 +14,6 @@ import {
   washingtonAuthoritativeListedCount,
   washingtonRosterReconciliationVerdict,
 } from "../../../lib/washington-roster-reconciliation.ts";
-import { PUBLICATION_READINESS_SUMMARIES } from "../../../lib/publication-eligibility-readiness.ts";
 
 test("authoritative Washington roster is 6,278 unique OP licenses — not 8,177", () => {
   assert.equal(WASHINGTON_LISTED_COUNT, 6278);
@@ -112,10 +111,10 @@ test("human decisions lock 6278; 8177 excluded; 6296 deferred; S5/S6 secrets rem
   assert.match(ownerPage, /params\.get\("mode"\)/);
   assert.match(ownerPage, /setMode\("login"\)/);
 
-  const washington = PUBLICATION_READINESS_SUMMARIES.find((row) => row.state === "Washington");
-  assert.ok(washington);
-  assert.equal(washington.stopGo, "GO");
-  assert.equal(washington.tierCounts.tier3, 6278);
+  // Publication readiness summaries live on development only; main release
+  // asserts the same Washington GO signal via WASHINGTON_PUBLICATION_ELIGIBILITY.
+  assert.equal(WASHINGTON_PUBLICATION_ELIGIBILITY.stateAuthorization, "public");
+  assert.equal(WASHINGTON_PUBLICATION_ELIGIBILITY.publicationEligibleHomes, 6278);
 
   assert.equal(existsSync("lib/washington-roster-reconciliation.ts"), true);
   assert.equal(
