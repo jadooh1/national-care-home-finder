@@ -1,6 +1,6 @@
 # Washington organic acquisition — Batch 1 (APPROVED) · commercial validation
 
-**Status:** Batch 1 approved; materials consolidated for development PR.  
+**Status:** PREPARATION CLOSED (merged via PR #250 into `development`). Focus: execution + measurable results.  
 **Claims baseline:** **0** legitimate production owner claims as of **2026-11-27**.  
 **Social:** Posts A/B1 **queued / suspended** (no auth retries).  
 **Hold:** Owner phases **2–3** until Phase 1 response review.  
