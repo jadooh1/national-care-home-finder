@@ -2,6 +2,7 @@
 
 **Branding:** National Care Home Finder — *Find. Compare. Choose with Confidence.*  
 **Status:** Content approved. **Publish blocked on Page authentication** (escalate — see `HUMAN_ESCALATIONS.md`).  
+**Auth probe (2026-11-27):** Browser sessions logged out — Facebook “Log into Facebook” wall; LinkedIn signed-out landing. No Page/Company admin session. Evidence: `/opt/cursor/artifacts/social-facebook-login-wall.png`, `/opt/cursor/artifacts/social-linkedin-login-wall.png`.  
 **Deferred:** Nextdoor. **Forbidden:** boosts, paid ads, subscriptions.
 
 ## Immediate — Post A (both channels)
@@ -22,7 +23,7 @@ Optional media: `https://www.nationalcarehomefinder.com/home/washington.webp` or
 
 | Channel | Auth | Publish | Post URL |
 |---------|------|---------|----------|
-| Facebook Page | PENDING | — | — |
-| LinkedIn Company | PENDING | — | — |
+| Facebook Page | BLOCKED_LOGIN_WALL | not published | — |
+| LinkedIn Company | BLOCKED_LOGIN_WALL | not published | — |
 
 After auth: publish Post A, then B1 (Tacoma) per `batch1_execution_plan.md`. Full copy remains in `family_organic_social_batch1.md`.

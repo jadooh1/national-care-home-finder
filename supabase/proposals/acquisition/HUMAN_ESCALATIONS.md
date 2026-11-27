@@ -14,13 +14,13 @@ Agent materials for Phase 1 are ready. Remaining blockers are mail, payment, and
 
 ## 2. Facebook + LinkedIn authentication (required to publish)
 
-No usable Page session or API token is available to this agent. Public lookup did not surface a discoverable National Care Home Finder Facebook/LinkedIn Page URL from this environment.
+Browser probe confirmed both sites are logged out (login walls; screenshots in `/opt/cursor/artifacts/social-facebook-login-wall.png` and `social-linkedin-login-wall.png`). No Page session or API token is available to this agent.
 
 **Please authenticate** (one of):
 1. Log into the existing Facebook Page + LinkedIn Company Page in a session this agent can use, **or**
-2. Add Page access so a human can paste/publish Post A from `family_organic_social_batch1.md` / `social_publish_queue_batch1.md`
+2. Publish Post A yourself from `social_publish_queue_batch1.md` / `family_organic_social_batch1.md`
 
-Then publish **Post A** (Week 1) organically on both channels — **no boosts**. Nextdoor remains deferred.
+Then (if agent-published) confirm so Post B1 can follow. Organic only — **no boosts**. Nextdoor remains deferred.
 
 ## 3. Family referral intros (≤6) — contacts identified
 

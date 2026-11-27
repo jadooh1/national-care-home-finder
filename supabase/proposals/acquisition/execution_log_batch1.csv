@@ -7,6 +7,8 @@ date,activity,channel,phase_or_post,count,status,spend_usd,notes
 2026-11-27,phase1_mailing_labels_pdf,print,phase1,20,COMPLETE_AGENT,0,"print/batch1_phase1_mailing_labels.pdf Avery 5160"
 2026-11-27,referral_public_contacts_identified,docs,intros_1_6,6,COMPLETE_AGENT,0,"family_referral_contacts_batch1.md"
 2026-11-27,social_auth_check,facebook_linkedin,post_A,2,ESCALATE_HUMAN,0,"No Page session/token; publish blocked pending auth"
+2026-11-27,social_auth_browser_probe,facebook,post_A,1,ESCALATE_HUMAN,0,"Login wall; artifact social-facebook-login-wall.png"
+2026-11-27,social_auth_browser_probe,linkedin,post_A,1,ESCALATE_HUMAN,0,"Signed-out landing; artifact social-linkedin-login-wall.png"
 ,phase1_print,print,phase1,20,ESCALATE_HUMAN,,"Print letters PDF under $150 cap"
 ,phase1_mail,usps,phase1,20,ESCALATE_HUMAN,,"Mail with labels PDF; log postage"
 ,post_A_publish,facebook,post_A,1,ESCALATE_HUMAN,,"Authenticate existing FB Page then publish"
