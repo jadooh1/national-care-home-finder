@@ -14,14 +14,13 @@ Agent materials for Phase 1 are ready. Remaining blockers are mail, payment, and
 
 ## 2. Facebook + LinkedIn authentication (required to publish)
 
-**Genuine blocker (re-confirmed after “auth completed”):** this VM’s Chrome still shows Facebook and LinkedIn login walls. Auth likely happened in a different browser/profile than the agent’s Chrome (`google-chrome-cdp`). No Page session and no API tokens are available here. Screenshots: `/opt/cursor/artifacts/social-linkedin-still-logged-out.png` (plus earlier login-wall PNGs).
+**Genuine blocker (2026-11-27, after remote-desktop auth claim):** Agent Chrome (`--user-data-dir=.../google-chrome-cdp`) still has **no** Facebook/LinkedIn session cookies (`c_user`/`xs`/`li_at` absent). Login walls remain. Posts A/B1 **not** published. Latest evidence: `/opt/cursor/artifacts/social-linkedin-still-logged-out-2.png`.
 
-**Please do one of the following:**
-1. In **this agent’s Chrome window** (the computer-use browser), sign in as admin of the existing National Care Home Finder Facebook Page and LinkedIn Company Page, leave those tabs open, and reply — agent will publish Post A then B1 and return permalinks, **or**
-2. Publish Post A (and B1 Tacoma) yourself from `social_publish_queue_batch1.md` and paste the two post URLs here so the queue can continue, **or**
-3. Provide Page-admin access another way that this environment can use (still no paid boosts / no new accounts).
+**Unblock (pick one — agent will not retry login):**
+1. In remote desktop, confirm the **same** Chrome window shows a **logged-in feed** (not a login form) for both sites as the National Care Home Finder Page/Company, leave tabs open, reply “feeds visible”, **or**
+2. Publish Post A + B1 yourself (copy in `social_publish_queue_batch1.md`) and paste the **four permalinks** (FB A, LI A, FB B1, LI B1).
 
-Organic only — **no boosts**. Nextdoor remains deferred.
+Organic only — **no boosts**. Nextdoor deferred.
 
 ## 3. Family referral intros (≤6) — contacts identified
 
