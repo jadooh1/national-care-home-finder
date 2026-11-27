@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   PUBLIC_SUPABASE_PLACEHOLDER_KEY,
@@ -117,4 +118,16 @@ test("washington roster config with empty env stays unavailable instead of throw
   assert.equal(config.publishableKey, "");
   const slice = await loadWashingtonDirectorySlice({ page: 0, config });
   assert.equal(slice.ok, false);
+});
+
+test("supabase module keeps direct process.env.NEXT_PUBLIC reads for Next client inlining", () => {
+  const source = readFileSync("lib/supabase.ts", "utf8");
+  // Parameterized source.NEXT_PUBLIC_* is not replaced by Next in client bundles.
+  assert.match(source, /process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
+  assert.match(source, /process\.env\.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY/);
+  assert.match(source, /BUILD_PUBLIC_SUPABASE_URL/);
+  assert.doesNotMatch(
+    source,
+    /readPublicSupabaseEnv\(\s*process\.env\s*\)/,
+  );
 });

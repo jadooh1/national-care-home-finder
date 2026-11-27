@@ -107,8 +107,17 @@ export default function WashingtonDirectoryClient({
             }
           }
         }
-        setFacilities([]); setTotal(0);
-        setError("Unable to load listings. Please try again later.");
+        // Keep SSR/prior rows visible when a browser refetch fails. Clearing them
+        // hid crawlable HTML behind an empty error state after hydration.
+        setFacilities(prev => {
+          if (prev.length > 0) {
+            setError("");
+            return prev;
+          }
+          setTotal(0);
+          setError("Unable to load listings. Please try again later.");
+          return [];
+        });
         setLoading(false);
         return;
       }
