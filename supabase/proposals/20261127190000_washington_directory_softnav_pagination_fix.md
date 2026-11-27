@@ -42,3 +42,9 @@ page index**. The fetch effect depends on local `page` and never re-ran, leaving
 
 Do **not** merge to `main` or deploy production without explicit human approval of this
 correction PR after development validation.
+
+## Browser validation note
+
+Development Preview (`dpl_EAbSzKrA7bYU6ANqQbfRwF6LkyKx` / `9828d7e`): Next/Prev/Back/Forward and filters/search **PASS** without hard reload.
+
+Residual: intermittent Clear-filters stuck loading (response already 206) — separate follow-up, not a pagination soft-nav regression.
