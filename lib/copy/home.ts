@@ -24,6 +24,7 @@ type HomeCopy = {
   brand: string;
   footerLead: string;
   footerDisclaimer: string;
+  ownerCta: string;
 };
 
 export const copy: Record<Locale, HomeCopy> = {
@@ -62,6 +63,7 @@ export const copy: Record<Locale, HomeCopy> = {
     brand: "National Care Home Finder",
     footerLead: "Helping families explore residential care options across America.",
     footerDisclaimer: "Independent informational directory. Verify all facility details with official state sources.",
+    ownerCta: "Care home owners — sign in or claim your listing",
   },
   es: {
     pageTitle: "Buscador Nacional de Hogares de Cuidado",
@@ -98,5 +100,6 @@ export const copy: Record<Locale, HomeCopy> = {
     brand: "National Care Home Finder",
     footerLead: "Ayudamos a las familias a explorar opciones de cuidado residencial en toda América.",
     footerDisclaimer: "Directorio informativo independiente. Verifique todos los datos del establecimiento con las fuentes oficiales del estado.",
+    ownerCta: "Propietarios — inicie sesión o reclame su listado",
   },
 };
